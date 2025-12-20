@@ -1,0 +1,67 @@
+@import "tailwindcss";
+@theme {
+  --font-sans: "Inter", "sans-serif";
+  --font-serif: "Noto Serif Display", "serif";
+}
+
+.animate-marquee {
+  animation: scrolling 24s linear infinite;
+}
+
+.animate-marquee-reverse {
+  animation: scrolling-reverse 24s linear infinite;
+}
+
+.animate-award-marquee {
+  animation: scrolling 24s linear infinite;
+}
+
+.animate-award-marquee-reverse {
+  animation: scrolling-reverse 24s linear infinite;
+}
+
+.animate-award-marquee:hover {
+  animation-play-state: paused;
+}
+
+.animate-award-marquee-reverse:hover {
+  animation-play-state: paused;
+}
+
+
+
+@keyframes scrolling {
+  to {
+    transform: translateX(calc(-48% - 3rem));
+  }
+}
+
+@keyframes scrolling-reverse {
+  from {
+    transform: translateX(calc(-48% - 3rem));
+  }
+}
+
+
+@media (min-width: 1536px) { /* Tailwind's 2xl breakpoint */
+  @keyframes scrolling {
+    to {
+      transform: translateX(calc(-48% - 11rem));
+    }
+  }
+
+  @keyframes scrolling-reverse {
+    from {
+      transform: translateX(calc(-48% - 11rem));
+    }
+  }
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}

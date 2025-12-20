@@ -1,0 +1,15 @@
+export function ArrowDown(props) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>
+      {/* Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ */}
+      <path
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.5"
+        d="m19 9l-7 6l-7-6"
+      ></path>
+    </svg>
+  );
+}

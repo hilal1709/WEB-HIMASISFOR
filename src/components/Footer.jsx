@@ -10,7 +10,7 @@ export default function Footer() {
       <div className="flex flex-col lg:flex-row justify-between border-y border-zinc-200 py-6 gap-4 lg:gap-0">
         {/* logo sisfor */}
         <div className="flex items-center gap-4 md:gap-6">
-          <Image src="/img/logo.png" alt="logo" width={48} height={48} className="h-10 md:h-12 flex-shrink-0" loading="lazy" />
+          <Image src="/img/logo.png" alt="logo" width={180} height={48} className="h-10 md:h-12 w-auto object-contain flex-shrink-0" loading="lazy" />
           <div className="border-l border-zinc-200 pl-4 md:pl-6">
             <h2
               className="font-semibold text-base md:text-lg lg:text-xl"

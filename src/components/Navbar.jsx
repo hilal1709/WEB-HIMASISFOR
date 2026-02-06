@@ -43,7 +43,7 @@ export default function Navbar() {
       <nav className="hidden max-w-7xl lg:flex justify-between items-center px-8 pr-4 py-3 text-sm mx-auto">
         <div className="flex items-center gap-6">
           <Link href="/">
-            <Image src="/img/logo.png" alt="Logo Sistem Informasi UISI" width={120} height={24} className="h-6" priority />
+            <Image src="/img/logo.png" alt="Logo Sistem Informasi UISI" width={180} height={48} className="h-8 w-auto object-contain" priority />
           </Link>
           <ul className="flex items-center gap-2">
             <li>

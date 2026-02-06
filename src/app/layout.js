@@ -1,5 +1,19 @@
-/* eslint-disable @next/next/no-page-custom-font */
 import "./globals.css";
+import { Inter, Noto_Serif_Display } from 'next/font/google';
+
+// Optimize font loading
+const inter = Inter({ 
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+});
+
+const notoSerif = Noto_Serif_Display({ 
+  subsets: ['latin'],
+  weight: '300',
+  display: 'swap',
+  variable: '--font-noto-serif',
+});
 
 export const metadata = {
   title: "Sistem Informasi - UISI",
@@ -9,7 +23,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${inter.variable} ${notoSerif.variable}`}>
       <head>
         <meta charSet="UTF-8" />
         <meta
@@ -37,16 +51,6 @@ export default function RootLayout({ children }) {
         <meta property="og:type" content="website" />
         <link rel="icon" type="image" href="/icon.png" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
-          rel="stylesheet"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Noto+Serif+Display:wght@300&display=swap"
-          rel="stylesheet"
-        />
 
         <script type="application/ld+json">
           {`
@@ -66,7 +70,7 @@ export default function RootLayout({ children }) {
         </script>
         <title>Sistem Informasi - UISI</title>
       </head>
-      <body>{children}</body>
+      <body className={`${inter.className} antialiased`}>{children}</body>
     </html>
   );
 }

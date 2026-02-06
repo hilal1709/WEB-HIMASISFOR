@@ -1,23 +1,39 @@
 @import "tailwindcss";
+
 @theme {
-  --font-sans: "Inter", "sans-serif";
-  --font-serif: "Noto Serif Display", "serif";
+  --font-sans: var(--font-inter), "Inter", "sans-serif";
+  --font-serif: var(--font-noto-serif), "Noto Serif Display", "serif";
 }
 
+/* Performance optimizations */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* Animations optimized for performance */
 .animate-marquee {
   animation: scrolling 24s linear infinite;
+  will-change: transform;
 }
 
 .animate-marquee-reverse {
   animation: scrolling-reverse 24s linear infinite;
+  will-change: transform;
 }
 
 .animate-award-marquee {
   animation: scrolling 24s linear infinite;
+  will-change: transform;
 }
 
 .animate-award-marquee-reverse {
   animation: scrolling-reverse 24s linear infinite;
+  will-change: transform;
 }
 
 .animate-award-marquee:hover {

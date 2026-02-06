@@ -4,182 +4,119 @@ import { ArrowDown } from "../icons/ArrowDown";
 import Auditor from "../icons/Auditor";
 import Consultant from "../icons/Consultant";
 import Analyst from "../icons/Analyst";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "motion/react";
 
 export default function CareerSection() {
   const [activeCareer, setActiveCareer] = useState("erp");
-  const carierContent = {
-    erp: {
-      description:
-        "Berperan dalam analisis kebutuhan bisnis dan solusi/implementasi sistem (ERP, SCM, CRM) sesuaifungsi dan skala perusahaan.",
-      img: "img/bidangerp.png",
-    },
-    auditor: {
-      description:
-        "Berperan dalam perencanaan, pemantauan dan evaluasi, serta pengukuran kinerja TI perusahaan, termasuk perancangan hingga evaluasi tingkat kematangan Tata Kelola TI.",
-      img: "img/bidangauditor.png",
-    },
-    consultant: {
-      description:
-        "IT Consultant Berperan dalam pengolahan data dan informasi yang mendukung pengambilan keputusan atau meningkatkan nilai tambah perusahaan.",
-      img: "img/bidangconsultant.png",
-    },
-    analyst: {
-      description:
-        "Berperan dalam proses supervisi, konsultasi, dan eksekusi pengelolaan proyek TI, termasuk juga dalam pengembangan sistem atau aplikasi dan penjaminan kualitas TI.",
-      img: "img/bidanganalyst.png",
-    },
-  };
+  const [careerData, setCareerData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch career data from API
+  useEffect(() => {
+    async function fetchCareerData() {
+      try {
+        const response = await fetch('/api/content?section=career');
+        if (response.ok) {
+          const data = await response.json();
+          setCareerData(data);
+        }
+      } catch (error) {
+        console.error('Error fetching career data:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchCareerData();
+  }, []);
+
+  if (loading || !careerData) {
+    return (
+      <div className="flex justify-center items-center my-24">
+        <div className="animate-pulse">Loading...</div>
+      </div>
+    );
+  }
+
+  const { title, data } = careerData;
+  const careers = data?.careers || [];
 
   return (
     <>
-      <div className="flex flex-col md:flex-row justify-center items-center gap-12 mx-4 lg:mx-0 my-16 lg:my-24">
-        {/* bagian kiri */}
-        <div className="w-full lg:w-fit">
-          <h1 className="text-4xl lg:text-5xl font-bold text-center lg:text-left">
-            Prospek Karir Lulusan <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-700 to-red-500">
-              Sistem Informasi UISI
-            </span>
-          </h1>
+      <div className="flex flex-col justify-center items-center my-12 md:my-16 lg:my-24 px-4 md:px-8 lg:px-24 2xl:px-48">
+        {/* container wrapper */}
+        <div className="w-full max-w-7xl flex flex-col md:flex-row justify-center items-center gap-8 md:gap-10 lg:gap-12">
+          {/* bagian kiri */}
+          <div className="w-full lg:w-fit">
+            <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-center lg:text-left lg:w-[42rem]" dangerouslySetInnerHTML={{ __html: title || "Prospek Karir Lulusan <br /><span class='text-transparent bg-clip-text bg-gradient-to-r from-red-700 to-red-500'>Sistem Informasi UISI</span>" }}>
+            </h1>
 
           {/* section karir lulusan */}
-          <div className="flex flex-col gap-4 mt-12">
-            {/* ERP Analyst */}
-            <button
-              onClick={() => setActiveCareer("erp")}
-              className={`flex justify-between items-center p-4 rounded-lg ${
-                activeCareer === "erp" ? "bg-zinc-100" : ""
-              }`}
-            >
-              <div className="flex items-center gap-4">
-                {/* Icon Erp */}
-                <div
-                  className={`p-2  rounded-full ${
-                    activeCareer === "erp"
-                      ? "bg-red-600 outline-8 outline-zinc-200"
-                      : "bg-zinc-200"
+          <div className="flex flex-col gap-3 md:gap-4 mt-8 md:mt-10 lg:mt-12 w-full">
+            {careers.map((career) => {
+              const IconComponent = 
+                career.id === 'erp' ? Erp :
+                career.id === 'auditor' ? Auditor :
+                career.id === 'consultant' ? Consultant :
+                Analyst;
+              
+              const isFillIcon = ['auditor', 'consultant', 'analyst'].includes(career.id);
+              
+              return (
+                <button
+                  key={career.id}
+                  onClick={() => setActiveCareer(career.id)}
+                  className={`flex justify-between items-center p-3 md:p-4 rounded-lg transition-colors ${
+                    activeCareer === career.id ? "bg-zinc-100" : ""
                   }`}
                 >
-                  <Erp
-                    className={`h-6 ${
-                      activeCareer === "erp" ? "text-white" : "text-zinc-500"
-                    }`}
-                  />
-                </div>
-                <h2 className="font-medium">Enterprise System Analyst</h2>
-              </div>
-              <ArrowDown className="h-6 lg:-rotate-90" />
-            </button>
-
-            {/* IT/IS Auditor */}
-            <button
-              onClick={() => setActiveCareer("auditor")}
-              className={`flex justify-between items-center p-4 rounded-lg ${
-                activeCareer === "auditor" ? "bg-zinc-100" : ""
-              }`}
-            >
-              <div className="flex items-center gap-4">
-                {/* Icon Auditor */}
-                <div
-                  className={`p-2  rounded-full ${
-                    activeCareer === "auditor"
-                      ? "bg-red-600 outline-8 outline-zinc-200"
-                      : "bg-zinc-200"
-                  }`}
-                >
-                  <Auditor
-                    className={`h-6 ${
-                      activeCareer === "auditor"
-                        ? "fill-white"
-                        : "fill-zinc-500"
-                    }`}
-                  />
-                </div>
-                <h2 className="font-medium">IT/IS Auditor</h2>
-              </div>
-              <ArrowDown className="h-6 lg:-rotate-90 text-zinc-500" />
-            </button>
-
-            {/* IT Consultant */}
-            <button
-              onClick={() => setActiveCareer("consultant")}
-              className={`flex justify-between items-center p-4 rounded-lg ${
-                activeCareer === "consultant" ? "bg-zinc-100" : ""
-              }`}
-            >
-              <div className="flex items-center gap-4">
-                {/* Icon Erp */}
-                <div
-                  className={`p-2  rounded-full ${
-                    activeCareer === "consultant"
-                      ? "bg-red-600 outline-8 outline-zinc-200"
-                      : "bg-zinc-200"
-                  }`}
-                >
-                  <Consultant
-                    className={`h-6 ${
-                      activeCareer === "consultant"
-                        ? "fill-white"
-                        : "fill-zinc-500"
-                    }`}
-                  />
-                </div>
-                <h2 className="font-medium">IT Consultant</h2>
-              </div>
-              <ArrowDown className="h-6 lg:-rotate-90 text-zinc-500" />
-            </button>
-
-            {/* Data Analyst */}
-            <button
-              onClick={() => setActiveCareer("analyst")}
-              className={`flex justify-between items-center p-4 rounded-lg ${
-                activeCareer === "analyst" ? "bg-zinc-100" : ""
-              }`}
-            >
-              <div className="flex items-center gap-4">
-                {/* Icon Erp */}
-                <div
-                  className={`p-2 rounded-full ${
-                    activeCareer === "analyst"
-                      ? "bg-red-600 outline-8 outline-zinc-200"
-                      : "bg-zinc-200"
-                  }`}
-                >
-                  <Analyst
-                    className={`h-6 ${
-                      activeCareer === "analyst"
-                        ? "fill-white"
-                        : "fill-zinc-500"
-                    }`}
-                  />
-                </div>
-                <h2 className="font-medium">Data Analyst</h2>
-              </div>
-              <ArrowDown className="h-6 lg:-rotate-90 text-zinc-500" />
-            </button>
+                  <div className="flex items-center gap-3 md:gap-4">
+                    <div
+                      className={`p-1.5 md:p-2 rounded-full ${
+                        activeCareer === career.id
+                          ? "bg-red-600 outline-8 outline-zinc-200"
+                          : "bg-zinc-200"
+                      }`}
+                    >
+                      <IconComponent
+                        className={`h-5 md:h-6 ${
+                          activeCareer === career.id
+                            ? isFillIcon ? "fill-white" : "text-white"
+                            : isFillIcon ? "fill-zinc-500" : "text-zinc-500"
+                        }`}
+                      />
+                    </div>
+                    <h2 className="font-medium text-sm md:text-base">{career.title}</h2>
+                  </div>
+                  <ArrowDown className="h-5 md:h-6 lg:-rotate-90 text-zinc-500 flex-shrink-0" />
+                </button>
+              );
+            })}
           </div>
           {/* end button */}
         </div>
 
         {/* bagian kanan */}
-        <motion.div
-          key={activeCareer}
-          initial={{ opacity: 0, scale: 0 }}
-          animate={{ opacity: 1, scale: 1 }}
-        >
-          <img
-            src={carierContent[activeCareer].img}
-            alt="bidangkeahlian"
-            className="border-3 border-white drop-shadow-lg rounded-2xl"
-          />
-          <p className="lg:w-[36rem] mx-2 lg:mx-0 mt-7 text-sm lg:text-base text-zinc-600">
-            {carierContent[activeCareer].description}
-          </p>
-        </motion.div>
+        {careers.find(c => c.id === activeCareer) && (
+          <motion.div
+            key={activeCareer}
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="w-full"
+          >
+            <img
+              src={careers.find(c => c.id === activeCareer).image}
+              alt="bidangkeahlian"
+              className="border-3 border-white drop-shadow-lg rounded-2xl w-full h-auto"
+            />
+            <p className="w-full lg:w-[36rem] mt-5 md:mt-6 lg:mt-7 text-xs md:text-sm lg:text-base text-zinc-600">
+              {careers.find(c => c.id === activeCareer).description}
+            </p>
+          </motion.div>
+        )}
 
         {/* end section karir lulusan */}
+        </div>
       </div>
     </>
   );

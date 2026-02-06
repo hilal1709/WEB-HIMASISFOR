@@ -2,6 +2,7 @@
 "use client"
 import { ArrowDown } from "../icons/ArrowDown";
 import { useEffect, useState } from "react";
+import Image from 'next/image';
 import Profile from "../icons/Profile";
 import Partner from "../icons/Partner";
 import Graduation from "../icons/Graduation";
@@ -42,7 +43,7 @@ export default function Navbar() {
       <nav className="hidden max-w-7xl lg:flex justify-between items-center px-8 pr-4 py-3 text-sm mx-auto">
         <div className="flex items-center gap-6">
           <Link href="/">
-            <img src="/img/logo.png" alt="Logo Sistem Informasi UISI" className="h-6" />
+            <Image src="/img/logo.png" alt="Logo Sistem Informasi UISI" width={120} height={24} className="h-6" priority />
           </Link>
           <ul className="flex items-center gap-2">
             <li>
@@ -250,7 +251,7 @@ export default function Navbar() {
       {/* navigasi mobile */}
       <nav className="lg:hidden flex justify-between px-4 py-4">
         <Link href="/">
-          <img src="/img/logo.png" alt="Logo Sistem Informasi UISI" className="h-6" />
+          <Image src="/img/logo.png" alt="Logo Sistem Informasi UISI" width={120} height={24} className="h-6" priority />
         </Link>
         <button onClick={() => setOpenNav(openNav ? null : true)}>
           <svg

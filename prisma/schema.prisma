@@ -1,0 +1,101 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Admin model untuk CMS
+model Admin {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  name      String
+  role      String   @default("admin")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Alumni {
+  id        Int      @id @default(autoincrement())
+  name      String
+  nim       String   @unique
+  tahunLulus Int
+  pekerjaan String?
+  foto      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Achievement {
+  id          Int      @id @default(autoincrement())
+  achieverName String  // Nama orang yang berprestasi
+  title       String   // Nama prestasi
+  description String?
+  category    String   // "dosen" atau "mahasiswa"
+  tingkatan   String   // "Internasional" atau "Nasional"
+  tahun       String   // Bisa range: "2019, 2021" atau single: "2023"
+  image       String?  // Foto orang
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Gallery {
+  id          Int      @id @default(autoincrement())
+  title       String   // Judul prestasi untuk galeri
+  name        String   // Nama orang yang berprestasi
+  year        String   // Tahun
+  image       String   // Foto showcase (wajib untuk galeri)
+  photoProfile String? // Foto profil orang
+  description String?  @db.Text
+  isActive    Boolean  @default(true)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model PageContent {
+  id        Int      @id @default(autoincrement())
+  section   String   @unique // hero, about, curriculum, etc
+  title     String?
+  subtitle  String?
+  content   String?  @db.Text
+  image     String?
+  data      String?  @db.Text // JSON data untuk konten dinamis
+  isActive  Boolean  @default(true)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model NavbarItem {
+  id        Int      @id @default(autoincrement())
+  label     String
+  href      String
+  order     Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Model untuk full page editing
+model Page {
+  id          Int      @id @default(autoincrement())
+  name        String   // Nama halaman: "Beranda", "Profil", "Prestasi"
+  slug        String   @unique // URL slug: "beranda", "profil", "prestasi"
+  title       String?  // SEO Title
+  description String?  // SEO Description
+  sections    String   @db.Text // JSON array of sections with config
+  sourceCode  String?  @db.Text // Full JSX source code (optional, for code mode)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

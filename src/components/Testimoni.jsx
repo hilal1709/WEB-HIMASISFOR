@@ -1,63 +1,87 @@
+"use client";
+import { useState, useEffect, useMemo } from "react";
+import Image from 'next/image';
+
+// Helper function to ensure image paths are valid
+const normalizeImagePath = (path) => {
+  if (!path) return '/img/logo.png'; // fallback image
+  if (path.startsWith('http://') || path.startsWith('https://')) return path;
+  return path.startsWith('/') ? path : `/${path}`;
+};
+
 export default function Testimoni() {
-  const dataAlumni = [
-    {
-      name: "M. Rusydani S., S.Kom.",
-      work: "ERP Solution Analyst",
-      image: "img/rusydani.png",
-      companyLogo: "img/kompas.png",
-      description:
-        "“Selama saya menjadi mahasiswa di Sistem Informasi UISI, pengembangan studi, karir, dan organisasi sangat di dukung penuh oleh dosen-dosen serta rekan kuliah. Semangat dari bapak/ibu dosen dan rekan kuliah menular kepada diri saya untuk terus aktif dalam belajar serta aktif dalam berpikir kreatif.”",
-    },
-    {
-      name: "Melenia Yolanda F., S.Kom.",
-      work: "Business Analyst Functional Odoo",
-      image: "img/melenia.png",
-      companyLogo: "img/alugra.png",
-      description:
-        "“Active, Dosen SISFOR identik dengan kata ini karena semangat dan antusias yang selalu mengajarkan kita untuk competitive, creative, dan open-challenging. Tidak hanya berkutat di bidang keilmuan, organisasi dan interaksi atau networking di lingkungan kampus juga ditekankan di sini, jadi sangat organized. Sistem dan mata kuliah yang ada di SISFOR juga sangat menarik seperti penjurusan di bidang yang diminati, sehingga bisa jadi batu loncatan untuk praktik di dunia kerja.”",
-    },
-    {
-      name: "Rizqi A. W. Y., S.Kom.",
-      work: "Surveyor SPBE",
-      image: "img/rizqi.png",
-      companyLogo: "img/tati.png",
-      description:
-        "“Saya sangat puas dengan pengalaman kuliah di program studi Sistem Informasi UISI. Dosen-dosen yang kompeten, kurikulum yang  relevan dengan lapangan kerja dimasa sekarang, dan fasilitas pendukung teknologi yang memadai membuat perjalanan akademik saya  menjadi sangat  berharga. Terima kasih atas pengalaman berharga ini!”",
-    },
-  ];
+  const [testimoniData, setTestimoniData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch testimoni data from API
+  useEffect(() => {
+    async function fetchTestimoniData() {
+      try {
+        const response = await fetch('/api/content?section=testimoni', {
+          // Add caching
+          next: { revalidate: 3600 }
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setTestimoniData(data);
+        }
+      } catch (error) {
+        console.error('Error fetching testimoni data:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchTestimoniData();
+  }, []);
+
+  const dataAlumni = useMemo(() => testimoniData?.data || [], [testimoniData]);
+
+  if (loading || !testimoniData) {
+    return (
+      <div className="flex justify-center items-center my-24">
+        <div className="animate-pulse">Loading...</div>
+      </div>
+    );
+  }
+
+  const { title, subtitle } = testimoniData;
+
   return (
     <>
       <div className="relative flex justify-center items-center">
-        <img
+        <Image
           src="/img/awardingbg.svg"
           alt="awarding"
-          className="w-full h-[42rem] lg:h-[60rem] object-cover"
+          width={1920}
+          height={960}
+          className="w-full h-[32rem] md:h-[42rem] lg:h-[60rem] object-cover"
+          loading="lazy"
         />
 
         {/* content container */}
-        <div className="absolute w-full h-full flex flex-col justify-center items-center text-white">
-          <div className="px-4 py-2 border-[0.5px] border-white bg-white/20 rounded-lg text-center text-sm uppercase tracking-widest font-semibold">
-            testimoni alumni
+        <div className="absolute w-full h-full flex flex-col justify-center items-center text-white px-4">
+          <div className="px-3 md:px-4 py-1.5 md:py-2 border-[0.5px] border-white bg-white/20 rounded-lg text-center text-xs md:text-sm uppercase tracking-widest font-semibold">
+            {subtitle || "testimoni alumni"}
           </div>
-          <h1 className="mt-5 mb-12 text-4xl 2xl:text-5xl font-bold">
-            Apa Kata Alumni?
+          <h1 className="mt-4 md:mt-5 mb-8 md:mb-10 lg:mb-12 text-2xl md:text-3xl lg:text-4xl 2xl:text-5xl font-bold">
+            {title || "Apa Kata Alumni?"}
           </h1>
 
           {/* content card */}
           <div className="w-full overflow-x-auto no-scrollbar flex lg:justify-center">
-            <div className="flex justify-center w-max gap-6 lg:gap-4 2xl:gap-12 text-black mx-4 lg:mx-0">
+            <div className="flex justify-center w-max gap-4 md:gap-5 lg:gap-4 2xl:gap-12 text-black mx-4 lg:mx-0 pb-2">
               {dataAlumni.map((alumni, index) => (
                 <div
                   key={index}
-                  className="w-80 lg:w-96 h-fit px-8 py-7 rounded-lg bg-white border-t-8 border-yellow-500 drop-shadow-lg"
+                  className="w-72 md:w-80 lg:w-96 h-fit px-6 md:px-8 py-6 md:py-7 rounded-lg bg-white border-t-8 border-yellow-500 drop-shadow-lg"
                 >
-                  <p className="text-sm lg:text-base text-zinc-600">{alumni.description}</p>
-                  <div className="mt-5 pt-5 flex items-center gap-5 text-xs lg:text-base border-t border-zinc-200">
-                    <img src={alumni.image} alt={alumni.name} />
+                  <p className="text-xs md:text-sm lg:text-base text-zinc-600">{alumni.description}</p>
+                  <div className="mt-4 md:mt-5 pt-4 md:pt-5 flex items-center gap-3 md:gap-5 text-xs md:text-sm lg:text-base border-t border-zinc-200">
+                    <Image src={normalizeImagePath(alumni.image)} alt={alumni.name || 'Alumni'} width={48} height={48} className="h-10 md:h-12" loading="lazy" />
                     <div>
-                      <h1>{alumni.name}</h1>
-                      <h2>{alumni.work}</h2>
-                      <img src={alumni.companyLogo} alt={alumni.work} className="mt-1" />
+                      <h1 className="font-medium">{alumni.name}</h1>
+                      <h2 className="text-zinc-600">{alumni.work}</h2>
+                      {alumni.companyLogo && <Image src={normalizeImagePath(alumni.companyLogo)} alt={alumni.work || 'Company'} width={80} height={20} className="mt-1 h-4 md:h-5" loading="lazy" />}
                     </div>
                   </div>
                 </div>

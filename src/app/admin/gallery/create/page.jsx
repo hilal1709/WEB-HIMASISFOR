@@ -82,12 +82,38 @@ export default function CreateGalleryPage() {
       let imagePath = formData.image
       let photoPath = formData.photoProfile
 
+      // Upload image file if selected
       if (imageFile) {
-        imagePath = await uploadImage(imageFile, 'img/award')
+        const uploadedImagePath = await uploadImage(imageFile, 'img/award')
+        if (uploadedImagePath) {
+          imagePath = uploadedImagePath
+        } else {
+          // Upload failed, check if manual URL provided
+          if (!imagePath || imagePath.trim() === '') {
+            alert('Upload gambar gagal dan URL manual tidak diisi. Silakan masukkan URL gambar secara manual.')
+            return
+          }
+        }
       }
 
+      // Upload photo file if selected
       if (photoFile) {
-        photoPath = await uploadImage(photoFile, 'img/award')
+        const uploadedPhotoPath = await uploadImage(photoFile, 'img/award')
+        if (uploadedPhotoPath) {
+          photoPath = uploadedPhotoPath
+        }
+        // Photo profile is optional, so we continue even if upload fails
+      }
+
+      // Validate required fields
+      if (!imagePath || imagePath.trim() === '') {
+        alert('Foto penghargaan wajib diisi! Silakan masukkan URL gambar.')
+        return
+      }
+
+      // photoProfile is optional, but if empty set to empty string
+      if (!photoPath) {
+        photoPath = ''
       }
 
       const response = await fetch('/api/gallery', {
@@ -149,21 +175,16 @@ export default function CreateGalleryPage() {
               </div>
               <div className="flex-1">
                 <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  className="w-full px-4 py-2 border border-zinc-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none text-sm"
-                />
-                <p className="text-xs text-zinc-500 mt-2">
-                  Upload foto penghargaan/sertifikat. Format: JPG, PNG (max 2MB)
-                </p>
-                <input
                   type="text"
                   value={formData.image}
                   onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                  className="w-full px-4 py-2 border border-zinc-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none mt-2"
-                  placeholder="atau masukkan URL: /img/award/nama.jpg"
+                  className="w-full px-4 py-2 border border-zinc-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none"
+                  placeholder="Masukkan URL: /img/award/nama.jpg"
+                  required
                 />
+                <p className="text-xs text-zinc-500 mt-2">
+                  Masukkan URL gambar (contoh: /img/award/piala.jpg). Upload file tidak tersedia di production Vercel.
+                </p>
               </div>
             </div>
           </div>
@@ -171,7 +192,7 @@ export default function CreateGalleryPage() {
           {/* Photo Profile Upload */}
           <div>
             <label className="block text-sm font-medium text-zinc-700 mb-2">
-              Foto Profil *
+              Foto Profil
             </label>
             <div className="flex items-start gap-4">
               <div className="flex-shrink-0">
@@ -189,21 +210,15 @@ export default function CreateGalleryPage() {
               </div>
               <div className="flex-1">
                 <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handlePhotoChange}
-                  className="w-full px-4 py-2 border border-zinc-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none text-sm"
-                />
-                <p className="text-xs text-zinc-500 mt-2">
-                  Upload foto profil penerima. Format: JPG, PNG (max 2MB)
-                </p>
-                <input
                   type="text"
                   value={formData.photoProfile}
                   onChange={(e) => setFormData({ ...formData, photoProfile: e.target.value })}
-                  className="w-full px-4 py-2 border border-zinc-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none mt-2"
-                  placeholder="atau masukkan URL: /img/award/profil.jpg"
+                  className="w-full px-4 py-2 border border-zinc-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none"
+                  placeholder="Masukkan URL: /img/award/profil.jpg"
                 />
+                <p className="text-xs text-zinc-500 mt-2">
+                  Masukkan URL foto profil (contoh: /img/award/john-doe.jpg). Upload file tidak tersedia di production Vercel.
+                </p>
               </div>
             </div>
           </div>

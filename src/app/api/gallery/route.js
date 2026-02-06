@@ -44,9 +44,10 @@ export async function POST(request) {
     const body = await request.json();
     const { title, name, year, image, photoProfile, description, order } = body;
 
+    // Validate required fields
     if (!title || !name || !year || !image) {
       return NextResponse.json(
-        { success: false, error: 'Missing required fields' },
+        { success: false, error: 'Field wajib: title, name, year, dan image harus diisi' },
         { status: 400 }
       );
     }
@@ -57,8 +58,8 @@ export async function POST(request) {
         name,
         year,
         image,
-        photoProfile,
-        description,
+        photoProfile: photoProfile || '',
+        description: description || '',
         order: order || 0,
         isActive: true
       }

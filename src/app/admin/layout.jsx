@@ -63,13 +63,13 @@ export default function AdminLayout({ children }) {
   }
 
   const menuItems = [
-    { href: '/admin/dashboard', label: 'Dashboard', icon: '📊' },
-    { href: '/admin/content', label: 'Konten Web Utama', icon: '📄' },
-    { href: '/admin/profile-content', label: 'Konten Halaman Profil', icon: '👤' },
-    { href: '/admin/curriculum', label: 'Kelola Kurikulum', icon: '📚' },
-    { href: '/admin/achievements', label: 'Kelola Prestasi', icon: '🏆' },
-    { href: '/admin/gallery', label: 'Kelola Galeri Prestasi', icon: '🖼️' },
-    { href: '/admin/media', label: 'Upload Media', icon: '📁' },
+    { href: '/admin/dashboard', label: 'Dashboard' },
+    { href: '/admin/content', label: 'Konten Web Utama' },
+    { href: '/admin/profile-content', label: 'Konten Halaman Profil' },
+    { href: '/admin/curriculum', label: 'Kelola Kurikulum' },
+    { href: '/admin/achievements', label: 'Kelola Prestasi' },
+    { href: '/admin/gallery', label: 'Kelola Galeri Prestasi' },
+    { href: '/admin/media', label: 'Upload Media' },
   ]
 
   const closeMobileMenu = () => {
@@ -120,8 +120,8 @@ export default function AdminLayout({ children }) {
               } ${!sidebarOpen ? 'justify-center' : ''}`}
               title={!sidebarOpen ? item.label : ''}
             >
-              <span className="text-lg">{item.icon}</span>
               {sidebarOpen && <span className="text-sm">{item.label}</span>}
+              {!sidebarOpen && <span className="text-sm font-bold">{item.label.charAt(0)}</span>}
             </Link>
           ))}
         </nav>
@@ -132,16 +132,16 @@ export default function AdminLayout({ children }) {
             className={`flex items-center gap-3 px-4 py-3 rounded-lg mb-2 text-zinc-600 hover:bg-zinc-100 transition ${!sidebarOpen ? 'justify-center' : ''}`}
             title={!sidebarOpen ? 'Lihat Website' : ''}
           >
-            <span className="text-lg">🌐</span>
             {sidebarOpen && <span className="text-sm">Lihat Website</span>}
+            {!sidebarOpen && <span className="text-sm font-bold">W</span>}
           </Link>
           <button
             onClick={handleLogout}
             className={`flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 transition w-full ${!sidebarOpen ? 'justify-center' : ''}`}
             title={!sidebarOpen ? 'Logout' : ''}
           >
-            <span className="text-lg">🚪</span>
             {sidebarOpen && <span className="text-sm">Logout</span>}
+            {!sidebarOpen && <span className="text-sm font-bold">X</span>}
           </button>
         </div>
       </aside>
@@ -155,7 +155,7 @@ export default function AdminLayout({ children }) {
               <p className="text-xs text-zinc-500 mt-1">Sistem Informasi</p>
             </div>
             <button onClick={closeMobileMenu} className="text-zinc-400 hover:text-zinc-600 text-2xl">
-              ✕
+              ×
             </button>
           </div>
         </div>
@@ -172,7 +172,6 @@ export default function AdminLayout({ children }) {
                   : 'text-zinc-600 hover:bg-zinc-100'
               }`}
             >
-              <span className="text-lg">{item.icon}</span>
               <span className="text-sm">{item.label}</span>
             </Link>
           ))}
@@ -184,14 +183,12 @@ export default function AdminLayout({ children }) {
             onClick={closeMobileMenu}
             className="flex items-center gap-3 px-4 py-3 rounded-lg mb-2 text-zinc-600 hover:bg-zinc-100 transition"
           >
-            <span className="text-lg">🌐</span>
             <span className="text-sm">Lihat Website</span>
           </Link>
           <button
             onClick={handleLogout}
             className="flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 transition w-full"
           >
-            <span className="text-lg">🚪</span>
             <span className="text-sm">Logout</span>
           </button>
         </div>

@@ -163,14 +163,14 @@ export default function MediaPage() {
   }
 
   return (
-    <div>
-      <div className="mb-6">
-        <h2 className="text-2xl font-bold text-zinc-800">Upload Media</h2>
-        <p className="text-zinc-500 mt-1">Upload gambar dan dapatkan link URL-nya</p>
+    <div className="space-y-4 lg:space-y-6">
+      <div className="mb-4 lg:mb-6">
+        <h2 className="text-xl lg:text-2xl font-bold text-zinc-800">Upload Media</h2>
+        <p className="text-sm text-zinc-500 mt-1">Upload gambar dan dapatkan link URL-nya</p>
       </div>
 
       {/* Upload Form */}
-      <div className="bg-white rounded-xl shadow-md p-6 mb-6">
+      <div className="bg-white rounded-xl shadow-md p-4 lg:p-6">
         <form onSubmit={handleUpload} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-zinc-700 mb-2">
@@ -179,7 +179,7 @@ export default function MediaPage() {
             <select
               value={selectedFolder}
               onChange={(e) => setSelectedFolder(e.target.value)}
-              className="w-full px-4 py-2 border border-zinc-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none"
+              className="w-full px-3 lg:px-4 py-2 border border-zinc-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none text-sm lg:text-base"
             >
               {folders.map((folder) => (
                 <option key={folder.value} value={folder.value}>
@@ -198,7 +198,7 @@ export default function MediaPage() {
               name="file"
               accept="image/*"
               onChange={handleFileSelect}
-              className="w-full px-4 py-2 border border-zinc-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none"
+              className="w-full px-3 lg:px-4 py-2 border border-zinc-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none text-sm lg:text-base"
               required
             />
           </div>
@@ -211,7 +211,7 @@ export default function MediaPage() {
               <img
                 src={previewUrl}
                 alt="Preview"
-                className="max-w-md h-auto rounded-lg border border-zinc-200"
+                className="max-w-full lg:max-w-md h-auto rounded-lg border border-zinc-200"
               />
             </div>
           )}
@@ -219,7 +219,7 @@ export default function MediaPage() {
           <button
             type="submit"
             disabled={uploading}
-            className="w-full bg-red-600 text-white py-3 rounded-lg font-semibold hover:bg-red-700 transition disabled:bg-zinc-400 disabled:cursor-not-allowed"
+            className="w-full bg-red-600 text-white py-2 lg:py-3 rounded-lg font-semibold hover:bg-red-700 transition disabled:bg-zinc-400 disabled:cursor-not-allowed text-sm lg:text-base"
           >
             {uploading ? 'Uploading...' : 'Upload File'}
           </button>
@@ -227,8 +227,8 @@ export default function MediaPage() {
       </div>
 
       {/* Uploaded Files */}
-      <div className="bg-white rounded-xl shadow-md p-6">
-        <h3 className="text-xl font-bold text-zinc-800 mb-4">
+      <div className="bg-white rounded-xl shadow-md p-4 lg:p-6">
+        <h3 className="text-lg lg:text-xl font-bold text-zinc-800 mb-4">
           File di Folder: {folders.find(f => f.value === selectedFolder)?.label}
         </h3>
         {loading ? (
@@ -239,12 +239,12 @@ export default function MediaPage() {
         ) : uploadedFiles.length > 0 ? (
           <div className="space-y-4">
             {uploadedFiles.map((file, index) => (
-              <div key={index} className="border border-zinc-200 rounded-lg p-4">
-                <div className="flex items-start gap-4">
+              <div key={index} className="border border-zinc-200 rounded-lg p-3 lg:p-4">
+                <div className="flex flex-col sm:flex-row items-start gap-3 lg:gap-4">
                   <img
                     src={file.url}
                     alt={file.filename}
-                    className="w-24 h-24 object-cover rounded-lg"
+                    className="w-full sm:w-20 lg:w-24 h-auto sm:h-20 lg:h-24 object-cover rounded-lg"
                   />
                   <div className="flex-1">
                     {editingFile?.url === file.url ? (

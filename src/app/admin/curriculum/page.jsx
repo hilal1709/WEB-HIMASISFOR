@@ -148,11 +148,11 @@ export default function CurriculumManagement() {
     <div className="min-h-screen bg-gray-50 p-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">
+        <div className="mb-6 lg:mb-8">
+          <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">
             Kelola Kurikulum
           </h1>
-          <p className="mt-2 text-gray-600">
+          <p className="mt-2 text-sm lg:text-base text-gray-600">
             Kelola mata kuliah per semester untuk halaman kurikulum
           </p>
         </div>
@@ -160,7 +160,7 @@ export default function CurriculumManagement() {
         {/* Message Alert */}
         {message.text && (
           <div
-            className={`mb-6 p-4 rounded-md ${
+            className={`mb-4 lg:mb-6 p-3 lg:p-4 rounded-md text-sm lg:text-base ${
               message.type === "success"
                 ? "bg-green-50 text-green-800 border border-green-200"
                 : "bg-red-50 text-red-800 border border-red-200"
@@ -171,8 +171,8 @@ export default function CurriculumManagement() {
         )}
 
         {/* Main Info Form */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-          <h2 className="text-xl font-semibold mb-4">Informasi Umum</h2>
+        <div className="bg-white rounded-lg shadow-md p-4 lg:p-6 mb-4 lg:mb-6">
+          <h2 className="text-lg lg:text-xl font-semibold mb-4">Informasi Umum</h2>
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -182,7 +182,7 @@ export default function CurriculumManagement() {
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm lg:text-base"
               />
             </div>
             <div>
@@ -193,51 +193,51 @@ export default function CurriculumManagement() {
                 type="text"
                 value={subtitle}
                 onChange={(e) => setSubtitle(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm lg:text-base"
               />
             </div>
           </div>
         </div>
 
         {/* Semester Cards */}
-        <div className="space-y-6">
+        <div className="space-y-4 lg:space-y-6">
           {kurikulum.map((semester, semesterIndex) => (
             <div
               key={semesterIndex}
               className="bg-white rounded-lg shadow-md overflow-hidden"
             >
-              <div className="bg-blue-600 text-white px-6 py-4 flex justify-between items-center">
+              <div className="bg-blue-600 text-white px-4 lg:px-6 py-3 lg:py-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
                 <div>
-                  <h3 className="text-xl font-semibold">
+                  <h3 className="text-lg lg:text-xl font-semibold">
                     Semester {semester.semester}
                   </h3>
-                  <p className="text-sm text-blue-100">
+                  <p className="text-xs lg:text-sm text-blue-100">
                     Total SKS: {calculateTotalSKS(semester.matkul || [])}
                   </p>
                 </div>
                 <button
                   onClick={() => deleteSemester(semesterIndex)}
-                  className="px-4 py-2 bg-red-500 hover:bg-red-600 rounded-md transition-colors"
+                  className="px-3 lg:px-4 py-2 bg-red-500 hover:bg-red-600 rounded-md transition-colors text-sm lg:text-base whitespace-nowrap"
                 >
                   Hapus Semester
                 </button>
               </div>
 
-              <div className="p-6">
+              <div className="p-4 lg:p-6">
                 <div className="overflow-x-auto">
-                  <table className="w-full">
+                  <table className="w-full min-w-max">
                     <thead>
                       <tr className="bg-gray-50 border-b">
-                        <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900">
+                        <th className="px-2 lg:px-4 py-2 lg:py-3 text-left text-xs lg:text-sm font-semibold text-gray-900">
                           No
                         </th>
-                        <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900">
+                        <th className="px-2 lg:px-4 py-2 lg:py-3 text-left text-xs lg:text-sm font-semibold text-gray-900 min-w-[150px]">
                           Nama Mata Kuliah
                         </th>
-                        <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900">
+                        <th className="px-2 lg:px-4 py-2 lg:py-3 text-left text-xs lg:text-sm font-semibold text-gray-900">
                           SKS
                         </th>
-                        <th className="px-4 py-3 text-right text-sm font-semibold text-gray-900">
+                        <th className="px-2 lg:px-4 py-2 lg:py-3 text-right text-xs lg:text-sm font-semibold text-gray-900 min-w-[100px]">
                           Aksi
                         </th>
                       </tr>

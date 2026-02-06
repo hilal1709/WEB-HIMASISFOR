@@ -88,22 +88,22 @@ export default function GalleryPage() {
 
 
   return (
-    <div>
-      <div className="flex justify-between items-center mb-6">
+    <div className="space-y-4 lg:space-y-6">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-zinc-800">Kelola Galeri Prestasi</h2>
-          <p className="text-zinc-500 mt-1">Kelola foto showcase galeri prestasi</p>
+          <h2 className="text-xl lg:text-2xl font-bold text-zinc-800">Kelola Galeri Prestasi</h2>
+          <p className="text-sm text-zinc-500 mt-1">Kelola foto showcase galeri prestasi</p>
         </div>
         <Link
           href="/admin/gallery/create"
-          className="bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition"
+          className="bg-red-600 text-white px-4 lg:px-6 py-2 lg:py-3 rounded-lg font-semibold hover:bg-red-700 transition text-center text-sm lg:text-base"
         >
           + Tambah Galeri
         </Link>
       </div>
 
       {/* Filter and Search */}
-      <div className="bg-white rounded-xl shadow-md p-6 mb-6">
+      <div className="bg-white rounded-xl shadow-md p-4 lg:p-6">
         <div className="grid grid-cols-1 gap-4">
           <div>
             <label className="block text-sm font-medium text-zinc-700 mb-2">Cari Galeri</label>
@@ -112,21 +112,21 @@ export default function GalleryPage() {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Cari judul, nama, atau tahun..."
-              className="w-full px-4 py-2 border border-zinc-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none"
+              className="w-full px-3 lg:px-4 py-2 border border-zinc-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none text-sm lg:text-base"
             />
           </div>
         </div>
-        <div className="mt-4 text-sm text-zinc-600">
+        <div className="mt-4 text-xs lg:text-sm text-zinc-600">
           Menampilkan {filteredGalleries.length} dari {galleries.length} galeri
         </div>
       </div>
 
       {/* Grid Gallery */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6">
         {loading ? (
-          <div className="col-span-full p-8 text-center text-zinc-500">Loading...</div>
+          <div className="col-span-full p-8 text-center text-zinc-500 text-sm lg:text-base">Loading...</div>
         ) : filteredGalleries.length === 0 ? (
-          <div className="col-span-full p-8 text-center text-zinc-500">
+          <div className="col-span-full p-8 text-center text-zinc-500 text-sm lg:text-base">
             {searchTerm ? 'Tidak ada data yang sesuai dengan pencarian' : 'Belum ada data galeri'}
           </div>
         ) : (

@@ -93,14 +93,14 @@ export default function ContentManagement() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
+    <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">
+        <div className="mb-6 lg:mb-8">
+          <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">
             Content Management System
           </h1>
-          <p className="mt-2 text-gray-600">
+          <p className="mt-2 text-sm lg:text-base text-gray-600">
             Kelola konten halaman utama website
           </p>
         </div>
@@ -108,7 +108,7 @@ export default function ContentManagement() {
         {/* Alert Message */}
         {message.text && (
           <div
-            className={`mb-6 p-4 rounded-lg ${
+            className={`mb-4 lg:mb-6 p-3 lg:p-4 rounded-lg text-sm lg:text-base ${
               message.type === "success"
                 ? "bg-green-100 text-green-800 border border-green-200"
                 : "bg-red-100 text-red-800 border border-red-200"
@@ -121,12 +121,12 @@ export default function ContentManagement() {
         {/* Tabs */}
         <div className="bg-white rounded-lg shadow">
           <div className="border-b border-gray-200">
-            <nav className="flex space-x-4 px-6 overflow-x-auto">
+            <nav className="flex space-x-2 lg:space-x-4 px-3 lg:px-6 overflow-x-auto scrollbar-hide">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`py-4 px-6 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${
+                  className={`py-3 lg:py-4 px-3 lg:px-6 text-xs lg:text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${
                     activeTab === tab.id
                       ? "border-red-600 text-red-600"
                       : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
@@ -139,7 +139,7 @@ export default function ContentManagement() {
           </div>
 
           {/* Tab Content */}
-          <div className="p-6">
+          <div className="p-4 lg:p-6">
             {activeTab === "hero" && (
               <HeroEditor
                 data={contents.hero}

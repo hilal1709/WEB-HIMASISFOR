@@ -15,6 +15,18 @@ export default function AdminLayout({ children }) {
     checkSession()
   }, [])
 
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'unset'
+    }
+    return () => {
+      document.body.style.overflow = 'unset'
+    }
+  }, [mobileMenuOpen])
+
   const checkSession = async () => {
     try {
       const response = await fetch('/api/auth/session', {
@@ -81,7 +93,7 @@ export default function AdminLayout({ children }) {
       {/* Mobile Overlay */}
       {mobileMenuOpen && (
         <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 lg:hidden transition-opacity duration-300"
           onClick={closeMobileMenu}
         />
       )}

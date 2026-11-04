@@ -1,104 +1,117 @@
 'use client'
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { Suspense, useRef, useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import Link from 'next/link'
+import { signIn } from 'next-auth/react'
+import gsap from 'gsap'
+import { useGSAP } from '@gsap/react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Spinner } from '@/components/ds/Loader'
+import LottiePlayer from '@/components/ds/LottiePlayer'
+import notify from '@/lib/notify'
+import { BackgroundBeams, BackgroundGrid, TextGenerateEffect } from '@/components/aceternity'
 
-export default function LoginPage() {
+function LoginForm() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const router = useRouter()
+  const params = useSearchParams()
+  const cardRef = useRef(null)
+
+  useGSAP(() => {
+    gsap.fromTo('[data-login-item]', { y: 24, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.08, duration: 0.7, ease: 'power3.out' })
+  }, { scope: cardRef })
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
     setLoading(true)
-
     try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email, password })
-      })
-
-      const data = await response.json()
-
-      if (data.success) {
-        router.push('/admin/dashboard')
+      const res = await signIn('credentials', { email, password, redirect: false })
+      if (res?.error) {
+        setError('Email atau password salah')
+        notify.error('Login gagal', { description: 'Periksa kembali email dan password Anda.' })
+        gsap.fromTo(cardRef.current, { x: -8 }, { x: 0, duration: 0.5, ease: 'elastic.out(1, 0.3)' })
       } else {
-        setError(data.error || 'Login gagal')
+        notify.success('Login berhasil', { description: 'Selamat datang kembali!' })
+        const callbackUrl = params.get('callbackUrl')
+        router.replace(callbackUrl && callbackUrl.startsWith('/') ? callbackUrl : '/admin/dashboard')
+        router.refresh()
       }
-    } catch (error) {
+    } catch {
       setError('Terjadi kesalahan. Silakan coba lagi.')
+      notify.error('Terjadi kesalahan', { description: 'Silakan coba lagi beberapa saat.' })
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-red-50 to-zinc-100 p-4">
-      <div className="absolute top-0 left-0 w-full h-full opacity-5 bg-[url('/img/sisfor.svg')] bg-repeat"></div>
-      
-      <div className="bg-white p-6 lg:p-8 rounded-2xl shadow-2xl w-full max-w-md relative z-10">
-        <div className="flex flex-col items-center mb-6 lg:mb-8">
-          <img src="/img/logo.png" alt="Logo Sistem Informasi UISI" className="h-10 lg:h-12 mb-4" />
-          <h1 className="text-2xl lg:text-3xl font-bold text-zinc-800">CMS Admin</h1>
-          <p className="text-sm lg:text-base text-zinc-500 mt-2">Sistem Informasi UISI</p>
-        </div>
+    <div ref={cardRef} className="relative z-10 w-full max-w-md rounded-2xl border bg-white/90 p-6 shadow-2xl backdrop-blur lg:p-8">
+      <div className="mb-6 flex flex-col items-center text-center" data-login-item>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/img/logo.png" alt="Logo Sistem Informasi UISI" className="mb-4 h-10 w-auto object-contain lg:h-12" />
+        <h1 className="text-2xl font-bold text-zinc-900 lg:text-3xl">CMS Admin</h1>
+        <p className="mt-1 text-sm text-zinc-500">Masuk untuk mengelola konten website</p>
+      </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4 lg:space-y-6">
-          {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-3 lg:px-4 py-2 lg:py-3 rounded-lg text-xs lg:text-sm">
-              {error}
-            </div>
-          )}
-
-          <div>
-            <label htmlFor="email" className="block text-xs lg:text-sm font-medium text-zinc-700 mb-2">
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 lg:px-4 py-2 lg:py-3 border border-zinc-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none transition text-sm lg:text-base"
-              placeholder="admin@uisi.ac.id"
-              required
-            />
+      <form onSubmit={handleSubmit} className="space-y-5">
+        {error && (
+          <div role="alert" className="rounded-lg border border-danger/20 bg-danger-soft px-4 py-3 text-sm text-danger" data-login-item>
+            {error}
           </div>
-
-          <div>
-            <label htmlFor="password" className="block text-xs lg:text-sm font-medium text-zinc-700 mb-2">
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 lg:px-4 py-2 lg:py-3 border border-zinc-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none transition text-sm lg:text-base"
-              placeholder="••••••••"
-              required
-            />
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-red-600 text-white py-2 lg:py-3 rounded-lg font-semibold hover:bg-red-700 transition disabled:bg-zinc-400 disabled:cursor-not-allowed text-sm lg:text-base"
-          >
-            {loading ? 'Loading...' : 'Login'}
-          </button>
-        </form>
-
-        <div className="mt-4 lg:mt-6 text-center text-xs lg:text-sm text-zinc-500">
-          <a href="/" className="text-red-600 hover:text-red-700 font-medium">
-            ← Kembali ke Website
-          </a>
+        )}
+        <div className="space-y-2" data-login-item>
+          <Label htmlFor="email">Email</Label>
+          <Input id="email" type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="admin@uisi.ac.id" required />
         </div>
+        <div className="space-y-2" data-login-item>
+          <Label htmlFor="password">Password</Label>
+          <Input id="password" type="password" autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" required />
+        </div>
+        <Button type="submit" size="lg" className="w-full" disabled={loading} data-login-item>
+          {loading ? <><Spinner /> Memproses…</> : 'Masuk'}
+        </Button>
+      </form>
+
+      <div className="mt-6 text-center text-sm" data-login-item>
+        <Link href="/" className="font-medium text-brand-600 hover:text-brand-700">← Kembali ke Website</Link>
+      </div>
+    </div>
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <div className="relative grid min-h-screen overflow-hidden bg-white lg:grid-cols-2">
+      {/* Panel ilustrasi */}
+      <div className="relative hidden flex-col justify-between overflow-hidden bg-zinc-950 p-10 text-white lg:flex">
+        <BackgroundBeams />
+        <div className="relative z-10 flex items-center gap-2 text-sm text-white/70">
+          <span className="size-2 rounded-full bg-brand-500" /> Sistem Informasi UISI
+        </div>
+        <div className="relative z-10">
+          <LottiePlayer name="secure" className="w-56" ariaLabel="Ilustrasi keamanan" />
+          <TextGenerateEffect
+            as="h2"
+            words="Kelola konten Sistem Informasi dengan mudah dan aman."
+            className="mt-6 max-w-md font-serif text-4xl leading-tight"
+          />
+          <p className="mt-4 max-w-sm text-sm text-white/60">Prestasi, galeri, kurikulum, dan konten halaman — semua dalam satu dashboard.</p>
+        </div>
+        <p className="relative z-10 text-xs text-white/40">© {new Date().getFullYear()} Program Studi Sistem Informasi</p>
+      </div>
+
+      {/* Panel form */}
+      <div className="relative flex items-center justify-center p-4 sm:p-8">
+        <BackgroundGrid variant="dot" />
+        <Suspense fallback={<Spinner size={24} className="text-brand-600" />}>
+          <LoginForm />
+        </Suspense>
       </div>
     </div>
   )

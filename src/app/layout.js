@@ -1,4 +1,5 @@
 import "./globals.css";
+import AppProviders from "@/components/providers/AppProviders";
 import { Inter, Noto_Serif_Display } from 'next/font/google';
 
 // Optimize font loading
@@ -23,7 +24,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${inter.variable} ${notoSerif.variable}`}>
+    <html lang="id" className={`${inter.variable} ${notoSerif.variable}`}>
       <head>
         <meta charSet="UTF-8" />
         <meta
@@ -70,7 +71,9 @@ export default function RootLayout({ children }) {
         </script>
         <title>Sistem Informasi - UISI</title>
       </head>
-      <body className={`${inter.className} antialiased`}>{children}</body>
+      <body className={`${inter.className} antialiased`}>
+        <AppProviders>{children}</AppProviders>
+      </body>
     </html>
   );
 }

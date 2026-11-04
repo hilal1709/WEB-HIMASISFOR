@@ -60,7 +60,7 @@ Di Vercel Dashboard, sebelum deploy, tambahkan environment variables:
 4. Tambahkan variable lain:
    ```
    DATABASE_URL = $POSTGRES_PRISMA_URL
-   JWT_SECRET = [generate random string di https://generate-secret.vercel.app]
+   AUTH_SECRET = [generate random string: npx auth secret atau https://generate-secret.vercel.app]
    ```
 
 #### Jika pakai database eksternal (Neon/Supabase/Railway):
@@ -68,10 +68,11 @@ Di Vercel Dashboard, sebelum deploy, tambahkan environment variables:
 2. Tambahkan:
    ```
    DATABASE_URL = postgresql://user:password@host:5432/database?schema=public
-   JWT_SECRET = [generate random string]
+   AUTH_SECRET = [generate random string: npx auth secret]
    ```
 
 **PENTING**: 
+- Login CMS memakai **Auth.js**. Variabel `AUTH_SECRET` wajib ada. Jika project lama masih punya `JWT_SECRET`, nilai itu tetap dipakai sebagai cadangan.
 - Untuk database eksternal, tambahkan `?connection_limit=1&pool_timeout=0` atau `?pgbouncer=true` di akhir DATABASE_URL jika pakai serverless
 - Contoh: `postgresql://user:pass@host:5432/db?schema=public&connection_limit=1`
 

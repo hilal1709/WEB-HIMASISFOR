@@ -32,7 +32,7 @@ const nextConfig = {
   
   // Experimental features for performance
   experimental: {
-    optimizePackageImports: ['motion', 'split-type'],
+    optimizePackageImports: ['lucide-react', 'gsap', 'animejs', 'chart.js', 'swiper'],
   },
 };
 

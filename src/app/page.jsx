@@ -75,7 +75,7 @@ export default function Home() {
       <Hero />
 
       {/* Sistem Informasi */}
-      <div className="px-4 md:px-8 lg:px-24 py-8 md:py-10 lg:py-12 bg-red-600 text-white relative">
+      <div className="px-4 md:px-8 lg:px-24 py-8 md:py-10 lg:py-12 bg-brand-600 text-white relative">
         <div className="max-w-7xl mx-auto flex flex-col lg:flex-row justify-between gap-6 lg:gap-8">
           {/* sisfor */}
           <div>
@@ -120,7 +120,7 @@ export default function Home() {
 
       {/* Bidang Keahlian */}
       <div className="my-12 md:my-16 lg:my-20 px-4">
-        <h1 className="text-2xl md:text-3xl lg:text-4xl 2xl:text-5xl font-bold text-center mb-3 md:mb-4" dangerouslySetInnerHTML={{ __html: bidangKeahlianData.title || "Bidang Keahlian <br /><span class='text-red-600'>Sistem Informasi UISI</span>" }}>
+        <h1 className="text-2xl md:text-3xl lg:text-4xl 2xl:text-5xl font-bold text-center mb-3 md:mb-4" dangerouslySetInnerHTML={{ __html: bidangKeahlianData.title || "Bidang Keahlian <br /><span class='text-brand-600'>Sistem Informasi UISI</span>" }}>
         </h1>
         <p className="mx-4 md:mx-12 lg:mx-[23rem] 2xl:mx-[40rem] text-xs md:text-sm 2xl:text-base text-center text-zinc-500">
           {bidangKeahlianData.subtitle || "Program Studi S1 Sistem Informasi Universitas Internasional Semen Indonesia memiliki 3 fokus utama bidang keahlian, diantaranya sebagai berikut"}
@@ -244,7 +244,7 @@ export default function Home() {
         <a
           target="blank"
           href={socialMediaData.data?.instagramUrl || "https://www.instagram.com/sisforuisi/"}
-          className="mt-4 lg:mt-0 bg-gradient-to-r from-[#C10F11] to-[#E31515] hover:scale-95 text-xs md:text-sm lg:text-base px-5 md:px-6 py-2.5 md:py-3 rounded-xl font-medium text-white w-full sm:w-auto text-center"
+          className="mt-4 lg:mt-0 bg-gradient-to-r from-brand-700 to-brand-600 hover:scale-95 text-xs md:text-sm lg:text-base px-5 md:px-6 py-2.5 md:py-3 rounded-xl font-medium text-white w-full sm:w-auto text-center"
         >
           {socialMediaData.data?.buttonText || "Follow On Instagram"}
         </a>

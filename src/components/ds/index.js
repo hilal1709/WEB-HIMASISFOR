@@ -8,3 +8,5 @@ export { default as LottiePlayer } from "./LottiePlayer";
 export { default as Modal } from "./Modal";
 export { default as StatCard, CountUp } from "./StatCard";
 export { default as Toaster } from "./Toaster";
+export { default as Reveal } from "./Reveal";
+export { default as NotFoundView } from "./NotFoundView";

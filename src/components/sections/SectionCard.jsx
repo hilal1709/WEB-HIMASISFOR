@@ -13,9 +13,9 @@ export default function SectionCard({ data }) {
 
   return (
     <section className="py-16 bg-zinc-50">
-      <div className="container mx-auto px-6">
+      <div className="container mx-auto px-6" data-aos="fade-up">
         {data.subtitle && (
-          <p className="text-red-600 font-semibold text-center mb-3">{data.subtitle}</p>
+          <p className="text-brand-600 font-semibold text-center mb-3">{data.subtitle}</p>
         )}
         {data.title && (
           <h2 className="text-4xl font-bold text-zinc-900 text-center mb-12">{data.title}</h2>

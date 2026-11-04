@@ -133,7 +133,7 @@ export default function AwardingRecognition() {
               onClick={() => setToggleAwardee("lecturer")}
               className={`px-8 lg:px-9 py-2 font-medium 2xl:text-lg rounded-xl hover:cursor-pointer ${
                 toggleAwardee === "lecturer"
-                  ? "bg-red-600 font-semibold text-white"
+                  ? "bg-brand-600 font-semibold text-white"
                   : "text-zinc-600"
               }`}
             >
@@ -143,7 +143,7 @@ export default function AwardingRecognition() {
               onClick={() => setToggleAwardee("student")}
               className={`px-8 lg:px-9 py-2 font-medium 2xl:text-lg rounded-xl hover:cursor-pointer ${
                 toggleAwardee === "student"
-                  ? "bg-red-600 font-semibold text-white"
+                  ? "bg-brand-600 font-semibold text-white"
                   : "text-zinc-600"
               }`}
             >
@@ -167,7 +167,7 @@ export default function AwardingRecognition() {
                     {prestasi.awardtype}
                   </h1>
                   <h2 className="lg:w-72 text-sm">{prestasi.title}</h2>
-                  <h3 className="px-4 py-2 font-semibold text-xs text-red-600 bg-white rounded-md">
+                  <h3 className="px-4 py-2 font-semibold text-xs text-brand-600 bg-white rounded-md">
                     {prestasi.name}
                   </h3>
                 </div>
@@ -177,7 +177,7 @@ export default function AwardingRecognition() {
           {/* button selengkapnya */}
           <a
             href="#"
-            className="px-4 lg:px-6 py-2 lg:py-3 font-semibold text-sm text-red-600 bg-white rounded-xl drop-shadow-lg"
+            className="px-4 lg:px-6 py-2 lg:py-3 font-semibold text-sm text-brand-600 bg-white rounded-xl drop-shadow-lg"
           >
             Selengkapnya
           </a>

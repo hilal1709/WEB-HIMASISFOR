@@ -3,7 +3,7 @@ export default function SectionContent({ data }) {
   
   return (
     <section className="py-16 bg-white">
-      <div className="container mx-auto px-6">
+      <div className="container mx-auto px-6" data-aos="fade-up">
         <div className={`flex flex-col ${hasImage ? 'md:flex-row' : ''} gap-12 items-center`}>
           {hasImage && (
             <div className="md:w-1/2">
@@ -16,7 +16,7 @@ export default function SectionContent({ data }) {
           )}
           <div className={hasImage ? 'md:w-1/2' : 'max-w-4xl mx-auto'}>
             {data.subtitle && (
-              <p className="text-red-600 font-semibold mb-3">{data.subtitle}</p>
+              <p className="text-brand-600 font-semibold mb-3">{data.subtitle}</p>
             )}
             {data.title && (
               <h2 className="text-4xl font-bold text-zinc-900 mb-6">{data.title}</h2>

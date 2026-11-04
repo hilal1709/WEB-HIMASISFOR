@@ -5,6 +5,7 @@ import { ArrowDown } from "@/icons/ArrowDown";
 import JumbotronPromo from "@/components/JumbotronPromo";
 import Footer from "@/components/Footer";
 import InfiniteAlumni from "@/components/InfiniteAlumni";
+import { PageLoader } from "@/components/ds/Loader";
 
 export default function Profile() {
   const [isVisible, setIsVisible] = useState(null);
@@ -108,7 +109,7 @@ export default function Profile() {
   };
 
   const akreditasi = contents.akreditasi || {
-    title: "Sertifikat <span class='text-red-600'>Akreditasi</span>",
+    title: "Sertifikat <span class='text-brand-600'>Akreditasi</span>",
     subtitle: "Program Studi Sistem Informasi UISI",
     content: "Per tanggal 3 April 2023, Program Studi S1 Sistem Informasi UISI telah terakreditasi \"Baik Sekali\" oleh Lembaga Akreditasi Mandiri Informatika dan Komputer (LAM INFOKOM) yang dinyatakan dalam Keputusan LAM INFOKOM No.026/SK/LAM-INFOKOM/Ak/S/IV/2023.",
     image: "/img/sertif_akreditasi.png"
@@ -123,9 +124,7 @@ export default function Profile() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl">Loading...</div>
-      </div>
+      <PageLoader label="Memuat profil…" />
     );
   }
 
@@ -157,7 +156,7 @@ export default function Profile() {
         <div className="flex justify-center items-center">
           <a
             href={videoProfile.content}
-            className="w-full md:w-[36rem] lg:w-210 2xl:w-310 h-48 md:h-64 lg:h-100 2xl:h-144 bg-cover bg-center hover:scale-105 transition-all duration-500 border-4 md:border-6 lg:border-8 border-red-50 hover:border-white shadow-xl rounded-xl group"
+            className="w-full md:w-[36rem] lg:w-210 2xl:w-310 h-48 md:h-64 lg:h-100 2xl:h-144 bg-cover bg-center hover:scale-105 transition-all duration-500 border-4 md:border-6 lg:border-8 border-brand-50 hover:border-white shadow-xl rounded-xl group"
             style={{ backgroundImage: `url('${videoProfile.image}')` }}
           >
             <div className="w-full h-full flex justify-center items-center group-hover:bg-black/20 rounded-lg transition-all duration-500">
@@ -175,7 +174,7 @@ export default function Profile() {
           {/* Visi */}
           <div className="flex flex-col lg:flex-row lg:gap-46 items-start lg:items-center">
             <div className="mb-4 lg:mb-0">
-              <h1 className="font-bold italic text-2xl md:text-3xl lg:text-4xl 2xl:text-5xl text-red-600">
+              <h1 className="font-bold italic text-2xl md:text-3xl lg:text-4xl 2xl:text-5xl text-brand-600">
                 {visi.title}
               </h1>
               <h2 className="font-serif text-sm md:text-base lg:text-xl mt-1 md:mt-2">
@@ -190,7 +189,7 @@ export default function Profile() {
           {/* Misi */}
           <div className="flex flex-col lg:flex-row lg:gap-46 items-start lg:items-center border-t border-zinc-200 pt-6 md:pt-7 lg:pt-8 mt-8 md:mt-12 lg:mt-24">
             <div className="mb-4 lg:mb-0">
-              <h1 className="font-bold italic text-2xl md:text-3xl lg:text-4xl 2xl:text-5xl text-red-600">
+              <h1 className="font-bold italic text-2xl md:text-3xl lg:text-4xl 2xl:text-5xl text-brand-600">
                 {misi.title}
               </h1>
               <h2 className="font-serif text-sm md:text-base lg:text-xl mt-1 md:mt-2">
@@ -198,7 +197,7 @@ export default function Profile() {
               </h2>
             </div>
             <div className="w-full lg:w-[38rem] text-xs md:text-sm lg:text-base text-zinc-600 mt-4 lg:mt-0">
-              <ol className="numbered-list list-decimal space-y-2">
+              <ol className="numbebrand-list list-decimal space-y-2">
                 {misi.data?.items?.map((item, index) => (
                   <li key={index}>{item}</li>
                 ))}
@@ -239,7 +238,7 @@ export default function Profile() {
       {/* 
 
         <div className="flex flex-col justify-center items-center my-24 text-center">
-          <h1 className="font-bold text-5xl text-red-600">Kerjasama</h1>
+          <h1 className="font-bold text-5xl text-brand-600">Kerjasama</h1>
           <p className="mt-4 text-lg text-zinc-500">
             Program Studi Sistem Informasi UISI
           </p>
@@ -259,7 +258,7 @@ export default function Profile() {
         <h1 className="font-bold text-2xl md:text-3xl lg:text-4xl xl:text-5xl text-zinc-900">
           {profilDosen.heading?.split(' ')[0]} {profilDosen.heading?.split(' ')[1]}
         </h1>
-        <h1 className="mt-2 font-bold text-2xl md:text-3xl lg:text-4xl xl:text-5xl text-red-600">
+        <h1 className="mt-2 font-bold text-2xl md:text-3xl lg:text-4xl xl:text-5xl text-brand-600">
           {profilDosen.subheading}
         </h1>
 
@@ -268,7 +267,7 @@ export default function Profile() {
           {profilDosen.dosens?.map((dosen, index) => (
             <div
               key={index}
-              className="bg-cover bg-no-repeat bg-center w-full max-w-[21rem] mx-auto h-[26rem] rounded-xl shadow-lg hover:shadow-red-100"
+              className="bg-cover bg-no-repeat bg-center w-full max-w-[21rem] mx-auto h-[26rem] rounded-xl shadow-lg hover:shadow-brand-100"
               style={{ backgroundImage: `url(${dosen.image})` }}
             >
               <div
@@ -286,7 +285,7 @@ export default function Profile() {
                     className="w-fit p-1 rounded-lg bg-white drop-shadow-md absolute -mt-8 ml-60 md:ml-64"
                   >
                     <ArrowDown
-                      className={`text-red-600 h-4 md:h-5 transition-transform duration-300 ${
+                      className={`text-brand-600 h-4 md:h-5 transition-transform duration-300 ${
                         isVisible === index ? "rotate-0" : "rotate-180"
                       }`}
                     />

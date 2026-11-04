@@ -30,21 +30,21 @@ export default function Footer() {
             href="https://www.instagram.com/sisforuisi"
             className="p-2 rounded-full bg-zinc-100 hover:bg-zinc-200 group"
           >
-            <Instagram className="text-red-600 group-hover:text-red-700 h-6" />
+            <Instagram className="text-brand-600 group-hover:text-brand-700 h-6" />
           </a>
           <a
             target="blank"
             href="https://www.youtube.com/@sisforuisi"
             className="p-2 rounded-full bg-zinc-100 hover:bg-zinc-200 group"
           >
-            <Youtube className="text-red-600 group-hover:text-red-700 h-6" />
+            <Youtube className="text-brand-600 group-hover:text-brand-700 h-6" />
           </a>
           <a
             target="blank"
             href="https://www.tiktok.com/@sisfor_uisi"
             className="p-2 rounded-full bg-zinc-100 hover:bg-zinc-200 group"
           >
-            <Tiktok className="text-red-600 group-hover:text-red-700 h-6" />
+            <Tiktok className="text-brand-600 group-hover:text-brand-700 h-6" />
           </a>
         </div>
       </div>
@@ -63,21 +63,21 @@ export default function Footer() {
             href="https://www.instagram.com/sisforuisi"
             className="p-2 rounded-full bg-zinc-100 hover:bg-zinc-200 group"
           >
-            <Instagram className="text-red-600 group-hover:text-red-700 h-4 md:h-5" />
+            <Instagram className="text-brand-600 group-hover:text-brand-700 h-4 md:h-5" />
           </a>
           <a
             target="blank"
             href="https://www.youtube.com/@sisforuisi"
             className="p-2 rounded-full bg-zinc-100 hover:bg-zinc-200 group"
           >
-            <Youtube className="text-red-600 group-hover:text-red-700 h-4 md:h-5" />
+            <Youtube className="text-brand-600 group-hover:text-brand-700 h-4 md:h-5" />
           </a>
           <a
             target="blank"
             href="https://www.tiktok.com/@sisfor_uisi"
             className="p-2 rounded-full bg-zinc-100 hover:bg-zinc-200 group"
           >
-            <Tiktok className="text-red-600 group-hover:text-red-700 h-4 md:h-5" />
+            <Tiktok className="text-brand-600 group-hover:text-brand-700 h-4 md:h-5" />
           </a>
         </div>
 

@@ -78,7 +78,7 @@ export default function DynamicNavbar() {
                   href={menu.href}
                   className={`px-4 py-2 rounded-lg font-medium transition ${
                     pathname === menu.href
-                      ? 'bg-red-600 text-white'
+                      ? 'bg-brand-600 text-white'
                       : 'text-zinc-700 hover:bg-zinc-100'
                   }`}
                 >
@@ -93,7 +93,7 @@ export default function DynamicNavbar() {
             href="https://pmb.uisi.ac.id/"
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition"
+            className="bg-brand-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-brand-700 transition"
           >
             Daftar Sekarang
           </a>
@@ -126,7 +126,7 @@ export default function DynamicNavbar() {
                   onClick={() => setOpenNav(false)}
                   className={`block px-4 py-3 rounded-lg font-medium transition ${
                     pathname === menu.href
-                      ? 'bg-red-600 text-white'
+                      ? 'bg-brand-600 text-white'
                       : 'text-zinc-700 hover:bg-zinc-100'
                   }`}
                 >
@@ -139,7 +139,7 @@ export default function DynamicNavbar() {
                 href="https://pmb.uisi.ac.id/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block bg-red-600 text-white px-4 py-3 rounded-lg font-semibold text-center hover:bg-red-700 transition"
+                className="block bg-brand-600 text-white px-4 py-3 rounded-lg font-semibold text-center hover:bg-brand-700 transition"
               >
                 Daftar Sekarang
               </a>

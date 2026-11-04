@@ -14,8 +14,8 @@ export default function SisforCard({
     setIsVisible(isVisible === cardId ? null : cardId);
   };
   return (
-    <div className="w-full md:w-fit shadow-xl">
-      {/* <h1 className="px-8 py-2 bg-red-600 rounded-t-xl font-medium text-center xl:text-lg text-white">
+    <div data-aos="fade-up" className="w-full md:w-fit shadow-xl rounded-xl transition-transform duration-500 ease-brand hover:-translate-y-1">
+      {/* <h1 className="px-8 py-2 bg-brand-600 rounded-t-xl font-medium text-center xl:text-lg text-white">
         {title}
       </h1> */}
       <div

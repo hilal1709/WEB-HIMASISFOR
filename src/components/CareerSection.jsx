@@ -5,7 +5,8 @@ import Auditor from "../icons/Auditor";
 import Consultant from "../icons/Consultant";
 import Analyst from "../icons/Analyst";
 import { useState, useEffect } from "react";
-import { motion } from "motion/react";
+import Reveal from "@/components/ds/Reveal";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function CareerSection() {
   const [activeCareer, setActiveCareer] = useState("erp");
@@ -32,8 +33,9 @@ export default function CareerSection() {
 
   if (loading || !careerData) {
     return (
-      <div className="flex justify-center items-center my-24">
-        <div className="animate-pulse">Loading...</div>
+      <div className="mx-auto my-24 grid w-full max-w-6xl gap-8 px-4 md:grid-cols-2">
+        <div className="space-y-4"><Skeleton className="h-12 w-3/4" />{[0, 1, 2, 3].map((i) => <Skeleton key={i} className="h-16 w-full" />)}</div>
+        <Skeleton className="h-80 w-full rounded-2xl" />
       </div>
     );
   }
@@ -48,7 +50,7 @@ export default function CareerSection() {
         <div className="w-full max-w-7xl flex flex-col md:flex-row justify-center items-center gap-8 md:gap-10 lg:gap-12">
           {/* bagian kiri */}
           <div className="w-full lg:w-fit">
-            <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-center lg:text-left lg:w-[42rem]" dangerouslySetInnerHTML={{ __html: title || "Prospek Karir Lulusan <br /><span class='text-transparent bg-clip-text bg-gradient-to-r from-red-700 to-red-500'>Sistem Informasi UISI</span>" }}>
+            <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-center lg:text-left lg:w-[42rem]" dangerouslySetInnerHTML={{ __html: title || "Prospek Karir Lulusan <br /><span class='text-transparent bg-clip-text bg-gradient-to-r from-brand-700 to-brand-500'>Sistem Informasi UISI</span>" }}>
             </h1>
 
           {/* section karir lulusan */}
@@ -74,7 +76,7 @@ export default function CareerSection() {
                     <div
                       className={`p-1.5 md:p-2 rounded-full ${
                         activeCareer === career.id
-                          ? "bg-red-600 outline-8 outline-zinc-200"
+                          ? "bg-brand-600 outline-8 outline-zinc-200"
                           : "bg-zinc-200"
                       }`}
                     >
@@ -98,12 +100,7 @@ export default function CareerSection() {
 
         {/* bagian kanan */}
         {careers.find(c => c.id === activeCareer) && (
-          <motion.div
-            key={activeCareer}
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="w-full"
-          >
+          <Reveal key={activeCareer} preset="zoom" className="w-full">
             <img
               src={careers.find(c => c.id === activeCareer).image}
               alt="bidangkeahlian"
@@ -112,7 +109,7 @@ export default function CareerSection() {
             <p className="w-full lg:w-[36rem] mt-5 md:mt-6 lg:mt-7 text-xs md:text-sm lg:text-base text-zinc-600">
               {careers.find(c => c.id === activeCareer).description}
             </p>
-          </motion.div>
+          </Reveal>
         )}
 
         {/* end section karir lulusan */}

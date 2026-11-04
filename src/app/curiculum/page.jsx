@@ -70,7 +70,7 @@ export default function Curiculum() {
       {/* Body of knowledge */}
       <div className="flex flex-col justify-center items-center my-8 md:my-10 lg:my-12 text-center px-4">
         <h1 className="font-bold text-2xl md:text-3xl lg:text-4xl xl:text-5xl">
-          Body of <span className="text-red-600">Knowledge</span>
+          Body of <span className="text-brand-600">Knowledge</span>
         </h1>
         <p className="mt-3 md:mt-4 text-xs md:text-sm lg:text-base text-zinc-500 text-center">
           Program Studi Sistem Informasi UISI
@@ -84,7 +84,7 @@ export default function Curiculum() {
       {/* Curiculum */}
       <div className="xl:flex xl:flex-col justify-center items-center py-12 md:py-14 lg:py-16 bg-zinc-100">
         <div className="mb-8 md:mb-10 lg:mb-12 text-center px-4">
-          <h1 className="font-bold text-2xl md:text-3xl lg:text-4xl xl:text-5xl text-red-600">
+          <h1 className="font-bold text-2xl md:text-3xl lg:text-4xl xl:text-5xl text-brand-600">
             {curriculumData.title}
           </h1>
           <p className="mt-3 md:mt-4 text-xs md:text-sm lg:text-base text-zinc-500">
@@ -109,7 +109,7 @@ export default function Curiculum() {
                 key={k.semester}
                 className="overflow-x-auto rounded-xl mt-4 md:mt-5 lg:mt-6 mx-4 md:mx-6 lg:mx-8 xl:mx-24 2xl:mx-96"
               >
-                <div className="bg-red-600 px-3 md:px-4 py-2.5 md:py-3 font-semibold text-xs md:text-sm lg:text-base xl:text-lg text-white">
+                <div className="bg-brand-600 px-3 md:px-4 py-2.5 md:py-3 font-semibold text-xs md:text-sm lg:text-base xl:text-lg text-white">
                   <h1>Semester {k.semester}</h1>
                 </div>
                 <table className="bg-white w-full">
@@ -153,7 +153,7 @@ export default function Curiculum() {
       {/* Mata Kuliah Pilihan */}
       <div className="xl:flex xl:flex-col justify-center items-center pb-12 md:pb-16 lg:pb-24 bg-zinc-100">
         <div className="overflow-x-auto rounded-xl mt-4 md:mt-5 lg:mt-6 mx-4 md:mx-6 lg:mx-8 xl:mx-24 2xl:mx-96">
-          <div className="w-[800px] md:w-[900px] lg:w-[993px] xl:w-[1076px] 2xl:w-[1127px] bg-red-600 px-3 md:px-4 py-2.5 md:py-3 font-semibold text-xs md:text-sm lg:text-base xl:text-lg text-white">
+          <div className="w-[800px] md:w-[900px] lg:w-[993px] xl:w-[1076px] 2xl:w-[1127px] bg-brand-600 px-3 md:px-4 py-2.5 md:py-3 font-semibold text-xs md:text-sm lg:text-base xl:text-lg text-white">
             <h1>Mata Kuliah Pilihan</h1>
           </div>
 

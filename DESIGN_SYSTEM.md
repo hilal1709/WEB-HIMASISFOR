@@ -54,7 +54,7 @@ Semua token didefinisikan sebagai CSS variable di `src/app/globals.css` lalu dip
 | `--danger` / `--danger-soft` | merah | `text-danger` | Error & aksi hapus |
 | `--chart-1 … --chart-5` | merah, zinc, amber, biru, hijau | — | Urutan warna seri chart |
 
-Aturan praktis: jangan menulis kode hex langsung di komponen. Pakai token di atas supaya bila warna brand berubah, cukup ganti satu tempat.
+Aturan praktis: jangan menulis kode hex langsung di komponen. Gunakan `brand-*`, bukan `red-*`. Class `*-red-*` hanya dipertahankan (lewat `@source inline` di `globals.css`) agar konten HTML lama yang tersimpan di database tetap tampil benar. Pakai token di atas supaya bila warna brand berubah, cukup ganti satu tempat.
 
 ### Tipografi
 
@@ -170,6 +170,20 @@ Cara mengaktifkan animasi Lordicon untuk sebuah ikon:
 3. Di `src/lib/icons.js`, isi `lordicon: '/icons/lordicon/<nama>.json'` (atau URL CDN `https://cdn.lordicon.com/<id>.json`).
 
 Selama slot `lordicon` masih kosong, ikon lucide yang dipakai, lengkap dengan efek hover kecil, sehingga tampilan tidak pernah rusak.
+
+### Reveal (GSAP)
+Animasi masuk satu blok. Default berjalan saat komponen tampil (cocok untuk dropdown atau konten yang berganti lewat `key`), atau saat masuk layar dengan `onScroll`. Preset: `fade-up`, `fade-down`, `drop`, `zoom`, `fade`.
+
+```jsx
+<Reveal key={activeTab} preset="zoom">…</Reveal>
+<Reveal onScroll stagger={0.08}>{cards}</Reveal>
+```
+
+### NotFoundView
+Halaman 404 dengan ilustrasi Lottie, dipakai oleh `app/not-found.jsx` dan `app/[slug]/not-found.jsx`.
+
+### Form lama: `.ds-input`
+Untuk form CMS yang belum dipecah ke komponen, class `ds-input` memberi tampilan yang sama dengan `<Input>` shadcn (termasuk `select`, `textarea`, dan `input[type=file]`). Untuk form baru tetap gunakan `<Input>`, `<Textarea>`, `<NativeSelect>`.
 
 ### Efek Aceternity
 | Komponen | Gunakan di |

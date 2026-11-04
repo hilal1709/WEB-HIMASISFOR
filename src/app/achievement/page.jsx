@@ -5,7 +5,8 @@ import { ArrowDown } from "@/icons/ArrowDown";
 import Gallery from "@/components/GalleryAward";
 import Footer from "@/components/Footer";
 // eslint-disable-next-line no-unused-vars
-import { motion, AnimatePresence } from "motion/react";
+import Reveal from "@/components/ds/Reveal";
+import { PageLoader } from "@/components/ds/Loader";
 
 export default function Students() {
   const [open, setOpen] = useState("dosen");
@@ -59,9 +60,7 @@ export default function Students() {
     return (
       <>
         <Navbar />
-        <div className="flex justify-center items-center min-h-screen">
-          <div className="text-xl font-semibold">Loading...</div>
-        </div>
+        <PageLoader fullscreen={false} label="Memuat prestasi…" />
       </>
     );
   }
@@ -87,7 +86,7 @@ export default function Students() {
                 onClick={() => openTable("dosen")}
                 className={`flex-1 sm:flex-none px-4 md:px-6 lg:px-8 py-2 md:py-2.5 rounded-lg cursor-pointer transition-colors ${
                   open === "dosen"
-                    ? "bg-red-600 text-white font-semibold"
+                    ? "bg-brand-600 text-white font-semibold"
                     : "text-black font-medium"
                 }`}
               >
@@ -97,7 +96,7 @@ export default function Students() {
                 onClick={() => openTable("mahasiswa")}
                 className={`flex-1 sm:flex-none px-4 md:px-6 lg:px-8 py-2 md:py-2.5 rounded-lg cursor-pointer transition-colors ${
                   open === "mahasiswa"
-                    ? "bg-red-600 text-white font-semibold"
+                    ? "bg-brand-600 text-white font-semibold"
                     : "text-black font-medium"
                 }`}
               >
@@ -106,18 +105,9 @@ export default function Students() {
             </div>
           </section>
 
-          <AnimatePresence>
-            <motion.div
-              key={open}
-              className="mt-6 md:mt-8 lg:mt-12"
-              initial={{ opacity: 0, scale: 0 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{
-                duration: 0.5,
-                scale: { type: "spring", visualDuration: 0.4, bounce: 0.1 },
-              }}
-            >
-              <div className="bg-red-600 px-3 md:px-4 py-2.5 md:py-3 font-semibold text-xs md:text-sm lg:text-base xl:text-lg text-white rounded-t-xl">
+          
+            <Reveal key={open} preset="zoom" className="mt-6 md:mt-8 lg:mt-12">
+              <div className="bg-brand-600 px-3 md:px-4 py-2.5 md:py-3 font-semibold text-xs md:text-sm lg:text-base xl:text-lg text-white rounded-t-xl">
                 <h1>{open === "dosen" ? "Dosen" : "Mahasiswa"} Sistem Informasi</h1>
               </div>
 
@@ -177,14 +167,7 @@ export default function Students() {
                       ) : (
                         <>
                           {prestasi.pencapaian.map((item, i) => (
-                            <motion.div
-                              key={`${index}-${i}`}
-                              className="flex items-center gap-1 md:gap-2 text-xs md:text-sm lg:text-base px-3 md:px-4 py-3 md:py-4 border-t border-zinc-200"
-                              animate={{ opacity: 1, y: 0 }}
-                              initial={{ opacity: 0, y: 20 }}
-                              exit={{ opacity: 0, y: -20 }}
-                              transition={{ duration: 0.15 }}
-                            >
+                            <Reveal key={`${index}-${i}`} duration={0.2} className="flex items-center gap-1 md:gap-2 text-xs md:text-sm lg:text-base px-3 md:px-4 py-3 md:py-4 border-t border-zinc-200">
                               <h3 className="lg:w-18 px-3 md:px-4 lg:px-6">
                                 {i === 0 ? index + 1 : ""}
                               </h3>
@@ -227,7 +210,7 @@ export default function Students() {
                                   </button>
                                 )}
                               </div>
-                            </motion.div>
+                            </Reveal>
                           ))}
                         </>
                       )}
@@ -236,8 +219,8 @@ export default function Students() {
                   </>
                 )}
               </div>
-            </motion.div>
-          </AnimatePresence>
+            </Reveal>
+          
         </div>
       </article>
       <Gallery />

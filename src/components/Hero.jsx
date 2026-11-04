@@ -2,9 +2,11 @@
 import { useEffect, useRef, useState, useMemo } from "react";
 import Image from 'next/image';
 import { Play } from "../icons/Play";
-import SplitType from "split-type";
-import { animate, stagger } from "motion";
-import { motion } from "motion/react";
+import gsap from "gsap";
+import { SplitText } from "gsap/SplitText";
+import { useGSAP } from "@gsap/react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { BackgroundGrid, Spotlight } from "@/components/aceternity";
 
 // Helper function to ensure image paths are valid
 const normalizeImagePath = (path) => {
@@ -39,49 +41,44 @@ export default function Hero() {
     fetchHeroData();
   }, []);
 
-  useEffect(() => {
-    document.fonts.ready.then(() => {
-      if (!containerRef.current) return;
+  const sectionRef = useRef(null);
 
-      containerRef.current.style.visibility = "visible";
-
-      const h1 = containerRef.current.querySelector("h1");
-      const h3 = containerRef.current.querySelector("h3");
-
-      const h1Split = new SplitType(h1, { types: "words" });
-      const h3Split = new SplitType(h3, { types: "words" });
-
-      animate(
-        h1Split.words,
-        { opacity: [0, 1], y: [10, 0] },
-        {
-          type: "spring",
-          stiffness: 200,
-          damping: 30,
-          delay: stagger(0.05),
-        }
-      );
-
-      animate(
-        h3Split.words,
-        { opacity: [0, 1], y: [10, 0] },
-        {
-          type: "spring",
-          stiffness: 200,
-          damping: 30,
-          delay: stagger(0.05),
-        }
-      );
-    });
-  }, [heroData]);
+  // Animasi masuk hero (GSAP + SplitText): gambar, badge, judul per kata, lalu CTA.
+  useGSAP(
+    () => {
+      if (!heroData || !containerRef.current) return;
+      let split;
+      document.fonts.ready.then(() => {
+        if (!containerRef.current) return;
+        containerRef.current.style.visibility = "visible";
+        split = new SplitText(containerRef.current.querySelectorAll("h1, h3"), { type: "words" });
+        const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+        tl.fromTo("[data-hero='image']", { opacity: 0, scale: 0.85 }, { opacity: 1, scale: 1, duration: 1, ease: "back.out(1.4)" })
+          .fromTo("[data-hero='badge']", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.5 }, "-=0.7")
+          .fromTo(split.words, { opacity: 0, y: 14, filter: "blur(6px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.6, stagger: 0.03 }, "-=0.3")
+          .fromTo("[data-hero='cta'] > *, [data-hero='akreditasi']", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.1 }, "-=0.4");
+        gsap.to("[data-hero='image']", { y: -10, duration: 3, repeat: -1, yoyo: true, ease: "sine.inOut", delay: 1.2 });
+      });
+      return () => split?.revert();
+    },
+    { scope: sectionRef, dependencies: [heroData] }
+  );
 
   // Move useMemo before early return to maintain hook order
   const parsedData = useMemo(() => heroData?.data || {}, [heroData?.data]);
 
   if (loading || !heroData) {
     return (
-      <section className="-mt-18 lg:-mt-16 flex justify-center items-center h-screen">
-        <div className="animate-pulse">Loading...</div>
+      <section className="-mt-18 lg:-mt-16 flex min-h-screen items-center justify-center px-4">
+        <div className="flex w-full max-w-5xl flex-col items-center gap-8 lg:flex-row">
+          <Skeleton className="size-64 shrink-0 rounded-full md:size-80" />
+          <div className="w-full space-y-4">
+            <Skeleton className="h-6 w-32" />
+            <Skeleton className="h-12 w-full max-w-lg" />
+            <Skeleton className="h-20 w-full" />
+            <div className="flex gap-3"><Skeleton className="h-11 w-40" /><Skeleton className="h-11 w-32" /></div>
+          </div>
+        </div>
       </section>
     );
   }
@@ -89,20 +86,15 @@ export default function Hero() {
   const { title, subtitle, content, image, data } = heroData;
 
   return (
-    <section className="-mt-18 lg:-mt-16">
+    <section ref={sectionRef} className="relative -mt-18 overflow-hidden lg:-mt-16">
+      <BackgroundGrid variant="dot" className="-z-20" />
+      <Spotlight className="-top-40 left-0 md:-top-20 md:left-40" />
       {/* top circle */}
       <img src="/img/heroCircle.svg" alt="HeroCircle" className="h-24 md:h-32 lg:h-40 -z-10" />
 
       {/* content */}
       <main className="flex flex-col lg:flex-row justify-center items-center gap-6 md:gap-8 lg:gap-12 lg:-mt-10 px-4 md:px-6">
-        <motion.div
-          initial={{ opacity: 0, scale: 0 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{
-            duration: 1.5,
-            scale: { type: "spring", visualDuration: 0.7, bounce: 0.1 },
-          }}
-        >
+        <div data-hero="image" className="opacity-0">
           <Image
             src={normalizeImagePath(image)}
             alt="heroPict"
@@ -111,39 +103,28 @@ export default function Hero() {
             className="h-64 md:h-80 lg:h-100 w-auto"
             priority
           />
-        </motion.div>
+        </div>
 
         {/* introduce */}
         <div className="w-full lg:w-auto">
-          <motion.div
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{
-              duration: 1.5,
-              scale: { type: "spring", visualDuration: 0.9, bounce: 0.1 },
-            }}
-            className="w-fit px-3 md:px-4 py-1 rounded-lg border border-red-400 bg-red-50 font-semibold text-red-600 text-xs md:text-sm tracking-wide"
+          <div
+            data-hero="badge"
+            className="opacity-0 w-fit px-3 md:px-4 py-1 rounded-lg border border-brand-300 bg-brand-50 font-semibold text-brand-600 text-xs md:text-sm tracking-wide"
           >
             {parsedData.badge || subtitle || "SISFOR UISI"}
-          </motion.div>
+          </div>
           <div ref={containerRef} className="invisible">
-            <h1 className="w-full lg:w-120 font-bold text-2xl md:text-3xl lg:text-4xl xl:text-5xl mt-4 md:mt-6" dangerouslySetInnerHTML={{ __html: title || "Program Studi <span class='text-red-600'>Sistem Informasi UISI</span>" }}>
+            <h1 className="w-full lg:w-120 font-bold text-2xl md:text-3xl lg:text-4xl xl:text-5xl mt-4 md:mt-6" dangerouslySetInnerHTML={{ __html: title || "Program Studi <span class='text-brand-600'>Sistem Informasi UISI</span>" }}>
             </h1>
             <h3 className="text-sm md:text-base lg:w-[38rem] mt-4 md:mt-6 text-zinc-600">
               {content || "Keberhasilan Semen Indonesia Group dalam penerapan Good Corporate Governance salah satunya melalui implementasi Enterprise Resource Planning (ERP), mampu menjadi dukungan best practice dalam sistem pembelajaran di Program Studi Sistem Informasi Universitas Internasional Semen Indonesia."}
             </h3>
-            <style>{`.split-word { will-change: transform, opacity; }`}</style>
           </div>
 
           {/* button hubungi dan profil */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{
-              duration: 0.5,
-              scale: { type: "spring", visualDuration: 1, bounce: 0.1 },
-            }}
-            className="flex flex-col sm:flex-row items-start sm:items-center gap-3 md:gap-4 lg:gap-8 mt-6 md:mt-8 lg:mt-10"
+          <div
+            data-hero="cta"
+            className="[&>*]:opacity-0 flex flex-col sm:flex-row items-start sm:items-center gap-3 md:gap-4 lg:gap-8 mt-6 md:mt-8 lg:mt-10"
           >
             {parsedData.buttons && parsedData.buttons.length > 0 && (
               <>
@@ -151,7 +132,7 @@ export default function Hero() {
                   <a
                     target="blank"
                     href={parsedData.buttons[0].url}
-                    className="bg-gradient-to-r from-[#C10F11] to-[#E31515] hover:scale-95 transition-all duration-200 px-4 md:px-6 py-2 md:py-3 rounded-xl font-medium text-xs md:text-sm 2xl:text-base text-white text-center w-full sm:w-auto"
+                    className="bg-gradient-to-r from-brand-700 to-brand-600 shadow-lift hover:-translate-y-0.5 hover:shadow-xl transition-[transform,box-shadow] duration-300 ease-brand px-4 md:px-6 py-2 md:py-3 rounded-xl font-medium text-xs md:text-sm 2xl:text-base text-white text-center w-full sm:w-auto"
                   >
                     {parsedData.buttons[0].text}
                   </a>
@@ -160,26 +141,21 @@ export default function Hero() {
                   <a
                     target="blank"
                     href={parsedData.buttons[1].url}
-                    className="flex items-center justify-center gap-3 md:gap-4 font-medium text-xs md:text-sm 2xl:text-base text-red-600 px-4 md:px-6 py-2 md:py-3 rounded-lg hover:scale-95 hover:border hover:border-red-400 transition-all duration-200 w-full sm:w-auto"
+                    className="flex items-center justify-center gap-3 md:gap-4 font-medium text-xs md:text-sm 2xl:text-base text-brand-600 px-4 md:px-6 py-2 md:py-3 rounded-xl border border-transparent hover:bg-brand-50 hover:border-brand-200 transition-colors duration-200 w-full sm:w-auto"
                   >
-                    <Play className="h-3 md:h-4 text-red-600" />
+                    <Play className="h-3 md:h-4 text-brand-600" />
                     <span>{parsedData.buttons[1].text}</span>
                   </a>
                 )}
               </>
             )}
-          </motion.div>
+          </div>
 
           {/* akreditasi */}
           {parsedData.akreditasi && (
-            <motion.div
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{
-              duration: 0.5,
-              scale: { type: "spring", visualDuration: 1.2, bounce: 0.1 },
-            }}
-            className="flex items-center gap-3 md:gap-4 mt-6 md:mt-8"
+            <div
+            data-hero="akreditasi"
+            className="opacity-0 flex items-center gap-3 md:gap-4 mt-6 md:mt-8"
             >
               <Image src={normalizeImagePath(parsedData.akreditasi.image)} alt="akreditasi" width={40} height={40} className="h-8 md:h-10" />
               <div>
@@ -188,7 +164,7 @@ export default function Hero() {
                   {parsedData.akreditasi.description}
                 </p>
               </div>
-            </motion.div>
+            </div>
           )}
         </div>
       </main>

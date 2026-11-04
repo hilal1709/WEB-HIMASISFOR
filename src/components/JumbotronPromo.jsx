@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect, useMemo } from "react";
 import Image from 'next/image';
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function JumbotronPromo() {
   const [promoData, setPromoData] = useState(null);
@@ -33,8 +34,8 @@ export default function JumbotronPromo() {
 
   if (loading || !promoData) {
     return (
-      <div className="flex justify-center items-center my-24">
-        <div className="animate-pulse">Loading...</div>
+      <div className="mx-auto my-24 max-w-6xl px-4">
+        <Skeleton className="h-64 w-full rounded-2xl" />
       </div>
     );
   }
@@ -44,7 +45,7 @@ export default function JumbotronPromo() {
   return (
     <>
       {/* jumbotron mari bergabung */}
-      <div className="flex flex-col justify-center items-center my-16 md:my-24 lg:my-32 px-4 md:px-8 lg:px-24 2xl:px-48">
+      <div data-aos="zoom-in" className="flex flex-col justify-center items-center my-16 md:my-24 lg:my-32 px-4 md:px-8 lg:px-24 2xl:px-48">
         {/* container */}
         <div className="relative flex flex-col justify-center items-center w-full max-w-7xl">
           <img
@@ -71,7 +72,7 @@ export default function JumbotronPromo() {
             </p>
             <a
               href={buttonUrl}
-              className="mt-3 md:mt-4 px-4 md:px-6 py-2 md:py-3 font-semibold text-xs md:text-sm text-red-600 bg-white rounded-xl drop-shadow-lg hover:scale-95 transition-all w-full sm:w-auto text-center"
+              className="mt-3 md:mt-4 px-4 md:px-6 py-2 md:py-3 font-semibold text-xs md:text-sm text-brand-600 bg-white rounded-xl drop-shadow-lg hover:scale-95 transition-all w-full sm:w-auto text-center"
             >
               {buttonText}
             </a>

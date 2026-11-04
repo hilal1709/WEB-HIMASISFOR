@@ -6,7 +6,7 @@ import Image from 'next/image';
 import Profile from "../icons/Profile";
 import Partner from "../icons/Partner";
 import Graduation from "../icons/Graduation";
-import { motion } from "motion/react";
+import Reveal from "@/components/ds/Reveal";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -51,7 +51,7 @@ export default function Navbar() {
                 href="/"
                 className={`px-4 ${
                   location.pathname === "/"
-                    ? "font-medium text-red-600"
+                    ? "font-medium text-brand-600"
                     : "text-zinc-500"
                 }`}
               >
@@ -63,7 +63,7 @@ export default function Navbar() {
                 onClick={() => openMenu("profil")}
                 className={`px-4 ${
                   location.pathname === "/profile"
-                    ? "flex items-center gap-2 px-4 py-2 font-medium text-red-600"
+                    ? "flex items-center gap-2 px-4 py-2 font-medium text-brand-600"
                     : "flex items-center gap-2 px-4 py-2 hover:bg-zinc-100 text-zinc-500 rounded-lg"
                 }`}
               >
@@ -75,16 +75,7 @@ export default function Navbar() {
                 />
               </button>
               {open === "profil" && (
-                <motion.div
-                  initial={{ opacity: 0, y: -50 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{
-                    duration: 0.3,
-                    type: "spring",
-                    visualDuration: 0.2,
-                    bounce: 0.2,
-                  }}
-                  className="absolute top-20 left-58 2xl:left-134 p-4 flex items-center gap-4 bg-white shadow-lg rounded-lg text-zinc-800"
+                <Reveal preset="drop" duration={0.3} className="absolute top-20 left-58 2xl:left-134 p-4 flex items-center gap-4 bg-white shadow-lg rounded-lg text-zinc-800"
                 >
                   <div className="p-4 border-r border-zinc-200">
                     <h3 className="font-medium text-lg">Profil Kami</h3>
@@ -95,7 +86,7 @@ export default function Navbar() {
 
                     <Link
                       href="/profile"
-                      className="flex items-center gap-2 mt-6 text-red-600 font-medium group hover:scale-95 transition-all duration-200"
+                      className="flex items-center gap-2 mt-6 text-brand-600 font-medium group hover:scale-95 transition-all duration-200"
                     >
                       Pelajari lebih lanjut
                       <ArrowDown className="h-4 -rotate-120 group-hover:-rotate-95 transition-all duration-200" />
@@ -145,7 +136,7 @@ export default function Navbar() {
                       </div>
                     </Link>
                   </div>
-                </motion.div>
+                </Reveal>
               )}
             </li>
             <li className="flex items-center gap-2 dropdown">
@@ -153,7 +144,7 @@ export default function Navbar() {
                 onClick={() => openMenu("prestasi")}
                 className={`px-4 ${
                   location.pathname === "/achievement"
-                    ? "flex items-center gap-2 px-4 py-2 font-medium text-red-600"
+                    ? "flex items-center gap-2 px-4 py-2 font-medium text-brand-600"
                     : "flex items-center gap-2 px-4 py-2 hover:bg-zinc-100 text-zinc-500 rounded-lg"
                 }`}
               >
@@ -165,16 +156,7 @@ export default function Navbar() {
                 />
               </button>
               {open === "prestasi" && (
-                <motion.div
-                  initial={{ opacity: 0, y: -50 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{
-                    duration: 0.3,
-                    type: "spring",
-                    visualDuration: 0.2,
-                    bounce: 0.2,
-                  }}
-                  className="absolute top-20 left-84 2xl:left-156 p-4 pr-24 flex items-center gap-4 bg-white shadow-lg rounded-lg text-zinc-800"
+                <Reveal preset="drop" duration={0.3} className="absolute top-20 left-84 2xl:left-156 p-4 pr-24 flex items-center gap-4 bg-white shadow-lg rounded-lg text-zinc-800"
                 >
                   <div className="p-4 border-r border-zinc-200">
                     <h3 className="font-medium text-lg">Prestasi Kami</h3>
@@ -185,7 +167,7 @@ export default function Navbar() {
 
                     <Link
                       href="/achievement"
-                      className="flex items-center gap-2 mt-6 text-red-600 font-medium group hover:scale-95 transition-all duration-200"
+                      className="flex items-center gap-2 mt-6 text-brand-600 font-medium group hover:scale-95 transition-all duration-200"
                     >
                       Pelajari lebih lanjut
                       <ArrowDown className="h-4 -rotate-120 group-hover:-rotate-95 transition-all duration-200" />
@@ -221,7 +203,7 @@ export default function Navbar() {
                       </div>
                     </Link>
                   </div>
-                </motion.div>
+                </Reveal>
               )}
             </li>
             <li>
@@ -229,7 +211,7 @@ export default function Navbar() {
                 href="/curiculum"
                 className={`px-4 ${
                   location.pathname === "/curiculum"
-                    ? "font-medium text-red-600"
+                    ? "font-medium text-brand-600"
                     : "text-zinc-500"
                 }`}
               >
@@ -242,7 +224,7 @@ export default function Navbar() {
         {/* hubungi kami */}
         <a
           href="https://s.id/DaftarSisforUISI"
-          className="bg-gradient-to-r from-[#C10F11] to-[#E31515] hover:scale-105 transition-all duration-300 px-5 py-3 text-xs rounded-lg font-medium text-white"
+          className="bg-gradient-to-r from-brand-700 to-brand-600 hover:scale-105 transition-all duration-300 px-5 py-3 text-xs rounded-lg font-medium text-white"
         >
           Hubungi Kami
         </a>
@@ -255,7 +237,7 @@ export default function Navbar() {
         </Link>
         <button onClick={() => setOpenNav(openNav ? null : true)}>
           <svg
-            className="h-6 w-6 stroke-red-600"
+            className="h-6 w-6 stroke-brand-600"
             stroke="currentColor"
             fill="none"
             viewBox="0 0 24 24"
@@ -279,7 +261,7 @@ export default function Navbar() {
 
         {openNav && (
           <div className="absolute w-72 right-4 top-24 flex flex-col gap-4 p-6 rounded-lg bg-white shadow-xl">
-            <Link href="/" className="px-4 py-2 rounded-lg bg-red-500 text-white">
+            <Link href="/" className="px-4 py-2 rounded-lg bg-brand-500 text-white">
               Beranda
             </Link>
 
@@ -287,13 +269,13 @@ export default function Navbar() {
             <div>
               <h2 className="text-sm text-zinc-400">Profil</h2>
               <div className="flex flex-col gap-1 text-zinc-500">
-                <Link href="/profile" className="px-4 py-2 rounded-lg hover:bg-red-500 hover:text-white">
+                <Link href="/profile" className="px-4 py-2 rounded-lg hover:bg-brand-500 hover:text-white">
                   Profil Prodi
                 </Link>
-                <Link href="/profile" className="px-4 py-2 rounded-lg hover:bg-red-500 hover:text-white">
+                <Link href="/profile" className="px-4 py-2 rounded-lg hover:bg-brand-500 hover:text-white">
                   Kerjasama
                 </Link>
-                <Link href="/profile" className="px-4 py-2 rounded-lg hover:bg-red-500 hover:text-white">
+                <Link href="/profile" className="px-4 py-2 rounded-lg hover:bg-brand-500 hover:text-white">
                   Profil Lulusan
                 </Link>
               </div>
@@ -303,10 +285,10 @@ export default function Navbar() {
             <div>
               <h2 className="text-sm text-zinc-400">Prestasi</h2>
               <div className="flex flex-col gap-1 text-zinc-500">
-                <Link href="/achievement" className="px-4 py-2 rounded-lg hover:bg-red-500 hover:text-white">
+                <Link href="/achievement" className="px-4 py-2 rounded-lg hover:bg-brand-500 hover:text-white">
                   Prestasi Dosen
                 </Link>
-                <Link href="/achievement" className="px-4 py-2 rounded-lg hover:bg-red-500 hover:text-white">
+                <Link href="/achievement" className="px-4 py-2 rounded-lg hover:bg-brand-500 hover:text-white">
                   Prestasi Mahasiswa
                 </Link>
               </div>
@@ -318,7 +300,7 @@ export default function Navbar() {
               <div className="flex flex-col gap-1 text-zinc-500">
                 <Link
                   href="/curiculum"
-                  className="px-4 py-2 rounded-lg hover:bg-red-500 hover:text-white"
+                  className="px-4 py-2 rounded-lg hover:bg-brand-500 hover:text-white"
                 >
                   Kurikulum Prodi
                 </Link>
@@ -326,7 +308,7 @@ export default function Navbar() {
             </div>
 
             {/* hubungi kami */}
-            <a href="https://s.id/DaftarSisforUISI" className="flex justify-center items-center py-2 bg-gradient-to-r from-[#C10F11] to-[#E31515] hover:from-[#94080a] hover:to-[#f22b2b] rounded-xl font-medium text-sm text-white cursor-pointer">
+            <a href="https://s.id/DaftarSisforUISI" className="flex justify-center items-center py-2 bg-gradient-to-r from-brand-700 to-brand-600 hover:from-brand-800 hover:to-brand-500 rounded-xl font-medium text-sm text-white cursor-pointer">
               Hubungi Kami
             </a>
           </div>

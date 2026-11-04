@@ -1,6 +1,11 @@
 "use client";
 import { useState, useEffect, useMemo } from "react";
 import Image from 'next/image';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay, Pagination, A11y } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import { Skeleton } from '@/components/ui/skeleton';
 
 // Helper function to ensure image paths are valid
 const normalizeImagePath = (path) => {
@@ -38,8 +43,8 @@ export default function Testimoni() {
 
   if (loading || !testimoniData) {
     return (
-      <div className="flex justify-center items-center my-24">
-        <div className="animate-pulse">Loading...</div>
+      <div className="mx-auto my-24 grid max-w-6xl gap-4 px-4 md:grid-cols-3">
+        {[0, 1, 2].map((i) => <Skeleton key={i} className="h-56 w-full rounded-xl" />)}
       </div>
     );
   }
@@ -67,26 +72,35 @@ export default function Testimoni() {
             {title || "Apa Kata Alumni?"}
           </h1>
 
-          {/* content card */}
-          <div className="w-full overflow-x-auto no-scrollbar flex lg:justify-center">
-            <div className="flex justify-center w-max gap-4 md:gap-5 lg:gap-4 2xl:gap-12 text-black mx-4 lg:mx-0 pb-2">
+          {/* content card — Swiper carousel */}
+          <div className="w-full max-w-7xl" data-aos="fade-up">
+            <Swiper
+              modules={[Autoplay, Pagination, A11y]}
+              spaceBetween={20}
+              slidesPerView={1.1}
+              centeredSlides={dataAlumni.length < 3}
+              breakpoints={{ 640: { slidesPerView: 2.1 }, 1024: { slidesPerView: 3 } }}
+              autoplay={{ delay: 4500, disableOnInteraction: false, pauseOnMouseEnter: true }}
+              pagination={{ clickable: true }}
+              loop={dataAlumni.length > 3}
+              className="testimoni-swiper !px-4 !pb-12 lg:!px-0"
+            >
               {dataAlumni.map((alumni, index) => (
-                <div
-                  key={index}
-                  className="w-72 md:w-80 lg:w-96 h-fit px-6 md:px-8 py-6 md:py-7 rounded-lg bg-white border-t-8 border-yellow-500 drop-shadow-lg"
-                >
-                  <p className="text-xs md:text-sm lg:text-base text-zinc-600">{alumni.description}</p>
-                  <div className="mt-4 md:mt-5 pt-4 md:pt-5 flex items-center gap-3 md:gap-5 text-xs md:text-sm lg:text-base border-t border-zinc-200">
-                    <Image src={normalizeImagePath(alumni.image)} alt={alumni.name || 'Alumni'} width={48} height={48} className="h-10 md:h-12" loading="lazy" />
-                    <div>
-                      <h1 className="font-medium">{alumni.name}</h1>
-                      <h2 className="text-zinc-600">{alumni.work}</h2>
-                      {alumni.companyLogo && <Image src={normalizeImagePath(alumni.companyLogo)} alt={alumni.work || 'Company'} width={80} height={20} className="mt-1 h-4 md:h-5" loading="lazy" />}
+                <SwiperSlide key={index} className="!h-auto">
+                  <div className="flex h-full flex-col justify-between rounded-xl border-t-8 border-brand-600 bg-white px-6 py-6 text-black shadow-soft transition-transform duration-300 ease-brand hover:-translate-y-1 md:px-8 md:py-7">
+                    <p className="text-xs text-zinc-600 md:text-sm lg:text-base">{alumni.description}</p>
+                    <div className="mt-4 flex items-center gap-3 border-t border-zinc-200 pt-4 text-xs md:mt-5 md:gap-5 md:pt-5 md:text-sm lg:text-base">
+                      <Image src={normalizeImagePath(alumni.image)} alt={alumni.name || 'Alumni'} width={48} height={48} className="h-10 w-auto md:h-12" loading="lazy" />
+                      <div>
+                        <h1 className="font-medium">{alumni.name}</h1>
+                        <h2 className="text-zinc-600">{alumni.work}</h2>
+                        {alumni.companyLogo && <Image src={normalizeImagePath(alumni.companyLogo)} alt={alumni.work || 'Company'} width={80} height={20} className="mt-1 h-4 w-auto md:h-5" loading="lazy" />}
+                      </div>
                     </div>
                   </div>
-                </div>
+                </SwiperSlide>
               ))}
-            </div>
+            </Swiper>
           </div>
         </div>
       </div>

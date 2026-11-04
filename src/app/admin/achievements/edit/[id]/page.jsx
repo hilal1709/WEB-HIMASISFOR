@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import Link from 'next/link'
+import notify from '@/lib/notify'
 
 export default function EditAchievementPage() {
   const router = useRouter()
@@ -35,13 +36,13 @@ export default function EditAchievementPage() {
           setFormData(achievement)
           setImagePreview(achievement.image || '')
         } else {
-          alert('Prestasi tidak ditemukan')
+          notify.error('Prestasi tidak ditemukan')
           router.push('/admin/achievements')
         }
       }
     } catch (error) {
       console.error('Error fetching achievement:', error)
-      alert('Gagal memuat data')
+      notify.error('Gagal memuat data')
       router.push('/admin/achievements')
     } finally {
       setLoading(false)
@@ -83,7 +84,7 @@ export default function EditAchievementPage() {
       }
     } catch (error) {
       console.error('Error uploading image:', error)
-      alert('Gagal upload gambar: ' + error.message)
+      notify.error('Gagal upload gambar', { description: error.message })
       return formData.image
     } finally {
       setUploading(false)
@@ -111,13 +112,13 @@ export default function EditAchievementPage() {
       const data = await response.json()
 
       if (data.success) {
-        alert('Prestasi berhasil diupdate!')
+        notify.success('Prestasi berhasil diupdate!')
         router.push('/admin/achievements')
       } else {
-        alert('Error: ' + data.error)
+        notify.error('Error', { description: data.error })
       }
     } catch (error) {
-      alert('Terjadi kesalahan: ' + error.message)
+      notify.error('Terjadi kesalahan', { description: error.message })
     }
   }
 
@@ -125,7 +126,7 @@ export default function EditAchievementPage() {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-600"></div>
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-brand-600"></div>
           <p className="mt-4 text-zinc-600">Loading...</p>
         </div>
       </div>
@@ -137,7 +138,7 @@ export default function EditAchievementPage() {
       <div className="mb-6">
         <Link 
           href="/admin/achievements"
-          className="text-red-600 hover:text-red-700 font-medium mb-4 inline-block"
+          className="text-brand-600 hover:text-brand-700 font-medium mb-4 inline-block"
         >
           ← Kembali ke List Prestasi
         </Link>
@@ -145,7 +146,7 @@ export default function EditAchievementPage() {
         <p className="text-zinc-500 mt-1">Update data prestasi di bawah</p>
       </div>
 
-      <div className="bg-white rounded-xl shadow-md p-8">
+      <div className="bg-white rounded-2xl border shadow-soft p-8">
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Image Upload with Preview */}
           <div>
@@ -169,7 +170,7 @@ export default function EditAchievementPage() {
                   type="file"
                   accept="image/*"
                   onChange={handleImageChange}
-                  className="w-full px-4 py-2 border border-zinc-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none text-sm"
+                  className="ds-input"
                 />
                 <p className="text-xs text-zinc-500 mt-2">
                   Upload foto atau masukkan URL gambar di bawah. Format: JPG, PNG (max 2MB)
@@ -178,7 +179,7 @@ export default function EditAchievementPage() {
                   type="text"
                   value={formData.image}
                   onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                  className="w-full px-4 py-2 border border-zinc-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none mt-2"
+                  className="ds-input"
                   placeholder="atau masukkan URL: /img/award/nama.jpg"
                 />
               </div>
@@ -191,7 +192,7 @@ export default function EditAchievementPage() {
               type="text"
               value={formData.achieverName}
               onChange={(e) => setFormData({ ...formData, achieverName: e.target.value })}
-              className="w-full px-4 py-2 border border-zinc-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none"
+              className="ds-input"
               placeholder="Contoh: Dr. John Doe, S.Kom., M.Kom."
               required
             />
@@ -203,7 +204,7 @@ export default function EditAchievementPage() {
               type="text"
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-              className="w-full px-4 py-2 border border-zinc-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none"
+              className="ds-input"
               placeholder="Contoh: Juara 1 Lomba Desain Web"
               required
             />
@@ -214,7 +215,7 @@ export default function EditAchievementPage() {
             <textarea
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              className="w-full px-4 py-2 border border-zinc-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none"
+              className="ds-input"
               rows="4"
               placeholder="Deskripsi prestasi (opsional)"
             />
@@ -226,7 +227,7 @@ export default function EditAchievementPage() {
               <select
                 value={formData.category}
                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                className="w-full px-4 py-2 border border-zinc-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none"
+                className="ds-input"
                 required
               >
                 <option value="dosen">Dosen</option>
@@ -239,7 +240,7 @@ export default function EditAchievementPage() {
               <select
                 value={formData.tingkatan}
                 onChange={(e) => setFormData({ ...formData, tingkatan: e.target.value })}
-                className="w-full px-4 py-2 border border-zinc-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none"
+                className="ds-input"
                 required
               >
                 <option value="Nasional">Nasional</option>
@@ -254,7 +255,7 @@ export default function EditAchievementPage() {
               type="text"
               value={formData.tahun}
               onChange={(e) => setFormData({ ...formData, tahun: e.target.value })}
-              className="w-full px-4 py-2 border border-zinc-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none"
+              className="ds-input"
               placeholder="Contoh: 2023 atau 2021, 2023 atau 2021-2023"
               required
             />
@@ -267,7 +268,7 @@ export default function EditAchievementPage() {
             <button
               type="submit"
               disabled={uploading}
-              className="flex-1 bg-red-600 text-white py-3 rounded-lg font-semibold hover:bg-red-700 transition disabled:bg-zinc-400 disabled:cursor-not-allowed"
+              className="flex-1 bg-brand-600 text-white py-3 rounded-lg font-semibold hover:bg-brand-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {uploading ? 'Mengupload...' : 'Update Prestasi'}
             </button>

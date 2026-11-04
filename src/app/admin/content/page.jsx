@@ -1,6 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import notify from '@/lib/notify'
+import { PageLoader } from '@/components/ds/Loader'
 
 export default function ContentManagement() {
   const router = useRouter();
@@ -8,6 +10,11 @@ export default function ContentManagement() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState({ type: "", text: "" });
+  useEffect(() => {
+    if (!message.text) return
+    if (message.type === 'success') notify.success(message.text)
+    else notify.error(message.text)
+  }, [message])
   const [contents, setContents] = useState({});
 
   // Fetch all content sections
@@ -86,9 +93,7 @@ export default function ContentManagement() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl">Loading...</div>
-      </div>
+      <PageLoader fullscreen={false} label="Memuat konten…" />
     );
   }
 
@@ -106,20 +111,9 @@ export default function ContentManagement() {
         </div>
 
         {/* Alert Message */}
-        {message.text && (
-          <div
-            className={`mb-4 lg:mb-6 p-3 lg:p-4 rounded-lg text-sm lg:text-base ${
-              message.type === "success"
-                ? "bg-green-100 text-green-800 border border-green-200"
-                : "bg-red-100 text-red-800 border border-red-200"
-            }`}
-          >
-            {message.text}
-          </div>
-        )}
 
         {/* Tabs */}
-        <div className="bg-white rounded-lg shadow">
+        <div className="bg-white rounded-2xl border shadow-soft">
           <div className="border-b border-gray-200">
             <nav className="flex space-x-2 lg:space-x-4 px-3 lg:px-6 overflow-x-auto scrollbar-hide">
               {tabs.map((tab) => (
@@ -128,7 +122,7 @@ export default function ContentManagement() {
                   onClick={() => setActiveTab(tab.id)}
                   className={`py-3 lg:py-4 px-3 lg:px-6 text-xs lg:text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${
                     activeTab === tab.id
-                      ? "border-red-600 text-red-600"
+                      ? "border-brand-600 text-brand-600"
                       : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
                   }`}
                 >
@@ -256,7 +250,7 @@ function HeroEditor({ data, onSave, saving }) {
     <form onSubmit={handleSubmit} className="space-y-6">
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          Judul Utama (gunakan &lt;span class='text-red-600'&gt; untuk teks merah)
+          Judul Utama (gunakan &lt;span class='text-brand-600'&gt; untuk teks merah)
         </label>
         <input
           type="text"
@@ -264,8 +258,8 @@ function HeroEditor({ data, onSave, saving }) {
           onChange={(e) =>
             setFormData({ ...formData, title: e.target.value })
           }
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-          placeholder="Program Studi <span class='text-red-600'>Sistem Informasi UISI</span>"
+          className="ds-input"
+          placeholder="Program Studi <span class='text-brand-600'>Sistem Informasi UISI</span>"
         />
       </div>
 
@@ -277,7 +271,7 @@ function HeroEditor({ data, onSave, saving }) {
           type="text"
           value={formData.data.badge}
           onChange={(e) => updateDataField("badge", e.target.value)}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+          className="ds-input"
           placeholder="SISFOR UISI"
         />
       </div>
@@ -292,7 +286,7 @@ function HeroEditor({ data, onSave, saving }) {
             setFormData({ ...formData, content: e.target.value })
           }
           rows={4}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+          className="ds-input"
           placeholder="Deskripsi singkat tentang program studi"
         />
       </div>
@@ -307,7 +301,7 @@ function HeroEditor({ data, onSave, saving }) {
           onChange={(e) =>
             setFormData({ ...formData, image: e.target.value })
           }
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+          className="ds-input"
           placeholder="/img/heroPict.png"
         />
       </div>
@@ -325,7 +319,7 @@ function HeroEditor({ data, onSave, saving }) {
               type="text"
               value={formData.data.buttons[0].text}
               onChange={(e) => updateDataField("buttons.0.text", e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+              className="ds-input"
               placeholder="Hubungi Kami"
             />
           </div>
@@ -338,7 +332,7 @@ function HeroEditor({ data, onSave, saving }) {
               type="text"
               value={formData.data.buttons[0].url}
               onChange={(e) => updateDataField("buttons.0.url", e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+              className="ds-input"
               placeholder="https://s.id/DaftarSisforUISI"
             />
           </div>
@@ -351,7 +345,7 @@ function HeroEditor({ data, onSave, saving }) {
               type="text"
               value={formData.data.buttons[1].text}
               onChange={(e) => updateDataField("buttons.1.text", e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+              className="ds-input"
               placeholder="Video Profile"
             />
           </div>
@@ -364,7 +358,7 @@ function HeroEditor({ data, onSave, saving }) {
               type="text"
               value={formData.data.buttons[1].url}
               onChange={(e) => updateDataField("buttons.1.url", e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+              className="ds-input"
               placeholder="https://www.youtube.com/watch?v=..."
             />
           </div>
@@ -384,7 +378,7 @@ function HeroEditor({ data, onSave, saving }) {
               type="text"
               value={formData.data.akreditasi.image}
               onChange={(e) => updateDataField("akreditasi.image", e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+              className="ds-input"
               placeholder="/img/akreditasi.png"
             />
           </div>
@@ -397,8 +391,8 @@ function HeroEditor({ data, onSave, saving }) {
               type="text"
               value={formData.data.akreditasi.title}
               onChange={(e) => updateDataField("akreditasi.title", e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-              placeholder='Terakreditasi <span class="font-semibold text-red-600">"Baik Sekali"</span>'
+              className="ds-input"
+              placeholder='Terakreditasi <span class="font-semibold text-brand-600">"Baik Sekali"</span>'
             />
           </div>
           
@@ -410,7 +404,7 @@ function HeroEditor({ data, onSave, saving }) {
               type="text"
               value={formData.data.akreditasi.description}
               onChange={(e) => updateDataField("akreditasi.description", e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+              className="ds-input"
               placeholder="LAM INFOKOM No.026/SK/LAM-INFOKOM/Ak/S/IV/2023."
             />
           </div>
@@ -420,7 +414,7 @@ function HeroEditor({ data, onSave, saving }) {
       <button
         type="submit"
         disabled={saving}
-        className="w-full bg-red-600 text-white py-3 px-6 rounded-lg hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors font-medium"
+        className="w-full bg-brand-600 text-white py-3 px-6 rounded-lg hover:bg-brand-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
       >
         {saving ? "Menyimpan..." : "Simpan Perubahan"}
       </button>
@@ -463,7 +457,7 @@ function AboutEditor({ data, onSave, saving }) {
           onChange={(e) =>
             setFormData({ ...formData, title: e.target.value })
           }
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+          className="ds-input"
           placeholder="Sistem Informasi"
         />
       </div>
@@ -478,7 +472,7 @@ function AboutEditor({ data, onSave, saving }) {
           onChange={(e) =>
             setFormData({ ...formData, subtitle: e.target.value })
           }
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+          className="ds-input"
           placeholder="Universitas Internasional Semen Indonesia"
         />
       </div>
@@ -493,7 +487,7 @@ function AboutEditor({ data, onSave, saving }) {
             setFormData({ ...formData, content: e.target.value })
           }
           rows={8}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+          className="ds-input"
           placeholder="Paragraf 1...&#10;&#10;Paragraf 2..."
         />
       </div>
@@ -501,7 +495,7 @@ function AboutEditor({ data, onSave, saving }) {
       <button
         type="submit"
         disabled={saving}
-        className="w-full bg-red-600 text-white py-3 px-6 rounded-lg hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors font-medium"
+        className="w-full bg-brand-600 text-white py-3 px-6 rounded-lg hover:bg-brand-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
       >
         {saving ? "Menyimpan..." : "Simpan Perubahan"}
       </button>
@@ -592,8 +586,8 @@ function BidangKeahlianEditor({ data, onSave, saving }) {
           onChange={(e) =>
             setFormData({ ...formData, title: e.target.value })
           }
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-          placeholder='Bidang Keahlian <br /><span class="text-red-600">Sistem Informasi UISI</span>'
+          className="ds-input"
+          placeholder='Bidang Keahlian <br /><span class="text-brand-600">Sistem Informasi UISI</span>'
         />
       </div>
 
@@ -607,7 +601,7 @@ function BidangKeahlianEditor({ data, onSave, saving }) {
             setFormData({ ...formData, subtitle: e.target.value })
           }
           rows={3}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+          className="ds-input"
           placeholder="Deskripsi bidang keahlian"
         />
       </div>
@@ -633,7 +627,7 @@ function BidangKeahlianEditor({ data, onSave, saving }) {
                 <button
                   type="button"
                   onClick={() => removeBidangItem(index)}
-                  className="px-3 py-1 bg-red-500 text-white text-xs rounded hover:bg-red-600"
+                  className="px-3 py-1 bg-brand-500 text-white text-xs rounded hover:bg-brand-600"
                 >
                   Hapus
                 </button>
@@ -647,7 +641,7 @@ function BidangKeahlianEditor({ data, onSave, saving }) {
                   type="text"
                   value={item.title || ''}
                   onChange={(e) => updateBidangItem(index, "title", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                  className="ds-input"
                   placeholder="IT Audit / Governance"
                 />
               </div>
@@ -658,7 +652,7 @@ function BidangKeahlianEditor({ data, onSave, saving }) {
                   type="text"
                   value={item.subtitle || ''}
                   onChange={(e) => updateBidangItem(index, "subtitle", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                  className="ds-input"
                   placeholder="Apa itu IT / Audit & Governance ?"
                 />
               </div>
@@ -669,7 +663,7 @@ function BidangKeahlianEditor({ data, onSave, saving }) {
                   type="text"
                   value={item.cardId || ''}
                   onChange={(e) => updateBidangItem(index, "cardId", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                  className="ds-input"
                   placeholder="audit"
                 />
               </div>
@@ -680,7 +674,7 @@ function BidangKeahlianEditor({ data, onSave, saving }) {
                   value={item.description || ''}
                   onChange={(e) => updateBidangItem(index, "description", e.target.value)}
                   rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                  className="ds-input"
                   placeholder="Deskripsi bidang keahlian..."
                 />
               </div>
@@ -691,7 +685,7 @@ function BidangKeahlianEditor({ data, onSave, saving }) {
                   type="text"
                   value={item.background || ''}
                   onChange={(e) => updateBidangItem(index, "background", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                  className="ds-input"
                   placeholder="bg-[url(/img/governance.jpeg)]"
                 />
               </div>
@@ -703,7 +697,7 @@ function BidangKeahlianEditor({ data, onSave, saving }) {
       <button
         type="submit"
         disabled={saving}
-        className="w-full bg-red-600 text-white py-3 px-6 rounded-lg hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors font-medium"
+        className="w-full bg-brand-600 text-white py-3 px-6 rounded-lg hover:bg-brand-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
       >
         {saving ? "Menyimpan..." : "Simpan Perubahan"}
       </button>
@@ -753,7 +747,7 @@ function CareerEditor({ data, onSave, saving }) {
           onChange={(e) =>
             setFormData({ ...formData, title: e.target.value })
           }
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+          className="ds-input"
           placeholder="Prospek Karir Lulusan Sistem Informasi UISI"
         />
       </div>
@@ -771,7 +765,7 @@ function CareerEditor({ data, onSave, saving }) {
                 type="text"
                 value={career.id}
                 onChange={(e) => updateCareerItem(index, "id", e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                className="ds-input"
                 placeholder="ID (erp, auditor, consultant, analyst)"
                 disabled
               />
@@ -780,7 +774,7 @@ function CareerEditor({ data, onSave, saving }) {
                 type="text"
                 value={career.title}
                 onChange={(e) => updateCareerItem(index, "title", e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                className="ds-input"
                 placeholder="Nama karir"
               />
               
@@ -788,7 +782,7 @@ function CareerEditor({ data, onSave, saving }) {
                 value={career.description}
                 onChange={(e) => updateCareerItem(index, "description", e.target.value)}
                 rows={3}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                className="ds-input"
                 placeholder="Deskripsi karir"
               />
               
@@ -796,7 +790,7 @@ function CareerEditor({ data, onSave, saving }) {
                 type="text"
                 value={career.image}
                 onChange={(e) => updateCareerItem(index, "image", e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                className="ds-input"
                 placeholder="img/bidangerp.png"
               />
             </div>
@@ -807,7 +801,7 @@ function CareerEditor({ data, onSave, saving }) {
       <button
         type="submit"
         disabled={saving}
-        className="w-full bg-red-600 text-white py-3 px-6 rounded-lg hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors font-medium"
+        className="w-full bg-brand-600 text-white py-3 px-6 rounded-lg hover:bg-brand-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
       >
         {saving ? "Menyimpan..." : "Simpan Perubahan"}
       </button>
@@ -877,7 +871,7 @@ function TestimoniEditor({ data, onSave, saving }) {
           onChange={(e) =>
             setFormData({ ...formData, title: e.target.value })
           }
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+          className="ds-input"
           placeholder="Apa Kata Alumni?"
         />
       </div>
@@ -892,7 +886,7 @@ function TestimoniEditor({ data, onSave, saving }) {
           onChange={(e) =>
             setFormData({ ...formData, subtitle: e.target.value })
           }
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+          className="ds-input"
           placeholder="testimoni alumni"
         />
       </div>
@@ -904,7 +898,7 @@ function TestimoniEditor({ data, onSave, saving }) {
           <button
             type="button"
             onClick={addTestimoni}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            className="px-4 py-2 bg-zinc-900 text-white rounded-lg hover:bg-zinc-800"
           >
             + Tambah Testimoni
           </button>
@@ -917,7 +911,7 @@ function TestimoniEditor({ data, onSave, saving }) {
               <button
                 type="button"
                 onClick={() => removeTestimoni(index)}
-                className="text-red-600 hover:text-red-800"
+                className="text-brand-600 hover:text-brand-800"
               >
                 Hapus
               </button>
@@ -928,7 +922,7 @@ function TestimoniEditor({ data, onSave, saving }) {
                 type="text"
                 value={testimoni.name}
                 onChange={(e) => updateTestimoniItem(index, "name", e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                className="ds-input"
                 placeholder="Nama alumni"
               />
               
@@ -936,7 +930,7 @@ function TestimoniEditor({ data, onSave, saving }) {
                 type="text"
                 value={testimoni.work}
                 onChange={(e) => updateTestimoniItem(index, "work", e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                className="ds-input"
                 placeholder="Pekerjaan"
               />
               
@@ -944,7 +938,7 @@ function TestimoniEditor({ data, onSave, saving }) {
                 type="text"
                 value={testimoni.image}
                 onChange={(e) => updateTestimoniItem(index, "image", e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                className="ds-input"
                 placeholder="img/alumniname.png"
               />
               
@@ -952,7 +946,7 @@ function TestimoniEditor({ data, onSave, saving }) {
                 type="text"
                 value={testimoni.companyLogo}
                 onChange={(e) => updateTestimoniItem(index, "companyLogo", e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                className="ds-input"
                 placeholder="img/companylogo.png"
               />
               
@@ -960,7 +954,7 @@ function TestimoniEditor({ data, onSave, saving }) {
                 value={testimoni.description}
                 onChange={(e) => updateTestimoniItem(index, "description", e.target.value)}
                 rows={4}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                className="ds-input"
                 placeholder="Testimoni alumni"
               />
             </div>
@@ -971,7 +965,7 @@ function TestimoniEditor({ data, onSave, saving }) {
       <button
         type="submit"
         disabled={saving}
-        className="w-full bg-red-600 text-white py-3 px-6 rounded-lg hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors font-medium"
+        className="w-full bg-brand-600 text-white py-3 px-6 rounded-lg hover:bg-brand-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
       >
         {saving ? "Menyimpan..." : "Simpan Perubahan"}
       </button>
@@ -1018,7 +1012,7 @@ function JumbotronPromoEditor({ data, onSave, saving }) {
           onChange={(e) =>
             setFormData({ ...formData, subtitle: e.target.value })
           }
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+          className="ds-input"
           placeholder="sisfor uisi"
         />
       </div>
@@ -1033,7 +1027,7 @@ function JumbotronPromoEditor({ data, onSave, saving }) {
           onChange={(e) =>
             setFormData({ ...formData, title: e.target.value })
           }
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+          className="ds-input"
           placeholder="Mari Bergabung Bersama Kami"
         />
       </div>
@@ -1048,7 +1042,7 @@ function JumbotronPromoEditor({ data, onSave, saving }) {
             setFormData({ ...formData, content: e.target.value })
           }
           rows={3}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+          className="ds-input"
           placeholder="Bergabung bersama kami..."
         />
       </div>
@@ -1063,7 +1057,7 @@ function JumbotronPromoEditor({ data, onSave, saving }) {
           onChange={(e) =>
             setFormData({ ...formData, image: e.target.value })
           }
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+          className="ds-input"
           placeholder="img/gabung.png"
         />
       </div>
@@ -1081,7 +1075,7 @@ function JumbotronPromoEditor({ data, onSave, saving }) {
               data: { ...formData.data, buttonText: e.target.value },
             })
           }
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+          className="ds-input"
           placeholder="Mari Bergabung"
         />
       </div>
@@ -1099,7 +1093,7 @@ function JumbotronPromoEditor({ data, onSave, saving }) {
               data: { ...formData.data, buttonUrl: e.target.value },
             })
           }
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+          className="ds-input"
           placeholder="https://s.id/DaftarSisforUISI"
         />
       </div>
@@ -1107,7 +1101,7 @@ function JumbotronPromoEditor({ data, onSave, saving }) {
       <button
         type="submit"
         disabled={saving}
-        className="w-full bg-red-600 text-white py-3 px-6 rounded-lg hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors font-medium"
+        className="w-full bg-brand-600 text-white py-3 px-6 rounded-lg hover:bg-brand-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
       >
         {saving ? "Menyimpan..." : "Simpan Perubahan"}
       </button>
@@ -1161,7 +1155,7 @@ function SocialMediaEditor({ data, onSave, saving }) {
           onChange={(e) =>
             setFormData({ ...formData, title: e.target.value })
           }
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+          className="ds-input"
           placeholder="@sisforuisi"
         />
       </div>
@@ -1176,7 +1170,7 @@ function SocialMediaEditor({ data, onSave, saving }) {
           onChange={(e) =>
             setFormData({ ...formData, subtitle: e.target.value })
           }
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+          className="ds-input"
           placeholder="Official Account Departemen & HIMASISFOR"
         />
       </div>
@@ -1191,7 +1185,7 @@ function SocialMediaEditor({ data, onSave, saving }) {
           onChange={(e) =>
             setFormData({ ...formData, content: e.target.value })
           }
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+          className="ds-input"
           placeholder="Universitas Internasional Semen Indonesia"
         />
       </div>
@@ -1206,7 +1200,7 @@ function SocialMediaEditor({ data, onSave, saving }) {
           onChange={(e) =>
             setFormData({ ...formData, image: e.target.value })
           }
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+          className="ds-input"
           placeholder="img/logo2.png"
         />
       </div>
@@ -1224,7 +1218,7 @@ function SocialMediaEditor({ data, onSave, saving }) {
               data: { ...formData.data, instagramUrl: e.target.value },
             })
           }
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+          className="ds-input"
           placeholder="https://www.instagram.com/sisforuisi/"
         />
       </div>
@@ -1242,7 +1236,7 @@ function SocialMediaEditor({ data, onSave, saving }) {
               data: { ...formData.data, uisiInstagram: e.target.value },
             })
           }
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+          className="ds-input"
           placeholder="@sayauisi"
         />
       </div>
@@ -1260,7 +1254,7 @@ function SocialMediaEditor({ data, onSave, saving }) {
               data: { ...formData.data, buttonText: e.target.value },
             })
           }
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+          className="ds-input"
           placeholder="Follow On Instagram"
         />
       </div>
@@ -1268,7 +1262,7 @@ function SocialMediaEditor({ data, onSave, saving }) {
       <button
         type="submit"
         disabled={saving}
-        className="w-full bg-red-600 text-white py-3 px-6 rounded-lg hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors font-medium"
+        className="w-full bg-brand-600 text-white py-3 px-6 rounded-lg hover:bg-brand-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
       >
         {saving ? "Menyimpan..." : "Simpan Perubahan"}
       </button>

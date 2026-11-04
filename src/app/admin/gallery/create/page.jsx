@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import notify from '@/lib/notify'
 
 export default function CreateGalleryPage() {
   const router = useRouter()
@@ -68,7 +69,7 @@ export default function CreateGalleryPage() {
       }
     } catch (error) {
       console.error('Error uploading image:', error)
-      alert('Gagal upload gambar: ' + error.message)
+      notify.error('Gagal upload gambar', { description: error.message })
       return null
     } finally {
       setUploading(false)
@@ -90,7 +91,7 @@ export default function CreateGalleryPage() {
         } else {
           // Upload failed, check if manual URL provided
           if (!imagePath || imagePath.trim() === '') {
-            alert('Upload gambar gagal dan URL manual tidak diisi. Silakan masukkan URL gambar secara manual.')
+            notify.error('Upload gambar gagal dan URL manual tidak diisi. Silakan masukkan URL gambar secara manual.')
             return
           }
         }
@@ -107,7 +108,7 @@ export default function CreateGalleryPage() {
 
       // Validate required fields
       if (!imagePath || imagePath.trim() === '') {
-        alert('Foto penghargaan wajib diisi! Silakan masukkan URL gambar.')
+        notify.warning('Foto penghargaan wajib diisi! Silakan masukkan URL gambar.')
         return
       }
 
@@ -129,13 +130,13 @@ export default function CreateGalleryPage() {
       const data = await response.json()
 
       if (data.success) {
-        alert('Galeri berhasil ditambahkan!')
+        notify.success('Galeri berhasil ditambahkan!')
         router.push('/admin/gallery')
       } else {
-        alert('Error: ' + data.error)
+        notify.error('Error', { description: data.error })
       }
     } catch (error) {
-      alert('Terjadi kesalahan: ' + error.message)
+      notify.error('Terjadi kesalahan', { description: error.message })
     }
   }
 
@@ -144,7 +145,7 @@ export default function CreateGalleryPage() {
       <div className="mb-6">
         <Link 
           href="/admin/gallery"
-          className="text-red-600 hover:text-red-700 font-medium mb-4 inline-block"
+          className="text-brand-600 hover:text-brand-700 font-medium mb-4 inline-block"
         >
           ← Kembali ke List Galeri
         </Link>
@@ -152,7 +153,7 @@ export default function CreateGalleryPage() {
         <p className="text-zinc-500 mt-1">Isi form di bawah untuk menambah galeri prestasi</p>
       </div>
 
-      <div className="bg-white rounded-xl shadow-md p-8">
+      <div className="bg-white rounded-2xl border shadow-soft p-8">
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Award Image Upload */}
           <div>
@@ -178,7 +179,7 @@ export default function CreateGalleryPage() {
                   type="text"
                   value={formData.image}
                   onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                  className="w-full px-4 py-2 border border-zinc-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none"
+                  className="ds-input"
                   placeholder="Masukkan URL: /img/award/nama.jpg"
                   required
                 />
@@ -213,7 +214,7 @@ export default function CreateGalleryPage() {
                   type="text"
                   value={formData.photoProfile}
                   onChange={(e) => setFormData({ ...formData, photoProfile: e.target.value })}
-                  className="w-full px-4 py-2 border border-zinc-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none"
+                  className="ds-input"
                   placeholder="Masukkan URL: /img/award/profil.jpg"
                 />
                 <p className="text-xs text-zinc-500 mt-2">
@@ -229,7 +230,7 @@ export default function CreateGalleryPage() {
               type="text"
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-              className="w-full px-4 py-2 border border-zinc-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none"
+              className="ds-input"
               placeholder="Contoh: Juara 1 Lomba Web Design"
               required
             />
@@ -241,7 +242,7 @@ export default function CreateGalleryPage() {
               type="text"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="w-full px-4 py-2 border border-zinc-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none"
+              className="ds-input"
               placeholder="Contoh: John Doe"
               required
             />
@@ -253,7 +254,7 @@ export default function CreateGalleryPage() {
               type="text"
               value={formData.year}
               onChange={(e) => setFormData({ ...formData, year: e.target.value })}
-              className="w-full px-4 py-2 border border-zinc-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none"
+              className="ds-input"
               placeholder="Contoh: 2023"
               required
             />
@@ -264,7 +265,7 @@ export default function CreateGalleryPage() {
             <textarea
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              className="w-full px-4 py-2 border border-zinc-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none"
+              className="ds-input"
               rows="4"
               placeholder="Deskripsi prestasi (opsional)"
             />
@@ -277,7 +278,7 @@ export default function CreateGalleryPage() {
                 type="number"
                 value={formData.order}
                 onChange={(e) => setFormData({ ...formData, order: parseInt(e.target.value) || 0 })}
-                className="w-full px-4 py-2 border border-zinc-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none"
+                className="ds-input"
                 placeholder="0"
               />
               <p className="text-xs text-zinc-500 mt-1">Semakin kecil angka, semakin depan urutannya</p>
@@ -288,7 +289,7 @@ export default function CreateGalleryPage() {
               <select
                 value={formData.isActive ? 'true' : 'false'}
                 onChange={(e) => setFormData({ ...formData, isActive: e.target.value === 'true' })}
-                className="w-full px-4 py-2 border border-zinc-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none"
+                className="ds-input"
               >
                 <option value="true">Aktif</option>
                 <option value="false">Tidak Aktif</option>
@@ -300,7 +301,7 @@ export default function CreateGalleryPage() {
             <button
               type="submit"
               disabled={uploading}
-              className="flex-1 bg-red-600 text-white py-3 rounded-lg font-semibold hover:bg-red-700 transition disabled:bg-zinc-400 disabled:cursor-not-allowed"
+              className="flex-1 bg-brand-600 text-white py-3 rounded-lg font-semibold hover:bg-brand-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {uploading ? 'Mengupload...' : 'Simpan Galeri'}
             </button>

@@ -1,7 +1,10 @@
 'use client'
 import { useState, useEffect } from 'react'
+import notify from '@/lib/notify'
+import { useConfirm } from '@/components/ds/ConfirmProvider'
 
 export default function MediaPage() {
+  const confirm = useConfirm()
   const [uploading, setUploading] = useState(false)
   const [uploadedFiles, setUploadedFiles] = useState([])
   const [selectedFolder, setSelectedFolder] = useState('uploads')
@@ -53,7 +56,7 @@ export default function MediaPage() {
     const file = fileInput.files[0]
 
     if (!file) {
-      alert('Pilih file terlebih dahulu')
+      notify.warning('Pilih file terlebih dahulu')
       return
     }
 
@@ -72,15 +75,15 @@ export default function MediaPage() {
       const data = await response.json()
 
       if (data.success) {
-        alert('File berhasil diupload!')
+        notify.success('File berhasil diupload!')
         loadFiles()
         setPreviewUrl(null)
         fileInput.value = ''
       } else {
-        alert('Error: ' + data.error)
+        notify.error('Error', { description: data.error })
       }
     } catch (error) {
-      alert('Terjadi kesalahan: ' + error.message)
+      notify.error('Terjadi kesalahan', { description: error.message })
     } finally {
       setUploading(false)
     }
@@ -89,16 +92,16 @@ export default function MediaPage() {
   const copyToClipboard = (url) => {
     const fullUrl = window.location.origin + url
     navigator.clipboard.writeText(fullUrl)
-    alert('Link berhasil dicopy!\n' + fullUrl)
+    notify.success('Link berhasil dicopy', { description: fullUrl })
   }
 
   const copyPath = (url) => {
     navigator.clipboard.writeText(url)
-    alert('Path berhasil dicopy!\n' + url)
+    notify.success('Path berhasil dicopy', { description: url })
   }
 
   const handleDelete = async (url, filename) => {
-    if (!confirm(`Yakin ingin menghapus file "${filename}"?\nFile akan dihapus permanen.`)) {
+    if (!(await confirm({ title: 'Hapus file ini?', description: `File "${filename}" akan dihapus permanen.`, tone: 'danger' }))) {
       return
     }
 
@@ -110,13 +113,13 @@ export default function MediaPage() {
       const data = await response.json()
 
       if (data.success) {
-        alert('File berhasil dihapus!')
+        notify.success('File berhasil dihapus!')
         loadFiles()
       } else {
-        alert('Error: ' + data.error)
+        notify.error('Error', { description: data.error })
       }
     } catch (error) {
-      alert('Terjadi kesalahan: ' + error.message)
+      notify.error('Terjadi kesalahan', { description: error.message })
     }
   }
 
@@ -132,7 +135,7 @@ export default function MediaPage() {
 
   const handleEdit = async () => {
     if (!newFilename.trim()) {
-      alert('Nama file tidak boleh kosong')
+      notify.warning('Nama file tidak boleh kosong')
       return
     }
 
@@ -151,14 +154,14 @@ export default function MediaPage() {
       const data = await response.json()
 
       if (data.success) {
-        alert('File berhasil diubah!')
+        notify.success('File berhasil diubah!')
         cancelEdit()
         loadFiles()
       } else {
-        alert('Error: ' + data.error)
+        notify.error('Error', { description: data.error })
       }
     } catch (error) {
-      alert('Terjadi kesalahan: ' + error.message)
+      notify.error('Terjadi kesalahan', { description: error.message })
     }
   }
 
@@ -170,7 +173,7 @@ export default function MediaPage() {
       </div>
 
       {/* Upload Form */}
-      <div className="bg-white rounded-xl shadow-md p-4 lg:p-6">
+      <div className="bg-white rounded-2xl border shadow-soft p-4 lg:p-6">
         <form onSubmit={handleUpload} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-zinc-700 mb-2">
@@ -179,7 +182,7 @@ export default function MediaPage() {
             <select
               value={selectedFolder}
               onChange={(e) => setSelectedFolder(e.target.value)}
-              className="w-full px-3 lg:px-4 py-2 border border-zinc-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none text-sm lg:text-base"
+              className="ds-input"
             >
               {folders.map((folder) => (
                 <option key={folder.value} value={folder.value}>
@@ -198,7 +201,7 @@ export default function MediaPage() {
               name="file"
               accept="image/*"
               onChange={handleFileSelect}
-              className="w-full px-3 lg:px-4 py-2 border border-zinc-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none text-sm lg:text-base"
+              className="ds-input"
               required
             />
           </div>
@@ -219,7 +222,7 @@ export default function MediaPage() {
           <button
             type="submit"
             disabled={uploading}
-            className="w-full bg-red-600 text-white py-2 lg:py-3 rounded-lg font-semibold hover:bg-red-700 transition disabled:bg-zinc-400 disabled:cursor-not-allowed text-sm lg:text-base"
+            className="w-full bg-brand-600 text-white py-2 lg:py-3 rounded-lg font-semibold hover:bg-brand-700 transition disabled:opacity-50 disabled:cursor-not-allowed text-sm lg:text-base"
           >
             {uploading ? 'Uploading...' : 'Upload File'}
           </button>
@@ -227,13 +230,13 @@ export default function MediaPage() {
       </div>
 
       {/* Uploaded Files */}
-      <div className="bg-white rounded-xl shadow-md p-4 lg:p-6">
+      <div className="bg-white rounded-2xl border shadow-soft p-4 lg:p-6">
         <h3 className="text-lg lg:text-xl font-bold text-zinc-800 mb-4">
           File di Folder: {folders.find(f => f.value === selectedFolder)?.label}
         </h3>
         {loading ? (
           <div className="text-center py-8">
-            <div className="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-red-600"></div>
+            <div className="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-brand-600"></div>
             <p className="mt-2 text-zinc-500">Memuat file...</p>
           </div>
         ) : uploadedFiles.length > 0 ? (
@@ -253,7 +256,7 @@ export default function MediaPage() {
                           type="text"
                           value={newFilename}
                           onChange={(e) => setNewFilename(e.target.value)}
-                          className="w-full px-3 py-2 border border-zinc-300 rounded-lg focus:ring-2 focus:ring-red-500 outline-none"
+                          className="ds-input"
                           autoFocus
                         />
                         <div className="flex gap-2 mt-2">
@@ -286,7 +289,7 @@ export default function MediaPage() {
                           />
                           <button
                             onClick={() => copyToClipboard(file.url)}
-                            className="px-4 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
+                            className="px-4 py-1 bg-zinc-900 text-white text-sm rounded hover:bg-zinc-800"
                           >
                             Copy URL
                           </button>
@@ -314,14 +317,14 @@ export default function MediaPage() {
                   <div className="flex flex-col gap-2">
                     <button
                       onClick={() => startEdit(file)}
-                      className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+                      className="px-4 py-2 bg-zinc-900 text-white rounded hover:bg-zinc-800 transition"
                       disabled={editingFile !== null}
                     >
                       Edit
                     </button>
                     <button
                       onClick={() => handleDelete(file.url, file.filename)}
-                      className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition"
+                      className="px-4 py-2 bg-brand-600 text-white rounded hover:bg-brand-700 transition"
                       disabled={editingFile !== null}
                     >
                       Hapus

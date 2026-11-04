@@ -1,197 +1,157 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Skeleton } from '@/components/ui/skeleton'
+import { AppIcon, EmptyState, useConfirm } from '@/components/ds'
+import { HoverCard } from '@/components/aceternity'
+import notify from '@/lib/notify'
+import { cn } from '@/lib/utils'
 
 export default function GalleryPage() {
   const [galleries, setGalleries] = useState([])
-  const [filteredGalleries, setFilteredGalleries] = useState([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
-
-  useEffect(() => {
-    fetchGalleries()
-  }, [])
-
-  useEffect(() => {
-    filterGalleries()
-  }, [galleries, searchTerm])
+  const confirm = useConfirm()
 
   const fetchGalleries = async () => {
     try {
       const response = await fetch('/api/gallery')
       const data = await response.json()
-      if (data.success) {
-        setGalleries(data.data)
-      }
+      if (data.success) setGalleries(data.data)
     } catch (error) {
-      console.error('Error fetching galleries:', error)
+      notify.error('Gagal memuat galeri', { description: error.message })
     } finally {
       setLoading(false)
     }
   }
 
-  const filterGalleries = () => {
-    let filtered = [...galleries]
+  useEffect(() => { fetchGalleries() }, [])
 
-    if (searchTerm) {
-      filtered = filtered.filter(item => 
-        item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.year.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-    }
+  const filtered = useMemo(() => {
+    const q = searchTerm.toLowerCase()
+    if (!q) return galleries
+    return galleries.filter((i) => i.title.toLowerCase().includes(q) || i.name.toLowerCase().includes(q) || String(i.year).toLowerCase().includes(q))
+  }, [galleries, searchTerm])
 
-    setFilteredGalleries(filtered)
-  }
-
-
-
-  const handleDelete = async (id) => {
-    if (!confirm('Yakin ingin menghapus galeri ini?')) return
-
+  const handleDelete = async (item) => {
+    const ok = await confirm({ title: 'Hapus galeri ini?', description: `"${item.title}" akan dihapus permanen dari galeri.`, tone: 'danger' })
+    if (!ok) return
     try {
-      const response = await fetch(`/api/gallery?id=${id}`, {
-        method: 'DELETE'
-      })
-
+      const response = await fetch(`/api/gallery?id=${item.id}`, { method: 'DELETE' })
       const data = await response.json()
-
       if (data.success) {
-        alert('Galeri berhasil dihapus!')
+        notify.success('Galeri berhasil dihapus')
         fetchGalleries()
       } else {
-        alert('Error: ' + data.error)
+        notify.error('Gagal menghapus', { description: data.error })
       }
     } catch (error) {
-      alert('Terjadi kesalahan: ' + error.message)
+      notify.error('Terjadi kesalahan', { description: error.message })
     }
   }
 
-  const toggleActive = async (id, currentStatus) => {
+  const toggleActive = async (item) => {
     try {
       const response = await fetch('/api/gallery', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id, isActive: !currentStatus })
+        body: JSON.stringify({ id: item.id, isActive: !item.isActive }),
       })
-
       const data = await response.json()
-
       if (data.success) {
+        notify.success(item.isActive ? 'Galeri dinonaktifkan' : 'Galeri diaktifkan')
         fetchGalleries()
+      } else {
+        notify.error('Gagal mengubah status', { description: data.error })
       }
     } catch (error) {
-      alert('Terjadi kesalahan: ' + error.message)
+      notify.error('Terjadi kesalahan', { description: error.message })
     }
   }
 
-
-
   return (
     <div className="space-y-4 lg:space-y-6">
-      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-xl lg:text-2xl font-bold text-zinc-800">Kelola Galeri Prestasi</h2>
-          <p className="text-sm text-zinc-500 mt-1">Kelola foto showcase galeri prestasi</p>
+          <h2 className="text-xl font-bold text-zinc-900 lg:text-2xl">Kelola Galeri Prestasi</h2>
+          <p className="mt-1 text-sm text-zinc-500">Kelola foto showcase galeri prestasi</p>
         </div>
-        <Link
-          href="/admin/gallery/create"
-          className="bg-red-600 text-white px-4 lg:px-6 py-2 lg:py-3 rounded-lg font-semibold hover:bg-red-700 transition text-center text-sm lg:text-base"
-        >
-          + Tambah Galeri
-        </Link>
+        <Button asChild className="group">
+          <Link href="/admin/gallery/create"><AppIcon name="plus" size={16} target=".group" /> Tambah Galeri</Link>
+        </Button>
       </div>
 
-      {/* Filter and Search */}
-      <div className="bg-white rounded-xl shadow-md p-4 lg:p-6">
-        <div className="grid grid-cols-1 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-zinc-700 mb-2">Cari Galeri</label>
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Cari judul, nama, atau tahun..."
-              className="w-full px-3 lg:px-4 py-2 border border-zinc-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none text-sm lg:text-base"
-            />
+      <div className="rounded-2xl border bg-white p-4 shadow-soft lg:p-6">
+        <div className="space-y-2">
+          <Label htmlFor="search">Cari Galeri</Label>
+          <div className="relative">
+            <AppIcon name="search" size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
+            <Input id="search" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} placeholder="Cari judul, nama, atau tahun…" className="pl-9" />
           </div>
         </div>
-        <div className="mt-4 text-xs lg:text-sm text-zinc-600">
-          Menampilkan {filteredGalleries.length} dari {galleries.length} galeri
-        </div>
+        <p className="mt-4 text-xs text-zinc-500 lg:text-sm">Menampilkan {filtered.length} dari {galleries.length} galeri</p>
       </div>
 
-      {/* Grid Gallery */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6">
-        {loading ? (
-          <div className="col-span-full p-8 text-center text-zinc-500 text-sm lg:text-base">Loading...</div>
-        ) : filteredGalleries.length === 0 ? (
-          <div className="col-span-full p-8 text-center text-zinc-500 text-sm lg:text-base">
-            {searchTerm ? 'Tidak ada data yang sesuai dengan pencarian' : 'Belum ada data galeri'}
-          </div>
-        ) : (
-          filteredGalleries.map((item) => (
-            <div key={item.id} className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition">
-              <div className="relative h-48">
-                {item.image ? (
-                  <img 
-                    src={item.image} 
-                    alt={item.title}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full bg-zinc-200 flex items-center justify-center text-zinc-500">
-                    <span className="text-sm">No Image</span>
-                  </div>
-                )}
-                <div className="absolute top-2 right-2">
+      {loading ? (
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {Array.from({ length: 8 }).map((_, i) => <Skeleton key={i} className="h-80 w-full rounded-2xl" />)}
+        </div>
+      ) : filtered.length === 0 ? (
+        <EmptyState
+          title={searchTerm ? 'Tidak ada yang cocok' : 'Belum ada data galeri'}
+          description={searchTerm ? 'Coba kata kunci lain.' : 'Tambahkan foto prestasi untuk ditampilkan di website.'}
+          illustration={searchTerm ? 'not-found' : 'empty'}
+          action={!searchTerm && <Button asChild><Link href="/admin/gallery/create">Tambah Galeri</Link></Button>}
+        />
+      ) : (
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 lg:gap-6">
+          {filtered.map((item, i) => (
+            <div key={item.id} data-aos="fade-up" data-aos-delay={(i % 4) * 60}>
+              <HoverCard className={cn('h-full', !item.isActive && 'opacity-70')}>
+                <div className="relative h-48 bg-zinc-100">
+                  {item.image ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={item.image} alt={item.title} className="h-full w-full object-cover" />
+                  ) : (
+                    <div className="flex h-full items-center justify-center text-sm text-zinc-400">Tidak ada gambar</div>
+                  )}
                   <button
-                    onClick={() => toggleActive(item.id, item.isActive)}
-                    className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                      item.isActive 
-                        ? 'bg-green-500 text-white' 
-                        : 'bg-gray-400 text-white'
-                    }`}
+                    onClick={() => toggleActive(item)}
+                    className={cn('absolute right-3 top-3 rounded-full px-3 py-1 text-xs font-semibold shadow-sm backdrop-blur transition cursor-pointer',
+                      item.isActive ? 'bg-success text-white hover:brightness-110' : 'bg-zinc-800/80 text-white hover:bg-zinc-800')}
                   >
                     {item.isActive ? 'Aktif' : 'Nonaktif'}
                   </button>
                 </div>
-              </div>
-              <div className="p-4">
-                <h3 className="font-semibold text-zinc-800 line-clamp-2 mb-2">{item.title}</h3>
-                <div className="flex items-center gap-2 text-sm text-zinc-600 mb-3">
-                  {item.photoProfile && (
-                    <img 
-                      src={item.photoProfile} 
-                      alt={item.name}
-                      className="w-6 h-6 rounded-full object-cover"
-                    />
-                  )}
-                  <span className="line-clamp-1">{item.name}</span>
+                <div className="p-4">
+                  <h3 className="mb-2 line-clamp-2 font-semibold text-zinc-900">{item.title}</h3>
+                  <div className="mb-3 flex items-center gap-2 text-sm text-zinc-600">
+                    {item.photoProfile && (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={item.photoProfile} alt={item.name} className="size-6 rounded-full object-cover" />
+                    )}
+                    <span className="line-clamp-1">{item.name}</span>
+                  </div>
+                  <div className="mb-4 flex items-center justify-between text-xs text-zinc-500">
+                    <span>Tahun {item.year}</span><span>Urutan {item.order}</span>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button asChild variant="outline" size="sm" className="group flex-1">
+                      <Link href={`/admin/gallery/edit/${item.id}`}><AppIcon name="edit" size={14} target=".group" /> Edit</Link>
+                    </Button>
+                    <Button variant="ghost" size="sm" className="group flex-1 bg-danger-soft text-danger hover:bg-brand-100 hover:text-danger" onClick={() => handleDelete(item)}>
+                      <AppIcon name="trash" size={14} target=".group" /> Hapus
+                    </Button>
+                  </div>
                 </div>
-                <div className="flex items-center justify-between text-xs text-zinc-500 mb-4">
-                  <span>Tahun: {item.year}</span>
-                  <span>Urutan: {item.order}</span>
-                </div>
-                <div className="flex gap-2">
-                  <Link
-                    href={`/admin/gallery/edit/${item.id}`}
-                    className="flex-1 bg-blue-50 text-blue-600 py-2 rounded-lg font-medium hover:bg-blue-100 transition text-sm text-center"
-                  >
-                    Edit
-                  </Link>
-                  <button
-                    onClick={() => handleDelete(item.id)}
-                    className="flex-1 bg-red-50 text-red-600 py-2 rounded-lg font-medium hover:bg-red-100 transition text-sm"
-                  >
-                    Hapus
-                  </button>
-                </div>
-              </div>
+              </HoverCard>
             </div>
-          ))
-        )}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   )
 }

@@ -1,139 +1,123 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
+import { useSession } from 'next-auth/react'
+import { AppIcon, Banner, ChartCard, StatCard } from '@/components/ds'
+import notify from '@/lib/notify'
+
+const QUICK_ACTIONS = [
+  { href: '/admin/content', title: 'Edit Konten Utama', desc: 'Kelola konten homepage', icon: 'content' },
+  { href: '/admin/profile-content', title: 'Edit Halaman Profil', desc: 'Kelola konten profil', icon: 'profile' },
+  { href: '/admin/curriculum', title: 'Kelola Kurikulum', desc: 'Edit data kurikulum', icon: 'book' },
+  { href: '/admin/achievements/create', title: 'Tambah Prestasi', desc: 'Tambahkan prestasi baru', icon: 'trophy' },
+  { href: '/admin/gallery/create', title: 'Tambah Galeri', desc: 'Upload foto galeri prestasi', icon: 'gallery' },
+  { href: '/admin/media', title: 'Upload Media', desc: 'Upload gambar dan file', icon: 'upload' },
+]
+
+const RED = '#dc2626'
+const DARK = '#27272a'
+
+function firstYear(tahun) {
+  const m = String(tahun || '').match(/\d{4}/)
+  return m ? m[0] : 'Lainnya'
+}
 
 export default function DashboardPage() {
-  const [stats, setStats] = useState({
-    achievements: 0,
-    gallery: 0
-  })
+  const { data: session } = useSession()
+  const [achievements, setAchievements] = useState([])
+  const [galleryCount, setGalleryCount] = useState(0)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetchStats()
+    const load = async () => {
+      try {
+        const [aRes, gRes] = await Promise.all([fetch('/api/achievements?format=list'), fetch('/api/gallery')])
+        const [aData, gData] = await Promise.all([aRes.json(), gRes.json()])
+        setAchievements(Array.isArray(aData.data) ? aData.data : [])
+        setGalleryCount(Array.isArray(gData.data) ? gData.data.length : 0)
+      } catch (error) {
+        notify.error('Gagal memuat statistik', { description: error.message })
+      } finally {
+        setLoading(false)
+      }
+    }
+    load()
   }, [])
 
-  const fetchStats = async () => {
-    try {
-      const [achievementsRes, galleryRes] = await Promise.all([
-        fetch('/api/achievements'),
-        fetch('/api/gallery')
-      ])
-
-      const achievementsData = await achievementsRes.json()
-      const galleryData = await galleryRes.json()
-
-      setStats({
-        achievements: achievementsData.data?.length || 0,
-        gallery: galleryData.data?.length || 0
-      })
-    } catch (error) {
-      console.error('Error fetching stats:', error)
-    } finally {
-      setLoading(false)
+  const stats = useMemo(() => {
+    const intl = achievements.filter((a) => /internasional/i.test(a.tingkatan)).length
+    const byYear = {}
+    achievements.forEach((a) => {
+      const y = firstYear(a.tahun)
+      byYear[y] ??= { nasional: 0, internasional: 0 }
+      byYear[y][/internasional/i.test(a.tingkatan) ? 'internasional' : 'nasional']++
+    })
+    const years = Object.keys(byYear).sort().slice(-6)
+    return {
+      total: achievements.length,
+      intl,
+      people: new Set(achievements.map((a) => a.achieverName)).size,
+      mahasiswa: achievements.filter((a) => a.category === 'mahasiswa').length,
+      dosen: achievements.filter((a) => a.category === 'dosen').length,
+      years,
+      byYear,
     }
+  }, [achievements])
+
+  const barData = {
+    labels: stats.years,
+    datasets: [
+      { label: 'Nasional', data: stats.years.map((y) => stats.byYear[y].nasional), backgroundColor: RED, borderRadius: 6, maxBarThickness: 28 },
+      { label: 'Internasional', data: stats.years.map((y) => stats.byYear[y].internasional), backgroundColor: DARK, borderRadius: 6, maxBarThickness: 28 },
+    ],
   }
-
-  const cards = [
-    {
-      title: 'Total Prestasi',
-      value: stats.achievements,
-      color: 'bg-yellow-500',
-      link: '/admin/achievements'
-    },
-    {
-      title: 'Galeri Prestasi',
-      value: stats.gallery,
-      color: 'bg-purple-500',
-      link: '/admin/gallery'
-    }
-  ]
+  const doughnutData = {
+    labels: ['Mahasiswa', 'Dosen'],
+    datasets: [{ data: [stats.mahasiswa, stats.dosen], backgroundColor: [RED, DARK], borderWidth: 0, hoverOffset: 6 }],
+  }
 
   return (
     <div className="space-y-6 lg:space-y-8">
-      <div className="mb-6 lg:mb-8">
-        <h2 className="text-2xl lg:text-3xl font-bold text-zinc-800">Selamat Datang di CMS!</h2>
-        <p className="text-sm lg:text-base text-zinc-500 mt-2">Kelola konten website Sistem Informasi UISI</p>
+      <div data-aos="fade-up">
+        <h2 className="text-2xl font-bold text-zinc-900 lg:text-3xl">Halo, {session?.user?.name?.split(' ')[0] || 'Admin'} 👋</h2>
+        <p className="mt-1 text-sm text-zinc-500 lg:text-base">Kelola konten website Sistem Informasi UISI dari sini.</p>
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
-        {cards.map((card, index) => (
-          <Link
-            key={index}
-            href={card.link}
-            className="bg-white rounded-xl shadow-md hover:shadow-lg transition p-4 lg:p-6 border border-zinc-100"
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-zinc-500 text-xs lg:text-sm font-medium">{card.title}</p>
-                <p className="text-2xl lg:text-3xl font-bold text-zinc-800 mt-2">
-                  {loading ? '...' : card.value}
-                </p>
-              </div>
-            </div>
-          </Link>
-        ))}
+      <Banner variant="brand" title="Design System sudah tersedia" dismissible storageKey="ds-launch" action={
+        <Link href="/design-system" className="rounded-md bg-white px-3 py-1.5 text-xs font-semibold text-brand-700 hover:bg-brand-50">Lihat</Link>
+      }>
+        Semua komponen, warna, dan animasi website kini terdokumentasi di satu tempat.
+      </Banner>
+
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <StatCard title="Total Prestasi" value={stats.total} icon="trophy" href="/admin/achievements" loading={loading} />
+        <StatCard title="Prestasi Internasional" value={stats.intl} icon="globe" href="/admin/achievements" loading={loading} />
+        <StatCard title="Peraih Prestasi" value={stats.people} icon="profile" loading={loading} />
+        <StatCard title="Galeri Prestasi" value={galleryCount} icon="gallery" href="/admin/gallery" loading={loading} />
       </div>
 
-      {/* Quick Actions */}
-      <div className="bg-white rounded-xl shadow-md p-4 lg:p-6 border border-zinc-100">
-        <h3 className="text-lg lg:text-xl font-bold text-zinc-800 mb-4">Quick Actions</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-4">
-          <Link
-            href="/admin/content"
-            className="flex items-center gap-3 lg:gap-4 p-3 lg:p-4 border border-zinc-200 rounded-lg hover:bg-zinc-50 transition"
-          >
-            <div>
-              <p className="font-semibold text-zinc-800 text-sm lg:text-base">Edit Konten Utama</p>
-              <p className="text-xs lg:text-sm text-zinc-500">Kelola konten homepage</p>
-            </div>
-          </Link>
-          <Link
-            href="/admin/profile-content"
-            className="flex items-center gap-3 lg:gap-4 p-3 lg:p-4 border border-zinc-200 rounded-lg hover:bg-zinc-50 transition"
-          >
-            <div>
-              <p className="font-semibold text-zinc-800 text-sm lg:text-base">Edit Halaman Profil</p>
-              <p className="text-xs lg:text-sm text-zinc-500">Kelola konten profil</p>
-            </div>
-          </Link>
-          <Link
-            href="/admin/curriculum"
-            className="flex items-center gap-3 lg:gap-4 p-3 lg:p-4 border border-zinc-200 rounded-lg hover:bg-zinc-50 transition"
-          >
-            <div>
-              <p className="font-semibold text-zinc-800 text-sm lg:text-base">Kelola Kurikulum</p>
-              <p className="text-xs lg:text-sm text-zinc-500">Edit data kurikulum</p>
-            </div>
-          </Link>
-          <Link
-            href="/admin/achievements"
-            className="flex items-center gap-3 lg:gap-4 p-3 lg:p-4 border border-zinc-200 rounded-lg hover:bg-zinc-50 transition"
-          >
-            <div>
-              <p className="font-semibold text-zinc-800 text-sm lg:text-base">Tambah Prestasi</p>
-              <p className="text-xs lg:text-sm text-zinc-500">Tambahkan prestasi baru</p>
-            </div>
-          </Link>
-          <Link
-            href="/admin/gallery"
-            className="flex items-center gap-3 lg:gap-4 p-3 lg:p-4 border border-zinc-200 rounded-lg hover:bg-zinc-50 transition"
-          >
-            <div>
-              <p className="font-semibold text-zinc-800 text-sm lg:text-base">Tambah Galeri</p>
-              <p className="text-xs lg:text-sm text-zinc-500">Upload foto galeri prestasi</p>
-            </div>
-          </Link>
-          <Link
-            href="/admin/media"
-            className="flex items-center gap-3 lg:gap-4 p-3 lg:p-4 border border-zinc-200 rounded-lg hover:bg-zinc-50 transition"
-          >
-            <div>
-              <p className="font-semibold text-zinc-800 text-sm lg:text-base">Upload Media</p>
-              <p className="text-xs lg:text-sm text-zinc-500">Upload gambar dan file</p>
-            </div>
-          </Link>
+      <div className="grid gap-4 lg:grid-cols-3">
+        <ChartCard type="bar" title="Prestasi per Tahun" description="6 tahun terakhir berdasarkan tingkat" className="lg:col-span-2" data={barData} loading={loading}
+          options={{ scales: { y: { beginAtZero: true, ticks: { precision: 0 } }, x: { grid: { display: false } } } }} />
+        <ChartCard type="doughnut" title="Kategori Peraih" description="Mahasiswa vs dosen" data={doughnutData} loading={loading}
+          options={{ cutout: '68%', plugins: { legend: { position: 'bottom' } } }} />
+      </div>
+
+      <div className="rounded-2xl border bg-white p-4 shadow-soft lg:p-6">
+        <h3 className="mb-4 text-lg font-bold text-zinc-900">Aksi Cepat</h3>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {QUICK_ACTIONS.map((a, i) => (
+            <Link key={a.href} href={a.href} data-aos="fade-up" data-aos-delay={i * 50}
+              className="group flex items-center gap-4 rounded-xl border p-4 transition-colors hover:border-brand-200 hover:bg-brand-50/50">
+              <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-600 transition-colors group-hover:bg-brand-600 group-hover:text-white">
+                <AppIcon name={a.icon} size={20} target=".group" />
+              </span>
+              <span className="min-w-0">
+                <span className="block text-sm font-semibold text-zinc-900">{a.title}</span>
+                <span className="block text-xs text-zinc-500">{a.desc}</span>
+              </span>
+            </Link>
+          ))}
         </div>
       </div>
     </div>

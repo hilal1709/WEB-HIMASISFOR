@@ -1,12 +1,21 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useConfirm } from '@/components/ds/ConfirmProvider'
+import notify from '@/lib/notify'
+import { PageLoader } from '@/components/ds/Loader'
 
 export default function CurriculumManagement() {
+  const confirm = useConfirm()
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState({ type: "", text: "" });
+  useEffect(() => {
+    if (!message.text) return
+    if (message.type === 'success') notify.success(message.text)
+    else notify.error(message.text)
+  }, [message])
   
   const [title, setTitle] = useState("Kurikulum Program Studi");
   const [subtitle, setSubtitle] = useState("Sistem Informasi Bisnis");
@@ -79,8 +88,8 @@ export default function CurriculumManagement() {
     setKurikulum([...kurikulum, newSemester]);
   };
 
-  const deleteSemester = (semesterIndex) => {
-    if (confirm(`Hapus Semester ${semesterIndex + 1}?`)) {
+  const deleteSemester = async (semesterIndex) => {
+    if ((await confirm({ title: `Hapus Semester ${semesterIndex + 1}?`, tone: 'danger' }))) {
       const updated = kurikulum.filter((_, index) => index !== semesterIndex);
       // Renumber semesters
       const renumbered = updated.map((sem, idx) => ({
@@ -124,8 +133,8 @@ export default function CurriculumManagement() {
     setEditMode({ [`${semesterIndex}-${courseIndex}`]: false });
   };
 
-  const deleteCourse = (semesterIndex, courseIndex) => {
-    if (confirm("Hapus mata kuliah ini?")) {
+  const deleteCourse = async (semesterIndex, courseIndex) => {
+    if ((await confirm({ title: "Hapus mata kuliah ini?", tone: 'danger' }))) {
       const updated = [...kurikulum];
       updated[semesterIndex].matkul.splice(courseIndex, 1);
       setKurikulum(updated);
@@ -138,9 +147,7 @@ export default function CurriculumManagement() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl">Loading...</div>
-      </div>
+      <PageLoader fullscreen={false} label="Memuat konten…" />
     );
   }
 
@@ -158,17 +165,6 @@ export default function CurriculumManagement() {
         </div>
 
         {/* Message Alert */}
-        {message.text && (
-          <div
-            className={`mb-4 lg:mb-6 p-3 lg:p-4 rounded-md text-sm lg:text-base ${
-              message.type === "success"
-                ? "bg-green-50 text-green-800 border border-green-200"
-                : "bg-red-50 text-red-800 border border-red-200"
-            }`}
-          >
-            {message.text}
-          </div>
-        )}
 
         {/* Main Info Form */}
         <div className="bg-white rounded-lg shadow-md p-4 lg:p-6 mb-4 lg:mb-6">
@@ -182,7 +178,7 @@ export default function CurriculumManagement() {
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm lg:text-base"
+                className="ds-input"
               />
             </div>
             <div>
@@ -193,7 +189,7 @@ export default function CurriculumManagement() {
                 type="text"
                 value={subtitle}
                 onChange={(e) => setSubtitle(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm lg:text-base"
+                className="ds-input"
               />
             </div>
           </div>
@@ -206,7 +202,7 @@ export default function CurriculumManagement() {
               key={semesterIndex}
               className="bg-white rounded-lg shadow-md overflow-hidden"
             >
-              <div className="bg-blue-600 text-white px-4 lg:px-6 py-3 lg:py-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+              <div className="bg-zinc-900 text-white px-4 lg:px-6 py-3 lg:py-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
                 <div>
                   <h3 className="text-lg lg:text-xl font-semibold">
                     Semester {semester.semester}
@@ -217,7 +213,7 @@ export default function CurriculumManagement() {
                 </div>
                 <button
                   onClick={() => deleteSemester(semesterIndex)}
-                  className="px-3 lg:px-4 py-2 bg-red-500 hover:bg-red-600 rounded-md transition-colors text-sm lg:text-base whitespace-nowrap"
+                  className="px-3 lg:px-4 py-2 bg-brand-500 hover:bg-brand-600 rounded-md transition-colors text-sm lg:text-base whitespace-nowrap"
                 >
                   Hapus Semester
                 </button>
@@ -294,7 +290,7 @@ export default function CurriculumManagement() {
         <div className="mt-6">
           <button
             onClick={addSemester}
-            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors"
+            className="px-6 py-3 bg-zinc-900 hover:bg-zinc-800 text-white rounded-md transition-colors"
           >
             + Tambah Semester Baru
           </button>
@@ -311,7 +307,7 @@ export default function CurriculumManagement() {
           <button
             onClick={handleSave}
             disabled={saving}
-            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors disabled:bg-gray-300"
+            className="px-6 py-3 bg-zinc-900 hover:bg-zinc-800 text-white rounded-md transition-colors disabled:bg-gray-300"
           >
             {saving ? "Menyimpan..." : "Simpan Kurikulum"}
           </button>
@@ -393,13 +389,13 @@ function CourseRow({
       <td className="px-4 py-3 text-right space-x-2">
         <button
           onClick={onEdit}
-          className="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white text-sm rounded"
+          className="px-3 py-1 bg-blue-500 hover:bg-zinc-900 text-white text-sm rounded"
         >
           Edit
         </button>
         <button
           onClick={onDelete}
-          className="px-3 py-1 bg-red-500 hover:bg-red-600 text-white text-sm rounded"
+          className="px-3 py-1 bg-brand-500 hover:bg-brand-600 text-white text-sm rounded"
         >
           Hapus
         </button>

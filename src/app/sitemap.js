@@ -15,6 +15,18 @@ export default function sitemap() {
       priority: 0.8,
     },
     {
+      url: `${baseUrl}/sambutan-kaprodi`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/visi-misi`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
       url: `${baseUrl}/curiculum`,
       lastModified: new Date(),
       changeFrequency: 'monthly',

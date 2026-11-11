@@ -360,9 +360,9 @@
     "semantic_hash": ""
   },
   "src/app/sitemap.js": {
-    "mtime": 1770359578.4561212,
-    "seen": 1793008817.6457732,
-    "ast_hash": "a97799c8e6ef92d3f3baf5c3b4a57bea",
+    "mtime": 1794420043.1053526,
+    "seen": 1794420295.1295831,
+    "ast_hash": "237ec9577ef243ca6e17a3c86bbdd562",
     "semantic_hash": ""
   },
   "src/components/AwardingRecognition.jsx": {
@@ -1524,15 +1524,15 @@
     "semantic_hash": ""
   },
   "src/components/ui/banner.jsx": {
-    "mtime": 1794392646.3312347,
-    "seen": 1794401632.3085856,
-    "ast_hash": "a80848af8c75eccc2ee51080d82eede6",
+    "mtime": 1794411474.5986373,
+    "seen": 1794418933.0194879,
+    "ast_hash": "4f48a74c8c1a57283595d123d5310417",
     "semantic_hash": ""
   },
   "src/components/ui/button.jsx": {
-    "mtime": 1794392640.5526893,
-    "seen": 1794401632.30859,
-    "ast_hash": "3687f599ba48ea256da3f5b98da75b90",
+    "mtime": 1794411453.7487283,
+    "seen": 1794418933.0194933,
+    "ast_hash": "db1defe0a7d3e363f0a979b393113455",
     "semantic_hash": ""
   },
   "src/components/ui/card.jsx": {
@@ -1560,15 +1560,15 @@
     "semantic_hash": ""
   },
   "src/components/ui/modal.jsx": {
-    "mtime": 1794392640.554708,
-    "seen": 1794401632.3094385,
-    "ast_hash": "aaa6e276f1ec9dc35f33ccdea495104c",
+    "mtime": 1794411462.3301985,
+    "seen": 1794418933.021347,
+    "ast_hash": "66f2f0952e98134be29e172628232041",
     "semantic_hash": ""
   },
   "src/components/ui/toast.jsx": {
-    "mtime": 1794380978.1252384,
-    "seen": 1794381379.3318543,
-    "ast_hash": "29e0273d646019faba3b724eb5167a41",
+    "mtime": 1794411470.5631335,
+    "seen": 1794418933.02272,
+    "ast_hash": "1d2dd85d14a986ef2be904456757762f",
     "semantic_hash": ""
   },
   "src/lib/motion.js": {
@@ -1584,9 +1584,9 @@
     "semantic_hash": ""
   },
   "DESIGN.md": {
-    "mtime": 1794410181.4994426,
-    "seen": 1794410208.8508031,
-    "ast_hash": "e6596ba33d8ea497b461f9ebd3707da4",
+    "mtime": 1794420986.898361,
+    "seen": 1794421010.5208476,
+    "ast_hash": "8159571ab130b946b5b6e62867b95244",
     "semantic_hash": ""
   },
   ".claude/launch.json": {
@@ -1716,9 +1716,9 @@
     "semantic_hash": ""
   },
   "src/lib/home-content.js": {
-    "mtime": 1794410277.0817437,
-    "seen": 1794410342.9907484,
-    "ast_hash": "84d1b3f5c923a49d7595ad837cba26f0",
+    "mtime": 1794420043.1033542,
+    "seen": 1794420295.2592218,
+    "ast_hash": "7c657bb0602e13708435aca5894edd11",
     "semantic_hash": ""
   },
   "src/lib/scroll.js": {
@@ -2022,9 +2022,9 @@
     "semantic_hash": ""
   },
   "src/components/home/site-header.jsx": {
-    "mtime": 1794410277.0845156,
-    "seen": 1794410342.9729905,
-    "ast_hash": "c97ba42f1a34ae387cd07c5f22c7ad7c",
+    "mtime": 1794411449.9568467,
+    "seen": 1794418933.0056236,
+    "ast_hash": "94a08fabdf9a2ba68a8f74efe88a342b",
     "semantic_hash": ""
   },
   "src/components/home/story.jsx": {
@@ -2034,9 +2034,9 @@
     "semantic_hash": ""
   },
   "src/components/illustrations/line-illustrations.jsx": {
-    "mtime": 1794407654.942664,
-    "seen": 1794408129.7644684,
-    "ast_hash": "2a80f9c2275008f9bab985fe811404b0",
+    "mtime": 1794419859.585145,
+    "seen": 1794420295.2191896,
+    "ast_hash": "123a4e052f40518e99081abe7d8b0428",
     "semantic_hash": ""
   },
   "src/components/intro-loader.jsx": {
@@ -2643,6 +2643,102 @@
     "mtime": 1794410745.1293695,
     "seen": 1794411146.8403583,
     "ast_hash": "f8aaac47c363e829003b85a24200a50e",
+    "semantic_hash": ""
+  },
+  "src/app/sambutan-kaprodi/loading.js": {
+    "mtime": 1794412286.5265024,
+    "seen": 1794418932.9862494,
+    "ast_hash": "3eedfa2fd39a3762e78c24d62a0ac33d",
+    "semantic_hash": ""
+  },
+  "src/app/sambutan-kaprodi/page.jsx": {
+    "mtime": 1794419116.0470512,
+    "seen": 1794419401.0607324,
+    "ast_hash": "78cb66efc38c019408afbc8cd8cb8440",
+    "semantic_hash": ""
+  },
+  "src/components/sambutan/letter.jsx": {
+    "mtime": 1794419134.6384234,
+    "seen": 1794419401.0853345,
+    "ast_hash": "8fc985a62056ac260c68ca417b2a4385",
+    "semantic_hash": ""
+  },
+  "src/components/sambutan/page-curtain.jsx": {
+    "mtime": 1794419813.684592,
+    "seen": 1794420295.240689,
+    "ast_hash": "818158047a3b710f33fc1a10430a8e61",
+    "semantic_hash": ""
+  },
+  "src/components/sambutan/profile-modal.jsx": {
+    "mtime": 1794419161.3090968,
+    "seen": 1794419401.0853426,
+    "ast_hash": "115ae0b0aa157a2ff6ceda52e5a5605a",
+    "semantic_hash": ""
+  },
+  "src/components/sambutan/sambutan-hero.jsx": {
+    "mtime": 1794412336.7792645,
+    "seen": 1794418933.0161886,
+    "ast_hash": "151718434a6149a0320a00064cf90f5b",
+    "semantic_hash": ""
+  },
+  "src/lib/sambutan-content.js": {
+    "mtime": 1794419161.3096395,
+    "seen": 1794419401.0955772,
+    "ast_hash": "202a150f92eda963e5c5d43d7f73775c",
+    "semantic_hash": ""
+  },
+  "src/app/visi-misi/loading.js": {
+    "mtime": 1794420031.5251317,
+    "seen": 1794420295.1295936,
+    "ast_hash": "b323526d54a5e00e74b0113b77c2c3b4",
+    "semantic_hash": ""
+  },
+  "src/app/visi-misi/page.jsx": {
+    "mtime": 1794420955.7886963,
+    "seen": 1794421010.456363,
+    "ast_hash": "52846ddc07f4dc992aea30b2b9e152e7",
+    "semantic_hash": ""
+  },
+  "src/components/motion/page-curtain.jsx": {
+    "mtime": 1794419813.2576287,
+    "seen": 1794420295.2349946,
+    "ast_hash": "e99117ac361ae8b22c578e0cb90ebce4",
+    "semantic_hash": ""
+  },
+  "src/components/visi-misi/closing.jsx": {
+    "mtime": 1794420031.0372114,
+    "seen": 1794420295.2529042,
+    "ast_hash": "280f38753aee449ad43cf0c1ea2a3854",
+    "semantic_hash": ""
+  },
+  "src/components/visi-misi/misi-modal.jsx": {
+    "mtime": 1794419949.217899,
+    "seen": 1794420295.2529125,
+    "ast_hash": "d090b57bf75b2a7d2e776ae2e9c4ca80",
+    "semantic_hash": ""
+  },
+  "src/components/visi-misi/misi-stack.jsx": {
+    "mtime": 1794419986.309304,
+    "seen": 1794420295.2529187,
+    "ast_hash": "8f3fcbc1e66ec103a13cb89ae51a7d76",
+    "semantic_hash": ""
+  },
+  "src/components/visi-misi/roadmap.jsx": {
+    "mtime": 1794420011.7581306,
+    "seen": 1794420295.2529273,
+    "ast_hash": "f25166a3bc0ab25caf1d2d69c1cfe6a9",
+    "semantic_hash": ""
+  },
+  "src/components/visi-misi/visi-hero.jsx": {
+    "mtime": 1794420977.3402293,
+    "seen": 1794421010.4933095,
+    "ast_hash": "172877ed32ecba64ead575196ee63bff",
+    "semantic_hash": ""
+  },
+  "src/lib/visi-misi-content.js": {
+    "mtime": 1794420955.789695,
+    "seen": 1794421010.4988837,
+    "ast_hash": "89e016aee23bc8632824a36d33916c91",
     "semantic_hash": ""
   }
 }

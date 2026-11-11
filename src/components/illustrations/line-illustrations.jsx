@@ -87,9 +87,65 @@ export function CareerIllustration() {
   );
 }
 
+/** Tiga orang di sekitar buku terbuka + balon gagasan — budaya berbagi pengetahuan. */
+export function KnowledgeIllustration() {
+  return (
+    <Frame label="Ilustrasi sivitas akademika berbagi pengetahuan">
+      <path d="M50 70l30 8 30-8v22l-30 8-30-8z" {...soft} />
+      <path data-line {...line} d="M50 70l30 8 30-8v22l-30 8-30-8zM80 78v22" />
+      <circle data-line {...line} cx="80" cy="40" r="8" />
+      <path data-line {...line} d="M68 66c0-7 5-12 12-12s12 5 12 12" />
+      <circle data-line {...line} cx="30" cy="54" r="7" />
+      <path data-line {...line} d="M18 84c0-7 5-12 12-12s12 5 12 12" />
+      <circle data-line {...line} cx="130" cy="54" r="7" />
+      <path data-line {...line} d="M118 84c0-7 5-12 12-12s12 5 12 12" />
+      <path data-line {...line} d="M100 14h34a4 4 0 0 1 4 4v12a4 4 0 0 1-4 4h-24l-8 6v-6h-2a4 4 0 0 1-4-4V18a4 4 0 0 1 4-4z" />
+      <path {...line} strokeDasharray="2 5" d="M40 46c10-10 20-12 30-10M120 46c-6-6-10-8-14-8" />
+      <circle cx="112" cy="24" r="2.4" {...accent} />
+      <circle cx="120" cy="24" r="2.4" {...accent} />
+      <circle cx="128" cy="24" r="2.4" {...accent} />
+    </Frame>
+  );
+}
+
+/**
+ * Lanskap "Horizon 2030": matahari terbit di garis cakrawala, jalan perspektif menuju
+ * kampus & silo, bendera 2030 di ujung jalan. Lebar (viewBox 520×300) untuk hero.
+ */
+export function HorizonIllustration({ className }) {
+  return (
+    <svg viewBox="0 0 520 300" role="img" aria-label="Ilustrasi jalan menuju cakrawala 2030" className={className ?? "h-auto w-full text-ink"}>
+      {/* matahari */}
+      <path d="M200 196a60 60 0 0 1 120 0z" {...soft} />
+      <path data-line {...line} d="M200 196a60 60 0 0 1 120 0" />
+      <path data-line {...line} d="M260 112v-14M214 128l-9-10M306 128l9-10M186 162l-13-5M334 162l13-5" />
+      {/* cakrawala */}
+      <path data-line {...line} d="M10 196h500" />
+      {/* jalan perspektif */}
+      <path data-line {...line} d="M252 196L150 296M268 196L370 296" />
+      <path {...line} strokeDasharray="6 10" d="M260 200v96" />
+      {/* kampus kiri */}
+      <path data-line {...line} d="M48 196v-46l34-20 34 20v46M64 196v-24h14v24M90 164h12v12H90zM58 158h12v10H58z" />
+      <path data-line {...line} d="M82 130v-14M82 116h12l-4 4 4 4H82" />
+      {/* silo + cerobong kanan */}
+      <path data-line {...line} d="M396 196v-62c0-3 2-5 5-5h12c3 0 5 2 5 5v62M424 196v-50c0-3 2-5 5-5h12c3 0 5 2 5 5v50M454 196v-30l14-9v39" />
+      <path data-line {...line} d="M462 157v-40h7v34" />
+      <path {...line} strokeDasharray="2 6" d="M466 110c6-8 14-10 22-6" />
+      {/* bendera 2030 di ujung jalan */}
+      <path data-line {...line} d="M260 186v-46" />
+      <path d="M260 140h34l-7 8 7 8h-34z" {...accent} />
+      {/* awan */}
+      <path data-line {...line} d="M110 72c0-8 6-14 14-14 6 0 11 4 13 9 2-1 4-1 6-1 7 0 12 5 12 12h-45" />
+      <path data-line {...line} d="M372 54c0-7 5-12 12-12 5 0 9 3 11 8 7 0 12 5 12 12h-35" />
+      <circle cx="260" cy="196" r="3.2" {...accent} />
+    </svg>
+  );
+}
+
 export const ILLUSTRATIONS = {
   erp: ErpIllustration,
   lecturer: LecturerIllustration,
   industry: IndustryIllustration,
   career: CareerIllustration,
+  knowledge: KnowledgeIllustration,
 };

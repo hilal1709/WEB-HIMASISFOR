@@ -1,0 +1,204 @@
+{
+ "regions": [
+  {
+   "id": "scene",
+   "kind": "plate",
+   "pixelBox": {
+    "x": 0,
+    "y": 0,
+    "w": 1536,
+    "h": 864
+   },
+   "note": "flat layered vector landscape of Gresik: white limestone cliff wall on the left, a winding grey asphalt road curving down through the middle with white concrete barriers, pine-green trees, deep blue sea with ships, a cement plant with red-white chimney and silos on the far shore, a limestone headland on the right, blue sky with small clouds; no text, no logos, no signposts, no mascot, no UI"
+  },
+  {
+   "id": "logo",
+   "kind": "image",
+   "pixelBox": {
+    "x": 30,
+    "y": 16,
+    "w": 332,
+    "h": 108
+   },
+   "note": "UISI logo and SISTEM INFORMASI UISI program logo lockup (real assets)",
+   "bleed": true
+  },
+  {
+   "id": "headline-1",
+   "kind": "text",
+   "pixelBox": {
+    "x": 58,
+    "y": 184,
+    "w": 420,
+    "h": 68
+   },
+   "note": "headline line 1 Menghubungkan, navy"
+  },
+  {
+   "id": "headline-2",
+   "kind": "text",
+   "pixelBox": {
+    "x": 58,
+    "y": 255,
+    "w": 592,
+    "h": 66
+   },
+   "note": "headline line 2 Bisnis & Sistem Informasi, red"
+  },
+  {
+   "id": "headline-3",
+   "kind": "text",
+   "pixelBox": {
+    "x": 58,
+    "y": 320,
+    "w": 470,
+    "h": 62
+   },
+   "note": "headline line 3 untuk Masa Depan, navy"
+  },
+  {
+   "id": "accreditation",
+   "kind": "text",
+   "pixelBox": {
+    "x": 60,
+    "y": 386,
+    "w": 500,
+    "h": 38
+   },
+   "note": "Terakreditasi Baik Sekali \u00c2\u00b7 LAM INFOKOM"
+  },
+  {
+   "id": "cta-primary",
+   "kind": "control",
+   "pixelBox": {
+    "x": 62,
+    "y": 438,
+    "w": 282,
+    "h": 72
+   },
+   "note": "red pill button Daftar Sekarang with arrow"
+  },
+  {
+   "id": "cta-secondary",
+   "kind": "control",
+   "pixelBox": {
+    "x": 355,
+    "y": 434,
+    "w": 230,
+    "h": 64
+   },
+   "note": "outline pill button Lihat Kurikulum with book icon"
+  },
+  {
+   "id": "cliff-tagline",
+   "kind": "text",
+   "pixelBox": {
+    "x": 212,
+    "y": 552,
+    "w": 186,
+    "h": 110
+   },
+   "note": "set text on the cliff face: DARI GRESIK UNTUK INDONESIA LEBIH MAJU"
+  },
+  {
+   "id": "far-cliff-text",
+   "kind": "text",
+   "pixelBox": {
+    "x": 1335,
+    "y": 168,
+    "w": 128,
+    "h": 72
+   },
+   "note": "set text on the headland: GRESIK KOTA SEMEN INDONESIA"
+  },
+  {
+   "id": "sign-audit",
+   "kind": "control",
+   "pixelBox": {
+    "x": 650,
+    "y": 126,
+    "w": 130,
+    "h": 142
+   },
+   "note": "red wooden signpost IT Audit & Governance"
+  },
+  {
+   "id": "sign-enterprise",
+   "kind": "control",
+   "pixelBox": {
+    "x": 833,
+    "y": 195,
+    "w": 120,
+    "h": 105
+   },
+   "note": "red wooden signpost Enterprise Systems"
+  },
+  {
+   "id": "sign-data",
+   "kind": "control",
+   "pixelBox": {
+    "x": 1198,
+    "y": 380,
+    "w": 172,
+    "h": 130
+   },
+   "note": "red wooden signpost Data Science"
+  },
+  {
+   "id": "sign-msi",
+   "kind": "control",
+   "pixelBox": {
+    "x": 1285,
+    "y": 468,
+    "w": 218,
+    "h": 226
+   },
+   "note": "red wooden arrow signpost Manajemen SI"
+  },
+  {
+   "id": "elvo",
+   "kind": "image",
+   "pixelBox": {
+    "x": 700,
+    "y": 312,
+    "w": 412,
+    "h": 415
+   },
+   "note": "mascot Elvo moving down the road toward the viewer (shipped from the real elvo-run asset)"
+  },
+  {
+   "id": "bubble",
+   "kind": "chrome",
+   "pixelBox": {
+    "x": 1042,
+    "y": 298,
+    "w": 196,
+    "h": 114
+   },
+   "note": "white speech bubble Ikut aku jalan-jalan, ya!"
+  },
+  {
+   "id": "nav",
+   "kind": "control",
+   "pixelBox": {
+    "x": 360,
+    "y": 745,
+    "w": 816,
+    "h": 86
+   },
+   "note": "white pill bottom navigation Beranda, Profil, Akademik, Layanan, PMB with icons"
+  },
+  {
+   "id": "nav-elvo",
+   "kind": "image",
+   "pixelBox": {
+    "x": 674,
+    "y": 714,
+    "w": 132,
+    "h": 124
+   },
+   "note": "round badge with Elvo head at the centre of the nav",
+   "bleed": true
+  }
+ ]
+}

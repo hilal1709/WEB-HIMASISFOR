@@ -1,0 +1,69 @@
+"use client";
+import { useState } from "react";
+import Image from "next/image";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, A11y, Keyboard } from "swiper/modules";
+import "swiper/css";
+import { ALUMNI, VIDEOS } from "@/lib/home-content";
+import { Container, PlaceholderTag, SectionHeader } from "./shared";
+import { VideoCard } from "./video-player";
+import { ArrowGlyph } from "./glyphs";
+import { ElvoPeek } from "./elvo-peek";
+import { LottieIllustration } from "@/components/media/lottie-illustration";
+
+/** Testimoni alumni: video profil alumni + slider kutipan serif besar dengan tanda kutip emas. */
+export function AlumniScene() {
+  const [swiper, setSwiper] = useState(null);
+  const [i, setI] = useState(0);
+  const n = ALUMNI.items.length;
+  return (
+    <section id="alumni" className="bg-cream-2 py-16 md:py-24">
+      <Container>
+        <SectionHeader title={["Cerita", "alumni", "kami"]} body={ALUMNI.body} action={<LottieIllustration src="/lottie/grad-cap.json" className="hidden w-32 md:block" />} />
+        <div className="mt-10 grid gap-10 md:mt-12 lg:grid-cols-[1fr_1fr] lg:items-center lg:gap-16">
+          <div data-aos="fade-up" className="min-w-0">
+            <VideoCard video={VIDEOS.alumni} label="Profil alumni" />
+          </div>
+
+          <div data-aos="fade-up" data-aos-delay="100" className="min-w-0">
+            <div className="flex items-end justify-between">
+              <span aria-hidden className="block font-serif text-[6rem] leading-[0.6] text-gold">“</span>
+              <div className="relative -mb-2 hidden sm:block"><ElvoPeek pose="laugh" size={84} say="Seru dengar cerita kakak-kakak alumni!" delay={1.2} /></div>
+            </div>
+            <Swiper modules={[Autoplay, A11y, Keyboard]} onSwiper={setSwiper} onSlideChange={(s) => setI(s.realIndex)} loop keyboard speed={700} autoplay={{ delay: 6000, disableOnInteraction: false, pauseOnMouseEnter: true }} className="mt-2">
+              {ALUMNI.items.map((a) => (
+                <SwiperSlide key={a.name}>
+                  <figure>
+                    <blockquote className="font-serif text-[clamp(1.4rem,2.2vw,1.85rem)] leading-snug text-navy">{a.quote}</blockquote>
+                    <figcaption className="mt-6 flex items-center gap-3">
+                      <span className="relative grid size-12 shrink-0 place-items-center overflow-hidden rounded-full bg-white text-sm font-semibold text-maroon ring-2 ring-gold/60">
+                        {a.photo ? <Image src={a.photo} alt="" fill sizes="48px" className="object-cover" /> : a.name.split(/[ ,.]+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join("")}
+                      </span>
+                      <span>
+                        <span className="block font-semibold text-navy">{a.name}</span>
+                        <span className="block text-sm text-text/60">{a.role}</span>
+                      </span>
+                    </figcaption>
+                  </figure>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+            <div className="mt-8 flex items-center gap-4">
+              <button type="button" aria-label="Sebelumnya" onClick={() => swiper?.slidePrev()} className="grid size-11 place-items-center rounded-full border border-navy/20 text-navy transition-colors hover:border-maroon hover:bg-maroon hover:text-white">
+                <ArrowGlyph dir="left" className="size-4" />
+              </button>
+              <button type="button" aria-label="Berikutnya" onClick={() => swiper?.slideNext()} className="grid size-11 place-items-center rounded-full border border-navy/20 text-navy transition-colors hover:border-maroon hover:bg-maroon hover:text-white">
+                <ArrowGlyph className="size-4" />
+              </button>
+              <span className="relative ml-2 h-px flex-1 bg-navy/15">
+                <span className="absolute inset-y-0 left-0 bg-maroon transition-[width] duration-700 ease-cinematic" style={{ width: `${((i + 1) / n) * 100}%`, height: 2, top: -0.5 }} />
+              </span>
+              <span className="tabular text-sm text-text/55">0{i + 1} / 0{n}</span>
+            </div>
+            <PlaceholderTag className="mt-5" />
+          </div>
+        </div>
+      </Container>
+    </section>
+  );
+}

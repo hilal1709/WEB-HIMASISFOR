@@ -1,0 +1,159 @@
+/* ==========================================================================
+   NEGERI KAPUR GRESIK — beranda si.uisi.ac.id
+   Dunia: ilustrasi vektor datar jalan kapur Gresik. Warna solid, tanpa gradien;
+   kedalaman dari tumpukan lapisan, bukan bayangan lembut. Lihat DESIGN.md.
+   Posisi hero = kotak region mockup (1536×864) dalam % bingkai; 1px mockup = 0.0651vw.
+   ========================================================================== */
+.home {
+  --ink: #0b1b45;        /* navy garis tepi & teks */
+  --uisi: #a80a0b;       /* merah UISI — baris aksen & aksi utama */
+  --kapur: #f7ece1;      /* tebing kapur */
+  --aspal: #727c89;      /* jalan */
+  --pinus: #0a3d35;      /* hutan */
+  --laut: #0d5a9e;       /* laut */
+  --langit: #7ebfe8;
+  --papan: #982318;      /* papan arah */
+  --tiang: #5e2316;
+  --emas: #f6b91e;       /* hanya Elvo & sorotan kecil */
+  --cat: #8a8b92;        /* cat abu di tebing */
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-optical-sizing: auto;
+  color: var(--ink);
+  background: var(--kapur);
+}
+.home ::selection { background: var(--uisi); color: #fff; }
+.home :focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; border-radius: 999px; }
+
+/* ---------- hero ---------- */
+.road-hero {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1536 / 864;
+  overflow: hidden;
+  isolation: isolate;
+}
+.road-hero > * { position: absolute; }
+.hero-layer { inset: 0; }
+.hero-layer > * { position: absolute; }
+.scene-group { z-index: 0; transform-origin: 50% 40%; }
+.scene-group picture, .r-scene { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.r-logo { left: 1.56%; top: 0.93%; width: 22.66%; height: 13.2%; display: block; background: var(--kapur); border-radius: 1.2vw; }
+.r-logo img { padding: 1.05vw 2.4vw 1.05vw 1.2vw; }
+.r-headline-1, .r-headline-2, .r-headline-3 { position: absolute; display: block; white-space: nowrap; }
+.r-headline-1 { left: 3.78%; top: 21.3%; }
+.r-headline-2 { left: 3.78%; top: 29.51%; }
+.r-headline-3 { left: 3.78%; top: 37.04%; }
+.r-accreditation { left: 3.91%; top: 44.68%; }
+.r-cta-primary { left: 4.04%; top: 50.69%; width: 18.36%; height: 8.33%; }
+.r-cta-secondary { left: 23.11%; top: 50.23%; width: 14.97%; height: 7.41%; }
+.r-cliff-tagline { left: 13.8%; top: 63.89%; width: 12.11%; }
+.r-far-cliff-text { left: 86.4%; top: 19.6%; width: 8.33%; }
+.r-sign-audit { left: 42.32%; top: 14.58%; width: 8.46%; height: 16.44%; }
+.r-sign-enterprise { left: 54.23%; top: 22.57%; width: 7.81%; height: 12.15%; }
+.r-sign-data { left: 77.99%; top: 43.98%; width: 11.2%; height: 15.05%; }
+.r-sign-msi { left: 83.66%; top: 54.17%; width: 14.19%; height: 26.16%; }
+.r-elvo { left: 44.92%; top: 34.72%; width: 28.65%; height: 51.5%; }
+.r-bubble { left: 67.84%; top: 34.49%; width: 12.76%; height: 13.19%; z-index: 4; }
+
+/* Teks "dicat" di tembok kapur: satu bidang 3D yang menjauh ke kanan mengikuti perspektif tembok. */
+.wall-plane {
+  position: absolute; inset: 0; pointer-events: none;
+  transform-origin: 0% 38%;
+  transform: perspective(71vw) rotateY(22deg);
+}
+.wall-plane > * { position: absolute; pointer-events: auto; }
+.hero-title { position: absolute; inset: 0; margin: 0; pointer-events: none; }
+.hero-title > span { pointer-events: auto; }
+.hero-title span {
+  font-size: 4.16vw;
+  font-weight: 800;
+  font-stretch: 84%;
+  line-height: 1;
+  letter-spacing: -0.012em;
+  color: var(--ink);
+}
+.hero-title .r-headline-2 { color: var(--uisi); font-size: 3.86vw; }
+.hero-title .r-headline-3 { font-size: 4.2vw; }
+.hero-accreditation { margin: 0; font-size: 1.76vw; font-weight: 500; font-stretch: 92%; letter-spacing: -0.012em; color: var(--ink); white-space: nowrap; }
+
+.hero-cta {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.7vw;
+  border-radius: 999px; font-weight: 700; font-stretch: 90%; white-space: nowrap;
+  transition: transform .5s cubic-bezier(.22,1,.36,1), box-shadow .5s cubic-bezier(.22,1,.36,1), background-color .3s;
+}
+.hero-cta--primary {
+  background: var(--uisi); color: #fff; font-size: 1.62vw;
+  box-shadow: 0 0.3vw 0 #6d0607, 0 0.9vw 1.6vw -0.6vw rgb(11 27 69 / .45);
+}
+.hero-cta--primary:hover { transform: translateY(-0.2vw); box-shadow: 0 0.5vw 0 #6d0607, 0 1.4vw 2vw -0.8vw rgb(11 27 69 / .5); }
+.hero-cta--primary:active { transform: translateY(0.15vw); box-shadow: 0 0.12vw 0 #6d0607; }
+.hero-cta--secondary {
+  background: var(--kapur); color: var(--ink); font-size: 1.42vw;
+  border: 0.17vw solid var(--ink);
+}
+.hero-cta--secondary:hover { background: #fff; transform: translateY(-0.15vw); }
+.hero-cta :is(span[role], span[aria-hidden]) { width: 1.8vw !important; height: 1.8vw !important; }
+.hero-cta lord-icon { width: 1.8vw !important; height: 1.8vw !important; }
+
+.cliff-paint { white-space: nowrap;
+  margin: 0; color: var(--cat); text-transform: uppercase; font-weight: 600; font-stretch: 88%;
+  font-size: 1.5vw; line-height: 1.12; letter-spacing: 0.06em;
+}
+.cliff-paint__dash { display: block; width: 2.4vw; height: 0.28vw; background: var(--cat); margin-top: 0.8vw; }
+.cliff-paint--far { color: #6f7480; font-size: 1.38vw; font-weight: 800; text-align: center; transform: rotate(-2deg); transform-origin: center; }
+
+/* papan arah: papan kayu menutup papan yang tergambar; bergoyang kecil saat disentuh */
+.signpost {
+  position: absolute; z-index: 2; display: grid; place-content: center; text-align: center;
+  background: var(--papan); color: #fff; border: 0.2vw solid #6e140d; border-radius: 0.4vw;
+  box-shadow: 0 0.25vw 0 #5a0f0a;
+  font-weight: 700; font-stretch: 90%; font-size: 1.14vw; line-height: 1.1; letter-spacing: -0.01em;
+  transform-origin: 50% 0%; transition: transform .6s cubic-bezier(.34,1.56,.64,1), background-color .25s;
+}
+.signpost:hover, .signpost:focus-visible { background: #b0291d; transform: rotate(-2.5deg); }
+.signpost--arrow { font-size: 1.62vw; padding-left: 1.4vw; clip-path: polygon(1.5vw 0, 100% 0, 100% 100%, 1.5vw 100%, 0 50%); border-radius: 0.2vw; }
+.signpost__post { position: absolute; z-index: 1; background: var(--tiang); border-radius: 0.15vw; }
+
+.r-elvo { z-index: 3; }
+.hero-elvo { position: absolute; inset: 0; animation: elvo-run 1.6s ease-in-out infinite; transform-origin: 50% 100%; }
+@keyframes elvo-run { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-1.2%) rotate(-1.2deg); } }
+
+.speech-bubble {
+  margin: 0; display: grid; place-items: center; text-align: center;
+  background: #fff; color: var(--ink); border: 0.18vw solid var(--ink); border-radius: 1.8vw;
+  font-weight: 700; font-stretch: 88%; font-size: 1.6vw; line-height: 1.15;
+}
+.speech-bubble::after {
+  content: ""; position: absolute; left: 6%; bottom: -1.1vw; width: 1.8vw; height: 1.5vw;
+  background: #fff; border: 0.18vw solid var(--ink); border-top: 0; border-right: 0;
+  transform: skewX(28deg) rotate(-8deg); border-bottom-left-radius: 0.4vw;
+}
+
+/* ---------- nav pil bawah ---------- */
+.bnav {
+  position: fixed; z-index: 60; left: 23.44vw; width: 53.13vw; bottom: 2.15vw; height: 5.6vw;
+  background: #fff; border-radius: 999px;
+  box-shadow: 0 0.5vw 1.6vw -0.4vw rgb(11 27 69 / .35);
+}
+.bnav__list { display: grid; grid-template-columns: repeat(2, 1fr) 1.1fr repeat(3, 1fr); height: 100%; margin: 0; padding: 0 1.6vw; list-style: none; align-items: center; }
+.bnav__list > li + li:not(.bnav__badge-slot):not(.bnav__badge-slot + li) { border-left: 1px solid #dfe2e8; }
+.bnav__item { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.2vw; height: 4.4vw; font-size: 0.98vw; font-weight: 700; color: var(--ink); border-radius: 1.2vw; transition: background-color .25s; }
+.bnav__item[aria-current="page"] { color: var(--uisi); }
+.bnav__item:hover { background: #f2f3f6; }
+.bnav__item lord-icon, .bnav__item > span:first-child { width: 1.95vw !important; height: 1.95vw !important; }
+.bnav__badge { position: absolute; left: 20.44vw; top: -2.05vw; width: 8.59vw; height: 8.07vw; transition: transform .5s cubic-bezier(.34,1.56,.64,1); }
+.bnav__badge:hover { transform: translateY(-0.4vw) rotate(-6deg); }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-elvo { animation: none; }
+  .signpost, .hero-cta, .bnav__badge { transition: none; }
+}
+
+/* punggung bukit kapur depan — bentuk datar, menutup tepi bawah saat parallax */
+.hero-ridge {
+  position: absolute; z-index: 5; left: -2%; right: -2%; bottom: -12%; height: 22%;
+  background: var(--kapur);
+  border-top: 0.25vw solid var(--ink);
+  border-radius: 55% 45% 0 0 / 38% 30% 0 0;
+}
+.road-hero { z-index: 0; }

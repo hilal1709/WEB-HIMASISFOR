@@ -1,28 +1,15 @@
 import { NextResponse } from 'next/server';
-import { jwtVerify } from 'jose';
+import NextAuth from 'next-auth';
+import { authConfig } from '@/auth.config';
 
-export async function middleware(request) {
+const { auth } = NextAuth(authConfig);
+
+export default auth((request) => {
   const pathname = request.nextUrl.pathname;
 
-  // Check authentication for admin routes (except login page)
-  if (pathname.startsWith('/admin') && pathname !== '/admin/login') {
-    const token = request.cookies.get('session')?.value;
-
-    if (!token) {
-      return NextResponse.redirect(new URL('/admin/login', request.url));
-    }
-
-    try {
-      const secret = new TextEncoder().encode(
-        process.env.JWT_SECRET || 'your-secret-key-change-this-in-production'
-      );
-      await jwtVerify(token, secret);
-    } catch (error) {
-      // Invalid or expired token
-      const response = NextResponse.redirect(new URL('/admin/login', request.url));
-      response.cookies.delete('session');
-      return response;
-    }
+  // Auth.js: area /admin (kecuali /admin/login) butuh sesi
+  if (pathname.startsWith('/admin') && pathname !== '/admin/login' && !request.auth) {
+    return NextResponse.redirect(new URL('/admin/login', request.url));
   }
 
   const response = NextResponse.next();
@@ -39,6 +26,8 @@ export async function middleware(request) {
   
   if (pathname.startsWith('/img/') || pathname.startsWith('/_next/static/')) {
     response.headers.set('Cache-Control', 'public, max-age=31536000, immutable');
+  } else if (pathname.startsWith('/api/auth')) {
+    response.headers.set('Cache-Control', 'no-store');
   } else if (pathname.startsWith('/api/')) {
     // Cache API responses for 1 hour
     response.headers.set('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
@@ -48,7 +37,7 @@ export async function middleware(request) {
   }
 
   return response;
-}
+});
 
 export const config = {
   matcher: [

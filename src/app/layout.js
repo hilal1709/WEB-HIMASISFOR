@@ -1,5 +1,6 @@
 import "./globals.css";
-import { Inter, Noto_Serif_Display } from 'next/font/google';
+import { Inter, Noto_Serif_Display, Bricolage_Grotesque } from 'next/font/google';
+import { Providers } from "@/components/providers";
 
 // Optimize font loading
 const inter = Inter({ 
@@ -8,9 +9,18 @@ const inter = Inter({
   variable: '--font-inter',
 });
 
+// Display face beranda (Negeri Kapur Gresik): grotesk tebal, sumbu lebar untuk judul padat
+const bricolage = Bricolage_Grotesque({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-display',
+  axes: ['wdth', 'opsz'],
+});
+
 const notoSerif = Noto_Serif_Display({ 
   subsets: ['latin'],
-  weight: '300',
+  weight: ['300', '400'],
+  style: ['normal', 'italic'],
   display: 'swap',
   variable: '--font-noto-serif',
 });
@@ -23,7 +33,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${inter.variable} ${notoSerif.variable}`}>
+    <html lang="id" suppressHydrationWarning className={`${inter.variable} ${notoSerif.variable} ${bricolage.variable}`}>
       <head>
         <meta charSet="UTF-8" />
         <meta
@@ -39,7 +49,7 @@ export default function RootLayout({ children }) {
           name="robots"
           content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
         />
-        <link rel="canonical" href="https://sisfor.uisi.ac.id/" />
+        <link rel="canonical" href="https://si.uisi.ac.id/" />
         <meta property="og:locale" content="id_ID" />
         <meta property="og:type" content="website" />
         <meta property="og:title" content="Sistem Informasi - UISI" />
@@ -70,7 +80,9 @@ export default function RootLayout({ children }) {
         </script>
         <title>Sistem Informasi - UISI</title>
       </head>
-      <body className={`${inter.className} antialiased`}>{children}</body>
+      <body className={`${inter.className} antialiased`}>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }

@@ -1,0 +1,216 @@
+"use client";
+import { useEffect, useMemo, useState } from "react";
+import Image from "next/image";
+import { ScrollTrigger } from "@/lib/scroll";
+import { AUDIENCE, MEGA_FEATURE, NAV, PMB_URL } from "@/lib/home-content";
+import { cn } from "@/lib/utils";
+import {
+  NavigationMenu,
+  NavigationMenuList,
+  NavigationMenuItem,
+  NavigationMenuTrigger,
+  NavigationMenuContent,
+  NavigationMenuLink,
+  navTriggerClass,
+} from "@/components/ui/navigation-menu";
+import { Sheet, SheetTrigger, SheetContent, SheetTitle, SheetDescription, SheetClose } from "@/components/ui/sheet";
+import { Modal, ModalTrigger, ModalContent, ModalTitle, ModalDescription } from "@/components/ui/modal";
+import { MenuGlyph, ChevronGlyph, ArrowGlyph } from "./glyphs";
+
+/** Bar utilitas navy: tautan per audiens (pola situs kampus). */
+export function Topbar() {
+  return (
+    <div className="hidden bg-maroon-deep text-[13px] text-white/80 md:block">
+      <div className="mx-auto flex h-9 max-w-[1240px] items-center justify-between px-8">
+        <nav aria-label="Tautan audiens" className="flex items-center gap-6">
+          {AUDIENCE.map((a) => (
+            <a key={a.label} href={a.href} className="u-gold transition-colors hover:text-white">
+              {a.label}
+            </a>
+          ))}
+        </nav>
+        <div className="flex items-center gap-6">
+          <a href="#kontak" className="u-gold transition-colors hover:text-white">Kontak</a>
+          <a href="https://uisi.ac.id" className="u-gold transition-colors hover:text-white">UISI</a>
+          <span className="text-white/45" title="Versi bahasa Inggris segera hadir">ID · EN</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/** Header utama putih, sticky, memadat saat di-scroll. Mega menu + pencarian + tombol PMB. */
+export function SiteHeader() {
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const st = ScrollTrigger.create({ start: 80, end: "max", onToggle: (s) => setScrolled(s.isActive) });
+    return () => st.kill();
+  }, []);
+
+  return (
+    <header className={cn("sticky top-0 z-50 border-b bg-white transition-[border-color,box-shadow] duration-500", scrolled ? "border-line shadow-[0_8px_24px_-20px_rgb(20_33_61/0.45)]" : "border-transparent")}>
+      <div className={cn("mx-auto flex max-w-[1240px] items-center justify-between gap-6 px-5 transition-[height] duration-500 ease-cinematic md:px-8", scrolled ? "h-16" : "h-20")}>
+        <a href="/" aria-label="Sistem Informasi UISI, ke beranda" className="shrink-0">
+          <Image src="/img/logo-lockup.png" alt="Sistem Informasi UISI" width={1400} height={420} priority className={cn("w-auto transition-[height] duration-500", scrolled ? "h-9" : "h-11")} />
+        </a>
+
+        <NavigationMenu className="hidden lg:flex" aria-label="Menu utama">
+          <NavigationMenuList>
+            {NAV.map((item) =>
+              item.items ? (
+                <NavigationMenuItem key={item.label} className="relative">
+                  <NavigationMenuTrigger className="text-text/80 hover:text-navy data-[state=open]:text-navy">{item.label}</NavigationMenuTrigger>
+                  <NavigationMenuContent className="-left-6 rounded-lg border-line p-0">
+                    <Mega item={item} />
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+              ) : (
+                <NavigationMenuItem key={item.label}>
+                  <NavigationMenuLink asChild>
+                    <a href={item.href} className={cn(navTriggerClass, "text-text/80 hover:text-navy")} aria-current={item.href === "/" ? "page" : undefined}>
+                      {item.label}
+                    </a>
+                  </NavigationMenuLink>
+                </NavigationMenuItem>
+              )
+            )}
+          </NavigationMenuList>
+        </NavigationMenu>
+
+        <div className="flex items-center gap-2">
+          <SearchButton />
+          <a href={PMB_URL} target="_blank" rel="noopener noreferrer" className="hidden h-10 items-center rounded-md bg-maroon px-5 text-sm font-semibold text-white transition-colors hover:bg-maroon-deep sm:inline-flex">
+            PMB 2027
+          </a>
+          <MobileMenu />
+        </div>
+      </div>
+    </header>
+  );
+}
+
+function Mega({ item }) {
+  const f = MEGA_FEATURE[item.label];
+  return (
+    <div className="grid w-[640px] grid-cols-[1fr_240px]">
+      <ul className="grid content-start gap-0.5 p-3">
+        {item.items.map((sub, i) => (
+          <li key={sub.label} className="animate-in fade-in-0 slide-in-from-bottom-1 duration-500" style={{ animationDelay: `${60 + i * 45}ms`, animationFillMode: "both" }}>
+            <NavigationMenuLink asChild>
+              <a href={sub.href} className="group/sub flex items-start justify-between gap-4 rounded-md px-3 py-2.5 transition-colors hover:bg-cream focus:bg-cream focus:outline-none">
+                <span>
+                  <span className="block text-sm font-semibold text-navy">{sub.label}</span>
+                  <span className="mt-0.5 block text-xs text-text/55">{sub.desc}</span>
+                </span>
+                <ArrowGlyph className="mt-1 size-3.5 shrink-0 -translate-x-1 text-maroon opacity-0 transition-all duration-300 group-hover/sub:translate-x-0 group-hover/sub:opacity-100" />
+              </a>
+            </NavigationMenuLink>
+          </li>
+        ))}
+      </ul>
+      {f && (
+        <NavigationMenuLink asChild>
+          <a href={f.href} className="group/feat m-3 ml-0 flex flex-col overflow-hidden rounded-md bg-navy text-white animate-in fade-in-0 duration-500" style={{ animationDelay: "120ms", animationFillMode: "both" }}>
+            <span className="relative block aspect-[4/3] overflow-hidden">
+              <Image src={f.image} alt="" fill sizes="240px" className="scale-[1.08] object-cover transition-transform duration-700 group-hover/feat:scale-[1.14]" />
+            </span>
+            <span className="flex-1 p-4">
+              <span className="block font-serif text-lg leading-snug">{f.title}</span>
+              <span className="mt-1 block text-xs leading-relaxed text-white/70">{f.body}</span>
+            </span>
+          </a>
+        </NavigationMenuLink>
+      )}
+    </div>
+  );
+}
+
+function SearchButton() {
+  const [q, setQ] = useState("");
+  const links = useMemo(() => NAV.flatMap((n) => (n.items ? n.items.map((s) => ({ ...s, group: n.label })) : [{ ...n, group: "Utama" }])), []);
+  const shown = links.filter((l) => (l.label + " " + (l.desc ?? "")).toLowerCase().includes(q.toLowerCase()));
+  return (
+    <Modal onOpenChange={(o) => !o && setQ("")}>
+      <ModalTrigger aria-label="Cari" className="grid size-10 place-items-center rounded-md text-navy transition-colors hover:bg-cream">
+        <svg aria-hidden viewBox="0 0 20 20" className="size-[18px]" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round">
+          <circle cx="9" cy="9" r="6" />
+          <path d="M13.5 13.5 17 17" />
+        </svg>
+      </ModalTrigger>
+      <ModalContent className="top-[18%] max-w-xl translate-y-0 p-0">
+        <ModalTitle className="sr-only">Cari halaman</ModalTitle>
+        <ModalDescription className="sr-only">Ketik untuk menyaring halaman situs</ModalDescription>
+        <input
+          autoFocus
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          placeholder="Cari halaman, mis. kurikulum, magang…"
+          className="h-14 w-full border-b border-line px-5 pr-12 text-[15px] outline-none placeholder:text-text/40"
+        />
+        <ul className="max-h-[50vh] overflow-y-auto p-2">
+          {shown.map((l) => (
+            <li key={l.group + l.label}>
+              <a href={l.href} className="flex items-center justify-between rounded-md px-3 py-2.5 text-sm hover:bg-cream">
+                <span className="font-medium text-navy">{l.label}</span>
+                <span className="text-xs text-text/45">{l.group}</span>
+              </a>
+            </li>
+          ))}
+          {!shown.length && <li className="px-3 py-6 text-center text-sm text-text/50">Tidak ada halaman yang cocok.</li>}
+        </ul>
+      </ModalContent>
+    </Modal>
+  );
+}
+
+function MobileMenu() {
+  const [open, setOpen] = useState(null);
+  return (
+    <Sheet>
+      <SheetTrigger aria-label="Buka menu" className="grid size-10 place-items-center rounded-md text-navy ring-1 ring-line transition hover:bg-cream lg:hidden">
+        <MenuGlyph className="size-5" />
+      </SheetTrigger>
+      <SheetContent>
+        <div className="border-b px-5 py-5">
+          <SheetTitle className="font-serif text-xl font-normal text-navy">Menu</SheetTitle>
+          <SheetDescription>Navigasi situs Sistem Informasi UISI</SheetDescription>
+        </div>
+        <nav aria-label="Menu seluler" className="flex-1 overflow-y-auto px-3 py-3">
+          {NAV.map((item) =>
+            item.items ? (
+              <div key={item.label} className="border-b border-line last:border-0">
+                <button type="button" aria-expanded={open === item.label} onClick={() => setOpen(open === item.label ? null : item.label)} className="flex w-full items-center justify-between px-3 py-3.5 text-left text-[15px] font-medium text-navy">
+                  {item.label}
+                  <ChevronGlyph className={cn("size-4 text-text/50 transition-transform duration-300", open === item.label && "rotate-180")} />
+                </button>
+                <div className={cn("grid transition-[grid-template-rows] duration-500 ease-cinematic", open === item.label ? "grid-rows-[1fr]" : "grid-rows-[0fr]")}>
+                  <ul className="overflow-hidden pb-1">
+                    {item.items.map((sub) => (
+                      <li key={sub.label}>
+                        <SheetClose asChild>
+                          <a href={sub.href} className="block rounded-md px-3 py-2.5 pl-6 text-sm text-text/65 hover:bg-cream hover:text-navy">{sub.label}</a>
+                        </SheetClose>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            ) : (
+              <SheetClose asChild key={item.label}>
+                <a href={item.href} className="block border-b border-line px-3 py-3.5 text-[15px] font-medium text-navy">{item.label}</a>
+              </SheetClose>
+            )
+          )}
+          <div className="mt-4 grid grid-cols-2 gap-2 px-3">
+            {AUDIENCE.map((a) => (
+              <a key={a.label} href={a.href} className="rounded-md bg-cream px-3 py-2.5 text-xs font-medium text-navy">{a.label}</a>
+            ))}
+          </div>
+        </nav>
+        <div className="border-t p-5">
+          <a href={PMB_URL} target="_blank" rel="noopener noreferrer" className="flex h-12 items-center justify-center rounded-md bg-maroon text-sm font-semibold text-white">PMB 2027: Daftar Sekarang</a>
+        </div>
+      </SheetContent>
+    </Sheet>
+  );
+}

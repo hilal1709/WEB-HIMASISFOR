@@ -1,6 +1,12 @@
 'use client'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { signIn } from 'next-auth/react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Banner } from '@/components/ui/banner'
+import { useToast } from '@/components/ui/toast'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -8,6 +14,7 @@ export default function LoginPage() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const router = useRouter()
+  const toast = useToast()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -15,22 +22,16 @@ export default function LoginPage() {
     setLoading(true)
 
     try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email, password })
-      })
+      const res = await signIn('credentials', { email, password, redirect: false })
 
-      const data = await response.json()
-
-      if (data.success) {
-        router.push('/admin/dashboard')
-      } else {
-        setError(data.error || 'Login gagal')
+      if (res?.error) {
+        setError('Email atau password salah')
+        return
       }
-    } catch (error) {
+      toast.success('Login berhasil', { description: 'Mengalihkan ke dashboard…' })
+      router.push('/admin/dashboard')
+      router.refresh()
+    } catch {
       setError('Terjadi kesalahan. Silakan coba lagi.')
     } finally {
       setLoading(false)
@@ -38,64 +39,55 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-red-50 to-zinc-100 p-4">
-      <div className="absolute top-0 left-0 w-full h-full opacity-5 bg-[url('/img/sisfor.svg')] bg-repeat"></div>
-      
-      <div className="bg-white p-6 lg:p-8 rounded-2xl shadow-2xl w-full max-w-md relative z-10">
-        <div className="flex flex-col items-center mb-6 lg:mb-8">
-          <img src="/img/logo.png" alt="Logo Sistem Informasi UISI" className="h-10 lg:h-12 mb-4" />
-          <h1 className="text-2xl lg:text-3xl font-bold text-zinc-800">CMS Admin</h1>
-          <p className="text-sm lg:text-base text-zinc-500 mt-2">Sistem Informasi UISI</p>
+    <div className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-red-50 to-zinc-100 p-4 dark:from-zinc-950 dark:to-zinc-900">
+      <div className="pointer-events-none absolute inset-0 opacity-5 bg-[url('/img/sisfor.svg')] bg-repeat" />
+
+      <div className="relative z-10 w-full max-w-md rounded-2xl border bg-card p-6 shadow-2xl lg:p-8">
+        <div className="mb-6 flex flex-col items-center lg:mb-8">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/img/logo.png" alt="Logo Sistem Informasi UISI" className="mb-4 h-10 w-auto lg:h-12" />
+          <h1 className="text-2xl font-bold lg:text-3xl">CMS Admin</h1>
+          <p className="mt-2 text-sm text-muted-foreground lg:text-base">Sistem Informasi UISI</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4 lg:space-y-6">
-          {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-3 lg:px-4 py-2 lg:py-3 rounded-lg text-xs lg:text-sm">
-              {error}
-            </div>
-          )}
+        <form onSubmit={handleSubmit} className="space-y-4 lg:space-y-5">
+          {error && <Banner variant="danger">{error}</Banner>}
 
-          <div>
-            <label htmlFor="email" className="block text-xs lg:text-sm font-medium text-zinc-700 mb-2">
-              Email
-            </label>
-            <input
-              type="email"
+          <div className="space-y-2">
+            <Label htmlFor="email">Email</Label>
+            <Input
               id="email"
+              type="email"
+              autoComplete="username"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 lg:px-4 py-2 lg:py-3 border border-zinc-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none transition text-sm lg:text-base"
               placeholder="admin@uisi.ac.id"
+              invalid={!!error}
               required
             />
           </div>
 
-          <div>
-            <label htmlFor="password" className="block text-xs lg:text-sm font-medium text-zinc-700 mb-2">
-              Password
-            </label>
-            <input
-              type="password"
+          <div className="space-y-2">
+            <Label htmlFor="password">Password</Label>
+            <Input
               id="password"
+              type="password"
+              autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 lg:px-4 py-2 lg:py-3 border border-zinc-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none transition text-sm lg:text-base"
               placeholder="••••••••"
+              invalid={!!error}
               required
             />
           </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-red-600 text-white py-2 lg:py-3 rounded-lg font-semibold hover:bg-red-700 transition disabled:bg-zinc-400 disabled:cursor-not-allowed text-sm lg:text-base"
-          >
-            {loading ? 'Loading...' : 'Login'}
-          </button>
+          <Button type="submit" variant="brand" size="lg" className="w-full" loading={loading}>
+            {loading ? 'Memproses…' : 'Login'}
+          </Button>
         </form>
 
-        <div className="mt-4 lg:mt-6 text-center text-xs lg:text-sm text-zinc-500">
-          <a href="/" className="text-red-600 hover:text-red-700 font-medium">
+        <div className="mt-4 text-center text-xs text-muted-foreground lg:mt-6 lg:text-sm">
+          <a href="/" className="font-medium text-primary hover:underline">
             ← Kembali ke Website
           </a>
         </div>

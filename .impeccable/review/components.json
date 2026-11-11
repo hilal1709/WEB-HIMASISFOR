@@ -1,0 +1,260 @@
+{
+  "schemaVersion": 3,
+  "stage": "components",
+  "id": "components",
+  "title": "Plan and asset review · src/app/page.jsx",
+  "comp": {
+    "path": ".impeccable/mocks/comp-road-v2.png",
+    "width": 1536,
+    "height": 864
+  },
+  "specSha256": "2271ee8c00f45aec6934f6337460c526b4528aecfb9aab658a517969c862ec62",
+  "components": [
+    {
+      "id": "scene",
+      "name": "Scene",
+      "kind": "plate",
+      "role": "asset",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "w": 1,
+        "h": 1
+      },
+      "note": "flat layered vector landscape of Gresik: white limestone cliff wall on the left, a winding grey asphalt road curving down through the middle with white concrete barriers, pine-green trees, deep blue sea with ships, a cement plant with red-white chimney and silos on the far shore, a limestone headland on the right, blue sky with small clouds; no text, no logos, no signposts, no mascot, no UI",
+      "medium": "raster",
+      "preview": {
+        "kind": "image",
+        "path": "assets/plates/scene.png"
+      },
+      "dependencies": []
+    },
+    {
+      "id": "logo",
+      "name": "Logo",
+      "kind": "image",
+      "role": "asset",
+      "box": {
+        "x": 0.0195,
+        "y": 0.0185,
+        "w": 0.2161,
+        "h": 0.125
+      },
+      "note": "UISI logo and SISTEM INFORMASI UISI program logo lockup (real assets)",
+      "medium": "raster",
+      "preview": {
+        "kind": "image",
+        "path": "assets/plates/logo.png"
+      },
+      "dependencies": []
+    },
+    {
+      "id": "elvo",
+      "name": "Elvo",
+      "kind": "image",
+      "role": "asset",
+      "box": {
+        "x": 0.4557,
+        "y": 0.3611,
+        "w": 0.2682,
+        "h": 0.4803
+      },
+      "note": "mascot Elvo moving down the road toward the viewer (shipped from the real elvo-run asset)",
+      "medium": "raster",
+      "preview": {
+        "kind": "image",
+        "path": "assets/plates/elvo.png"
+      },
+      "dependencies": []
+    },
+    {
+      "id": "nav-elvo",
+      "name": "Nav elvo",
+      "kind": "image",
+      "role": "asset",
+      "box": {
+        "x": 0.4388,
+        "y": 0.8264,
+        "w": 0.0859,
+        "h": 0.1435
+      },
+      "note": "round badge with Elvo head at the centre of the nav",
+      "medium": "raster",
+      "preview": {
+        "kind": "image",
+        "path": "assets/plates/nav-elvo.png"
+      },
+      "dependencies": []
+    }
+  ],
+  "codeRegions": [
+    {
+      "id": "headline-1",
+      "name": "Headline 1",
+      "kind": "text",
+      "box": {
+        "x": 0.0378,
+        "y": 0.213,
+        "w": 0.2734,
+        "h": 0.0787
+      },
+      "note": "headline line 1 Menghubungkan, navy"
+    },
+    {
+      "id": "headline-2",
+      "name": "Headline 2",
+      "kind": "text",
+      "box": {
+        "x": 0.0378,
+        "y": 0.2951,
+        "w": 0.3854,
+        "h": 0.0764
+      },
+      "note": "headline line 2 Bisnis & Sistem Informasi, red"
+    },
+    {
+      "id": "headline-3",
+      "name": "Headline 3",
+      "kind": "text",
+      "box": {
+        "x": 0.0378,
+        "y": 0.3704,
+        "w": 0.306,
+        "h": 0.0718
+      },
+      "note": "headline line 3 untuk Masa Depan, navy"
+    },
+    {
+      "id": "accreditation",
+      "name": "Accreditation",
+      "kind": "text",
+      "box": {
+        "x": 0.0391,
+        "y": 0.4468,
+        "w": 0.3255,
+        "h": 0.044
+      },
+      "note": "Terakreditasi Baik Sekali Â· LAM INFOKOM"
+    },
+    {
+      "id": "cta-primary",
+      "name": "Cta primary",
+      "kind": "control",
+      "box": {
+        "x": 0.0404,
+        "y": 0.5069,
+        "w": 0.1836,
+        "h": 0.0833
+      },
+      "note": "red pill button Daftar Sekarang with arrow"
+    },
+    {
+      "id": "cta-secondary",
+      "name": "Cta secondary",
+      "kind": "control",
+      "box": {
+        "x": 0.2311,
+        "y": 0.5023,
+        "w": 0.1497,
+        "h": 0.0741
+      },
+      "note": "outline pill button Lihat Kurikulum with book icon"
+    },
+    {
+      "id": "cliff-tagline",
+      "name": "Cliff tagline",
+      "kind": "text",
+      "box": {
+        "x": 0.138,
+        "y": 0.6389,
+        "w": 0.1211,
+        "h": 0.1273
+      },
+      "note": "set text on the cliff face: DARI GRESIK UNTUK INDONESIA LEBIH MAJU"
+    },
+    {
+      "id": "far-cliff-text",
+      "name": "Far cliff text",
+      "kind": "text",
+      "box": {
+        "x": 0.8691,
+        "y": 0.1944,
+        "w": 0.0833,
+        "h": 0.0833
+      },
+      "note": "set text on the headland: GRESIK KOTA SEMEN INDONESIA"
+    },
+    {
+      "id": "sign-audit",
+      "name": "Sign audit",
+      "kind": "control",
+      "box": {
+        "x": 0.4232,
+        "y": 0.1458,
+        "w": 0.0846,
+        "h": 0.1644
+      },
+      "note": "red wooden signpost IT Audit & Governance"
+    },
+    {
+      "id": "sign-enterprise",
+      "name": "Sign enterprise",
+      "kind": "control",
+      "box": {
+        "x": 0.5423,
+        "y": 0.2257,
+        "w": 0.0781,
+        "h": 0.1215
+      },
+      "note": "red wooden signpost Enterprise Systems"
+    },
+    {
+      "id": "sign-data",
+      "name": "Sign data",
+      "kind": "control",
+      "box": {
+        "x": 0.7799,
+        "y": 0.4398,
+        "w": 0.112,
+        "h": 0.1505
+      },
+      "note": "red wooden signpost Data Science"
+    },
+    {
+      "id": "sign-msi",
+      "name": "Sign msi",
+      "kind": "control",
+      "box": {
+        "x": 0.8366,
+        "y": 0.5417,
+        "w": 0.1419,
+        "h": 0.2616
+      },
+      "note": "red wooden arrow signpost Manajemen SI"
+    },
+    {
+      "id": "bubble",
+      "name": "Bubble",
+      "kind": "chrome",
+      "box": {
+        "x": 0.6784,
+        "y": 0.3449,
+        "w": 0.1276,
+        "h": 0.1319
+      },
+      "note": "white speech bubble Ikut aku jalan-jalan, ya!"
+    },
+    {
+      "id": "nav",
+      "name": "Nav",
+      "kind": "control",
+      "box": {
+        "x": 0.2344,
+        "y": 0.8623,
+        "w": 0.5313,
+        "h": 0.0995
+      },
+      "note": "white pill bottom navigation Beranda, Profil, Akademik, Layanan, PMB with icons"
+    }
+  ]
+}

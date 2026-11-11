@@ -2,6 +2,8 @@
 import { useEffect, useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
+import { signOut } from 'next-auth/react'
+import { BrandLoader } from '@/components/ui/loader'
 
 export default function AdminLayout({ children }) {
   const [session, setSession] = useState(null)
@@ -32,10 +34,10 @@ export default function AdminLayout({ children }) {
       const response = await fetch('/api/auth/session', {
         credentials: 'include'
       })
-      const data = await response.json()
+      const data = await response.json() // Auth.js: { user, expires } atau null
 
-      if (data.success) {
-        setSession(data.session)
+      if (data?.user) {
+        setSession(data.user)
       } else {
         router.push('/admin/login')
       }
@@ -48,7 +50,7 @@ export default function AdminLayout({ children }) {
 
   const handleLogout = async () => {
     try {
-      await fetch('/api/auth/logout', { method: 'POST' })
+      await signOut({ redirect: false })
       router.push('/admin/login')
     } catch (error) {
       console.error('Logout error:', error)
@@ -62,10 +64,7 @@ export default function AdminLayout({ children }) {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-zinc-100">
-        <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-600"></div>
-          <p className="mt-4 text-zinc-600">Loading...</p>
-        </div>
+        <BrandLoader label="Memuat CMS…" />
       </div>
     )
   }

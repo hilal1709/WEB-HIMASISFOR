@@ -1,0 +1,1153 @@
+{
+  "tool": "comp-spec",
+  "version": 1,
+  "createdAt": "2026-11-11T09:31:03.304Z",
+  "comp": ".impeccable/mocks/comp-road-v2.png",
+  "warnings": [
+    "region logo: \"bleed\": true set in the regions file (the clipped-artwork refusal is overridden: the page crops it there)",
+    "region nav-elvo: \"bleed\": true set in the regions file (the clipped-artwork refusal is overridden: the page crops it there)"
+  ],
+  "uncoveredInkCells": [],
+  "compSize": {
+    "width": 1536,
+    "height": 864
+  },
+  "aspect": 1.7778,
+  "orientation": "landscape",
+  "palette": [
+    {
+      "hex": "#f7ece2",
+      "coverage": 0.5164
+    },
+    {
+      "hex": "#6d7683",
+      "coverage": 0.1563
+    },
+    {
+      "hex": "#0a3d35",
+      "coverage": 0.1374
+    },
+    {
+      "hex": "#beb5af",
+      "coverage": 0.1008
+    },
+    {
+      "hex": "#7ebfe8",
+      "coverage": 0.0891
+    }
+  ],
+  "bands": [
+    {
+      "y": 0.1389,
+      "strength": 0.2161
+    },
+    {
+      "y": 0.2361,
+      "strength": 0.2446
+    },
+    {
+      "y": 0.2778,
+      "strength": 0.2084
+    },
+    {
+      "y": 0.3611,
+      "strength": 0.5444
+    },
+    {
+      "y": 0.4306,
+      "strength": 0.4877
+    },
+    {
+      "y": 0.4583,
+      "strength": 0.4406
+    },
+    {
+      "y": 0.4861,
+      "strength": 0.3701
+    },
+    {
+      "y": 0.5139,
+      "strength": 0.383
+    },
+    {
+      "y": 0.5417,
+      "strength": 0.2079
+    },
+    {
+      "y": 0.5833,
+      "strength": 0.3287
+    },
+    {
+      "y": 0.8611,
+      "strength": 0.5955
+    },
+    {
+      "y": 0.9583,
+      "strength": 1
+    }
+  ],
+  "regions": [
+    {
+      "id": "scene",
+      "kind": "plate",
+      "note": "flat layered vector landscape of Gresik: white limestone cliff wall on the left, a winding grey asphalt road curving down through the middle with white concrete barriers, pine-green trees, deep blue sea with ships, a cement plant with red-white chimney and silos on the far shore, a limestone headland on the right, blue sky with small clouds; no text, no logos, no signposts, no mascot, no UI",
+      "grid": null,
+      "box": {
+        "x": 0,
+        "y": 0,
+        "w": 1,
+        "h": 1
+      },
+      "px": {
+        "x": 0,
+        "y": 0,
+        "w": 1536,
+        "h": 864
+      },
+      "aspect": 1.7778,
+      "palette": [
+        {
+          "hex": "#f7ece2",
+          "coverage": 0.5164
+        },
+        {
+          "hex": "#6d7683",
+          "coverage": 0.1563
+        },
+        {
+          "hex": "#0a3d35",
+          "coverage": 0.1374
+        },
+        {
+          "hex": "#beb5af",
+          "coverage": 0.1008
+        },
+        {
+          "hex": "#7ebfe8",
+          "coverage": 0.0891
+        }
+      ],
+      "detail": {
+        "energy": 54.6381
+      },
+      "medium": "raster",
+      "plate": "assets/plates/scene.png",
+      "text": null
+    },
+    {
+      "id": "logo",
+      "kind": "image",
+      "note": "UISI logo and SISTEM INFORMASI UISI program logo lockup (real assets)",
+      "grid": null,
+      "bleed": true,
+      "box": {
+        "x": 0.0195,
+        "y": 0.0185,
+        "w": 0.2161,
+        "h": 0.125
+      },
+      "px": {
+        "x": 30,
+        "y": 16,
+        "w": 332,
+        "h": 108
+      },
+      "aspect": 3.0741,
+      "palette": [
+        {
+          "hex": "#f8e8e7",
+          "coverage": 0.8184
+        },
+        {
+          "hex": "#485156",
+          "coverage": 0.0915
+        },
+        {
+          "hex": "#db271c",
+          "coverage": 0.0448
+        },
+        {
+          "hex": "#949490",
+          "coverage": 0.0259
+        },
+        {
+          "hex": "#ccc0b9",
+          "coverage": 0.0194
+        }
+      ],
+      "detail": {
+        "energy": 40.7592
+      },
+      "medium": "raster",
+      "plate": "assets/plates/logo.png",
+      "text": null
+    },
+    {
+      "id": "headline-1",
+      "kind": "text",
+      "note": "headline line 1 Menghubungkan, navy",
+      "grid": null,
+      "box": {
+        "x": 0.0378,
+        "y": 0.213,
+        "w": 0.2734,
+        "h": 0.0787
+      },
+      "px": {
+        "x": 58,
+        "y": 184,
+        "w": 420,
+        "h": 68
+      },
+      "aspect": 6.1765,
+      "palette": [
+        {
+          "hex": "#f7e9da",
+          "coverage": 0.627
+        },
+        {
+          "hex": "#081c42",
+          "coverage": 0.3285
+        },
+        {
+          "hex": "#bfbcb9",
+          "coverage": 0.0178
+        },
+        {
+          "hex": "#5c6a79",
+          "coverage": 0.0159
+        },
+        {
+          "hex": "#9197a2",
+          "coverage": 0.0108
+        }
+      ],
+      "detail": {
+        "energy": 63.4295
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null,
+      "surface": {
+        "flat": true,
+        "rules": false
+      },
+      "type": {
+        "comp": {
+          "lines": 1,
+          "glyphs": 15,
+          "capHeightPx": 65,
+          "inkIsDark": true,
+          "allCaps": true,
+          "advance": 0.3923,
+          "advTall": 0.3538,
+          "advX": null,
+          "gap": 0.0462,
+          "xRatio": null,
+          "stemW": 0.1509,
+          "contrast": 1.0612,
+          "serif": null,
+          "densTall": 0.3453,
+          "densX": null,
+          "weight": 0.3453
+        },
+        "widthClass": "compressed",
+        "weightClass": "regular",
+        "chosen": {
+          "family": "Economica",
+          "weight": 700,
+          "fontSizePx": 90,
+          "source": "index",
+          "fp": {
+            "lines": 1,
+            "glyphs": 19,
+            "capHeightPx": 64.5,
+            "inkIsDark": true,
+            "allCaps": true,
+            "advance": 0.3566,
+            "advTall": 0.3566,
+            "advX": null,
+            "gap": 0.124,
+            "xRatio": null,
+            "stemW": 0.1317,
+            "contrast": 1.0226,
+            "serif": 0.9776,
+            "densTall": 0.5757,
+            "densX": null,
+            "weight": 0.5757
+          },
+          "stamp": "8c36052a6f02"
+        }
+      }
+    },
+    {
+      "id": "headline-2",
+      "kind": "text",
+      "note": "headline line 2 Bisnis & Sistem Informasi, red",
+      "grid": null,
+      "box": {
+        "x": 0.0378,
+        "y": 0.2951,
+        "w": 0.3854,
+        "h": 0.0764
+      },
+      "px": {
+        "x": 58,
+        "y": 255,
+        "w": 592,
+        "h": 66
+      },
+      "aspect": 8.9697,
+      "palette": [
+        {
+          "hex": "#f8e9dc",
+          "coverage": 0.6242
+        },
+        {
+          "hex": "#a00a09",
+          "coverage": 0.3131
+        },
+        {
+          "hex": "#e1aea1",
+          "coverage": 0.0217
+        },
+        {
+          "hex": "#c9786d",
+          "coverage": 0.0212
+        },
+        {
+          "hex": "#af443e",
+          "coverage": 0.0198
+        }
+      ],
+      "detail": {
+        "energy": 89.1532
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null,
+      "surface": {
+        "flat": true,
+        "rules": false
+      },
+      "type": {
+        "comp": {
+          "lines": 1,
+          "glyphs": 20,
+          "capHeightPx": 51,
+          "inkIsDark": true,
+          "allCaps": false,
+          "advance": 0.5294,
+          "advTall": 0.2157,
+          "advX": 0.549,
+          "gap": 0.0392,
+          "xRatio": 0.6863,
+          "stemW": 0.1999,
+          "contrast": 1.1207,
+          "serif": 0.9902,
+          "densTall": 0.8833,
+          "densX": 0.6636,
+          "weight": 0.8833
+        },
+        "widthClass": "condensed",
+        "weightClass": "black"
+      }
+    },
+    {
+      "id": "headline-3",
+      "kind": "text",
+      "note": "headline line 3 untuk Masa Depan, navy",
+      "grid": null,
+      "box": {
+        "x": 0.0378,
+        "y": 0.3704,
+        "w": 0.306,
+        "h": 0.0718
+      },
+      "px": {
+        "x": 58,
+        "y": 320,
+        "w": 470,
+        "h": 62
+      },
+      "aspect": 7.5806,
+      "palette": [
+        {
+          "hex": "#f8eadd",
+          "coverage": 0.6301
+        },
+        {
+          "hex": "#092141",
+          "coverage": 0.1828
+        },
+        {
+          "hex": "#081a4a",
+          "coverage": 0.1451
+        },
+        {
+          "hex": "#bfbcbe",
+          "coverage": 0.0293
+        },
+        {
+          "hex": "#576676",
+          "coverage": 0.0128
+        }
+      ],
+      "detail": {
+        "energy": 74.7007
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null,
+      "surface": {
+        "flat": true,
+        "rules": false
+      },
+      "type": {
+        "comp": {
+          "lines": 1,
+          "glyphs": 14,
+          "capHeightPx": 47.1,
+          "inkIsDark": true,
+          "allCaps": false,
+          "advance": 0.5735,
+          "advTall": 0.6585,
+          "advX": 0.6054,
+          "gap": 0.0425,
+          "xRatio": 0.7859,
+          "stemW": 0.2147,
+          "contrast": 1.1423,
+          "serif": 0.8724,
+          "densTall": 0.6361,
+          "densX": 0.7218,
+          "weight": 0.6361
+        },
+        "widthClass": "normal",
+        "weightClass": "bold"
+      }
+    },
+    {
+      "id": "accreditation",
+      "kind": "text",
+      "note": "Terakreditasi Baik Sekali Â· LAM INFOKOM",
+      "grid": null,
+      "box": {
+        "x": 0.0391,
+        "y": 0.4468,
+        "w": 0.3255,
+        "h": 0.044
+      },
+      "px": {
+        "x": 60,
+        "y": 386,
+        "w": 500,
+        "h": 38
+      },
+      "aspect": 13.1579,
+      "palette": [
+        {
+          "hex": "#f7eadd",
+          "coverage": 0.7807
+        },
+        {
+          "hex": "#091a4c",
+          "coverage": 0.0857
+        },
+        {
+          "hex": "#0d2544",
+          "coverage": 0.0631
+        },
+        {
+          "hex": "#657283",
+          "coverage": 0.0357
+        },
+        {
+          "hex": "#c8c7c7",
+          "coverage": 0.0348
+        }
+      ],
+      "detail": {
+        "energy": 93.6133
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null,
+      "surface": {
+        "flat": true,
+        "rules": false
+      },
+      "type": {
+        "comp": {
+          "lines": 1,
+          "glyphs": 34,
+          "capHeightPx": 22.2,
+          "inkIsDark": true,
+          "allCaps": false,
+          "advance": 0.5405,
+          "advTall": 0.5517,
+          "advX": 0.5405,
+          "gap": 0.0901,
+          "xRatio": 0.6672,
+          "stemW": 0.1563,
+          "contrast": 0.9867,
+          "serif": 1.2141,
+          "densTall": 0.5523,
+          "densX": 0.6322,
+          "weight": 0.5523
+        },
+        "widthClass": "condensed",
+        "weightClass": "medium"
+      }
+    },
+    {
+      "id": "cta-primary",
+      "kind": "control",
+      "note": "red pill button Daftar Sekarang with arrow",
+      "grid": null,
+      "box": {
+        "x": 0.0404,
+        "y": 0.5069,
+        "w": 0.1836,
+        "h": 0.0833
+      },
+      "px": {
+        "x": 62,
+        "y": 438,
+        "w": 282,
+        "h": 72
+      },
+      "aspect": 3.9167,
+      "palette": [
+        {
+          "hex": "#a70808",
+          "coverage": 0.6923
+        },
+        {
+          "hex": "#f8ede1",
+          "coverage": 0.2394
+        },
+        {
+          "hex": "#b03335",
+          "coverage": 0.0296
+        },
+        {
+          "hex": "#eec7c1",
+          "coverage": 0.0209
+        },
+        {
+          "hex": "#c56866",
+          "coverage": 0.0178
+        }
+      ],
+      "detail": {
+        "energy": 43.0803
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null,
+      "surface": {
+        "flat": true,
+        "rules": false
+      }
+    },
+    {
+      "id": "cta-secondary",
+      "kind": "control",
+      "note": "outline pill button Lihat Kurikulum with book icon",
+      "grid": null,
+      "box": {
+        "x": 0.2311,
+        "y": 0.5023,
+        "w": 0.1497,
+        "h": 0.0741
+      },
+      "px": {
+        "x": 355,
+        "y": 434,
+        "w": 230,
+        "h": 64
+      },
+      "aspect": 3.5938,
+      "palette": [
+        {
+          "hex": "#f7eae1",
+          "coverage": 0.7871
+        },
+        {
+          "hex": "#09133e",
+          "coverage": 0.0988
+        },
+        {
+          "hex": "#bebdc1",
+          "coverage": 0.0449
+        },
+        {
+          "hex": "#7e8696",
+          "coverage": 0.037
+        },
+        {
+          "hex": "#1f3253",
+          "coverage": 0.0321
+        }
+      ],
+      "detail": {
+        "energy": 53.7531
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null,
+      "surface": {
+        "flat": true,
+        "rules": false
+      }
+    },
+    {
+      "id": "cliff-tagline",
+      "kind": "text",
+      "note": "set text on the cliff face: DARI GRESIK UNTUK INDONESIA LEBIH MAJU",
+      "grid": null,
+      "box": {
+        "x": 0.138,
+        "y": 0.6389,
+        "w": 0.1211,
+        "h": 0.1273
+      },
+      "px": {
+        "x": 212,
+        "y": 552,
+        "w": 186,
+        "h": 110
+      },
+      "aspect": 1.6909,
+      "palette": [
+        {
+          "hex": "#f7e8d9",
+          "coverage": 0.7737
+        },
+        {
+          "hex": "#898a91",
+          "coverage": 0.1535
+        },
+        {
+          "hex": "#c2bcb9",
+          "coverage": 0.0386
+        },
+        {
+          "hex": "#1d5347",
+          "coverage": 0.0311
+        },
+        {
+          "hex": "#083841",
+          "coverage": 0.0031
+        }
+      ],
+      "detail": {
+        "energy": 21.4013
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null,
+      "surface": {
+        "flat": true,
+        "rules": false
+      },
+      "type": {
+        "comp": {
+          "lines": 3,
+          "glyphs": 22,
+          "capHeightPx": 24.5,
+          "inkIsDark": true,
+          "allCaps": false,
+          "advance": 0.5011,
+          "advTall": 0.7457,
+          "advX": 0.2484,
+          "gap": 0.1656,
+          "xRatio": 0.4595,
+          "stemW": 0.1034,
+          "contrast": 0.8172,
+          "serif": 1.0226,
+          "densTall": 0.5199,
+          "densX": 0.5893,
+          "weight": 0.5199
+        },
+        "widthClass": "compressed",
+        "weightClass": "medium"
+      }
+    },
+    {
+      "id": "far-cliff-text",
+      "kind": "text",
+      "note": "set text on the headland: GRESIK KOTA SEMEN INDONESIA",
+      "grid": null,
+      "box": {
+        "x": 0.8691,
+        "y": 0.1944,
+        "w": 0.0833,
+        "h": 0.0833
+      },
+      "px": {
+        "x": 1335,
+        "y": 168,
+        "w": 128,
+        "h": 72
+      },
+      "aspect": 1.7778,
+      "palette": [
+        {
+          "hex": "#c6bab7",
+          "coverage": 0.7335
+        },
+        {
+          "hex": "#687281",
+          "coverage": 0.2083
+        },
+        {
+          "hex": "#939599",
+          "coverage": 0.0494
+        },
+        {
+          "hex": "#545d7c",
+          "coverage": 0.0087
+        }
+      ],
+      "detail": {
+        "energy": 16.8424
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null,
+      "surface": {
+        "flat": true,
+        "rules": false
+      },
+      "type": {
+        "comp": {
+          "lines": 3,
+          "glyphs": 23,
+          "capHeightPx": 16.4,
+          "inkIsDark": true,
+          "allCaps": false,
+          "advance": 0.6625,
+          "advTall": 0.6625,
+          "advX": 0.5784,
+          "gap": 0.0871,
+          "xRatio": 0.8314,
+          "stemW": 0.2047,
+          "contrast": 1.0002,
+          "serif": 0.6772,
+          "densTall": 0.6768,
+          "densX": 0.6648,
+          "weight": 0.6768
+        },
+        "widthClass": "condensed",
+        "weightClass": "black"
+      }
+    },
+    {
+      "id": "sign-audit",
+      "kind": "control",
+      "note": "red wooden signpost IT Audit & Governance",
+      "grid": null,
+      "box": {
+        "x": 0.4232,
+        "y": 0.1458,
+        "w": 0.0846,
+        "h": 0.1644
+      },
+      "px": {
+        "x": 650,
+        "y": 126,
+        "w": 130,
+        "h": 142
+      },
+      "aspect": 0.9155,
+      "palette": [
+        {
+          "hex": "#972118",
+          "coverage": 0.3961
+        },
+        {
+          "hex": "#0c3d36",
+          "coverage": 0.1868
+        },
+        {
+          "hex": "#41703a",
+          "coverage": 0.1519
+        },
+        {
+          "hex": "#f6eee7",
+          "coverage": 0.1393
+        },
+        {
+          "hex": "#1979b8",
+          "coverage": 0.126
+        }
+      ],
+      "detail": {
+        "energy": 20.5875
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null,
+      "surface": {
+        "flat": true,
+        "rules": false
+      }
+    },
+    {
+      "id": "sign-enterprise",
+      "kind": "control",
+      "note": "red wooden signpost Enterprise Systems",
+      "grid": null,
+      "box": {
+        "x": 0.5423,
+        "y": 0.2257,
+        "w": 0.0781,
+        "h": 0.1215
+      },
+      "px": {
+        "x": 833,
+        "y": 195,
+        "w": 120,
+        "h": 105
+      },
+      "aspect": 1.1429,
+      "palette": [
+        {
+          "hex": "#98241a",
+          "coverage": 0.4717
+        },
+        {
+          "hex": "#0a68a8",
+          "coverage": 0.1858
+        },
+        {
+          "hex": "#0a3c38",
+          "coverage": 0.1528
+        },
+        {
+          "hex": "#558143",
+          "coverage": 0.1104
+        },
+        {
+          "hex": "#f6f2f1",
+          "coverage": 0.0792
+        }
+      ],
+      "detail": {
+        "energy": 20.6969
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null,
+      "surface": {
+        "flat": true,
+        "rules": false
+      }
+    },
+    {
+      "id": "sign-data",
+      "kind": "control",
+      "note": "red wooden signpost Data Science",
+      "grid": null,
+      "box": {
+        "x": 0.7799,
+        "y": 0.4398,
+        "w": 0.112,
+        "h": 0.1505
+      },
+      "px": {
+        "x": 1198,
+        "y": 380,
+        "w": 172,
+        "h": 130
+      },
+      "aspect": 1.3231,
+      "palette": [
+        {
+          "hex": "#982318",
+          "coverage": 0.4435
+        },
+        {
+          "hex": "#0b3f38",
+          "coverage": 0.2302
+        },
+        {
+          "hex": "#f5ede5",
+          "coverage": 0.1228
+        },
+        {
+          "hex": "#31643e",
+          "coverage": 0.1038
+        },
+        {
+          "hex": "#689250",
+          "coverage": 0.0997
+        }
+      ],
+      "detail": {
+        "energy": 20.8415
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null,
+      "surface": {
+        "flat": true,
+        "rules": false
+      }
+    },
+    {
+      "id": "sign-msi",
+      "kind": "control",
+      "note": "red wooden arrow signpost Manajemen SI",
+      "grid": null,
+      "box": {
+        "x": 0.8366,
+        "y": 0.5417,
+        "w": 0.1419,
+        "h": 0.2616
+      },
+      "px": {
+        "x": 1285,
+        "y": 468,
+        "w": 218,
+        "h": 226
+      },
+      "aspect": 0.9646,
+      "palette": [
+        {
+          "hex": "#9b2519",
+          "coverage": 0.341
+        },
+        {
+          "hex": "#0a3b31",
+          "coverage": 0.3053
+        },
+        {
+          "hex": "#3f6e36",
+          "coverage": 0.1483
+        },
+        {
+          "hex": "#f7ece3",
+          "coverage": 0.1327
+        },
+        {
+          "hex": "#245630",
+          "coverage": 0.0728
+        }
+      ],
+      "detail": {
+        "energy": 18.1927
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null,
+      "surface": {
+        "flat": true,
+        "rules": false
+      }
+    },
+    {
+      "id": "elvo",
+      "kind": "image",
+      "note": "mascot Elvo moving down the road toward the viewer (shipped from the real elvo-run asset)",
+      "grid": null,
+      "box": {
+        "x": 0.4557,
+        "y": 0.3611,
+        "w": 0.2682,
+        "h": 0.4803
+      },
+      "px": {
+        "x": 700,
+        "y": 312,
+        "w": 412,
+        "h": 415
+      },
+      "aspect": 0.9928,
+      "palette": [
+        {
+          "hex": "#f7f4f2",
+          "coverage": 0.2844
+        },
+        {
+          "hex": "#767d8a",
+          "coverage": 0.2211
+        },
+        {
+          "hex": "#0e374d",
+          "coverage": 0.1975
+        },
+        {
+          "hex": "#ba1b28",
+          "coverage": 0.1955
+        },
+        {
+          "hex": "#f8aa08",
+          "coverage": 0.1015
+        }
+      ],
+      "detail": {
+        "energy": 38.5888
+      },
+      "medium": "raster",
+      "plate": "assets/plates/elvo.png",
+      "text": null
+    },
+    {
+      "id": "bubble",
+      "kind": "chrome",
+      "note": "white speech bubble Ikut aku jalan-jalan, ya!",
+      "grid": null,
+      "box": {
+        "x": 0.6784,
+        "y": 0.3449,
+        "w": 0.1276,
+        "h": 0.1319
+      },
+      "px": {
+        "x": 1042,
+        "y": 298,
+        "w": 196,
+        "h": 114
+      },
+      "aspect": 1.7193,
+      "palette": [
+        {
+          "hex": "#f7f8f8",
+          "coverage": 0.6177
+        },
+        {
+          "hex": "#a4a9a6",
+          "coverage": 0.1366
+        },
+        {
+          "hex": "#09153f",
+          "coverage": 0.1015
+        },
+        {
+          "hex": "#0967a4",
+          "coverage": 0.08
+        },
+        {
+          "hex": "#083d37",
+          "coverage": 0.0641
+        }
+      ],
+      "detail": {
+        "energy": 33.1946
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null,
+      "surface": {
+        "flat": true,
+        "rules": false
+      }
+    },
+    {
+      "id": "nav",
+      "kind": "control",
+      "note": "white pill bottom navigation Beranda, Profil, Akademik, Layanan, PMB with icons",
+      "grid": null,
+      "box": {
+        "x": 0.2344,
+        "y": 0.8623,
+        "w": 0.5313,
+        "h": 0.0995
+      },
+      "px": {
+        "x": 360,
+        "y": 745,
+        "w": 816,
+        "h": 86
+      },
+      "aspect": 9.4884,
+      "palette": [
+        {
+          "hex": "#f8f8f8",
+          "coverage": 0.8519
+        },
+        {
+          "hex": "#5d6779",
+          "coverage": 0.0896
+        },
+        {
+          "hex": "#091a45",
+          "coverage": 0.0354
+        },
+        {
+          "hex": "#314668",
+          "coverage": 0.0122
+        },
+        {
+          "hex": "#f8b708",
+          "coverage": 0.0109
+        }
+      ],
+      "detail": {
+        "energy": 46.3063
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null,
+      "surface": {
+        "flat": true,
+        "rules": false
+      }
+    },
+    {
+      "id": "nav-elvo",
+      "kind": "image",
+      "note": "round badge with Elvo head at the centre of the nav",
+      "grid": null,
+      "bleed": true,
+      "box": {
+        "x": 0.4388,
+        "y": 0.8264,
+        "w": 0.0859,
+        "h": 0.1435
+      },
+      "px": {
+        "x": 674,
+        "y": 714,
+        "w": 132,
+        "h": 124
+      },
+      "aspect": 1.0645,
+      "palette": [
+        {
+          "hex": "#f7f8f8",
+          "coverage": 0.5596
+        },
+        {
+          "hex": "#626e7a",
+          "coverage": 0.2783
+        },
+        {
+          "hex": "#0a1c46",
+          "coverage": 0.0584
+        },
+        {
+          "hex": "#f7b509",
+          "coverage": 0.0559
+        },
+        {
+          "hex": "#d1d9e5",
+          "coverage": 0.0478
+        }
+      ],
+      "detail": {
+        "energy": 33.0413
+      },
+      "medium": "raster",
+      "plate": "assets/plates/nav-elvo.png",
+      "text": null
+    }
+  ],
+  "compSha256": "ac4b22e310026113f8c7d9e1ecf6414039406412d26997f8f046b4134b4903cf",
+  "regionsSource": {
+    "path": ".impeccable/build/regions.json",
+    "sha256": "1f4a5a4aa416e6a431fa5ecd790cfba73fce8a5dd6c866d60e14823bb63c1ca3"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 2,
+  "stage": "hero",
+  "id": "hero",
+  "title": "First viewport",
+  "comp": {"path": ".impeccable/mocks/comp-road-v2.png", "width": 1536, "height": 864},
+  "components": [{
+    "id": "first-viewport",
+    "name": "First viewport",
+    "medium": "HTML / CSS (Next.js)",
+    "note": "Assembled first viewport captured at 1536x864 from the running dev server",
+    "box": {"x": 0, "y": 0, "w": 1, "h": 1},
+    "preview": {"kind": "image", "path": ".impeccable/review/hero-repro.png"},
+    "dependencies": []
+  }]
+}

@@ -1,0 +1,804 @@
+{
+  "tool": "comp-diff",
+  "version": 1,
+  "createdAt": "2026-11-11T09:50:58.265Z",
+  "label": "hero",
+  "comp": ".impeccable/mocks/comp-road-v2.png",
+  "build": ".impeccable/review/hero-repro.png",
+  "spec": ".impeccable/build/spec.json",
+  "compSize": "1536x864",
+  "buildSize": "1536x864",
+  "align": "top",
+  "overall": 0.878,
+  "verdict": "match",
+  "scores": {
+    "overall": 0.878,
+    "structure": 0.8258,
+    "color": 0.8973,
+    "colorIntersection": 0.8934,
+    "paletteMatch": 0.8993,
+    "detail": 0.8886,
+    "detailRaw": 0.8938,
+    "detailAdded": 0.0104,
+    "bands": 0.95
+  },
+  "palette": {
+    "comp": [
+      {
+        "hex": "#f7ece2",
+        "coverage": 0.4744
+      },
+      {
+        "hex": "#6d7683",
+        "coverage": 0.1436
+      },
+      {
+        "hex": "#0a3d35",
+        "coverage": 0.1263
+      },
+      {
+        "hex": "#beb5af",
+        "coverage": 0.0926
+      },
+      {
+        "hex": "#7ebfe8",
+        "coverage": 0.0818
+      },
+      {
+        "hex": "#0e6ba9",
+        "coverage": 0.0813
+      }
+    ],
+    "build": [
+      {
+        "hex": "#f7ebe2",
+        "coverage": 0.478
+      },
+      {
+        "hex": "#727b8a",
+        "coverage": 0.151
+      },
+      {
+        "hex": "#0a3d35",
+        "coverage": 0.1278
+      },
+      {
+        "hex": "#beb4af",
+        "coverage": 0.0869
+      },
+      {
+        "hex": "#7ebfe8",
+        "coverage": 0.082
+      },
+      {
+        "hex": "#42703a",
+        "coverage": 0.0743
+      }
+    ]
+  },
+  "regions": [
+    {
+      "id": "scene",
+      "x": 0,
+      "y": 0,
+      "w": 1,
+      "h": 1,
+      "kind": "plate",
+      "score": {
+        "overall": 0.8777,
+        "structure": 0.8258,
+        "color": 0.8973,
+        "colorIntersection": 0.8934,
+        "paletteMatch": 0.8993,
+        "detail": 0.8886,
+        "detailRaw": 0.8938,
+        "detailAdded": 0.0104,
+        "bands": 0.95
+      },
+      "verdict": "match",
+      "inkBox": {
+        "comp": {
+          "x": 0,
+          "y": 0,
+          "w": 1536,
+          "h": 864
+        },
+        "build": {
+          "x": 0,
+          "y": 0,
+          "w": 1536,
+          "h": 864
+        }
+      },
+      "blocking": false,
+      "blockingReasons": [],
+      "rawVerdict": "match"
+    },
+    {
+      "id": "logo",
+      "x": 0.0195,
+      "y": 0.0185,
+      "w": 0.2161,
+      "h": 0.125,
+      "kind": "image",
+      "score": {
+        "overall": 0.6337,
+        "structure": 0.4707,
+        "color": 0.9599,
+        "colorIntersection": 0.9206,
+        "paletteMatch": 0.9811,
+        "detail": 0.5741,
+        "detailRaw": 0.6053,
+        "detailAdded": 0.0625,
+        "bands": 0.74
+      },
+      "verdict": "drift",
+      "inkBox": {
+        "comp": {
+          "x": 0,
+          "y": 9,
+          "w": 326,
+          "h": 99
+        },
+        "build": {
+          "x": 0,
+          "y": 11,
+          "w": 286,
+          "h": 97
+        }
+      },
+      "blocking": false,
+      "blockingReasons": [],
+      "rawVerdict": "drift"
+    },
+    {
+      "id": "headline-1",
+      "x": 0.0378,
+      "y": 0.213,
+      "w": 0.2734,
+      "h": 0.0787,
+      "kind": "text",
+      "score": {
+        "overall": 0.4916,
+        "structure": 0.3517,
+        "color": 0.772,
+        "colorIntersection": 0.6183,
+        "paletteMatch": 0.8547,
+        "detail": 0.5012,
+        "detailRaw": 0.6158,
+        "detailAdded": 0.2292,
+        "bands": 0.4762
+      },
+      "verdict": "drift",
+      "inkBox": {
+        "comp": {
+          "x": 5,
+          "y": 0,
+          "w": 415,
+          "h": 68
+        },
+        "build": {
+          "x": 2,
+          "y": 0,
+          "w": 418,
+          "h": 62
+        }
+      },
+      "blocking": false,
+      "blockingReasons": [],
+      "rawVerdict": "drift"
+    },
+    {
+      "id": "headline-2",
+      "x": 0.0378,
+      "y": 0.2951,
+      "w": 0.3854,
+      "h": 0.0764,
+      "kind": "text",
+      "score": {
+        "overall": 0.4794,
+        "structure": 0.313,
+        "color": 0.8454,
+        "colorIntersection": 0.7107,
+        "paletteMatch": 0.918,
+        "detail": 0.5545,
+        "detailRaw": 0.6274,
+        "detailAdded": 0.1458,
+        "bands": 0.2833
+      },
+      "verdict": "drift",
+      "inkBox": {
+        "comp": {
+          "x": 6,
+          "y": 0,
+          "w": 575,
+          "h": 65
+        },
+        "build": {
+          "x": 2,
+          "y": 6,
+          "w": 583,
+          "h": 44
+        }
+      },
+      "blocking": false,
+      "blockingReasons": [],
+      "rawVerdict": "drift"
+    },
+    {
+      "id": "headline-3",
+      "x": 0.0378,
+      "y": 0.3704,
+      "w": 0.306,
+      "h": 0.0718,
+      "kind": "text",
+      "score": {
+        "overall": 0.5804,
+        "structure": 0.4363,
+        "color": 0.8163,
+        "colorIntersection": 0.6815,
+        "paletteMatch": 0.8889,
+        "detail": 0.7422,
+        "detailRaw": 0.7734,
+        "detailAdded": 0.0625,
+        "bands": 0.4686
+      },
+      "verdict": "drift",
+      "inkBox": {
+        "comp": {
+          "x": 7,
+          "y": 2,
+          "w": 449,
+          "h": 60
+        },
+        "build": {
+          "x": 2,
+          "y": 8,
+          "w": 453,
+          "h": 54
+        }
+      },
+      "blocking": false,
+      "blockingReasons": [],
+      "rawVerdict": "drift"
+    },
+    {
+      "id": "accreditation",
+      "x": 0.0391,
+      "y": 0.4468,
+      "w": 0.3255,
+      "h": 0.044,
+      "kind": "text",
+      "score": {
+        "overall": 0.6631,
+        "structure": 0.6168,
+        "color": 0.7807,
+        "colorIntersection": 0.6669,
+        "paletteMatch": 0.842,
+        "detail": 0.6571,
+        "detailRaw": 0.6831,
+        "detailAdded": 0.0521,
+        "bands": 0.6095
+      },
+      "verdict": "drift",
+      "inkBox": {
+        "comp": {
+          "x": 5,
+          "y": 7,
+          "w": 479,
+          "h": 25
+        },
+        "build": {
+          "x": 0,
+          "y": 10,
+          "w": 453,
+          "h": 20
+        }
+      },
+      "blocking": false,
+      "blockingReasons": [],
+      "rawVerdict": "drift"
+    },
+    {
+      "id": "cta-primary",
+      "x": 0.0404,
+      "y": 0.5069,
+      "w": 0.1836,
+      "h": 0.0833,
+      "kind": "control",
+      "score": {
+        "overall": 0.661,
+        "structure": 0.5737,
+        "color": 0.8359,
+        "colorIntersection": 0.7311,
+        "paletteMatch": 0.8924,
+        "detail": 0.5512,
+        "detailRaw": 0.5824,
+        "detailAdded": 0.0625,
+        "bands": 0.4513
+      },
+      "verdict": "drift",
+      "inkBox": {
+        "comp": {
+          "x": 0,
+          "y": 0,
+          "w": 282,
+          "h": 72
+        },
+        "build": {
+          "x": 0,
+          "y": 0,
+          "w": 282,
+          "h": 72
+        }
+      },
+      "blocking": false,
+      "blockingReasons": [],
+      "rawVerdict": "drift"
+    },
+    {
+      "id": "cta-secondary",
+      "x": 0.2311,
+      "y": 0.5023,
+      "w": 0.1497,
+      "h": 0.0741,
+      "kind": "control",
+      "score": {
+        "overall": 0.5901,
+        "structure": 0.5043,
+        "color": 0.68,
+        "colorIntersection": 0.4261,
+        "paletteMatch": 0.8168,
+        "detail": 0.6256,
+        "detailRaw": 0.662,
+        "detailAdded": 0.0729,
+        "bands": 0.6231
+      },
+      "verdict": "drift",
+      "inkBox": {
+        "comp": {
+          "x": 3,
+          "y": 1,
+          "w": 225,
+          "h": 63
+        },
+        "build": {
+          "x": 0,
+          "y": 0,
+          "w": 230,
+          "h": 64
+        }
+      },
+      "blocking": true,
+      "blockingReasons": [
+        "control cta-secondary drifts to 59% (structure 50%, color 68%): open .impeccable/review/diff/hero/regions/cta-secondary.png and compare its lettering and visible shape separately; use the measured readings and preserve the region's control classification"
+      ],
+      "rawVerdict": "drift"
+    },
+    {
+      "id": "cliff-tagline",
+      "x": 0.138,
+      "y": 0.6389,
+      "w": 0.1211,
+      "h": 0.1273,
+      "kind": "text",
+      "score": {
+        "overall": 0.5464,
+        "structure": 0.4931,
+        "color": 0.8238,
+        "colorIntersection": 0.7169,
+        "paletteMatch": 0.8814,
+        "detail": 0.3596,
+        "detailRaw": 0.4533,
+        "detailAdded": 0.1875,
+        "bands": 0.4
+      },
+      "verdict": "drift",
+      "inkBox": {
+        "comp": {
+          "x": 9,
+          "y": 5,
+          "w": 177,
+          "h": 105
+        },
+        "build": {
+          "x": 2,
+          "y": 0,
+          "w": 184,
+          "h": 110
+        }
+      },
+      "blocking": false,
+      "blockingReasons": [],
+      "rawVerdict": "drift"
+    },
+    {
+      "id": "far-cliff-text",
+      "x": 0.8691,
+      "y": 0.1944,
+      "w": 0.0833,
+      "h": 0.0833,
+      "kind": "text",
+      "score": {
+        "overall": 0.4839,
+        "structure": 0.3898,
+        "color": 0.8366,
+        "colorIntersection": 0.6749,
+        "paletteMatch": 0.9236,
+        "detail": 0.5326,
+        "detailRaw": 0.6055,
+        "detailAdded": 0.1458,
+        "bands": 0
+      },
+      "verdict": "drift",
+      "inkBox": {
+        "comp": {
+          "x": 13,
+          "y": 7,
+          "w": 95,
+          "h": 61
+        },
+        "build": {
+          "x": 0,
+          "y": 3,
+          "w": 121,
+          "h": 65
+        }
+      },
+      "blocking": false,
+      "blockingReasons": [],
+      "rawVerdict": "drift"
+    },
+    {
+      "id": "sign-audit",
+      "x": 0.4232,
+      "y": 0.1458,
+      "w": 0.0846,
+      "h": 0.1644,
+      "kind": "control",
+      "score": {
+        "overall": 0.5532,
+        "structure": 0.5213,
+        "color": 0.677,
+        "colorIntersection": 0.5601,
+        "paletteMatch": 0.7399,
+        "detail": 0.4084,
+        "detailRaw": 0.4604,
+        "detailAdded": 0.1042,
+        "bands": 0.5524
+      },
+      "verdict": "drift",
+      "inkBox": {
+        "comp": {
+          "x": 0,
+          "y": 1,
+          "w": 130,
+          "h": 141
+        },
+        "build": {
+          "x": 0,
+          "y": 0,
+          "w": 130,
+          "h": 142
+        }
+      },
+      "blocking": true,
+      "blockingReasons": [
+        "control sign-audit drifts to 55% (structure 52%, color 68%): open .impeccable/review/diff/hero/regions/sign-audit.png and compare its lettering and visible shape separately; use the measured readings and preserve the region's control classification"
+      ],
+      "rawVerdict": "drift"
+    },
+    {
+      "id": "sign-enterprise",
+      "x": 0.5423,
+      "y": 0.2257,
+      "w": 0.0781,
+      "h": 0.1215,
+      "kind": "control",
+      "score": {
+        "overall": 0.5107,
+        "structure": 0.4587,
+        "color": 0.6763,
+        "colorIntersection": 0.511,
+        "paletteMatch": 0.7654,
+        "detail": 0.3381,
+        "detailRaw": 0.4214,
+        "detailAdded": 0.1667,
+        "bands": 0.6571
+      },
+      "verdict": "contradicted",
+      "inkBox": {
+        "comp": {
+          "x": 0,
+          "y": 13,
+          "w": 117,
+          "h": 92
+        },
+        "build": {
+          "x": 0,
+          "y": 12,
+          "w": 110,
+          "h": 93
+        }
+      },
+      "blocking": true,
+      "blockingReasons": [
+        "region sign-enterprise (control) is contradicted (structure 46%, detail added 17%): this control differs from the comp: inspect its lettering and visible shape separately against the crop and the measured readings; preserve the region's control classification"
+      ],
+      "rawVerdict": "contradicted"
+    },
+    {
+      "id": "sign-data",
+      "x": 0.7799,
+      "y": 0.4398,
+      "w": 0.112,
+      "h": 0.1505,
+      "kind": "control",
+      "score": {
+        "overall": 0.5895,
+        "structure": 0.5756,
+        "color": 0.7761,
+        "colorIntersection": 0.6089,
+        "paletteMatch": 0.866,
+        "detail": 0.2944,
+        "detailRaw": 0.3517,
+        "detailAdded": 0.1146,
+        "bands": 0.5182
+      },
+      "verdict": "drift",
+      "inkBox": {
+        "comp": {
+          "x": 0,
+          "y": 0,
+          "w": 172,
+          "h": 130
+        },
+        "build": {
+          "x": 0,
+          "y": 0,
+          "w": 136,
+          "h": 130
+        }
+      },
+      "blocking": true,
+      "blockingReasons": [
+        "control sign-data drifts to 59% (structure 58%, color 78%): open .impeccable/review/diff/hero/regions/sign-data.png and compare its lettering and visible shape separately; use the measured readings and preserve the region's control classification"
+      ],
+      "rawVerdict": "drift"
+    },
+    {
+      "id": "sign-msi",
+      "x": 0.8366,
+      "y": 0.5417,
+      "w": 0.1419,
+      "h": 0.2616,
+      "kind": "control",
+      "score": {
+        "overall": 0.7472,
+        "structure": 0.6954,
+        "color": 0.8782,
+        "colorIntersection": 0.7326,
+        "paletteMatch": 0.9566,
+        "detail": 0.6345,
+        "detailRaw": 0.6397,
+        "detailAdded": 0.0104,
+        "bands": 0.6429
+      },
+      "verdict": "drift",
+      "inkBox": {
+        "comp": {
+          "x": 0,
+          "y": 5,
+          "w": 214,
+          "h": 221
+        },
+        "build": {
+          "x": 0,
+          "y": 0,
+          "w": 218,
+          "h": 226
+        }
+      },
+      "blocking": false,
+      "blockingReasons": [],
+      "rawVerdict": "drift"
+    },
+    {
+      "id": "elvo",
+      "x": 0.4557,
+      "y": 0.3611,
+      "w": 0.2682,
+      "h": 0.4803,
+      "kind": "image",
+      "score": {
+        "overall": 0.6673,
+        "structure": 0.4663,
+        "color": 0.8541,
+        "colorIntersection": 0.7852,
+        "paletteMatch": 0.8912,
+        "detail": 0.671,
+        "detailRaw": 0.7231,
+        "detailAdded": 0.1042,
+        "bands": 0.8876
+      },
+      "verdict": "drift",
+      "inkBox": {
+        "comp": {
+          "x": 0,
+          "y": 0,
+          "w": 412,
+          "h": 415
+        },
+        "build": {
+          "x": 0,
+          "y": 0,
+          "w": 412,
+          "h": 415
+        }
+      },
+      "blocking": false,
+      "blockingReasons": [],
+      "rawVerdict": "drift"
+    },
+    {
+      "id": "bubble",
+      "x": 0.6784,
+      "y": 0.3449,
+      "w": 0.1276,
+      "h": 0.1319,
+      "kind": "chrome",
+      "score": {
+        "overall": 0.5006,
+        "structure": 0.5012,
+        "color": 0.6901,
+        "colorIntersection": 0.5881,
+        "paletteMatch": 0.7451,
+        "detail": 0.328,
+        "detailRaw": 0.4686,
+        "detailAdded": 0.2813,
+        "bands": 0.4708
+      },
+      "verdict": "drift",
+      "inkBox": {
+        "comp": {
+          "x": 0,
+          "y": 0,
+          "w": 196,
+          "h": 114
+        },
+        "build": {
+          "x": 0,
+          "y": 0,
+          "w": 196,
+          "h": 114
+        }
+      },
+      "blocking": false,
+      "blockingReasons": [],
+      "rawVerdict": "drift"
+    },
+    {
+      "id": "nav",
+      "x": 0.2344,
+      "y": 0.8623,
+      "w": 0.5313,
+      "h": 0.0995,
+      "kind": "control",
+      "score": {
+        "overall": 0.6276,
+        "structure": 0.5113,
+        "color": 0.9385,
+        "colorIntersection": 0.8736,
+        "paletteMatch": 0.9734,
+        "detail": 0.3456,
+        "detailRaw": 0.4393,
+        "detailAdded": 0.1875,
+        "bands": 0.6571
+      },
+      "verdict": "drift",
+      "inkBox": {
+        "comp": {
+          "x": 0,
+          "y": 0,
+          "w": 816,
+          "h": 86
+        },
+        "build": {
+          "x": 0,
+          "y": 0,
+          "w": 816,
+          "h": 86
+        }
+      },
+      "blocking": true,
+      "blockingReasons": [
+        "control nav drifts to 63% (structure 51%, color 94%): open .impeccable/review/diff/hero/regions/nav.png and compare its lettering and visible shape separately; use the measured readings and preserve the region's control classification"
+      ],
+      "rawVerdict": "drift"
+    },
+    {
+      "id": "nav-elvo",
+      "x": 0.4388,
+      "y": 0.8264,
+      "w": 0.0859,
+      "h": 0.1435,
+      "kind": "image",
+      "score": {
+        "overall": 0.5591,
+        "structure": 0.3074,
+        "color": 0.8666,
+        "colorIntersection": 0.7754,
+        "paletteMatch": 0.9156,
+        "detail": 0.5482,
+        "detailRaw": 0.668,
+        "detailAdded": 0.2396,
+        "bands": 0.6965
+      },
+      "verdict": "drift",
+      "inkBox": {
+        "comp": {
+          "x": 0,
+          "y": 0,
+          "w": 132,
+          "h": 124
+        },
+        "build": {
+          "x": 0,
+          "y": 0,
+          "w": 132,
+          "h": 124
+        }
+      },
+      "placed": true,
+      "verdictReason": "current plate passed asset validation and rendered presence check; placement remains reviewable",
+      "blocking": false,
+      "blockingReasons": [],
+      "rawVerdict": "contradicted"
+    }
+  ],
+  "files": {
+    "sideBySide": "D:/Web Sisfor/.impeccable/review/diff/hero/side-by-side.png",
+    "heatmap": "D:/Web Sisfor/.impeccable/review/diff/hero/heatmap.png",
+    "regionFiles": [
+      "D:/Web Sisfor/.impeccable/review/diff/hero/regions/scene.png",
+      "D:/Web Sisfor/.impeccable/review/diff/hero/regions/logo.png",
+      "D:/Web Sisfor/.impeccable/review/diff/hero/regions/headline-1.png",
+      "D:/Web Sisfor/.impeccable/review/diff/hero/regions/headline-2.png",
+      "D:/Web Sisfor/.impeccable/review/diff/hero/regions/headline-3.png",
+      "D:/Web Sisfor/.impeccable/review/diff/hero/regions/accreditation.png",
+      "D:/Web Sisfor/.impeccable/review/diff/hero/regions/cta-primary.png",
+      "D:/Web Sisfor/.impeccable/review/diff/hero/regions/cta-secondary.png",
+      "D:/Web Sisfor/.impeccable/review/diff/hero/regions/cliff-tagline.png",
+      "D:/Web Sisfor/.impeccable/review/diff/hero/regions/far-cliff-text.png",
+      "D:/Web Sisfor/.impeccable/review/diff/hero/regions/sign-audit.png",
+      "D:/Web Sisfor/.impeccable/review/diff/hero/regions/sign-enterprise.png",
+      "D:/Web Sisfor/.impeccable/review/diff/hero/regions/sign-data.png",
+      "D:/Web Sisfor/.impeccable/review/diff/hero/regions/sign-msi.png",
+      "D:/Web Sisfor/.impeccable/review/diff/hero/regions/elvo.png",
+      "D:/Web Sisfor/.impeccable/review/diff/hero/regions/bubble.png",
+      "D:/Web Sisfor/.impeccable/review/diff/hero/regions/nav.png",
+      "D:/Web Sisfor/.impeccable/review/diff/hero/regions/nav-elvo.png"
+    ]
+  },
+  "interpretation": "hero-gate",
+  "measurementsAvailable": true,
+  "gate": {
+    "ok": false,
+    "reasons": [
+      "region sign-enterprise (control) is contradicted (structure 46%, detail added 17%): this control differs from the comp: inspect its lettering and visible shape separately against the crop and the measured readings; preserve the region's control classification",
+      "control cta-secondary drifts to 59% (structure 50%, color 68%): open .impeccable/review/diff/hero/regions/cta-secondary.png and compare its lettering and visible shape separately; use the measured readings and preserve the region's control classification",
+      "control sign-audit drifts to 55% (structure 52%, color 68%): open .impeccable/review/diff/hero/regions/sign-audit.png and compare its lettering and visible shape separately; use the measured readings and preserve the region's control classification",
+      "control sign-data drifts to 59% (structure 58%, color 78%): open .impeccable/review/diff/hero/regions/sign-data.png and compare its lettering and visible shape separately; use the measured readings and preserve the region's control classification",
+      "control nav drifts to 63% (structure 51%, color 94%): open .impeccable/review/diff/hero/regions/nav.png and compare its lettering and visible shape separately; use the measured readings and preserve the region's control classification"
+    ],
+    "advisories": [
+      "(advisory, above the 72% bar; fix in the polish pass before responsive) 4 readings:",
+      "  text accreditation: letter-spacing is wider than the comp's (gap 0.138 vs 0.090 of the cap height); set letter-spacing to close it by about 1px",
+      "  text far-cliff-text: letter-spacing is wider than the comp's (gap 0.167 vs 0.087 of the cap height); set letter-spacing to close it by about 1px",
+      "  text sign-enterprise: letter-spacing is wider than the comp's (gap 0.076 vs 0.035 of the cap height); set letter-spacing to close it by about 1px",
+      "  text cliff-tagline: 2 lines in the build, 3 in the comp; the measure (max-width, font-size, letter-spacing) wraps it differently, so the block is a different shape"
+    ],
+    "unscopedReasons": []
+  },
+  "rawReport": ".impeccable/review/diff/hero/raw-report.json"
+}

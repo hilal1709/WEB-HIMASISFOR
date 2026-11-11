@@ -1,8 +1,154 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
-@theme {
+/* ==========================================================================
+   DESIGN SYSTEM TOKENS — Sisfor UISI
+   Brand: merah UISI (#C10F11 -> #E31515), netral zinc.
+   shadcn/ui membaca variabel semantik di bawah; ubah di sini, bukan di komponen.
+   ========================================================================== */
+:root {
+  --radius: 0.75rem;
+
+  --background: #ffffff;
+  --foreground: #27272a;
+  --card: #ffffff;
+  --card-foreground: #27272a;
+  --popover: #ffffff;
+  --popover-foreground: #27272a;
+  --primary: #dc2626;
+  --primary-foreground: #ffffff;
+  --secondary: #f4f4f5;
+  --secondary-foreground: #3f3f46;
+  --muted: #f4f4f5;
+  --muted-foreground: #71717a;
+  --accent: #fef2f2;
+  --accent-foreground: #b91c1c;
+  --destructive: #991b1b;
+  --border: #e4e4e7;
+  --input: #d4d4d8;
+  --ring: #ef4444;
+
+  /* status (toast / banner / badge) */
+  --success: #16a34a;
+  --success-soft: #f0fdf4;
+  --warning: #d97706;
+  --warning-soft: #fffbeb;
+  --info: #2563eb;
+  --info-soft: #eff6ff;
+  --danger: #dc2626;
+  --danger-soft: #fef2f2;
+
+  /* brand */
+  --brand-from: #c10f11;
+  --brand-to: #e31515;
+  --brand-deep: #94080a;
+
+  /* chart.js palette (dibaca lewat getComputedStyle) */
+  --chart-1: #dc2626;
+  --chart-2: #27272a;
+  --chart-3: #f87171;
+  --chart-4: #a1a1aa;
+  --chart-5: #2563eb;
+}
+
+.dark {
+  --background: #09090b;
+  --foreground: #fafafa;
+  --card: #18181b;
+  --card-foreground: #fafafa;
+  --popover: #18181b;
+  --popover-foreground: #fafafa;
+  --primary: #ef4444;
+  --primary-foreground: #ffffff;
+  --secondary: #27272a;
+  --secondary-foreground: #fafafa;
+  --muted: #27272a;
+  --muted-foreground: #a1a1aa;
+  --accent: #3b0d0e;
+  --accent-foreground: #fca5a5;
+  --destructive: #f87171;
+  --border: #27272a;
+  --input: #3f3f46;
+  --ring: #f87171;
+  --success-soft: #052e16;
+  --warning-soft: #422006;
+  --info-soft: #172554;
+  --danger-soft: #3b0d0e;
+}
+
+@theme inline {
   --font-sans: var(--font-inter), "Inter", "sans-serif";
   --font-serif: var(--font-noto-serif), "Noto Serif Display", "serif";
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-brand-from: var(--brand-from);
+  --color-brand-to: var(--brand-to);
+  --color-brand-deep: var(--brand-deep);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --animate-toast-in: toast-in 0.35s cubic-bezier(0.21, 1.02, 0.73, 1) both;
+  --animate-toast-out: toast-out 0.2s ease-in both;
+  --animate-shimmer: shimmer 1.6s ease-in-out infinite;
+  --animate-spotlight: spotlight 2s ease 0.75s 1 forwards;
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateX(100%) scale(0.96); }
+  to { opacity: 1; transform: translateX(0) scale(1); }
+}
+@keyframes toast-out {
+  to { opacity: 0; transform: translateX(100%) scale(0.96); }
+}
+@keyframes shimmer {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+@keyframes spotlight {
+  0% { opacity: 0; transform: translate(-72%, -62%) scale(0.5); }
+  100% { opacity: 1; transform: translate(-50%, -40%) scale(1); }
+}
+
+@layer base {
+  * { border-color: var(--border); }
+  body { background: var(--background); color: var(--foreground); }
+  :focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 /* Performance optimizations */
@@ -90,3 +236,210 @@ img, picture, video, canvas, svg {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;     /* Firefox */
 }
+/* ==========================================================================
+   CINEMATIC LAYER — token & utilitas beranda 2026 (lihat DESIGN.md › Cinematic Scroll)
+   Inspirasi: 21st.dev (spotlight card, background paths, marquee, text reveal)
+              horizonx.so (glass, pointer-reactive glow, pinned story, forced-break headline)
+   ========================================================================== */
+:root {
+  --paper: #fbf7f4;          /* latar hangat premium, menggantikan putih polos di halaman publik */
+  --ink: #1a0607;            /* teks/latar gelap bernuansa merah */
+  --brand-gold: #f5b71c;     /* aksen dari paruh & jubah maskot Elvo — pemakaian hemat */
+  --brand-glow: #ff3b3b;
+  --glass-bg: rgb(255 255 255 / 0.62);
+  --glass-border: rgb(255 255 255 / 0.75);
+  --shadow-float: 0 1px 0 rgb(255 255 255 / 0.6) inset, 0 24px 60px -20px rgb(120 10 12 / 0.28), 0 8px 20px -12px rgb(26 6 7 / 0.18);
+}
+.dark {
+  --paper: #0d0505;
+  --ink: #050101;
+  --glass-bg: rgb(24 24 27 / 0.6);
+  --glass-border: rgb(255 255 255 / 0.08);
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-brand-gold: var(--brand-gold);
+  --color-brand-glow: var(--brand-glow);
+  --shadow-float: var(--shadow-float);
+  --ease-cinematic: cubic-bezier(0.22, 1, 0.36, 1);
+  --animate-float: float 5s ease-in-out infinite;
+  --animate-marquee-x: marquee-x 32s linear infinite;
+  --animate-orbit: orbit 40s linear infinite;
+  --animate-orbit-reverse: orbit 40s linear infinite reverse;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(-1.5deg); }
+}
+@keyframes marquee-x {
+  to { transform: translateX(-100%); }
+}
+@keyframes orbit {
+  to { transform: rotate(360deg); }
+}
+@keyframes path-flow {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: -1; }
+}
+
+/* glass panel (navbar, menu maskot) */
+.glass {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(18px) saturate(1.6);
+  -webkit-backdrop-filter: blur(18px) saturate(1.6);
+}
+
+/* grain halus untuk panel merah — kesan cetak premium */
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.18;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* titik grid dekoratif */
+.dot-grid {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22'%3E%3Ccircle cx='1' cy='1' r='1' fill='%231a0607' fill-opacity='.09'/%3E%3C/svg%3E");
+}
+
+/* (fade tepi dihapus — aturan: tanpa gradien) */
+.mask-fade-x { }
+
+/* Spotlight Card: tanpa gradien — garis tepi brand muncul saat hover */
+.spotlight-card { transition: border-color .3s, box-shadow .3s; }
+.spotlight-card:hover { border-color: rgb(220 38 38 / 0.35); }
+
+.bg-path {
+  stroke-dasharray: 0.35 0.65;
+  animation: path-flow 20s linear infinite;
+}
+
+/* SplitText mask */
+.split-word { padding-bottom: 0.08em; margin-bottom: -0.08em; }
+
+/* Cinematic mode: track horizontal digerakkan GSAP, bukan scroll native */
+html[data-cinematic] .h-viewport { overflow: hidden; scroll-snap-type: none; }
+html[data-cinematic] body { overscroll-behavior: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-float, .animate-marquee-x, .bg-path, .animate-orbit, .animate-orbit-reverse { animation: none !important; }
+}
+
+/* ==========================================================================
+   BERANDA PROFESIONAL 2026 — tanpa gradien, tanpa glow (lihat DESIGN.md)
+   ========================================================================== */
+.font-display { font-family: var(--font-display), var(--font-inter), system-ui, sans-serif; }
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0.75rem; right: 0.75rem; bottom: 0.35rem;
+  height: 1.5px;
+  background: var(--primary);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.nav-link:hover::after, .nav-link[data-state="open"]::after, .nav-link[aria-current="page"]::after { transform: scaleX(1); }
+.tabular { font-variant-numeric: tabular-nums; }
+html[data-intro-seen] .intro-loader { display: none; }
+/* Alumni carousel: slide aktif merah solid, tetangga mengecil */
+.alumni-swiper .swiper-slide .alumni-card { transform: scale(0.92); }
+.alumni-swiper .swiper-slide-active .alumni-card { transform: scale(1); background: var(--primary); color: #fff; border-color: transparent; }
+.alumni-swiper .swiper-slide-active .alumni-role { color: rgb(255 255 255 / 0.75); }
+
+/* ==========================================================================
+   BERANDA PREMIUM v2 — rujukan horizonx.so & 21st.dev (tanpa gradien)
+   ========================================================================== */
+:root {
+  --canvas: #f4f4f2;
+  --tile: #ffffff;
+  --tile-muted: #ebebe8;
+  --night: #0f0f10;
+  --hairline: rgb(0 0 0 / 0.06);
+  --shadow-tile: 0 1px 0 rgb(255 255 255 / 0.9) inset, 0 30px 60px -32px rgb(0 0 0 / 0.18), 0 2px 6px -2px rgb(0 0 0 / 0.04);
+}
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-tile: var(--tile);
+  --color-tile-muted: var(--tile-muted);
+  --color-night: var(--night);
+  --color-hairline: var(--hairline);
+  --shadow-tile: var(--shadow-tile);
+}
+.premium { background: var(--canvas); color: var(--night); }
+.tile { background: var(--tile); border: 1px solid var(--hairline); border-radius: 28px; box-shadow: var(--shadow-tile); }
+.display-xl { font-family: var(--font-display), var(--font-inter), sans-serif; font-weight: 600; letter-spacing: -0.045em; line-height: 0.95; }
+.outline-text { color: transparent; -webkit-text-stroke: 1.5px currentColor; }
+
+/* 3D curved carousel */
+.cyl-stage { perspective: 1800px; perspective-origin: 50% 40%; }
+.cyl-ring { transform-style: preserve-3d; will-change: transform; }
+.cyl-card { position: absolute; inset: 0; margin: auto; backface-visibility: hidden; }
+
+/* text roll */
+.roll { display: inline-grid; overflow: hidden; height: 1.25em; line-height: 1.25em; }
+.roll > span { grid-area: 1 / 1; transition: transform .55s cubic-bezier(0.22, 1, 0.36, 1); }
+.roll > span:last-child { transform: translateY(105%); }
+.group\/roll:hover .roll > span:first-child { transform: translateY(-105%); }
+.group\/roll:hover .roll > span:last-child { transform: translateY(0); }
+
+/* vertical marquee */
+@keyframes marquee-y { to { transform: translateY(-50%); } }
+.marquee-y { animation: marquee-y var(--dur, 40s) linear infinite; }
+.marquee-y.reverse { animation-direction: reverse; }
+.marquee-col:hover .marquee-y { animation-play-state: paused; }
+
+/* custom cursor */
+.cursor-dot { position: fixed; left: 0; top: 0; z-index: 300; pointer-events: none; }
+html.has-cursor, html.has-cursor a, html.has-cursor button { cursor: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-y { animation: none !important; }
+}
+.group\/arrow:hover .roll > span:first-child { transform: translateY(-105%); }
+.group\/arrow:hover .roll > span:last-child { transform: translateY(0); }
+
+/* ==========================================================================
+   KAMPUS v3 — maroon + navy + gold di atas cream (tanpa gradien). Lihat DESIGN.md › Kampus v3
+   ========================================================================== */
+:root {
+  --maroon: #6e1423;
+  --maroon-deep: #4e0e19;
+  --navy: #14213d;
+  --navy-deep: #0e1830;
+  --gold: #c9a227;
+  --gold-soft: #e6d3a1;
+  --cream: #f7f2ea;
+  --cream-2: #efe7da;
+  --text: #1f2430;
+  --line: rgb(31 36 48 / 0.1);
+}
+@theme inline {
+  --color-maroon: var(--maroon);
+  --color-maroon-deep: var(--maroon-deep);
+  --color-navy: var(--navy);
+  --color-navy-deep: var(--navy-deep);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-cream: var(--cream);
+  --color-cream-2: var(--cream-2);
+  --color-text: var(--text);
+  --color-line: var(--line);
+}
+.kampus { background: var(--cream); color: var(--text); }
+.kicker { font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; }
+.u-gold { background-image: none; position: relative; }
+.u-gold::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: -2px; height: 1.5px;
+  background: var(--gold); transform: scaleX(0); transform-origin: left;
+  transition: transform .5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.group:hover .u-gold::after, .u-gold:hover::after, .u-gold[aria-current="page"]::after, .u-gold[data-state="open"]::after { transform: scaleX(1); }
+.kampus .nav-link::after { background: var(--gold); }

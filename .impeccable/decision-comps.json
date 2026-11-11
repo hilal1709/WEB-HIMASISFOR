@@ -1,0 +1,10 @@
+{
+  "title": "Pilih komposisi beranda — Negeri Kapur Gresik",
+  "question": "Tiga komposisi di dunia yang sama. Mana yang jadi patokan build? Kode nanti harus menyamai gambar ini.",
+  "options": [
+    { "id": "opt-panorama", "label": "1 · Panorama terbang", "thesis": "Elvo terbang di atas panorama kapur & pabrik; papan arah 4 bidang di jalan bawah; nav pil di bawah.", "comp": ".impeccable/mocks/decision/model-pick.png" },
+    { "id": "opt-road", "label": "2 · Jalan berkelok", "thesis": "Jalan kapur berkelok jadi struktur halaman; judul dicat di tebing; Elvo melaju di jalan menuju papan arah.", "comp": ".impeccable/mocks/comp-road.png" },
+    { "id": "opt-closeup", "label": "3 · Elvo dekat", "thesis": "Elvo raksasa di batu depan menyapa; lembah & conveyor berisi peti 4 bidang di belakang.", "comp": ".impeccable/mocks/comp-closeup.png" }
+  ],
+  "steer": true
+}

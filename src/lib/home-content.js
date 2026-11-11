@@ -20,7 +20,8 @@ export const NAV = [
       { label: "Visi & Misi", href: "/visi-misi", desc: "Arah dan tujuan pendidikan" },
       { label: "Struktur Organisasi", href: "/struktur-organisasi", desc: "Pimpinan dan dosen program studi" },
       { label: "Profil Lulusan", href: "/profil-lulusan", desc: "Kompetensi dan peran lulusan" },
-      { label: "Dosen", href: "/profile#dosen", desc: "Pengajar dan bidang risetnya" },
+      { label: "Program Kelas", href: "/program-kelas", desc: "Pilihan kelas dan jadwal kuliah" },
+      { label: "Dosen", href: "/dosen", desc: "Pengajar dan bidang risetnya" },
       { label: "Prestasi", href: "/achievement", desc: "Capaian dosen dan mahasiswa" },
     ],
   },
@@ -218,7 +219,7 @@ export const FOOTER = {
   ],
   instagram: "https://www.instagram.com/sisforuisi/",
   columns: [
-    { title: "Profil", links: [["Sambutan Kaprodi", "/sambutan-kaprodi"], ["Visi & Misi", "/visi-misi"], ["Struktur Organisasi", "/struktur-organisasi"], ["Profil Lulusan", "/profil-lulusan"], ["Dosen", "/profile#dosen"]] },
+    { title: "Profil", links: [["Sambutan Kaprodi", "/sambutan-kaprodi"], ["Visi & Misi", "/visi-misi"], ["Struktur Organisasi", "/struktur-organisasi"], ["Profil Lulusan", "/profil-lulusan"], ["Dosen", "/dosen"]] },
     { title: "Akademik", links: [["Kurikulum & RPS", "/curiculum"], ["Jalur Kelulusan", "/curiculum#kelulusan"], ["Prestasi", "/achievement"]] },
     { title: "Tautan Penting", links: [["Universitas (UISI)", "https://uisi.ac.id"], ["PMB UISI", PMB_URL], ["Instagram Prodi", "https://www.instagram.com/sisforuisi/"]] },
   ],
@@ -296,7 +297,7 @@ export const AUDIENCE = [
   { label: "Calon Mahasiswa", href: PMB_URL },
   { label: "Mahasiswa", href: "/curiculum" },
   { label: "Alumni", href: "/profil-lulusan" },
-  { label: "Dosen & Tendik", href: "/profile#dosen" },
+  { label: "Dosen & Tendik", href: "/dosen" },
 ];
 
 export const HERO_V3 = {

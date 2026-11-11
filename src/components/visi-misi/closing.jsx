@@ -6,7 +6,7 @@ import { ElvoPeek } from "@/components/home/elvo-peek";
 const STOPS = [
   { href: "/sambutan-kaprodi", kicker: "Profil", title: "Sambutan Kaprodi", body: "Pesan dari ketua program studi." },
   { href: "/curiculum", kicker: "Akademik", title: "Kurikulum", body: "Mata kuliah per bidang keahlian." },
-  { href: "/profile#dosen", kicker: "Profil", title: "Dosen", body: "Pengajar dan bidang risetnya." },
+  { href: "/dosen", kicker: "Profil", title: "Dosen", body: "Pengajar dan bidang risetnya." },
   { href: PMB_URL, kicker: "2030", title: "Daftar PMB 2027", body: "Ikut menempuh perjalanan ini.", final: true },
 ];
 

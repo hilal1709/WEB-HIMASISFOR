@@ -360,9 +360,9 @@
     "semantic_hash": ""
   },
   "src/app/sitemap.js": {
-    "mtime": 1794422865.4029472,
-    "seen": 1794423166.3014987,
-    "ast_hash": "a62e9701c08d66c9194c9e5aae7d022d",
+    "mtime": 1794427473.8524034,
+    "seen": 1794427798.3241224,
+    "ast_hash": "b4f4765e7555e8a28d7fbcd29a59313e",
     "semantic_hash": ""
   },
   "src/components/AwardingRecognition.jsx": {
@@ -1566,9 +1566,9 @@
     "semantic_hash": ""
   },
   "src/components/ui/toast.jsx": {
-    "mtime": 1794411470.5631335,
-    "seen": 1794418933.02272,
-    "ast_hash": "1d2dd85d14a986ef2be904456757762f",
+    "mtime": 1794427837.1949067,
+    "seen": 1794427906.372431,
+    "ast_hash": "fab3cd86c75c6e5eee0e87a5001b924a",
     "semantic_hash": ""
   },
   "src/lib/motion.js": {
@@ -1584,9 +1584,9 @@
     "semantic_hash": ""
   },
   "DESIGN.md": {
-    "mtime": 1794422308.2412906,
-    "seen": 1794423166.3732214,
-    "ast_hash": "bfc8a2c653eba47045b4f5b2ded15b54",
+    "mtime": 1794428128.124092,
+    "seen": 1794428211.490923,
+    "ast_hash": "466716657a305b2ecfb0d2f5e7d8469b",
     "semantic_hash": ""
   },
   ".claude/launch.json": {
@@ -1716,15 +1716,15 @@
     "semantic_hash": ""
   },
   "src/lib/home-content.js": {
-    "mtime": 1794423670.2270253,
-    "seen": 1794423834.7504458,
-    "ast_hash": "4a3087522b66bb0fee3fa2438951a708",
+    "mtime": 1794427472.1314518,
+    "seen": 1794427798.4066722,
+    "ast_hash": "051202fcf7c702be4a1cec8bf7b2ae62",
     "semantic_hash": ""
   },
   "src/lib/scroll.js": {
-    "mtime": 1794384798.9052055,
-    "seen": 1794386121.1536303,
-    "ast_hash": "2a235595d9167796aebdb7710dddf2f0",
+    "mtime": 1794427362.0338237,
+    "seen": 1794427798.4085517,
+    "ast_hash": "405152577f72491c61d799f572e3aeb2",
     "semantic_hash": ""
   },
   "public/mascot/elvo-confident.webp": {
@@ -2034,9 +2034,9 @@
     "semantic_hash": ""
   },
   "src/components/illustrations/line-illustrations.jsx": {
-    "mtime": 1794422644.2812312,
-    "seen": 1794423166.320286,
-    "ast_hash": "8e3f22ab6c1bfc0b6cb55c949efcb2c7",
+    "mtime": 1794427219.3305156,
+    "seen": 1794427798.3573475,
+    "ast_hash": "a1eba9fda168cde8fb62c1d3065bd2c1",
     "semantic_hash": ""
   },
   "src/components/intro-loader.jsx": {
@@ -2670,9 +2670,9 @@
     "semantic_hash": ""
   },
   "src/components/sambutan/profile-modal.jsx": {
-    "mtime": 1794419161.3090968,
-    "seen": 1794419401.0853426,
-    "ast_hash": "115ae0b0aa157a2ff6ceda52e5a5605a",
+    "mtime": 1794423971.2448723,
+    "seen": 1794425127.8630664,
+    "ast_hash": "777af0a103b85dfd823dda8ac836f833",
     "semantic_hash": ""
   },
   "src/components/sambutan/sambutan-hero.jsx": {
@@ -2682,9 +2682,9 @@
     "semantic_hash": ""
   },
   "src/lib/sambutan-content.js": {
-    "mtime": 1794419161.3096395,
-    "seen": 1794419401.0955772,
-    "ast_hash": "202a150f92eda963e5c5d43d7f73775c",
+    "mtime": 1794423971.2401812,
+    "seen": 1794425127.8829463,
+    "ast_hash": "c42d3c7a5cd84e5b07262dd1000a6e84",
     "semantic_hash": ""
   },
   "src/app/visi-misi/loading.js": {
@@ -2706,9 +2706,9 @@
     "semantic_hash": ""
   },
   "src/components/visi-misi/closing.jsx": {
-    "mtime": 1794420031.0372114,
-    "seen": 1794420295.2529042,
-    "ast_hash": "280f38753aee449ad43cf0c1ea2a3854",
+    "mtime": 1794427494.1845303,
+    "seen": 1794427798.3999426,
+    "ast_hash": "fcbead0f74e919a182a92ec028253419",
     "semantic_hash": ""
   },
   "src/components/visi-misi/misi-modal.jsx": {
@@ -2730,9 +2730,9 @@
     "semantic_hash": ""
   },
   "src/components/visi-misi/visi-hero.jsx": {
-    "mtime": 1794420977.3402293,
-    "seen": 1794421010.4933095,
-    "ast_hash": "172877ed32ecba64ead575196ee63bff",
+    "mtime": 1794424837.514773,
+    "seen": 1794425127.8751135,
+    "ast_hash": "0d96d4da51bd95b148322f05ddea839c",
     "semantic_hash": ""
   },
   "src/lib/visi-misi-content.js": {
@@ -2748,9 +2748,9 @@
     "semantic_hash": ""
   },
   "src/app/profil-lulusan/page.jsx": {
-    "mtime": 1794421689.8766575,
-    "seen": 1794422225.9910638,
-    "ast_hash": "855c3072632a1710326d91bab721a7ef",
+    "mtime": 1794424712.4751346,
+    "seen": 1794425127.8119404,
+    "ast_hash": "6f6e1be5564375e3a4db90223d60bbfc",
     "semantic_hash": ""
   },
   "src/components/profil-lulusan/alumni-wall.jsx": {
@@ -2760,9 +2760,9 @@
     "semantic_hash": ""
   },
   "src/components/profil-lulusan/closing.jsx": {
-    "mtime": 1794421874.9763587,
-    "seen": 1794422226.0214477,
-    "ast_hash": "65b08538f819c73069553c712889ee8d",
+    "mtime": 1794424723.4596434,
+    "seen": 1794425127.8599296,
+    "ast_hash": "eba8f6c9b1f0baa8d2f46b4c39eb4caa",
     "semantic_hash": ""
   },
   "src/components/profil-lulusan/cpl-bento.jsx": {
@@ -2772,9 +2772,9 @@
     "semantic_hash": ""
   },
   "src/components/profil-lulusan/lulusan-hero.jsx": {
-    "mtime": 1794421718.3489804,
-    "seen": 1794422226.0214546,
-    "ast_hash": "620b425742a6bca07e7d8ed0325ca7f8",
+    "mtime": 1794424953.0550668,
+    "seen": 1794425127.8604033,
+    "ast_hash": "ebbc383e84ee0cd6a17205d4363355ac",
     "semantic_hash": ""
   },
   "src/components/profil-lulusan/profile-explorer.jsx": {
@@ -2814,39 +2814,183 @@
     "semantic_hash": ""
   },
   "src/components/struktur/closing.jsx": {
-    "mtime": 1794423670.2250082,
-    "seen": 1794423834.7378497,
-    "ast_hash": "5c1b4686a90de255e6d024c580b59935",
+    "mtime": 1794425194.538484,
+    "seen": 1794425241.0475967,
+    "ast_hash": "5121513b79aec307ed36db47ac0a6261",
     "semantic_hash": ""
   },
   "src/components/struktur/org-chart.jsx": {
-    "mtime": 1794423681.2582793,
-    "seen": 1794423834.7378607,
-    "ast_hash": "7af36316cdede0e21a577268f7e4a362",
+    "mtime": 1794424077.0710897,
+    "seen": 1794425127.8670273,
+    "ast_hash": "acb768b527b2cc4e2992cc93c213e5bd",
     "semantic_hash": ""
   },
   "src/components/struktur/person-modal.jsx": {
-    "mtime": 1794423699.3343608,
-    "seen": 1794423834.7378643,
-    "ast_hash": "a57d28716a68fbbb4fb381352b04b01c",
+    "mtime": 1794423874.213369,
+    "seen": 1794425127.8670323,
+    "ast_hash": "867dc39e7d14b6bf3e80f69fe52a602b",
     "semantic_hash": ""
   },
   "src/components/struktur/struktur-hero.jsx": {
-    "mtime": 1794423681.0305448,
-    "seen": 1794423834.7378693,
-    "ast_hash": "ff15c114ef53e59d0a29e9d930fd3cb8",
+    "mtime": 1794425194.2404442,
+    "seen": 1794425241.048683,
+    "ast_hash": "d3da0e86842ee9bf500b70c436dd66c4",
     "semantic_hash": ""
   },
   "src/lib/struktur-content.js": {
-    "mtime": 1794423792.1160603,
-    "seen": 1794423834.7532415,
-    "ast_hash": "f623f62a24a8b45b6da7f091442d9882",
+    "mtime": 1794423874.203953,
+    "seen": 1794425127.8835042,
+    "ast_hash": "545042a8cd0eef1274a40f3e9b394e58",
     "semantic_hash": ""
   },
   "src/components/struktur/minilab.jsx": {
-    "mtime": 1794423641.8208098,
-    "seen": 1794423834.7378554,
-    "ast_hash": "965d0905779d9c2c02f56fc88b68dee1",
+    "mtime": 1794424085.8625216,
+    "seen": 1794425127.8670208,
+    "ast_hash": "628a8c3e673c59a9683dce9a50e879d8",
+    "semantic_hash": ""
+  },
+  "src/app/program-kelas/loading.js": {
+    "mtime": 1794426196.6661756,
+    "seen": 1794426571.248191,
+    "ast_hash": "eab9542cd88e9aef21c7dbd48713430a",
+    "semantic_hash": ""
+  },
+  "src/app/program-kelas/page.jsx": {
+    "mtime": 1794426196.818143,
+    "seen": 1794426571.2481976,
+    "ast_hash": "759af8addeecd09bd8f6b1e4370e7293",
+    "semantic_hash": ""
+  },
+  "src/components/program-kelas/class-modal.jsx": {
+    "mtime": 1794426469.3119042,
+    "seen": 1794426571.28997,
+    "ast_hash": "961b8cb7dcdcf27e8a1031a4f6f779d0",
+    "semantic_hash": ""
+  },
+  "src/components/program-kelas/class-switcher.jsx": {
+    "mtime": 1794426290.9256468,
+    "seen": 1794426571.2899742,
+    "ast_hash": "a3b204b47450f9d73d22ec09dd41fc6a",
+    "semantic_hash": ""
+  },
+  "src/components/program-kelas/closing.jsx": {
+    "mtime": 1794426180.3746586,
+    "seen": 1794426571.289978,
+    "ast_hash": "cf677f42bb0f3b29bc33de1f88cffe7c",
+    "semantic_hash": ""
+  },
+  "src/components/program-kelas/compare-table.jsx": {
+    "mtime": 1794426855.4970164,
+    "seen": 1794426911.4781525,
+    "ast_hash": "0219ea15269fd3e5e73ea4fb90fea64c",
+    "semantic_hash": ""
+  },
+  "src/components/program-kelas/faq.jsx": {
+    "mtime": 1794426180.061924,
+    "seen": 1794426571.289988,
+    "ast_hash": "ab0a3b2a949f439aa89ee00fe31102c9",
+    "semantic_hash": ""
+  },
+  "src/components/program-kelas/kelas-hero.jsx": {
+    "mtime": 1794425984.60009,
+    "seen": 1794426571.2899923,
+    "ast_hash": "3216ceec6aa194029b7ee41fae0ad5d8",
+    "semantic_hash": ""
+  },
+  "src/components/program-kelas/kelas-provider.jsx": {
+    "mtime": 1794425901.3864741,
+    "seen": 1794426571.289997,
+    "ast_hash": "f101d8e2f25a57b89928cc8808df8497",
+    "semantic_hash": ""
+  },
+  "src/components/program-kelas/pmb-banner.jsx": {
+    "mtime": 1794426000.3621213,
+    "seen": 1794426571.2900026,
+    "ast_hash": "3cb1cb2d445d1245e4d9347e81672db3",
+    "semantic_hash": ""
+  },
+  "src/components/program-kelas/quiz-modal.jsx": {
+    "mtime": 1794426418.812367,
+    "seen": 1794426571.2900088,
+    "ast_hash": "b8e124fef5bbe05e4d5fa015d4644112",
+    "semantic_hash": ""
+  },
+  "src/components/program-kelas/week-schedule.jsx": {
+    "mtime": 1794426328.7995012,
+    "seen": 1794426571.290014,
+    "ast_hash": "74d678dffc872d74e2b72b02e1d1fd9d",
+    "semantic_hash": ""
+  },
+  "src/lib/program-kelas-content.js": {
+    "mtime": 1794425872.0379581,
+    "seen": 1794426571.3161178,
+    "ast_hash": "cb211154d8ad9e461bd9d783d4a98f23",
+    "semantic_hash": ""
+  },
+  "src/app/dosen/loading.js": {
+    "mtime": 1794427459.292545,
+    "seen": 1794427798.316008,
+    "ast_hash": "8206185b7f53bc7dba66e51264145753",
+    "semantic_hash": ""
+  },
+  "src/app/dosen/page.jsx": {
+    "mtime": 1794427458.9566271,
+    "seen": 1794427798.3160172,
+    "ast_hash": "4d89a16f11e2ce7b2032e1c1ae8d1549",
+    "semantic_hash": ""
+  },
+  "src/components/dosen/closing.jsx": {
+    "mtime": 1794427458.4847002,
+    "seen": 1794427798.339697,
+    "ast_hash": "61029b47d8be93b40b45e754f67fc611",
+    "semantic_hash": ""
+  },
+  "src/components/dosen/directory.jsx": {
+    "mtime": 1794428109.8887515,
+    "seen": 1794428211.347746,
+    "ast_hash": "6952f0c66583015735167236a2ccd6d5",
+    "semantic_hash": ""
+  },
+  "src/components/dosen/dosen-hero.jsx": {
+    "mtime": 1794427425.5542538,
+    "seen": 1794427798.3397064,
+    "ast_hash": "728abc826852a10d8a6d4ded6e7a76d0",
+    "semantic_hash": ""
+  },
+  "src/components/dosen/dosen-provider.jsx": {
+    "mtime": 1794427240.5764964,
+    "seen": 1794427798.33971,
+    "ast_hash": "1520816c9dfbd7022cb43879bc160316",
+    "semantic_hash": ""
+  },
+  "src/components/dosen/expertise-map.jsx": {
+    "mtime": 1794427458.088728,
+    "seen": 1794427798.3397129,
+    "ast_hash": "45c7b43fd1f6c7356acc5d2fe45cabf0",
+    "semantic_hash": ""
+  },
+  "src/components/dosen/kaprodi-feature.jsx": {
+    "mtime": 1794427346.9613903,
+    "seen": 1794427798.3397155,
+    "ast_hash": "7cd47a2e9ebfd4a7a7992d2d03c72749",
+    "semantic_hash": ""
+  },
+  "src/components/dosen/lecturer-modal.jsx": {
+    "mtime": 1794428128.1157148,
+    "seen": 1794428211.3511832,
+    "ast_hash": "e382dbed97ddd06b790a81c699779685",
+    "semantic_hash": ""
+  },
+  "src/components/dosen/stats-band.jsx": {
+    "mtime": 1794427346.610936,
+    "seen": 1794427798.3397226,
+    "ast_hash": "bc29beb4cbcc1c1693c9ceb9e9cd5c56",
+    "semantic_hash": ""
+  },
+  "src/lib/dosen-content.js": {
+    "mtime": 1794428139.1487184,
+    "seen": 1794428211.4415672,
+    "ast_hash": "3fcf3d51845e681c98c19c69fc7302ba",
     "semantic_hash": ""
   }
 }

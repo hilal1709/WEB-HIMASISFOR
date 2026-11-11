@@ -11,9 +11,10 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
 import { SplitText } from "gsap/SplitText";
+import { Flip } from "gsap/Flip";
 
 if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
+  gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText, Flip);
 }
 
 export const CINEMATIC_QUERY = "(min-width: 768px) and (prefers-reduced-motion: no-preference)";
@@ -29,4 +30,4 @@ export const sceneTokens = {
   ease: "power3.out",
 };
 
-export { gsap, ScrollTrigger, ScrollSmoother, SplitText };
+export { gsap, ScrollTrigger, ScrollSmoother, SplitText, Flip };

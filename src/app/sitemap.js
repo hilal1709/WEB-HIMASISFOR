@@ -39,6 +39,18 @@ export default function sitemap() {
       priority: 0.7,
     },
     {
+      url: `${baseUrl}/program-kelas`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/dosen`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
       url: `${baseUrl}/curiculum`,
       lastModified: new Date(),
       changeFrequency: 'monthly',

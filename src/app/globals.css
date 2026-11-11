@@ -450,3 +450,25 @@ html.has-cursor, html.has-cursor a, html.has-cursor button { cursor: none; }
 /* Ilustrasi line-art di atas permukaan gelap (hero Struktur): aksen maroon → emas */
 .art-on-dark [fill="var(--maroon)"], .art-on-dark [data-node] { fill: var(--gold); }
 .art-on-dark [fill="var(--gold)"] { fill-opacity: 0.1; }
+
+/* Program Kelas — jalur kelas aktif menyala di ilustrasi hero */
+.class-paths [data-path] { opacity: 0.28; transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1); }
+.class-paths[data-active-path="0"] [data-path="0"],
+.class-paths[data-active-path="1"] [data-path="1"],
+.class-paths[data-active-path="2"] [data-path="2"] { opacity: 1; }
+
+/* Dosen — simpul rumpun aktif menyala di ilustrasi hero */
+.lecturer-net [data-field] { transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1); }
+.lecturer-net[data-active-field]:not([data-active-field="all"]) [data-field] { opacity: 0.25; }
+.lecturer-net[data-active-field="tata-kelola"] [data-field="tata-kelola"],
+.lecturer-net[data-active-field="enterprise"] [data-field="enterprise"],
+.lecturer-net[data-active-field="data"] [data-field="data"],
+.lecturer-net[data-active-field="strategi"] [data-field="strategi"] { opacity: 1; }
+
+/* Dosen — mode daftar: baris lain meredup saat satu baris di-hover */
+.dosen-rows:hover .dosen-row { opacity: 0.35; }
+.dosen-rows:hover .dosen-row:hover, .dosen-rows .dosen-row:focus-visible { opacity: 1; }
+.dosen-row { transition: opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
+
+/* Dosen — teks yang cocok dengan pencarian */
+.dosen-mark { background: rgb(201 162 39 / 0.28); color: inherit; border-radius: 2px; padding: 0 1px; }

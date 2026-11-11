@@ -237,7 +237,127 @@ export function OrgTreeIllustration({ className }) {
   );
 }
 
+/**
+ * "Tiga jalur kelas": gedung kampus di tengah dengan tiga jalan menuju
+ * (0) matahari + ruang kelas pagi, (1) bulan + laptop (malam/akhir pekan), (2) silo pabrik (kemitraan industri).
+ * Tiap jalur dibungkus <g data-path="i"> agar bisa disorot sesuai kelas aktif; titik tujuan bertanda data-node.
+ */
+export function ClassPathsIllustration({ className }) {
+  return (
+    <svg viewBox="0 0 520 300" role="img" aria-label="Ilustrasi kampus dengan tiga jalur kelas: pagi, malam, dan industri" className={className ?? "h-auto w-full text-ink"}>
+      {/* tanah */}
+      <path data-line {...line} d="M10 268h500" />
+      {/* kampus tengah */}
+      <path d="M210 268v-92l50-30 50 30v92z" {...soft} />
+      <path data-line {...line} d="M210 268v-92l50-30 50 30v92M246 268v-34h28v34M224 190h18v16h-18zM278 190h18v16h-18zM224 214h18v14h-18zM278 214h18v14h-18z" />
+      <path data-line {...line} d="M260 146v-26M260 120h18l-6 6 6 6h-18" />
+      <path data-line {...line} d="M196 268v-8h128v8" />
+
+      {/* jalur 0 — pagi */}
+      <g data-path="0">
+        <path {...line} strokeDasharray="5 8" d="M210 248c-34 0-48-24-86-30" />
+        <circle data-line {...line} cx="72" cy="78" r="18" />
+        <path data-line {...line} d="M72 46v-10M72 120v-10M40 78H30M114 78h-10M49 55l-7-7M102 108l-7-7M95 55l7-7M42 108l7-7" />
+        <rect x="40" y="196" width="72" height="44" rx="3" {...soft} />
+        <path data-line {...line} d="M40 268v-72h72v72M52 210h48M52 222h32M76 240v28" />
+        <circle data-node cx="120" cy="216" r="4.5" {...node} />
+      </g>
+
+      {/* jalur 1 — malam & akhir pekan */}
+      <g data-path="1">
+        <path {...line} strokeDasharray="5 8" d="M300 150c26-30 52-44 92-50" />
+        <path data-line {...line} d="M440 38a22 22 0 1 0 22 30 17 17 0 0 1-22-30z" />
+        <path data-line {...line} d="M404 34v-8M400 30h8M488 92v-8M484 88h8" />
+        <rect x="372" y="104" width="70" height="44" rx="3" {...soft} />
+        <path data-line {...line} d="M372 148v-40c0-2 2-4 4-4h62c2 0 4 2 4 4v40M362 148h90l-6 8h-78zM386 118h26M386 130h40" />
+        <circle data-node cx="394" cy="98" r="4.5" {...node} />
+      </g>
+
+      {/* jalur 2 — kemitraan industri */}
+      <g data-path="2">
+        <path {...line} strokeDasharray="5 8" d="M310 248c30 0 48-4 78-8" />
+        <path d="M402 268v-62h20v62zM428 268v-46h20v46z" {...soft} />
+        <path data-line {...line} d="M402 268v-58c0-2 2-4 4-4h12c2 0 4 2 4 4v58M428 268v-42c0-2 2-4 4-4h12c2 0 4 2 4 4v42M454 268v-24l18-10v34l18-10v10" />
+        <path data-line {...line} d="M412 206v-26h4v26M412 180c4-10 14-12 22-6" />
+        <circle data-node cx="392" cy="240" r="4.5" {...node} />
+      </g>
+
+      {/* awan kecil */}
+      <path data-line {...line} d="M176 66c0-7 5-12 12-12 5 0 9 3 11 8 7 0 12 5 12 12h-35" />
+      <path data-line {...line} d="M300 54v-8M296 50h8" />
+    </svg>
+  );
+}
+
+/**
+ * "Jejaring keahlian dosen": sosok dosen di podium di tengah, terhubung ke empat simpul rumpun —
+ * (tata-kelola) perisai, (enterprise) roda gigi, (data) grafik, (strategi) target.
+ * Tiap simpul dibungkus <g data-field="key"> agar bisa disorot sesuai filter aktif; titik konektor bertanda data-node.
+ */
+export function LecturerNetworkIllustration({ className }) {
+  return (
+    <svg viewBox="0 0 520 320" role="img" aria-label="Ilustrasi dosen terhubung ke empat rumpun keahlian: tata kelola, enterprise, data, dan strategi" className={className ?? "h-auto w-full text-ink"}>
+      {/* lantai */}
+      <path data-line {...line} d="M30 292h460" />
+      {/* dosen + podium */}
+      <circle cx="260" cy="150" r="64" {...soft} />
+      <circle data-line {...line} cx="260" cy="118" r="17" />
+      <path data-line {...line} d="M226 186c0-22 15-36 34-36s34 14 34 36" />
+      <path data-line {...line} d="M250 152l10 14 10-14" />
+      <path d="M222 186h76l-8 106h-60z" {...soft} />
+      <path data-line {...line} d="M216 186h88M222 186l8 106h60l8-106M240 214h40" />
+      <circle cx="260" cy="232" r="5" {...accent} />
+      {/* papan presentasi kecil di belakang */}
+      <path data-line {...line} d="M300 96h44v30h-44zM322 126v12M310 104h22M310 112h14" />
+
+      {/* rumpun: tata kelola — perisai */}
+      <g data-field="tata-kelola">
+        <path {...line} strokeDasharray="4 7" d="M228 132C180 110 150 92 118 84" />
+        <circle cx="86" cy="74" r="34" {...soft} />
+        <path data-line {...line} d="M86 50l22 8v16c0 14-10 24-22 28-12-4-22-14-22-28V58z" />
+        <path data-line {...line} d="M76 76l7 7 13-14" />
+        <circle data-node cx="120" cy="84" r="4.5" {...node} />
+      </g>
+
+      {/* rumpun: enterprise — roda gigi */}
+      <g data-field="enterprise">
+        <path {...line} strokeDasharray="4 7" d="M292 132c48-22 78-40 110-48" />
+        <circle cx="434" cy="74" r="34" {...soft} />
+        <circle data-line {...line} cx="434" cy="74" r="14" />
+        <circle data-line {...line} cx="434" cy="74" r="5" />
+        <path data-line {...line} d="M434 52v-6M434 102v-6M412 74h-6M462 74h-6M418 58l-4-4M454 94l-4-4M450 58l4-4M414 94l4-4" />
+        <circle data-node cx="400" cy="84" r="4.5" {...node} />
+      </g>
+
+      {/* rumpun: data — grafik */}
+      <g data-field="data">
+        <path {...line} strokeDasharray="4 7" d="M222 210c-40 10-70 18-102 20" />
+        <circle cx="86" cy="232" r="34" {...soft} />
+        <path data-line {...line} d="M64 252h44M68 252v-14M80 252v-24M92 252v-18M104 252v-30" />
+        <path data-line {...line} d="M66 226l14-10 12 8 14-16" />
+        <circle data-node cx="120" cy="230" r="4.5" {...node} />
+      </g>
+
+      {/* rumpun: strategi — target */}
+      <g data-field="strategi">
+        <path {...line} strokeDasharray="4 7" d="M298 210c40 10 70 18 102 20" />
+        <circle cx="434" cy="232" r="34" {...soft} />
+        <circle data-line {...line} cx="434" cy="232" r="20" />
+        <circle data-line {...line} cx="434" cy="232" r="11" />
+        <circle cx="434" cy="232" r="3.5" {...accent} />
+        <path data-line {...line} d="M434 232l20-20M448 210h8v8" />
+        <circle data-node cx="400" cy="230" r="4.5" {...node} />
+      </g>
+
+      {/* bintang kecil */}
+      <path data-line {...line} d="M190 50v-10M185 45h10M352 40v-8M348 36h8M496 160v-8M492 156h8" />
+    </svg>
+  );
+}
+
 export const ILLUSTRATIONS = {
+  "lecturer-network": LecturerNetworkIllustration,
+  "class-paths": ClassPathsIllustration,
   erp: ErpIllustration,
   lecturer: LecturerIllustration,
   industry: IndustryIllustration,

@@ -94,8 +94,17 @@ export function ToastProvider({ children }) {
   );
 }
 
+const noop = () => undefined;
+const NOOP_TOAST = { success: noop, error: noop, warning: noop, info: noop, dismiss: noop };
+
+/**
+ * Di luar <ToastProvider> (mis. saat SSR ketika bundler memuat modul ini dua kali) kembalikan API kosong
+ * alih-alih melempar error, supaya halaman tidak jatuh ke client rendering. Toast hanya dipicu dari event klien.
+ */
 export function useToast() {
   const ctx = useContext(ToastContext);
-  if (!ctx) throw new Error("useToast harus dipakai di dalam <ToastProvider>");
-  return ctx;
+  if (!ctx && process.env.NODE_ENV !== "production" && typeof window !== "undefined") {
+    console.warn("useToast dipakai di luar <ToastProvider>; toast diabaikan.");
+  }
+  return ctx ?? NOOP_TOAST;
 }

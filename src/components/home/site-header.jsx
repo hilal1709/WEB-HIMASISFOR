@@ -56,11 +56,12 @@ export function SiteHeader() {
 
         <NavigationMenu className="hidden lg:flex" aria-label="Menu utama">
           <NavigationMenuList>
-            {NAV.map((item) =>
+            {NAV.map((item, idx) =>
               item.items ? (
                 <NavigationMenuItem key={item.label} className="relative">
                   <NavigationMenuTrigger className="text-text/80 hover:text-navy data-[state=open]:text-navy">{item.label}</NavigationMenuTrigger>
-                  <NavigationMenuContent className="-left-6 rounded-lg border-line p-0">
+                  {/* Menu di separuh kanan nav di-anchor ke tepi kanan trigger agar panel tidak keluar viewport */}
+                  <NavigationMenuContent className={cn("max-w-[calc(100vw-2rem)] rounded-lg border-line p-0", idx >= NAV.length / 2 ? "left-auto -right-6" : "-left-6")}>
                     <Mega item={item} />
                   </NavigationMenuContent>
                 </NavigationMenuItem>
@@ -92,7 +93,7 @@ export function SiteHeader() {
 function Mega({ item }) {
   const f = MEGA_FEATURE[item.label];
   return (
-    <div className="grid w-[640px] grid-cols-[1fr_240px]">
+    <div className={cn("grid max-w-full", f ? "w-[600px] grid-cols-[1fr_232px]" : "w-[360px]")}>
       <ul className="grid content-start gap-0.5 p-3">
         {item.items.map((sub, i) => (
           <li key={sub.label} className="animate-in fade-in-0 slide-in-from-bottom-1 duration-500" style={{ animationDelay: `${60 + i * 45}ms`, animationFillMode: "both" }}>

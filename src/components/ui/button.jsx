@@ -12,6 +12,10 @@ export const buttonVariants = cva(
         default: "bg-primary text-primary-foreground shadow-sm hover:bg-red-700",
         brand:
           "bg-brand-from text-white shadow-sm hover:bg-brand-deep",
+        // Gaya situs publik: maroon + navy
+        maroon: "rounded-md bg-maroon text-white hover:bg-maroon-deep",
+        navy: "rounded-md bg-navy text-white hover:bg-navy-deep",
+        "outline-navy": "rounded-md border border-navy/20 bg-white text-navy hover:border-navy/40 hover:bg-cream",
         secondary: "bg-secondary text-secondary-foreground hover:bg-zinc-200",
         outline: "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
         ghost: "hover:bg-accent hover:text-accent-foreground",

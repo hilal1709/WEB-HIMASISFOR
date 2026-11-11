@@ -4,15 +4,15 @@ import { CheckCircle2, AlertTriangle, Info, XCircle, Megaphone, X } from "lucide
 import { cva } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
-const bannerVariants = cva("relative flex w-full items-start gap-3 rounded-xl border px-4 py-3 text-sm", {
+const bannerVariants = cva("relative flex w-full items-start gap-3 overflow-hidden rounded-lg border border-l-4 px-4 py-3 text-sm", {
   variants: {
     variant: {
-      info: "border-info/25 bg-info-soft text-info",
-      success: "border-success/25 bg-success-soft text-success",
-      warning: "border-warning/25 bg-warning-soft text-warning",
-      danger: "border-danger/25 bg-danger-soft text-danger",
+      info: "border-navy/15 border-l-navy bg-cream text-navy",
+      success: "border-success/20 border-l-success bg-success-soft text-success",
+      warning: "border-gold/40 border-l-gold bg-warning-soft text-warning",
+      danger: "border-maroon/20 border-l-maroon bg-danger-soft text-maroon",
       // Banner pengumuman bermerek (mis. pendaftaran mahasiswa baru)
-      brand: "border-transparent bg-brand-from text-white shadow-sm",
+      brand: "border-maroon-deep border-l-gold bg-maroon text-white shadow-sm",
     },
   },
   defaultVariants: { variant: "info" },
@@ -30,7 +30,7 @@ export function Banner({ variant = "info", title, children, dismissible = false,
       <Icon className="mt-0.5 size-5 shrink-0" />
       <div className="min-w-0 flex-1">
         {title && <p className="font-semibold">{title}</p>}
-        {children && <div className={cn(title && "mt-0.5", variant !== "brand" && "text-foreground/80")}>{children}</div>}
+        {children && <div className={cn(title && "mt-0.5", variant === "brand" ? "text-white/80" : "text-text/75")}>{children}</div>}
       </div>
       {action && <div className="shrink-0">{action}</div>}
       {dismissible && (

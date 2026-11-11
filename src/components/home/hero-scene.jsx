@@ -73,7 +73,7 @@ export function HeroScene() {
   };
 
   return (
-    <section ref={root} id="beranda" className="relative isolate h-[86svh] min-h-[560px] overflow-hidden bg-maroon-deep md:h-[88vh]">
+    <section ref={root} id="beranda" className="relative isolate flex min-h-[calc(100svh-8.5rem)] overflow-hidden bg-maroon-deep">
       <div data-hero-media className="absolute inset-0 -z-10">
         {useVideo ? (
           <video ref={video} src={VIDEOS.heroLoop.src} poster={VIDEOS.heroLoop.poster} autoPlay muted loop playsInline preload="auto" aria-hidden className="h-full w-full object-cover" />
@@ -83,9 +83,9 @@ export function HeroScene() {
         <div className="absolute inset-0 bg-maroon-deep/20" />
       </div>
 
-      <Container className="flex h-full items-end pb-24 md:pb-32">
+      <Container className="flex w-full items-end pb-28 pt-12 md:pb-36 md:pt-16">
         <div data-hero-in data-hero-panel className="invisible max-w-2xl border-t-4 border-gold bg-maroon/[0.92] p-6 text-white sm:p-7 md:p-10">
-          <h1 className="font-serif text-[clamp(2.1rem,4.6vw,3.9rem)] font-normal leading-[1.06] tracking-[-0.01em]">
+          <h1 className="font-serif text-[clamp(2rem,3.6vw,3.25rem)] font-normal leading-[1.08] tracking-[-0.01em]">
             {HERO_V3.title[0]} <em className="italic text-gold-soft">{HERO_V3.title[1]}</em> {HERO_V3.title[2]}
           </h1>
           <p data-hero-fade className="mt-5 max-w-lg text-pretty text-[16.5px] leading-relaxed text-white/75">

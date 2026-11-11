@@ -1434,9 +1434,9 @@
     "semantic_hash": ""
   },
   "src/app/design-system/page.jsx": {
-    "mtime": 1794410277.0891,
-    "seen": 1794410342.955307,
-    "ast_hash": "80ce09d8f32b0c0d76af17b580c374c6",
+    "mtime": 1794410652.7868495,
+    "seen": 1794411146.8816924,
+    "ast_hash": "5aa3019084f89815b2d5ed255e720a87",
     "semantic_hash": ""
   },
   "src/app/loading.js": {
@@ -1632,9 +1632,9 @@
     "semantic_hash": ""
   },
   "src/components/home/hero-scene.jsx": {
-    "mtime": 1794408432.7757187,
-    "seen": 1794408602.9038439,
-    "ast_hash": "10235092907689b9f94b4fda8ea85eae",
+    "mtime": 1794411021.038795,
+    "seen": 1794411146.8951454,
+    "ast_hash": "b95e91e3c50bf71e64e1b3adc52a19e8",
     "semantic_hash": ""
   },
   "src/components/home/join-scene.jsx": {
@@ -2637,6 +2637,12 @@
     "mtime": 1794410046.1428523,
     "seen": 1794410208.764944,
     "ast_hash": "e1500e068ba518ce8185665b0afb1b2d",
+    "semantic_hash": ""
+  },
+  ".claude/settings.local.json": {
+    "mtime": 1794410745.1293695,
+    "seen": 1794411146.8403583,
+    "ast_hash": "f8aaac47c363e829003b85a24200a50e",
     "semantic_hash": ""
   }
 }

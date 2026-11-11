@@ -12,10 +12,11 @@ import { cn } from "@/lib/utils";
 const ToastContext = createContext(null);
 
 const STYLE = {
-  success: { icon: CheckCircle2, bar: "bg-success", text: "text-success" },
-  error: { icon: XCircle, bar: "bg-danger", text: "text-danger" },
-  warning: { icon: AlertTriangle, bar: "bg-warning", text: "text-warning" },
-  info: { icon: Info, bar: "bg-info", text: "text-info" },
+  // Kartu navy; warna status dipakai hanya untuk aksen bar + ikon (versi terang agar kontras di atas navy)
+  success: { icon: CheckCircle2, bar: "bg-emerald-400", text: "text-emerald-400" },
+  error: { icon: XCircle, bar: "bg-red-400", text: "text-red-400" },
+  warning: { icon: AlertTriangle, bar: "bg-gold", text: "text-gold" },
+  info: { icon: Info, bar: "bg-sky-400", text: "text-sky-400" },
 };
 
 function ToastItem({ toast, onClose }) {
@@ -39,7 +40,7 @@ function ToastItem({ toast, onClose }) {
       role={toast.type === "error" ? "alert" : "status"}
       onMouseEnter={() => clearTimeout(timer.current)}
       className={cn(
-        "relative flex w-full items-start gap-3 overflow-hidden rounded-xl border bg-card p-4 pr-10 shadow-lg",
+        "relative flex w-full items-start gap-3 overflow-hidden rounded-lg border border-white/10 bg-navy p-4 pl-5 pr-10 text-white shadow-[0_24px_50px_-20px_rgb(14_24_48/0.7)]",
         leaving ? "animate-toast-out" : "animate-toast-in"
       )}
     >
@@ -47,12 +48,12 @@ function ToastItem({ toast, onClose }) {
       <Icon className={cn("mt-0.5 size-5 shrink-0", text)} />
       <div className="min-w-0">
         <p className="text-sm font-semibold">{toast.title}</p>
-        {toast.description && <p className="mt-0.5 text-sm text-muted-foreground">{toast.description}</p>}
+        {toast.description && <p className="mt-0.5 text-[13px] leading-relaxed text-white/70">{toast.description}</p>}
       </div>
       <button
         onClick={close}
         aria-label="Tutup notifikasi"
-        className="absolute right-3 top-3 rounded p-0.5 text-muted-foreground hover:text-foreground"
+        className="absolute right-3 top-3 rounded p-0.5 text-white/50 transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
       >
         <X className="size-4" />
       </button>

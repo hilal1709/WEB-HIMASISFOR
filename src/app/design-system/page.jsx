@@ -193,7 +193,7 @@ export default function DesignSystemPage() {
           <SceneTitle lines={["Judul babak tegas", "dengan aksen serif"]} />
           <SplitReveal as="p" className="text-lg text-muted-foreground">SplitReveal: teks muncul per kata dengan mask dan blur.</SplitReveal>
           <div className="flex flex-wrap gap-3">
-            <Magnetic><PillLink href="#" icon={ArrowRight}>PillLink brand + Magnetic</PillLink></Magnetic>
+            <Magnetic><PillLink href="#" icon={<ArrowRight className="size-4" />}>PillLink brand + Magnetic</PillLink></Magnetic>
             <PillLink href="#" variant="glass">Glass</PillLink>
           </div>
         </CardContent></Card>

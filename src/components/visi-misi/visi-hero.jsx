@@ -51,7 +51,10 @@ export function VisiHero() {
     });
     const ctx = gsap.context(() => {
       gsap.from("[data-hero-fade]", { y: 18, opacity: 0, duration: 0.8, stagger: 0.08, ease: "expo.out", delay: delay / 1000 });
-      gsap.to("[data-parallax]", { yPercent: -10, ease: "none", scrollTrigger: { trigger: el, start: "top top", end: "bottom top", scrub: 0.8 } });
+      gsap.from("[data-rule]", { scaleX: 0, duration: 1.4, ease: "expo.out", delay: delay / 1000 + 0.6 });
+      const st = { trigger: el, start: "top top", end: "bottom top", scrub: 0.8 };
+      gsap.to("[data-numeral]", { yPercent: 18, ease: "none", scrollTrigger: st });
+      gsap.to("[data-horizon]", { yPercent: -6, ease: "none", scrollTrigger: st });
     }, el);
     return () => {
       draw.revert?.();
@@ -74,15 +77,22 @@ export function VisiHero() {
           </ol>
         </nav>
 
-        <div className="mt-10 grid items-center gap-12 lg:mt-14 lg:grid-cols-[1fr_1.05fr] lg:gap-16">
-          <div>
-            <span aria-hidden data-hero-fade className="mb-6 block h-[3px] w-10 bg-gold" />
-            <SceneTitle as="h1" trigger="mount" title={["Visi", "& Misi"]} className="!text-[clamp(2.75rem,6vw,5rem)]" />
-            <p data-hero-fade className="mt-6 max-w-lg text-pretty text-[17px] leading-relaxed text-text/70">
-              Arah yang kami tuju dan cara kami menempuhnya: menjadi program studi Sistem Informasi yang unggul dan berdaya saing internasional pada 2030.
-            </p>
-            <div data-hero-fade className="mt-9 flex flex-wrap items-center gap-3">
-              <Magnetic strength={0.25}>
+        <div className="relative mt-10 flex flex-col items-center text-center lg:mt-12">
+          {/* numeral tahun raksasa sebagai latar judul */}
+          <p
+            aria-hidden
+            data-numeral
+            className="pointer-events-none absolute left-1/2 top-[-1.5rem] -translate-x-1/2 select-none font-serif text-[clamp(7rem,24vw,19rem)] leading-none tracking-tight text-transparent opacity-50 tabular-nums [-webkit-text-stroke:1.5px_var(--gold)]"
+          >
+            <span ref={year}>2030</span>
+          </p>
+          <p data-hero-fade className="kicker relative text-maroon">Menuju 2030 · sejak 2014</p>
+          <SceneTitle as="h1" trigger="mount" align="center" title={["Visi", "& Misi"]} className="relative mt-4 !text-[clamp(3rem,7.5vw,6.25rem)]" />
+          <p data-hero-fade className="relative mt-6 max-w-xl text-pretty text-[17px] leading-relaxed text-text/70">
+            Arah yang kami tuju dan cara kami menempuhnya: menjadi program studi Sistem Informasi yang unggul dan berdaya saing internasional pada 2030.
+          </p>
+          <div data-hero-fade className="relative mt-9 flex flex-wrap items-center justify-center gap-3">
+            <Magnetic strength={0.25}>
                 <a
                   href="#misi"
                   onClick={(e) => {
@@ -96,27 +106,31 @@ export function VisiHero() {
                     <path d="M8 3v10M4 9l4 4 4-4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </a>
-              </Magnetic>
-            </div>
+            </Magnetic>
           </div>
+        </div>
+      </Container>
 
-          <div className="relative">
-            <div data-parallax className="relative rounded-lg border border-line bg-white p-5 shadow-[0_30px_60px_-40px_rgb(20_33_61/0.45)] sm:p-7">
-              <div className="flex items-baseline justify-between">
-                <p className="kicker text-maroon">Menuju</p>
-                <p className="text-[13px] text-text/50">sejak 2014</p>
-              </div>
-              <p className="mt-1 font-serif text-[clamp(3.5rem,8vw,6rem)] leading-none tracking-tight text-navy tabular-nums">
-                <span ref={year}>2030</span>
-              </p>
-              <div data-horizon className="mt-4 text-ink">
-                <HorizonIllustration className="h-auto w-full text-ink" />
-              </div>
-            </div>
-            <div className="absolute -bottom-8 -left-10 hidden lg:block">
-              <div className="relative"><ElvoPeek pose="confident" size={96} side="right" say="2030 tinggal sebentar lagi. Ayo ikut mewujudkannya!" delay={0.4} /></div>
-            </div>
-          </div>
+      {/* lanskap cakrawala tanpa kartu; garis cakrawala menyambung ke tepi layar */}
+      <div data-horizon className="relative mt-10 md:mt-6">
+        <span aria-hidden data-rule className="absolute inset-x-0 top-[65.3%] hidden h-[1.6px] origin-center bg-ink/80 md:block" />
+        <div className="relative mx-auto max-w-[900px] px-5 text-ink md:px-8">
+          <HorizonIllustration className="relative block h-auto w-full text-ink" />
+        </div>
+        <div className="absolute bottom-[33%] right-[4%] hidden xl:block">
+          <div className="relative"><ElvoPeek pose="confident" size={92} side="left" say="2030 tinggal sebentar lagi. Ayo ikut mewujudkannya!" delay={0.4} /></div>
+        </div>
+      </div>
+
+      {/* pita linimasa 2014 → 2030 */}
+      <Container>
+        <div data-hero-fade className="mx-auto mt-2 flex max-w-xl items-center gap-4 text-[13px] font-semibold tabular-nums text-text/55">
+          <span>2014</span>
+          <span aria-hidden className="relative h-px flex-1 border-t border-dashed border-navy/30">
+            <span className="absolute left-0 top-1/2 size-2 -translate-y-1/2 rounded-full bg-navy/40" />
+            <span className="absolute right-0 top-1/2 size-2.5 -translate-y-1/2 rounded-full bg-maroon ring-4 ring-maroon/15" />
+          </span>
+          <span className="text-maroon">2030</span>
         </div>
       </Container>
     </section>

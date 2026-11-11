@@ -27,6 +27,18 @@ export default function sitemap() {
       priority: 0.7,
     },
     {
+      url: `${baseUrl}/struktur-organisasi`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.6,
+    },
+    {
+      url: `${baseUrl}/profil-lulusan`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
       url: `${baseUrl}/curiculum`,
       lastModified: new Date(),
       changeFrequency: 'monthly',

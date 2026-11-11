@@ -42,7 +42,7 @@ export function ProfileModalProvider({ data, children }) {
                   <dt className="font-semibold text-navy">Pendidikan</dt>
                   <dd className="mt-1.5 space-y-1 text-text/70">
                     {data.education.map((e) => (
-                      <p key={e.degree}>{e.degree} · {e.place}</p>
+                      <p key={e.degree}>{e.degree}{e.place ? ` · ${e.place}` : ""}</p>
                     ))}
                   </dd>
                 </div>

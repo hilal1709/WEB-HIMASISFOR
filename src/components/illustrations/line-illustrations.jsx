@@ -6,6 +6,7 @@
 const line = { fill: "none", stroke: "currentColor", strokeWidth: 1.6, strokeLinecap: "round", strokeLinejoin: "round" };
 const accent = { fill: "var(--maroon)" };
 const soft = { fill: "var(--gold)", fillOpacity: 0.16 };
+const node = { fill: "var(--maroon)", style: { transformBox: "fill-box", transformOrigin: "center" } };
 
 function Frame({ children, label }) {
   return (
@@ -142,10 +143,106 @@ export function HorizonIllustration({ className }) {
   );
 }
 
+/**
+ * "Jalur lulusan": gedung kampus di kiri → toga di tengah → jalan bercabang ke tiga tujuan
+ * (gedung kantor, pabrik/silo, layar data). Lebar (viewBox 520×300) untuk hero Profil Lulusan.
+ * Titik tujuan bertanda data-node agar bisa "menyala" bergantian.
+ */
+export function GraduatePathIllustration({ className }) {
+  return (
+    <svg viewBox="0 0 520 300" role="img" aria-label="Ilustrasi jalur lulusan dari kampus menuju beragam karier" className={className ?? "h-auto w-full text-ink"}>
+      {/* tanah */}
+      <path data-line {...line} d="M10 262h500" />
+      {/* kampus kiri */}
+      <path d="M34 262v-70l44-26 44 26v70z" {...soft} />
+      <path data-line {...line} d="M34 262v-70l44-26 44 26v70M58 262v-30h18v30M90 204h16v14H90zM46 204h16v14H46z" />
+      <path data-line {...line} d="M78 166v-20M78 146h16l-5 5 5 5H78" />
+      {/* jalan dari kampus ke toga */}
+      <path {...line} strokeDasharray="5 8" d="M122 236c30 0 44-10 70-10s34 6 58 6" />
+      {/* toga di tengah */}
+      <path d="M232 152l38-16 38 16-38 16z" {...soft} />
+      <path data-line {...line} d="M232 152l38-16 38 16-38 16zM248 159v20c0 6 10 11 22 11s22-5 22-11v-20M308 152v26" />
+      <circle cx="308" cy="180" r="3.4" {...accent} />
+      <path data-line {...line} d="M270 190v40M258 232h24" />
+      {/* cabang ke tiga tujuan */}
+      <path {...line} strokeDasharray="5 8" d="M286 232c26 0 40-46 82-70M290 234c34 0 54-8 90-8M286 236c30 0 52 14 84 22" />
+      {/* tujuan 1: gedung kantor */}
+      <rect x="378" y="96" width="44" height="66" rx="3" {...soft} />
+      <path data-line {...line} d="M378 162V100c0-2 2-4 4-4h36c2 0 4 2 4 4v62M390 110h6M404 110h6M390 124h6M404 124h6M390 138h6M404 138h6M396 162v-12h8v12" />
+      <circle data-node cx="372" cy="160" r="4" {...node} />
+      {/* tujuan 2: silo pabrik */}
+      <path data-line {...line} d="M392 262v-44c0-2 2-4 4-4h10c2 0 4 2 4 4v44M414 262v-32c0-2 2-4 4-4h10c2 0 4 2 4 4v32M436 262v-20l14-8v28" />
+      <path {...line} strokeDasharray="2 6" d="M444 228c5-8 12-10 20-6" />
+      <circle data-node cx="384" cy="226" r="4" {...node} />
+      {/* tujuan 3: layar data */}
+      <rect data-line {...line} x="452" y="150" width="54" height="38" rx="3" />
+      <path data-line {...line} d="M462 178l10-10 8 6 16-14M470 196h18M479 188v8" />
+      <circle data-node cx="446" cy="200" r="4" {...node} />
+      {/* bintang kecil & awan */}
+      <path data-line {...line} d="M160 70c0-7 5-12 12-12 5 0 9 3 11 8 7 0 12 5 12 12h-35" />
+      <path data-line {...line} d="M270 96v-12M262 90h16" />
+      <path data-line {...line} d="M214 58v-8M210 54h8M336 64v-8M332 60h8" />
+    </svg>
+  );
+}
+
+/**
+ * Bagan organisasi line-art: satu simpul pimpinan bercabang ke koordinator lalu ke tim.
+ * Lebar (viewBox 520×300) untuk hero Struktur Organisasi. Simpul bertanda data-node agar bisa berdenyut.
+ */
+export function OrgTreeIllustration({ className }) {
+  const person = (cx, cy, r = 12) => (
+    <g key={`${cx}-${cy}`}>
+      <circle cx={cx} cy={cy} r={r + 10} {...soft} />
+      <circle data-line {...line} cx={cx} cy={cy - r * 0.35} r={r * 0.42} />
+      <path data-line {...line} d={`M${cx - r * 0.75} ${cy + r * 0.8}c0-${r * 0.6} ${r * 0.34}-${r * 0.95} ${r * 0.75}-${r * 0.95}s${r * 0.75} ${r * 0.35} ${r * 0.75} ${r * 0.95}`} />
+      <circle data-line {...line} cx={cx} cy={cy} r={r + 10} />
+    </g>
+  );
+  return (
+    <svg viewBox="0 0 520 300" role="img" aria-label="Ilustrasi bagan organisasi program studi" className={className ?? "h-auto w-full text-ink"}>
+      {/* konektor */}
+      <path data-line {...line} d="M260 74v26M110 100h300M110 100v30M260 100v30M410 100v30" />
+      <path data-line {...line} d="M110 182v22M60 204h100M60 204v24M160 204v24M410 182v22M360 204h100M360 204v24M460 204v24" />
+      <path {...line} strokeDasharray="4 7" d="M260 182v46" />
+      {/* pimpinan */}
+      <rect x="214" y="18" width="92" height="56" rx="8" {...soft} />
+      <rect data-line {...line} x="214" y="18" width="92" height="56" rx="8" />
+      <circle data-line {...line} cx="240" cy="40" r="7" />
+      <path data-line {...line} d="M229 62c0-7 5-11 11-11s11 4 11 11M260 36h32M260 46h22M260 56h26" />
+      <path data-line {...line} d="M252 18l8-8 8 8" />
+      {/* koordinator */}
+      {person(110, 156)}
+      {person(260, 156)}
+      {person(410, 156)}
+      {/* tim */}
+      {[60, 160, 360, 460].map((x) => (
+        <g key={x}>
+          <rect data-line {...line} x={x - 22} y="228" width="44" height="34" rx="6" />
+          <path data-line {...line} d={`M${x - 12} 240h24M${x - 12} 250h14`} />
+        </g>
+      ))}
+      <rect data-line {...line} x="236" y="228" width="48" height="34" rx="6" />
+      <path data-line {...line} d="M248 240h24M248 250h14" />
+      {/* titik simpul */}
+      <circle data-node cx="260" cy="100" r="4" {...node} />
+      <circle data-node cx="110" cy="100" r="4" {...node} />
+      <circle data-node cx="410" cy="100" r="4" {...node} />
+      <circle data-node cx="110" cy="204" r="3.4" {...node} />
+      <circle data-node cx="410" cy="204" r="3.4" {...node} />
+      <circle cx="300" cy="22" r="3" {...accent} />
+      <path data-line {...line} d="M10 286h500" />
+      <path data-line {...line} d="M486 40v-12M480 34h12M30 70v-8M26 66h8" />
+    </svg>
+  );
+}
+
 export const ILLUSTRATIONS = {
   erp: ErpIllustration,
   lecturer: LecturerIllustration,
   industry: IndustryIllustration,
   career: CareerIllustration,
   knowledge: KnowledgeIllustration,
+  "graduate-path": GraduatePathIllustration,
+  "org-tree": OrgTreeIllustration,
 };

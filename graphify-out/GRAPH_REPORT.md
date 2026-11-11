@@ -1,17 +1,17 @@
 # Graph Report - Web Sisfor  (2026-11-12)
 
 ## Corpus Check
-- 307 files · ~2,207,453 words
+- 325 files · ~2,217,711 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 9 file(s) not represented in the graph (top: (none) 3, .css 3, .cmd 1)
 
 ## Summary
-- 2178 nodes · 4914 edges · 140 communities (111 shown, 29 thin omitted)
-- Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 119 edges (avg confidence: 0.87)
+- 2265 nodes · 5256 edges · 139 communities (110 shown, 29 thin omitted)
+- Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 125 edges (avg confidence: 0.87)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `6a801111`
+- Built from commit: `cdcfa90a`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -19,9 +19,9 @@
 - live-browser.js
 - modern-screenshot.umd.js
 - prisma.js
-- showBar
-- achievement/page.jsx
 - renderDesignVisual
+- achievement/page.jsx
+- struktur-organisasi/page.jsx
 - setLiveState
 - 🚀 Panduan Deploy ke Vercel dengan Database
 - package.json
@@ -31,43 +31,43 @@
 - Ringkasan Optimasi yang Telah Dilakukan
 - adapt.md
 - live.md
-- new-work.md
+- impeccable/SKILL.md
 - onboard.md
-- handleManualEditActivity
+- actOnAgentTarget
 - The Toolkit
-- connectSSE
+- showToast
+- documentRefForElement
+- Simplify the Design
 - react
-- Hardening Dimensions
-- prefersReducedMotion
 - polish.md
-- story.jsx
+- Hardening Dimensions
 - createLiveBrowserSessionState
 - components.json
 - auth.js
-- normalizeManualContextText
+- scheduleAcceptCleanup
 - Beranda Kampus v3 (2026-11 — menggantikan Premium v2)
 - initGlobalBar
-- startVariantObserver
-- scheduleAcceptCleanup
+- connectSSE
+- mountSvelteComponentVariant
 - animate.md
 - Handle `generate`
 - scripts
 - Generate Report
-- New visual work
+- road-hero.jsx
 - optimize.md
 - cn
 - el
-- visi-misi/page.jsx
-- resumeSession
+- profil-lulusan/page.jsx
+- profil-lulusan-content.js
 - eslint.config.mjs
-- Impeccable Asset Producer
-- site-header.jsx
+- [slug]/page.jsx
+- Responsive Design
 - build.py
 - @prisma/client
 - critique.md
-- Simplify the Design
+- CareerSection.jsx
 - onAnnotDown
-- Impeccable Documenter
+- profile/page.jsx
 - home-content.js
 - clarify.md
 - Nielsen's 10 Heuristics
@@ -75,47 +75,47 @@
 - Scan mode (approach C: auto-extract, then confirm descriptive language)
 - quieter.md
 - Testimoni.jsx
-- actOnAgentTarget
+- Diagnostic Scan
 - Web Sisfor - Next.js dengan PostgreSQL
-- design-system/page.jsx
+- next
 - dependencies
 - profile-content/page.jsx
 - Init flow
 - Generate Combined Critique Report
-- syncPageChatFocus
+- initPageChat
 - Panduan Kelola Galeri Prestasi
 - content/page.jsx
 - graphify reference: extra exports and benchmark
 - Common Cognitive Load Violations
 - iOS platform
-- line-illustrations.jsx
+- visi-misi/page.jsx
 - Shape
-- impeccable/SKILL.md
-- adapt.native.md
+- bolder.md
+- Adaptation Strategies
 - Android platform
 - colorize.md
 - Persona-Based Design Testing
 - Operate mode depth (and Read notes)
 - Extract Flow
-- [slug]/page.jsx
+- typeset.md
 - Generate Report
 - Cognitive Load Assessment
 - Impeccable Finish Reviewer
 - Impeccable Manual Edit Applier
 - impeccable
 - live-browser-ignores.js
-- CareerSection.jsx
+- Footer.jsx
 - motion
 - graphify reference: query, path, explain
 - Diagnostic Scan
 - Product
 - Visualize: Direction Comps & Asset Production
-- Responsive Design
-- profile/page.jsx
+- doctor.md
+- Navbar.jsx
 - 20260205020326_init/migration.sql
 - layout.js
-- typeset.md
-- Region map
+- Operate
+- ArrowDown.jsx
 - create-admin.js
 - seed.js
 - seed-homepage.js
@@ -125,10 +125,10 @@
 - graphify reference: commit hook and native CLAUDE.md integration
 - graphify reference: incremental update and cluster-only
 - Heuristics Scoring Guide
-- Footer.jsx
-- sync-to-production.js
-- Navbar.jsx
-- bolder.md
+- Impeccable Documenter
+- Persuade and Experience
+- Read
+- Command guidance
 - build
 - graphify reference: GitHub clone and cross-repo merge
 - graphify reference: transcribe video and audio
@@ -142,24 +142,23 @@
 - extraction-spec.md
 - postcss.config.mjs
 - 20260205062108_add_navbar_items/migration.sql
-- /impeccable hooks
+- sync-to-production.js
 - { GET, POST }
-- ArrowDown.jsx
 - devDependencies
 - curriculum/page.jsx
 - Beranda — si.uisi.ac.id
 
 ## God Nodes (most connected - your core abstractions)
-1. `cn()` - 122 edges
-2. `react` - 72 edges
-3. `next` - 56 edges
-4. `prefersReducedMotion()` - 41 edges
+1. `cn()` - 140 edges
+2. `react` - 82 edges
+3. `next` - 61 edges
+4. `prefersReducedMotion()` - 57 edges
 5. `connectSSE()` - 34 edges
 6. `setLiveState()` - 33 edges
 7. `resumeSession()` - 33 edges
-8. `showToast()` - 31 edges
-9. `initGlobalBar()` - 30 edges
-10. `el()` - 29 edges
+8. `Container()` - 33 edges
+9. `showToast()` - 31 edges
+10. `initGlobalBar()` - 30 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `Interpreter guard for subcommands` --references--> `path()`  [INFERRED]
@@ -168,51 +167,51 @@
   .claude/skills/impeccable/reference/doctor.md → scripts/lottie/build.py
 - `Write the config` --references--> `path()`  [INFERRED]
   .claude/skills/impeccable/reference/live-setup.md → scripts/lottie/build.py
-- `Assemble and review` --references--> `box()`  [INFERRED]
-  .claude/skills/impeccable/reference/component-review.md → src/components/home/road-hero.jsx
-- `Comp-led: the comp is a measured contract` --references--> `box()`  [INFERRED]
-  .claude/skills/impeccable/reference/new-work.md → src/components/home/road-hero.jsx
+- `Halaman Sambutan Kaprodi (`/sambutan-kaprodi`)` --references--> `PlaceholderTag()`  [INFERRED]
+  DESIGN.md → src/components/home/shared.jsx
+- `Halaman Profil Lulusan (`/profil-lulusan`)` --references--> `GraduatePathIllustration()`  [INFERRED]
+  DESIGN.md → src/components/illustrations/line-illustrations.jsx
 
 ## Import Cycles
 - None detected.
 
-## Communities (140 total, 29 thin omitted)
+## Communities (139 total, 29 thin omitted)
 
 ### Community 0 - "live-browser.js"
 Cohesion: 0.04
-Nodes (112): applyLiveBarPreference(), applyOriginalAttrsToSvelteAnchor(), applyPlaceholderSizingStyles(), averageRgb01(), bindEditBadgeProxy(), bufferToBase64(), buildColorModels(), buildPlaceholderResizeHandles() (+104 more)
+Nodes (107): addManualContextText(), applyLiveBarPreference(), applyPlaceholderSizingStyles(), averageRgb01(), bindEditBadgeProxy(), bufferToBase64(), buildInsertPlaceholderSnapshotFromDom(), buildLocatorForLeaf() (+99 more)
 
 ### Community 1 - "modern-screenshot.umd.js"
 Cohesion: 0.09
 Nodes (55): ae(), be(), bt(), Ce(), s(), Ct(), de(), dt() (+47 more)
 
-### Community 3 - "showBar"
-Cohesion: 0.15
-Nodes (19): actionLabel(), applyConfigureBarChrome(), buildConfirmedRow(), buildCyclingRow(), buildDots(), buildGeneratingRow(), buildSavingRow(), cycleVariant() (+11 more)
+### Community 3 - "renderDesignVisual"
+Cohesion: 0.08
+Nodes (39): buildCollapsible(), buildColorModels(), buildDesignHeader(), buildListHtml(), buildRadiiModels(), buildTypographyModels(), cssSafe(), designEmptyMessage() (+31 more)
 
 ### Community 4 - "achievement/page.jsx"
 Cohesion: 0.21
 Nodes (6): ref_framer_motion, Curiculum(), Footer(), GalleryAward(), FramerImg(), Navbar()
 
-### Community 5 - "renderDesignVisual"
-Cohesion: 0.10
-Nodes (29): buildCollapsible(), buildListHtml(), buildRadiiModels(), cssSafe(), designEmptyMessage(), escapeHtml(), fontStack(), groupByKind() (+21 more)
+### Community 5 - "struktur-organisasi/page.jsx"
+Cohesion: 0.11
+Nodes (23): getData(), metadata, revalidate, StrukturOrganisasiPage(), SpotlightCard(), Topbar(), KnowledgeIllustration(), Closing() (+15 more)
 
 ### Community 6 - "setLiveState"
-Cohesion: 0.10
-Nodes (55): applyEditing(), beginNewLiveConfiguration(), buildInsertPlaceholderSnapshotFromDom(), buildLocatorForLeaf(), buildPickedAnchorSnapshot(), cancelEditing(), cancelEditingToPicking(), cancelInsertConfigure() (+47 more)
+Cohesion: 0.14
+Nodes (46): applyEditing(), beginNewLiveConfiguration(), cancelEditing(), cancelEditingToPicking(), cancelInsertConfigure(), cleanupAcceptedSession(), clearAnnotations(), clearInsertPicking() (+38 more)
 
 ### Community 7 - "🚀 Panduan Deploy ke Vercel dengan Database"
 Cohesion: 0.06
 Nodes (32): 1. Push Code ke GitHub, Build Error: "prisma:client" not found, 🌐 Deploy ke Vercel, Error: "Can't reach database server", Error: "Error: P1001", Error: "Error: P3009", Error: "PrismaClient is unable to run in this browser environment", Jika pakai database eksternal (Neon/Supabase/Railway): (+24 more)
 
 ### Community 8 - "package.json"
-Cohesion: 0.09
-Nodes (22): name, private, version, clsx, eslint, eslint-config-next, @gsap/react, jose (+14 more)
+Cohesion: 0.08
+Nodes (23): name, private, version, clsx, eslint, eslint-config-next, @gsap/react, jose (+15 more)
 
 ### Community 9 - "createLiveBrowserDomHelpers"
-Cohesion: 0.11
-Nodes (23): collectEditableTextRows(), visit(), createLiveBrowserDomHelpers(), activeElementDeep(), cloneWithoutChrome(), copyTextViaSelection(), cssId(), liveUiRoot() (+15 more)
+Cohesion: 0.16
+Nodes (15): createLiveBrowserDomHelpers(), activeElementDeep(), cloneWithoutChrome(), copyTextViaSelection(), cssId(), liveUiRoot(), makeFrozenAnchor(), raiseHitModal() (+7 more)
 
 ### Community 10 - "What You Must Do When Invoked"
 Cohesion: 0.07
@@ -234,45 +233,45 @@ Nodes (15): Assess Adaptation Challenge, Content Adaptation, Desktop Adaptation 
 Cohesion: 0.07
 Nodes (26): Step 1: Parse the request, Step 2: Reuse the page, then start, Step 3: Generate, Step 4: Accept and close, Cleanup, Exit, First-time setup, Handle `accept` (+18 more)
 
-### Community 15 - "new-work.md"
-Cohesion: 0.09
-Nodes (17): Recommended Actions, Craft (deprecated alias), Apply, Live-mode signature params, Set the spatial thesis, Two isolated assessments, Verify, Visitor mode (+9 more)
+### Community 15 - "impeccable/SKILL.md"
+Cohesion: 0.12
+Nodes (15): Assess Adaptation Challenge, Implement & Verify, Recommended Actions, Recommended Actions, Craft (deprecated alias), Apply, Live-mode signature params, Set the spatial thesis (+7 more)
 
 ### Community 16 - "onboard.md"
 Cohesion: 0.09
 Nodes (22): Assess Onboarding Needs, Context Over Ceremony, Contextual Help, Design Onboarding Experiences, Documentation & Help, Empty State Design, Feature Discovery & Adoption, Guided Tours & Walkthroughs (+14 more)
 
-### Community 17 - "handleManualEditActivity"
-Cohesion: 0.19
-Nodes (24): clearStoredManualApplyState(), fetchPendingCount(), handleManualEditActivity(), hidePendingApplyDock(), manualApplyLoadingText(), manualApplyStateKey(), manualEditEventForCurrentPage(), numberOrNull() (+16 more)
+### Community 17 - "actOnAgentTarget"
+Cohesion: 0.12
+Nodes (40): actOnAgentTarget(), agentTargetBusyReason(), agentTargetOverlayGone(), agentTargetTaken(), claimAgentTarget(), claimAndActOnAgentTarget(), clearStoredManualApplyState(), declineAgentTargetBusy() (+32 more)
 
 ### Community 18 - "The Toolkit"
 Cohesion: 0.10
 Nodes (20): Animate complex properties, Assess What "Extraordinary" Means Here, For data-heavy interfaces, For functional UI, For performance-critical UI, For visual/marketing surfaces, Implement with Discipline, Interact with the device (+12 more)
 
-### Community 19 - "connectSSE"
-Cohesion: 0.07
-Nodes (61): abandonForeignSession(), abandonSupersededGo(), abortSvelteComponentInjection(), cleanup(), clearMountErrorCard(), clearScrollY(), clearSession(), completeParameterGenerationIfReady() (+53 more)
-
-### Community 20 - "react"
-Cohesion: 0.05
-Nodes (25): Aturan pakai, class-variance-authority, next, react, LoginPage(), DesignSystemPage(), Badge(), badgeVariants (+17 more)
-
-### Community 21 - "Hardening Dimensions"
-Cohesion: 0.17
-Nodes (11): Accessibility Resilience, Assess Hardening Needs, Edge Cases & Boundary Conditions, Error Handling, Hardening Dimensions, Input Validation & Sanitization, Internationalization (i18n), Performance Resilience (+3 more)
-
-### Community 22 - "prefersReducedMotion"
+### Community 19 - "showToast"
 Cohesion: 0.08
-Nodes (40): animejs, gsap, Tile(), Card(), Cylinder(), HeroScene(), VideoButton(), WhyScene() (+32 more)
+Nodes (40): abandonForeignSession(), abandonSupersededGo(), cleanup(), clearHandled(), clearMountErrorCard(), clearScrollY(), copyToClipboard(), discardedWrappers() (+32 more)
+
+### Community 20 - "documentRefForElement"
+Cohesion: 0.08
+Nodes (30): canRestoreManualEditElement(), collectEditableTextRows(), visit(), walk(), copyEditContainerContext(), copyEditLeafContext(), cssIdent(), directMixedTextRestoreNodes() (+22 more)
+
+### Community 21 - "Simplify the Design"
+Cohesion: 0.17
+Nodes (11): Assess Current State, Code Simplification, Content Simplification, Document Removed Complexity, Information Architecture, Interaction Simplification, Layout Simplification, Plan Simplification (+3 more)
+
+### Community 22 - "react"
+Cohesion: 0.07
+Nodes (47): Halaman Profil Lulusan (`/profil-lulusan`), animejs, gsap, react, Cylinder(), HeroScene(), VideoButton(), WhyScene() (+39 more)
 
 ### Community 23 - "polish.md"
 Cohesion: 0.18
 Nodes (10): 1. Establish the system, 2. Gather the evidence, 3. Triage, 4. Polish the whole path, 5. Verify and finish, Color, imagery, and icons, Content and code, Flow and hierarchy (+2 more)
 
-### Community 24 - "story.jsx"
-Cohesion: 0.09
-Nodes (14): LEFT, RIGHT, ElvoSays(), ParallaxScene(), box(), pct(), RoadHero(), SIGNS (+6 more)
+### Community 24 - "Hardening Dimensions"
+Cohesion: 0.17
+Nodes (11): Accessibility Resilience, Assess Hardening Needs, Edge Cases & Boundary Conditions, Error Handling, Hardening Dimensions, Input Validation & Sanitization, Internationalization (i18n), Performance Resilience (+3 more)
 
 ### Community 25 - "createLiveBrowserSessionState"
 Cohesion: 0.19
@@ -286,25 +285,25 @@ Nodes (17): aliases, components, hooks, lib, ui, utils, iconLibrary, rsc (+9 mor
 Cohesion: 0.23
 Nodes (8): next-auth, auth, authConfig, handlers, signIn, signOut, { auth }, config
 
-### Community 28 - "normalizeManualContextText"
-Cohesion: 0.12
-Nodes (20): addManualContextText(), canRestoreManualEditElement(), collectManualContextPieces(), walk(), contextElementForManualEdit(), cssIdent(), directMixedTextRestoreNodes(), findManualEditRestoreElement() (+12 more)
+### Community 28 - "scheduleAcceptCleanup"
+Cohesion: 0.31
+Nodes (11): acceptedDomAlreadyClean(), clearHandledWrapperReloadStamp(), deferredRecoverySuperseded(), ensureAcceptedDomClean(), findAcceptedRuntimeWrappers(), handledWrapperReloadKey(), reloadAfterMissingAcceptedDom(), restoreAcceptedDomFromSnapshot() (+3 more)
 
 ### Community 29 - "Beranda Kampus v3 (2026-11 — menggantikan Premium v2)"
 Cohesion: 0.14
 Nodes (13): Auth.js, Beranda Kampus v3 (2026-11 — menggantikan Premium v2), Design System — Sisfor UISI, Halaman Sambutan Kaprodi (`/sambutan-kaprodi`), Lottie (Kampus v3), Maskot — Si Elvo (v3), Palet (`globals.css` › KAMPUS v3), Stack (+5 more)
 
 ### Community 30 - "initGlobalBar"
-Cohesion: 0.08
-Nodes (47): agentHasWorkInFlight(), agentStatusText(), barPaletteForTheme(), brandMarkSvg(), buildDesignHeader(), buildParamsPanel(), buildSteerQueueHint(), cursorForInsertAxis() (+39 more)
+Cohesion: 0.07
+Nodes (49): agentHasWorkInFlight(), agentStatusText(), barPaletteForTheme(), brandMarkSvg(), buildSteerProcessingDots(), buildSteerQueueHint(), clearSteerFocusRecoverTimer(), cursorForInsertAxis() (+41 more)
 
-### Community 31 - "startVariantObserver"
-Cohesion: 0.11
-Nodes (36): applyParamDefaults(), applyParamValue(), applyPlaceholderDimensions(), closedClipPath(), commitAcceptedVariantToDom(), ensureInsertPlaceholder(), finalizeInsertSession(), findVariantsWrapper() (+28 more)
+### Community 31 - "connectSSE"
+Cohesion: 0.06
+Nodes (85): abortSvelteComponentInjection(), applyParamDefaults(), applyParamValue(), applyPlaceholderDimensions(), applySavedSessionMeta(), buildParamsPanel(), clampVariantIndex(), clearSession() (+77 more)
 
-### Community 32 - "scheduleAcceptCleanup"
-Cohesion: 0.31
-Nodes (11): acceptedDomAlreadyClean(), clearHandledWrapperReloadStamp(), deferredRecoverySuperseded(), ensureAcceptedDomClean(), findAcceptedRuntimeWrappers(), handledWrapperReloadKey(), reloadAfterMissingAcceptedDom(), restoreAcceptedDomFromSnapshot() (+3 more)
+### Community 32 - "mountSvelteComponentVariant"
+Cohesion: 0.27
+Nodes (12): applyOriginalAttrsToSvelteAnchor(), commitAcceptedSvelteComponentToDom(), componentModuleCandidates(), describeMountFailure(), detectDevServerBase(), getMountedSvelteComponentAnchor(), importFirstReachable(), isSvelteInsertManifest() (+4 more)
 
 ### Community 33 - "animate.md"
 Cohesion: 0.12
@@ -319,44 +318,44 @@ Cohesion: 0.29
 Nodes (7): scripts, build, dev, export, lint, postinstall, start
 
 ### Community 36 - "Generate Report"
-Cohesion: 0.13
-Nodes (14): 1. Accessibility (A11y), 2. Performance, 3. Theming, 4. Responsive Design, 5. Implementation Integrity (CRITICAL), Audit Health Score, Detailed Findings by Severity, Diagnostic Scan (+6 more)
+Cohesion: 0.29
+Nodes (7): Audit Health Score, Detailed Findings by Severity, Executive Summary, Generate Report, Implementation Integrity Verdict, Patterns & Systemic Issues, Positive Findings
 
-### Community 37 - "New visual work"
-Cohesion: 0.14
-Nodes (14): 1. Decide what is already true, 2. Ask what will change the work, 3. Choose the right amount of invention, 4. Commit the world, 5. Record the decision, 6. Build with full commitment, 7. Inspect and finish, Both paths (+6 more)
+### Community 37 - "road-hero.jsx"
+Cohesion: 0.06
+Nodes (34): Act on the receipt, Assemble and review, Plan and asset review, Plan, capture, serve, Core Rule, Decision Comps, Impeccable Asset Producer, Input Contract (+26 more)
 
 ### Community 38 - "optimize.md"
 Cohesion: 0.14
 Nodes (13): Animation Performance, Assess Performance Issues, Core Web Vitals Optimization, Cumulative Layout Shift (CLS < 0.1), Interaction to Next Paint (INP < 200ms), Largest Contentful Paint (LCP < 2.5s), Loading Performance, Network Optimization (+5 more)
 
 ### Community 39 - "cn"
-Cohesion: 0.09
-Nodes (28): swiper, BackgroundPaths(), MovingBorderButton(), SpotlightCard(), Spotlight(), TiltCard(), SiteNav(), Elvo() (+20 more)
+Cohesion: 0.04
+Nodes (78): Aturan pakai, class-variance-authority, @radix-ui/react-dialog, LoginPage(), DesignSystemPage(), SWATCHES, BackgroundPaths(), MovingBorderButton() (+70 more)
 
 ### Community 40 - "el"
-Cohesion: 0.06
-Nodes (73): applyGlobalBarLabelState(), armPageChatForTyping(), bindConfigureCountPillTooltip(), bindConfigureInlineControlHover(), bindConfigureModifierPillHover(), buildConfigureActionControl(), buildConfigureCountControl(), buildConfigureRow() (+65 more)
+Cohesion: 0.08
+Nodes (54): actionLabel(), applyConfigureBarChrome(), bindConfigureCountPillTooltip(), bindConfigureInlineControlHover(), bindConfigureModifierPillHover(), buildConfigureActionControl(), buildConfigureCountControl(), buildConfigureRow() (+46 more)
 
-### Community 41 - "visi-misi/page.jsx"
-Cohesion: 0.09
-Nodes (27): aos, getSambutan(), metadata, revalidate, SambutanKaprodiPage(), getVisiMisi(), metadata, revalidate (+19 more)
+### Community 41 - "profil-lulusan/page.jsx"
+Cohesion: 0.10
+Nodes (20): aos, metadata, revalidate, getSambutan(), metadata, revalidate, SambutanKaprodiPage(), AosReady() (+12 more)
 
-### Community 42 - "resumeSession"
-Cohesion: 0.12
-Nodes (25): applySavedSessionMeta(), captureAndEmit(), checkpointPayload(), clampVariantIndex(), clearHandled(), compileShader(), findActiveSessionSummary(), findAdoptableServerSession() (+17 more)
+### Community 42 - "profil-lulusan-content.js"
+Cohesion: 0.18
+Nodes (12): getData(), ProfilLulusanPage(), ALUMNI, CPL, FALLBACK_ALUMNI, INTRO, mergeProfilLulusan(), normImg() (+4 more)
 
 ### Community 43 - "eslint.config.mjs"
 Cohesion: 0.14
 Nodes (8): compat, __dirname, eslintConfig, __filename, @eslint/eslintrc, ref_fs, ref_path, ref_url
 
-### Community 44 - "Impeccable Asset Producer"
-Cohesion: 0.15
-Nodes (11): Act on the receipt, Assemble and review, Plan and asset review, Plan, capture, serve, Core Rule, Decision Comps, Impeccable Asset Producer, Input Contract (+3 more)
+### Community 44 - "[slug]/page.jsx"
+Cohesion: 0.29
+Nodes (7): DynamicPage(), generateMetadata(), getPageData(), renderSection(), SectionCard(), SectionContent(), SectionHero()
 
-### Community 45 - "site-header.jsx"
-Cohesion: 0.13
-Nodes (22): @radix-ui/react-dialog, ArrowGlyph(), ArrowUpGlyph(), base, ChevronGlyph(), CloseGlyph(), MenuGlyph(), Mega() (+14 more)
+### Community 45 - "Responsive Design"
+Cohesion: 0.20
+Nodes (10): Breakpoints: Content-Driven, Detect Input Method, Not Just Screen Size, Layout Adaptation Patterns, Mobile-First: Write It Right, Picture Element for Art Direction, Responsive Design, Responsive Images: Get It Right, Safe Areas: Handle the Notch (+2 more)
 
 ### Community 46 - "build.py"
 Cohesion: 0.22
@@ -370,21 +369,21 @@ Nodes (8): prisma, prisma, { PrismaClient }, prisma, { PrismaClient }, @prisma/c
 Cohesion: 0.17
 Nodes (11): Action Summary, Ask the User, Assessment A: Design Review, Assessment B: Detector + Browser Evidence, Assessment Orchestration, Deliver the Report, Hard Invariants, Persist the Snapshot (+3 more)
 
-### Community 49 - "Simplify the Design"
-Cohesion: 0.17
-Nodes (11): Assess Current State, Code Simplification, Content Simplification, Document Removed Complexity, Information Architecture, Interaction Simplification, Layout Simplification, Plan Simplification (+3 more)
+### Community 49 - "CareerSection.jsx"
+Cohesion: 0.25
+Nodes (5): CareerSection(), Analyst(), Auditor(), Consultant(), Erp()
 
 ### Community 50 - "onAnnotDown"
-Cohesion: 0.20
-Nodes (17): beginEditPin(), buildAnnotationsForCapture(), buildPinElement(), cancelEditingPin(), clampPlaceholderSize(), finalizeEditingPin(), initAnnotOverlay(), localCoords() (+9 more)
+Cohesion: 0.24
+Nodes (15): beginEditPin(), buildAnnotationsForCapture(), buildPinElement(), cancelEditingPin(), finalizeEditingPin(), initAnnotOverlay(), localCoords(), onAnnotDown() (+7 more)
 
-### Community 51 - "Impeccable Documenter"
-Cohesion: 0.40
-Nodes (4): Impeccable Documenter, Input Contract, Output Contract, Workflow
+### Community 51 - "profile/page.jsx"
+Cohesion: 0.27
+Nodes (4): Profile(), InfiniteAlumni(), normalizeImagePath(), JumbotronPromo()
 
 ### Community 52 - "home-content.js"
-Cohesion: 0.06
-Nodes (54): ref_node_fs, ref_node_path, @radix-ui/react-tabs, getAchievements(), Home(), normalizeSrc(), revalidate, AccreditationBand() (+46 more)
+Cohesion: 0.05
+Nodes (66): ref_node_fs, ref_node_path, swiper, getAchievements(), Home(), normalizeSrc(), revalidate, AccreditationBand() (+58 more)
 
 ### Community 53 - "clarify.md"
 Cohesion: 0.18
@@ -406,17 +405,17 @@ Nodes (13): Component translation rules, Narrative mapping, Scan mode (approach 
 Cohesion: 0.18
 Nodes (10): Assess Current State, Color Refinement, Composition Refinement, Motion Reduction, Plan Refinement, Refine the Design, Simplification, Verify Quality (+2 more)
 
-### Community 59 - "actOnAgentTarget"
-Cohesion: 0.20
-Nodes (21): actOnAgentTarget(), agentTargetBusyReason(), agentTargetOverlayGone(), agentTargetTaken(), claimAgentTarget(), claimAndActOnAgentTarget(), declineAgentTargetBusy(), declineAgentTargetUnresolvable() (+13 more)
+### Community 59 - "Diagnostic Scan"
+Cohesion: 0.33
+Nodes (6): 1. Accessibility (A11y), 2. Performance, 3. Theming, 4. Responsive Design, 5. Implementation Integrity (CRITICAL), Diagnostic Scan
 
 ### Community 60 - "Web Sisfor - Next.js dengan PostgreSQL"
 Cohesion: 0.18
 Nodes (10): 1. Konfigurasi Database, 2. Generate Prisma Client, 3. Migrasi Database, 4. Prisma Studio (GUI Database), API Endpoints, Cara Menggunakan, Database Schema, Setup Database PostgreSQL (+2 more)
 
-### Community 61 - "design-system/page.jsx"
-Cohesion: 0.15
-Nodes (26): lucide-react, StatsDemo(), SWATCHES, AboutScene(), AccreditationScene(), BentoScene(), LECTURERS, Eyebrow() (+18 more)
+### Community 61 - "next"
+Cohesion: 0.09
+Nodes (22): lucide-react, next, StatsDemo(), AboutScene(), AccreditationScene(), BentoScene(), LECTURERS, LottieIllustration() (+14 more)
 
 ### Community 62 - "dependencies"
 Cohesion: 0.06
@@ -430,9 +429,9 @@ Nodes (10): Completion gate, Init flow, Step 1: Load current state, Step 2: Expl
 Cohesion: 0.20
 Nodes (10): Design Health Score, Design Specificity Verdict, Generate Combined Critique Report, Minor Observations, Overall Impression, Persona Red Flags, Priority Issues, Questions to Consider (+2 more)
 
-### Community 66 - "syncPageChatFocus"
-Cohesion: 0.21
-Nodes (17): attachSteerFocusDebug(), attachSteerFocusGuard(), clearSteerFocusRecoverTimer(), focusConfigureInput(), focusSteerChat(), isInlineEditActive(), isPageEditableActive(), isPageEditableElement() (+9 more)
+### Community 66 - "initPageChat"
+Cohesion: 0.09
+Nodes (47): applyGlobalBarLabelState(), armPageChatForTyping(), attachSteerFocusDebug(), attachSteerFocusGuard(), clearSteerAwaitTimer(), collapsePageChat(), configureVoiceContext(), expandPageChat() (+39 more)
 
 ### Community 67 - "Panduan Kelola Galeri Prestasi"
 Cohesion: 0.20
@@ -450,21 +449,21 @@ Nodes (9): 1. The Wall of Options, 2. The Memory Bridge, 3. The Hidden Navigatio
 Cohesion: 0.22
 Nodes (9): Color & materials, Components & controls, iOS platform, Layout & structure, Motion, The iOS slop test, Touch targets, Typography (+1 more)
 
-### Community 72 - "line-illustrations.jsx"
-Cohesion: 0.15
-Nodes (6): Halaman Visi & Misi (`/visi-misi`), accent, HorizonIllustration(), ILLUSTRATIONS, line, soft
+### Community 72 - "visi-misi/page.jsx"
+Cohesion: 0.07
+Nodes (29): Halaman Visi & Misi (`/visi-misi`), getVisiMisi(), metadata, revalidate, VisiMisiPage(), accent, GraduatePathIllustration(), HorizonIllustration() (+21 more)
 
 ### Community 73 - "Shape"
-Cohesion: 0.22
+Cohesion: 0.25
 Nodes (8): Cadence, Confirm and stop, Phase 1: Discovery interview, Phase 2: Resolve the design direction, Phase 3: Write the brief, Round 1: purpose, people, and outcome, Round 2: material, behavior, and boundaries, Shape
 
-### Community 74 - "impeccable/SKILL.md"
-Cohesion: 0.09
-Nodes (17): Craft floor, Refuse, Verify, Monorepo notes, Opting out of the boot check, Step 1: Run the pass, Step 2: Act by severity, Step 3: Deprecated fields are binding (+9 more)
+### Community 74 - "bolder.md"
+Cohesion: 0.33
+Nodes (5): Before you finish, Scope is sovereign, The amplification, The skeleton test, Why it reads flat
 
-### Community 75 - "adapt.native.md"
-Cohesion: 0.25
-Nodes (7): Adaptation Strategies, Assess Adaptation Challenge, Implement & Verify, Orientation & foldables, Phone → Tablet (iPad / large screens), Platform → platform (iOS ↔ Android), Web → native (porting a website or web app)
+### Community 75 - "Adaptation Strategies"
+Cohesion: 0.40
+Nodes (5): Adaptation Strategies, Orientation & foldables, Phone → Tablet (iPad / large screens), Platform → platform (iOS ↔ Android), Web → native (porting a website or web app)
 
 ### Community 76 - "Android platform"
 Cohesion: 0.25
@@ -479,16 +478,16 @@ Cohesion: 0.25
 Nodes (8): 1. Impatient Power User: "Alex", 2. Confused First-Timer: "Jordan", 3. Accessibility-Dependent User: "Sam", 4. Deliberate Stress Tester: "Riley", 5. Distracted Mobile User: "Casey", Persona-Based Design Testing, Project-Specific Personas, Selecting Personas
 
 ### Community 79 - "Operate mode depth (and Read notes)"
-Cohesion: 0.22
-Nodes (9): Color, Components, Layout, Motion, Operate mode depth (and Read notes), Product constraints, Product permissions, The product slop test (+1 more)
+Cohesion: 0.10
+Nodes (18): Craft floor, Refuse, Verify, Constraints, Failure modes, Flow, /impeccable hooks, Routing (+10 more)
 
 ### Community 80 - "Extract Flow"
 Cohesion: 0.25
 Nodes (7): Extract Flow, Step 1: Discover the Design System, Step 2: Identify Patterns, Step 3: Plan Extraction, Step 4: Extract & Enrich, Step 5: Migrate, Step 6: Document
 
-### Community 81 - "[slug]/page.jsx"
-Cohesion: 0.29
-Nodes (7): DynamicPage(), generateMetadata(), getPageData(), renderSection(), SectionCard(), SectionContent(), SectionHero()
+### Community 81 - "typeset.md"
+Cohesion: 0.25
+Nodes (7): Apply, Line breaks, Live-mode signature params, Set the system, Two isolated assessments, Verify, Visitor mode
 
 ### Community 82 - "Generate Report"
 Cohesion: 0.29
@@ -514,9 +513,9 @@ Nodes (5): impeccable script, check_download(), fetch_url(), probe_ok(), setup_h
 Cohesion: 0.52
 Nodes (6): globToRegex(), matchesScope(), normalizeIgnoreRule(), normalizeIgnoreValue(), pageCandidates(), resolveDetectIgnores()
 
-### Community 88 - "CareerSection.jsx"
-Cohesion: 0.25
-Nodes (5): CareerSection(), Analyst(), Auditor(), Consultant(), Erp()
+### Community 88 - "Footer.jsx"
+Cohesion: 0.43
+Nodes (3): Instagram(), Tiktok(), Youtube()
 
 ### Community 89 - "motion"
 Cohesion: 0.32
@@ -538,13 +537,13 @@ Nodes (11): Accessibility & Inclusion, Brand Commitments, Capabilities and Const
 Cohesion: 0.33
 Nodes (5): After approval: the comp becomes a spec, Generate three compositional options, One approval point, Plates and provenance, Visualize: Direction Comps & Asset Production
 
-### Community 94 - "Responsive Design"
-Cohesion: 0.20
-Nodes (10): Breakpoints: Content-Driven, Detect Input Method, Not Just Screen Size, Layout Adaptation Patterns, Mobile-First: Write It Right, Picture Element for Art Direction, Responsive Design, Responsive Images: Get It Right, Safe Areas: Handle the Notch (+2 more)
+### Community 94 - "doctor.md"
+Cohesion: 0.25
+Nodes (7): Monorepo notes, Opting out of the boot check, Step 1: Run the pass, Step 2: Act by severity, Step 3: Deprecated fields are binding, Step 4: Do not overclaim on truth drift, What this owns, and what it does not
 
-### Community 95 - "profile/page.jsx"
-Cohesion: 0.27
-Nodes (4): Profile(), InfiniteAlumni(), normalizeImagePath(), JumbotronPromo()
+### Community 95 - "Navbar.jsx"
+Cohesion: 0.43
+Nodes (3): Graduation(), Partner(), Profile()
 
 ### Community 97 - "20260205020326_init/migration.sql"
 Cohesion: 0.47
@@ -554,13 +553,9 @@ Nodes (5): "Achievement", "Alumni", Alumni_nim_key, "User", User_email_key
 Cohesion: 0.20
 Nodes (8): src_app_globals, bricolage, inter, metadata, notoSerif, AosProvider(), Providers(), ToastProvider()
 
-### Community 99 - "typeset.md"
-Cohesion: 0.25
-Nodes (7): Apply, Line breaks, Live-mode signature params, Set the system, Two isolated assessments, Verify, Visitor mode
-
-### Community 100 - "Region map"
-Cohesion: 0.40
-Nodes (4): Containment, Painted material, Region map, What varies independently
+### Community 99 - "Operate"
+Cohesion: 0.50
+Nodes (3): Comps, Directions, Operate
 
 ### Community 101 - "create-admin.js"
 Cohesion: 0.40
@@ -598,49 +593,49 @@ Nodes (3): For --cluster-only, For --update (incremental re-extraction), graphif
 Cohesion: 0.50
 Nodes (4): Heuristics Scoring Guide, Issue Severity (P0–P3), Reference Material, Score Summary
 
-### Community 111 - "Footer.jsx"
-Cohesion: 0.43
-Nodes (3): Instagram(), Tiktok(), Youtube()
+### Community 111 - "Impeccable Documenter"
+Cohesion: 0.40
+Nodes (4): Impeccable Documenter, Input Contract, Output Contract, Workflow
 
-### Community 114 - "Navbar.jsx"
-Cohesion: 0.43
-Nodes (3): Graduation(), Partner(), Profile()
+### Community 112 - "Persuade and Experience"
+Cohesion: 0.50
+Nodes (3): Comps, Directions, Persuade and Experience
 
-### Community 115 - "bolder.md"
-Cohesion: 0.33
-Nodes (5): Before you finish, Scope is sovereign, The amplification, The skeleton test, Why it reads flat
+### Community 114 - "Read"
+Cohesion: 0.50
+Nodes (3): Comps, Directions, Read
+
+### Community 115 - "Command guidance"
+Cohesion: 0.50
+Nodes (3): Command guidance, No-argument routing: the context-aware menu, Workflow questions
 
 ### Community 116 - "build"
 Cohesion: 0.50
 Nodes (3): build, env, PRISMA_GENERATE_SKIP_AUTOINSTALL
-
-### Community 129 - "/impeccable hooks"
-Cohesion: 0.33
-Nodes (6): Constraints, Failure modes, Flow, /impeccable hooks, Routing, Triage findings
 
 ### Community 132 - "devDependencies"
 Cohesion: 0.33
 Nodes (6): devDependencies, eslint, eslint-config-next, @eslint/eslintrc, tailwindcss, @tailwindcss/postcss
 
 ## Knowledge Gaps
-- **689 isolated node(s):** `prisma`, `$schema`, `style`, `rsc`, `tsx` (+684 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 856 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **709 isolated node(s):** `prisma`, `$schema`, `style`, `rsc`, `tsx` (+704 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 885 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 - **29 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `box()` connect `story.jsx` to `Region map`, `Impeccable Asset Producer`, `New visual work`?**
-  _High betweenness centrality (0.329) - this node is a cross-community bridge._
-- **Why does `init()` connect `initGlobalBar` to `Init flow`, `live-browser.js`, `syncPageChatFocus`, `setLiveState`, `createLiveBrowserDomHelpers`, `impeccable/SKILL.md`, `resumeSession`, `live.md`, `handleManualEditActivity`, `onAnnotDown`, `connectSSE`?**
-  _High betweenness centrality (0.329) - this node is a cross-community bridge._
-- **Why does `Region map` connect `Region map` to `story.jsx`?**
-  _High betweenness centrality (0.317) - this node is a cross-community bridge._
+- **Why does `init()` connect `initGlobalBar` to `Init flow`, `live-browser.js`, `initPageChat`, `setLiveState`, `live.md`, `impeccable/SKILL.md`, `actOnAgentTarget`, `onAnnotDown`, `doctor.md`, `connectSSE`?**
+  _High betweenness centrality (0.327) - this node is a cross-community bridge._
 - **What connects `prisma`, `$schema`, `style` to the rest of the system?**
-  _689 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _709 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `live-browser.js` be split into smaller, more focused modules?**
-  _Cohesion score 0.03666245259165613 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.035507985049269455 - nodes in this community are weakly interconnected._
 - **Should `modern-screenshot.umd.js` be split into smaller, more focused modules?**
   _Cohesion score 0.08897243107769423 - nodes in this community are weakly interconnected._
 - **Should `renderDesignVisual` be split into smaller, more focused modules?**
-  _Cohesion score 0.10098522167487685 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.07692307692307693 - nodes in this community are weakly interconnected._
+- **Should `struktur-organisasi/page.jsx` be split into smaller, more focused modules?**
+  _Cohesion score 0.10685483870967742 - nodes in this community are weakly interconnected._
+- **Should `setLiveState` be split into smaller, more focused modules?**
+  _Cohesion score 0.14202898550724638 - nodes in this community are weakly interconnected._

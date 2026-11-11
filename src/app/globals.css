@@ -443,3 +443,10 @@ html.has-cursor, html.has-cursor a, html.has-cursor button { cursor: none; }
 }
 .group:hover .u-gold::after, .u-gold:hover::after, .u-gold[aria-current="page"]::after, .u-gold[data-state="open"]::after { transform: scaleX(1); }
 .kampus .nav-link::after { background: var(--gold); }
+
+/* Profil Lulusan — bar progres autoplay tab profil */
+@keyframes pl-progress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+/* Ilustrasi line-art di atas permukaan gelap (hero Struktur): aksen maroon → emas */
+.art-on-dark [fill="var(--maroon)"], .art-on-dark [data-node] { fill: var(--gold); }
+.art-on-dark [fill="var(--gold)"] { fill-opacity: 0.1; }

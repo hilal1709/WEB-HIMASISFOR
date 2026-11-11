@@ -1,55 +1,61 @@
 "use client";
 import { PMB_URL } from "@/lib/home-content";
-import { Banner } from "@/components/ui/banner";
-import { ArrowLink, Container } from "@/components/home/shared";
+import { Container, SceneTitle } from "@/components/home/shared";
 import { ElvoPeek } from "@/components/home/elvo-peek";
 
-const NEXT = [
+const STOPS = [
   { href: "/sambutan-kaprodi", kicker: "Profil", title: "Sambutan Kaprodi", body: "Pesan dari ketua program studi." },
   { href: "/curiculum", kicker: "Akademik", title: "Kurikulum", body: "Mata kuliah per bidang keahlian." },
   { href: "/profile#dosen", kicker: "Profil", title: "Dosen", body: "Pengajar dan bidang risetnya." },
+  { href: PMB_URL, kicker: "2030", title: "Daftar PMB 2027", body: "Ikut menempuh perjalanan ini.", final: true },
 ];
 
-/** Penutup ramping: banner PMB + tautan lanjutan (CTA besar sudah ada di beranda). */
+/**
+ * Penutup "Langkah berikutnya" sebagai rute: garis putus-putus emas dengan halte bertitik,
+ * halte terakhir = pendaftaran PMB. Horizontal di desktop, vertikal di mobile.
+ */
 export function Closing() {
   return (
-    <section className="relative bg-cream-2 py-16 md:py-20">
+    <section className="relative overflow-hidden bg-cream-2 py-16 md:py-24">
       <Container>
-        <Banner
-          variant="brand"
-          dismissible
-          title="Pendaftaran mahasiswa baru telah dibuka"
-          action={
-            <ArrowLink href={PMB_URL} tone="dark" target="_blank" rel="noopener noreferrer" className="hidden sm:inline-flex">
-              Daftar
-            </ArrowLink>
-          }
-        >
-          Jadilah bagian dari perjalanan menuju 2030 bersama Sisforians.
-        </Banner>
-
-        <div className="relative mt-12 grid gap-4 md:grid-cols-3">
-          <div className="absolute -top-20 right-2 hidden xl:block">
-            <div className="relative"><ElvoPeek pose="thumbs-up" size={84} say="Masih penasaran? Jelajahi halaman lainnya." delay={0.2} /></div>
+        <div className="flex items-end justify-between gap-6">
+          <SceneTitle title={["Langkah", "berikutnya"]} />
+          <div className="relative hidden shrink-0 xl:block">
+            <ElvoPeek pose="thumbs-up" size={84} say="Masih penasaran? Jelajahi halaman lainnya." delay={0.2} />
           </div>
-          {NEXT.map((n, i) => (
-            <a
-              key={n.href}
-              href={n.href}
-              data-aos="fade-up"
-              data-aos-delay={i * 80}
-              className="group relative overflow-hidden rounded-lg border border-line bg-white p-6 transition-[transform,border-color,box-shadow] duration-500 ease-cinematic hover:-translate-y-1 hover:border-navy/20 hover:shadow-[0_24px_50px_-36px_rgb(20_33_61/0.55)]"
-            >
-              <span aria-hidden className="absolute inset-x-0 top-0 block h-[3px] origin-left scale-x-0 bg-gold transition-transform duration-700 ease-cinematic group-hover:scale-x-100" />
-              <p className="kicker text-maroon">{n.kicker}</p>
-              <p className="mt-2 font-serif text-[1.45rem] text-navy">{n.title}</p>
-              <p className="mt-1 text-sm text-text/60">{n.body}</p>
-              <svg aria-hidden viewBox="0 0 16 16" className="absolute bottom-6 right-6 size-4 text-maroon transition-transform duration-500 ease-cinematic group-hover:translate-x-1">
-                <path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </a>
-          ))}
         </div>
+
+        <ol className="relative mt-12 grid gap-8 md:mt-16 md:grid-cols-4 md:gap-6">
+          {/* jalur: vertikal (mobile) / horizontal (desktop) */}
+          <span aria-hidden className="absolute bottom-3 left-[7px] top-3 border-l-2 border-dashed border-gold/70 md:inset-x-2 md:bottom-auto md:left-2 md:top-[7px] md:border-l-0 md:border-t-2" />
+          {STOPS.map((s, i) => {
+            const external = s.href.startsWith("http");
+            return (
+              <li key={s.title} data-aos="fade-up" data-aos-delay={i * 90} className="relative pl-10 md:pl-0 md:pt-10">
+                <span
+                  aria-hidden
+                  className={`absolute left-0 top-1 size-4 rounded-full border-2 md:top-0 ${
+                    s.final ? "border-maroon bg-maroon ring-4 ring-maroon/15" : "border-navy bg-cream-2"
+                  }`}
+                />
+                <a
+                  href={s.href}
+                  {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                  className={`group block rounded-md transition-colors ${s.final ? "-m-3 bg-maroon p-3 text-white hover:bg-maroon-deep md:-m-4 md:p-4" : ""}`}
+                >
+                  <p className={`kicker ${s.final ? "text-gold-soft" : "text-maroon"}`}>{s.kicker}</p>
+                  <p className={`mt-1.5 inline-flex items-center gap-2 font-serif text-[1.4rem] leading-tight ${s.final ? "text-white" : "text-navy"}`}>
+                    <span className={s.final ? "" : "u-gold"}>{s.title}</span>
+                    <svg aria-hidden viewBox="0 0 16 16" className="size-4 shrink-0 transition-transform duration-500 ease-cinematic group-hover:translate-x-1">
+                      <path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </p>
+                  <p className={`mt-1 text-sm ${s.final ? "text-white/70" : "text-text/60"}`}>{s.body}</p>
+                </a>
+              </li>
+            );
+          })}
+        </ol>
       </Container>
     </section>
   );

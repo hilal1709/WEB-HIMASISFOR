@@ -7,10 +7,10 @@
  * Teks di bawah adalah CONTOH (PRODUCT.md) — tampil dengan PlaceholderTag sampai CMS terisi.
  */
 export const SAMBUTAN = {
-  name: "Ardhi Dwi Firmansyah",
-  credentials: "S.Kom., M.Kom., MCE",
+  name: "Grandys Frieska Prassida",
+  credentials: "S.Kom., M.Kom., Ph.D., MCE, CIIQA",
   role: "Ketua Program Studi Sistem Informasi",
-  photo: "/img/profil/ardhi.jpg",
+  photo: "/img/profil/grandys.jpg",
   greeting: "Assalamu’alaikum warahmatullahi wabarakatuh, salam sejahtera untuk kita semua.",
   paragraphs: [
     "Selamat datang di laman Program Studi Sistem Informasi Universitas Internasional Semen Indonesia. Terima kasih sudah meluangkan waktu untuk mengenal kami lebih dekat, entah Anda calon mahasiswa, orang tua, alumni, maupun mitra industri.",
@@ -21,12 +21,14 @@ export const SAMBUTAN = {
   ],
   quote: "Teknologi akan terus berganti. Yang kami tanamkan adalah cara berpikir: memahami masalah bisnis lebih dulu, lalu memilih teknologi yang tepat untuk menyelesaikannya.",
   closing: "Wassalamu’alaikum warahmatullahi wabarakatuh.",
+  // Kampus asal tiap jenjang belum diketahui — tambahkan `place` bila sudah ada.
   education: [
-    { degree: "Magister Komputer (M.Kom.)", place: "Sistem Informasi" },
-    { degree: "Sarjana Komputer (S.Kom.)", place: "Sistem Informasi" },
+    { degree: "Doktor (Ph.D.)" },
+    { degree: "Magister Komputer (M.Kom.)" },
+    { degree: "Sarjana Komputer (S.Kom.)" },
   ],
-  research: ["IT Governance", "Data Governance", "IT Service Management"],
-  certifications: ["MCE (Microsoft Certified Educator)"],
+  research: ["IS Strategic Planning", "Enterprise Architecture", "IT Governance & Risk Management"],
+  certifications: ["MCE (Microsoft Certified Educator)", "CIIQA"],
 };
 
 /** Gabungkan baris CMS (PageContent) ke fallback. */

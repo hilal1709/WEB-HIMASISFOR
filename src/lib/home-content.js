@@ -18,7 +18,8 @@ export const NAV = [
     items: [
       { label: "Sambutan Kaprodi", href: "/sambutan-kaprodi", desc: "Pesan dari ketua program studi" },
       { label: "Visi & Misi", href: "/visi-misi", desc: "Arah dan tujuan pendidikan" },
-      { label: "Profil Lulusan", href: "/profile#lulusan", desc: "Kompetensi dan peran lulusan" },
+      { label: "Struktur Organisasi", href: "/struktur-organisasi", desc: "Pimpinan dan dosen program studi" },
+      { label: "Profil Lulusan", href: "/profil-lulusan", desc: "Kompetensi dan peran lulusan" },
       { label: "Dosen", href: "/profile#dosen", desc: "Pengajar dan bidang risetnya" },
       { label: "Prestasi", href: "/achievement", desc: "Capaian dosen dan mahasiswa" },
     ],
@@ -217,7 +218,7 @@ export const FOOTER = {
   ],
   instagram: "https://www.instagram.com/sisforuisi/",
   columns: [
-    { title: "Profil", links: [["Sambutan Kaprodi", "/sambutan-kaprodi"], ["Visi & Misi", "/visi-misi"], ["Profil Lulusan", "/profile#lulusan"], ["Dosen", "/profile#dosen"]] },
+    { title: "Profil", links: [["Sambutan Kaprodi", "/sambutan-kaprodi"], ["Visi & Misi", "/visi-misi"], ["Struktur Organisasi", "/struktur-organisasi"], ["Profil Lulusan", "/profil-lulusan"], ["Dosen", "/profile#dosen"]] },
     { title: "Akademik", links: [["Kurikulum & RPS", "/curiculum"], ["Jalur Kelulusan", "/curiculum#kelulusan"], ["Prestasi", "/achievement"]] },
     { title: "Tautan Penting", links: [["Universitas (UISI)", "https://uisi.ac.id"], ["PMB UISI", PMB_URL], ["Instagram Prodi", "https://www.instagram.com/sisforuisi/"]] },
   ],
@@ -294,7 +295,7 @@ export const VIDEOS = {
 export const AUDIENCE = [
   { label: "Calon Mahasiswa", href: PMB_URL },
   { label: "Mahasiswa", href: "/curiculum" },
-  { label: "Alumni", href: "/profile#lulusan" },
+  { label: "Alumni", href: "/profil-lulusan" },
   { label: "Dosen & Tendik", href: "/profile#dosen" },
 ];
 
@@ -314,15 +315,15 @@ export const MEGA_FEATURE = {
 export const QUICK_LINKS = [
   { title: "Calon Mahasiswa", body: "Jalur masuk, biaya, dan pendaftaran PMB.", href: PMB_URL, icon: "target", lottie: "/lottie/qa-campus.json", external: true },
   { title: "Mahasiswa Aktif", body: "Kurikulum, RPS, magang, dan layanan prodi.", href: "/curiculum", icon: "book", lottie: "/lottie/qa-student.json" },
-  { title: "Alumni", body: "Jejaring alumni dan profil lulusan.", href: "/profile#lulusan", icon: "account", lottie: "/lottie/qa-alumni.json" },
+  { title: "Alumni", body: "Jejaring alumni dan profil lulusan.", href: "/profil-lulusan", icon: "account", lottie: "/lottie/qa-alumni.json" },
   { title: "Mitra Industri", body: "Kerja sama riset, magang, dan rekrutmen.", href: "#kontak", icon: "suitcase", lottie: "/lottie/qa-industry.json" },
 ];
 
 export const ABOUT_V3 = {
   title: ["Sistem informasi,", "di jantung", "kawasan industri"],
   quote: "Kami menyiapkan lulusan yang memahami proses bisnis dan teknologi sekaligus, karena di Gresik keduanya bertemu setiap hari.",
-  quoteBy: "Ketua Program Studi Sistem Informasi",
-  photo: "/img/profil/ardhi.jpg",
+  quoteBy: "Grandys Frieska Prassida, Ketua Program Studi Sistem Informasi",
+  photo: "/img/profil/grandys.jpg",
 };
 
 /** Agenda — contoh, menunggu modul agenda di CMS. */

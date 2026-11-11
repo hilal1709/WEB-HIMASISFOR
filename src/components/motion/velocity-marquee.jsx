@@ -48,7 +48,7 @@ export function VelocityMarquee({ children, base = 60, className, reverse = fals
     <div className={cn("overflow-hidden", className)}>
       <div ref={track} className="flex w-max will-change-transform">
         {[0, 1].map((k) => (
-          <div key={k} aria-hidden={k === 1 || undefined} className="flex shrink-0 items-center">
+          <div key={k} aria-hidden={k === 1 || undefined} inert={k === 1 || undefined} className="flex shrink-0 items-center">
             {children}
           </div>
         ))}

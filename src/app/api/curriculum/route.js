@@ -46,10 +46,12 @@ export async function PUT(request) {
     const body = await request.json();
     const { title, subtitle, data } = body;
 
-    // Validate data structure
-    if (!Array.isArray(data)) {
+    // Validate data structure: array semester (bentuk lama) atau
+    // { semesters[], electives?, paths?, regulations? } (bentuk baru, dipakai halaman /curiculum)
+    const validObject = data && typeof data === "object" && !Array.isArray(data) && Array.isArray(data.semesters);
+    if (!Array.isArray(data) && !validObject) {
       return NextResponse.json(
-        { error: "Data must be an array of semesters" },
+        { error: "Data must be an array of semesters or an object with a semesters array" },
         { status: 400 }
       );
     }
@@ -144,7 +146,8 @@ export async function DELETE(request) {
     }
 
     const data = JSON.parse(content.data);
-    const semesterData = data.find((s) => s.semester === semester);
+    const semesters = Array.isArray(data) ? data : data?.semesters ?? [];
+    const semesterData = semesters.find((s) => s.semester === semester);
 
     if (!semesterData) {
       return NextResponse.json(

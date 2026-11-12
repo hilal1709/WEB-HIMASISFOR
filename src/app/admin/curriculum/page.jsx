@@ -1,6 +1,12 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { ELECTIVES } from "@/lib/kurikulum-content";
+import { AdminRpsEditor } from "@/components/kurikulum/admin-rps-editor";
+import { useToast } from "@/components/ui/toast";
+
+/** Mata kuliah pilihan dalam bentuk mentah untuk disimpan ke CMS. */
+const defaultElectives = () => ELECTIVES.map(({ key, name, matkul }) => ({ key, name, matkul: matkul.map((m) => ({ ...m })) }));
 
 export default function CurriculumManagement() {
   const router = useRouter();
@@ -12,6 +18,11 @@ export default function CurriculumManagement() {
   const [subtitle, setSubtitle] = useState("Sistem Informasi Bisnis");
   const [kurikulum, setKurikulum] = useState([]);
   
+  const [electives, setElectives] = useState(defaultElectives);
+  const [extra, setExtra] = useState({}); // kunci data lain di CMS, disimpan ulang apa adanya
+  const [rpsTarget, setRpsTarget] = useState(null); // { kind: "sem" | "el", a, b }
+  const toast = useToast();
+
   const [editMode, setEditMode] = useState({});
   const [addMode, setAddMode] = useState({});
 
@@ -24,7 +35,16 @@ export default function CurriculumManagement() {
           const data = await response.json();
           setTitle(data.title || "Kurikulum Program Studi");
           setSubtitle(data.subtitle || "Sistem Informasi Bisnis");
-          setKurikulum(data.data || []);
+          const d = data.data;
+          if (Array.isArray(d)) setKurikulum(d);
+          else if (d && typeof d === "object") {
+            const { semesters, electives: els, ...rest } = d;
+            setKurikulum(Array.isArray(semesters) ? semesters : []);
+            if (Array.isArray(els) && els.length) {
+              setElectives(defaultElectives().map((e) => ({ ...e, ...(els.find((x) => x?.key === e.key) ?? {}) })));
+            }
+            setExtra(rest);
+          }
         } else {
           setMessage({ type: "error", text: "Gagal memuat kurikulum" });
         }
@@ -51,12 +71,13 @@ export default function CurriculumManagement() {
         body: JSON.stringify({
           title,
           subtitle,
-          data: kurikulum,
+          data: { ...extra, semesters: kurikulum, electives },
         }),
       });
 
       if (response.ok) {
         setMessage({ type: "success", text: "Kurikulum berhasil disimpan!" });
+        toast.success("Kurikulum tersimpan", { description: "Halaman publik diperbarui dalam beberapa menit." });
         setTimeout(() => {
           setMessage({ type: "", text: "" });
         }, 3000);
@@ -130,6 +151,23 @@ export default function CurriculumManagement() {
       updated[semesterIndex].matkul.splice(courseIndex, 1);
       setKurikulum(updated);
     }
+  };
+
+  const rpsCourse = rpsTarget
+    ? rpsTarget.kind === "sem"
+      ? kurikulum[rpsTarget.a]?.matkul?.[rpsTarget.b]
+      : electives[rpsTarget.a]?.matkul?.[rpsTarget.b]
+    : null;
+
+  const saveRps = (next) => {
+    if (!rpsTarget) return;
+    const { kind, a, b } = rpsTarget;
+    if (kind === "sem") {
+      setKurikulum(kurikulum.map((s, i) => (i === a ? { ...s, matkul: s.matkul.map((m, j) => (j === b ? next : m)) } : s)));
+    } else {
+      setElectives(electives.map((e, i) => (i === a ? { ...e, matkul: e.matkul.map((m, j) => (j === b ? next : m)) } : e)));
+    }
+    toast.info("RPS diperbarui", { description: "Klik Simpan Kurikulum untuk menerbitkan." });
   };
 
   const calculateTotalSKS = (matkul) => {
@@ -263,6 +301,7 @@ export default function CurriculumManagement() {
                             onDelete={() =>
                               deleteCourse(semesterIndex, courseIndex)
                             }
+                            onRps={() => setRpsTarget({ kind: "sem", a: semesterIndex, b: courseIndex })}
                           />
                         ))}
 
@@ -300,6 +339,34 @@ export default function CurriculumManagement() {
           </button>
         </div>
 
+        {/* Mata kuliah pilihan */}
+        <div className="mt-8 rounded-lg bg-white p-4 shadow-md lg:p-6">
+          <h2 className="text-lg font-semibold lg:text-xl">Mata Kuliah Pilihan</h2>
+          <p className="mt-1 text-sm text-gray-600">Klik RPS untuk mengisi ringkasan dan PDF tiap mata kuliah pilihan.</p>
+          <div className="mt-4 grid gap-4 md:grid-cols-3">
+            {electives.map((e, ei) => (
+              <div key={e.key} className="rounded-md border border-gray-200">
+                <p className="border-b bg-gray-50 px-3 py-2 text-sm font-semibold">{e.name}</p>
+                <ul className="divide-y">
+                  {e.matkul.map((m, mi) => (
+                    <li key={mi} className="flex items-center justify-between gap-2 px-3 py-2 text-sm">
+                      <span>
+                        {m.nama} <span className="text-gray-400">· {m.sks ?? "-"} SKS</span>
+                        {m.rps && <span className="ml-1 rounded bg-green-100 px-1.5 text-xs text-green-700">RPS</span>}
+                      </span>
+                      <button onClick={() => setRpsTarget({ kind: "el", a: ei, b: mi })} className="shrink-0 rounded bg-indigo-500 px-2.5 py-1 text-xs text-white hover:bg-indigo-600">
+                        RPS
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <AdminRpsEditor course={rpsCourse} open={!!rpsCourse} onOpenChange={(o) => !o && setRpsTarget(null)} onSave={saveRps} />
+
         {/* Save Button */}
         <div className="mt-8 flex justify-end space-x-4">
           <button
@@ -331,6 +398,7 @@ function CourseRow({
   onUpdate,
   onCancelEdit,
   onDelete,
+  onRps,
 }) {
   const [editedCourse, setEditedCourse] = useState(course);
 
@@ -388,9 +456,20 @@ function CourseRow({
   return (
     <tr className="border-b hover:bg-gray-50">
       <td className="px-4 py-3 text-sm">{courseIndex + 1}</td>
-      <td className="px-4 py-3 text-sm">{course.nama}</td>
+      <td className="px-4 py-3 text-sm">
+        {course.nama}
+        {course.rps && <span className="ml-2 rounded bg-green-100 px-1.5 text-xs text-green-700">RPS</span>}
+      </td>
       <td className="px-4 py-3 text-sm">{course.sks || "-"}</td>
       <td className="px-4 py-3 text-right space-x-2">
+        {!/^elective\b/i.test(course.nama || "") && (
+          <button
+            onClick={onRps}
+            className="px-3 py-1 bg-indigo-500 hover:bg-indigo-600 text-white text-sm rounded"
+          >
+            RPS
+          </button>
+        )}
         <button
           onClick={onEdit}
           className="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white text-sm rounded"

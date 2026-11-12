@@ -30,7 +30,7 @@ export const NAV = [
     href: "/curiculum",
     items: [
       { label: "Kurikulum & RPS", href: "/curiculum", desc: "Struktur mata kuliah per semester" },
-      { label: "Bidang Keahlian", href: "/#bidang", desc: "Empat peminatan unggulan" },
+      { label: "Bidang Keahlian", href: "/bidang-keahlian", desc: "Empat peminatan unggulan" },
       { label: "Jalur Kelulusan", href: "/curiculum#kelulusan", desc: "Skripsi dan jalur non-reguler" },
       { label: "Regulasi Akademik", href: "/curiculum#regulasi", desc: "Pedoman dan peraturan studi" },
     ],
@@ -220,7 +220,7 @@ export const FOOTER = {
   instagram: "https://www.instagram.com/sisforuisi/",
   columns: [
     { title: "Profil", links: [["Sambutan Kaprodi", "/sambutan-kaprodi"], ["Visi & Misi", "/visi-misi"], ["Struktur Organisasi", "/struktur-organisasi"], ["Profil Lulusan", "/profil-lulusan"], ["Dosen", "/dosen"]] },
-    { title: "Akademik", links: [["Kurikulum & RPS", "/curiculum"], ["Jalur Kelulusan", "/curiculum#kelulusan"], ["Prestasi", "/achievement"]] },
+    { title: "Akademik", links: [["Kurikulum & RPS", "/curiculum"], ["Bidang Keahlian", "/bidang-keahlian"], ["Jalur Kelulusan", "/curiculum#kelulusan"], ["Prestasi", "/achievement"]] },
     { title: "Tautan Penting", links: [["Universitas (UISI)", "https://uisi.ac.id"], ["PMB UISI", PMB_URL], ["Instagram Prodi", "https://www.instagram.com/sisforuisi/"]] },
   ],
 };

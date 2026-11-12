@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
  * Toast custom — tanpa dependensi.
  *   const toast = useToast();
  *   toast.success("Tersimpan"); toast.error("Gagal", { description: "..." });
+ *   toast.success("Ditandai", { action: { label: "Batalkan", onClick: undo } });
  * Pasang <ToastProvider> sekali di layout.
  */
 const ToastContext = createContext(null);
@@ -49,6 +50,18 @@ function ToastItem({ toast, onClose }) {
       <div className="min-w-0">
         <p className="text-sm font-semibold">{toast.title}</p>
         {toast.description && <p className="mt-0.5 text-[13px] leading-relaxed text-white/70">{toast.description}</p>}
+        {toast.action && (
+          <button
+            type="button"
+            onClick={() => {
+              toast.action.onClick?.();
+              close();
+            }}
+            className="mt-2 text-[13px] font-semibold text-gold-soft underline decoration-gold/50 underline-offset-4 transition-colors hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
+          >
+            {toast.action.label}
+          </button>
+        )}
       </div>
       <button
         onClick={close}

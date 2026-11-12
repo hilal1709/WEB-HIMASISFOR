@@ -20,7 +20,7 @@ export function ExpertiseScene() {
         <div className="absolute -top-6 right-[38%] z-10 hidden xl:block">
           <div className="relative"><ElvoPeek pose="think" size={92} say="Bingung pilih bidang? Arahkan kursor ke kartunya." side="right" delay={0.3} /></div>
         </div>
-        <SectionHeader title={EXPERTISE.title} body={EXPERTISE.body} action={<ArrowLink href="/curiculum">Lihat kurikulum lengkap</ArrowLink>} />
+        <SectionHeader title={EXPERTISE.title} body={EXPERTISE.body} action={<ArrowLink href="/bidang-keahlian">Jelajahi bidang keahlian</ArrowLink>} />
         <ul className="mt-10 hidden gap-5 md:mt-12 md:grid md:grid-cols-2 lg:grid-cols-4">
           {EXPERTISE.items.map((item, i) => (
             <li key={item.slug} data-aos="fade-up" data-aos-delay={i * 80}>
@@ -44,7 +44,7 @@ export function ExpertiseScene() {
 
 function Card({ item, index, open }) {
   return (
-    <a href="/curiculum" className="group relative block aspect-[3/4] overflow-hidden rounded-lg bg-maroon-deep text-white">
+    <a href={`/bidang-keahlian#bidang-${item.slug}`} className="group relative block aspect-[3/4] overflow-hidden rounded-lg bg-maroon-deep text-white">
       <Image src={item.image} alt="" fill sizes="(min-width:1024px) 300px, (min-width:768px) 45vw, 85vw" className={cn("object-cover transition-transform duration-1000 ease-cinematic group-hover:scale-[1.07]", item.crop && "scale-[1.12]")} />
       <span className="absolute left-4 top-4 grid size-9 place-items-center rounded-full bg-gold font-serif text-sm text-navy">0{index + 1}</span>
       <div className="absolute inset-x-0 bottom-0 bg-maroon/[0.94] p-5">

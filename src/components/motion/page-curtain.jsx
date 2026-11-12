@@ -9,6 +9,8 @@ import { prefersReducedMotion } from "@/lib/motion";
  * + garis emas memanjang (anime.js), lalu tirai terangkat lewat clip-path (GSAP).
  *   <PageCurtain storageKey="sisfor:curtain:visi" title="Visi" accent="& Misi" />
  */
+const HIDDEN = { opacity: 0, transform: "translateY(14px)" };
+
 export function PageCurtain({ storageKey, kicker = "Program Studi Sistem Informasi", title, accent, label = "Memuat halaman" }) {
   const ref = useRef(null);
   const [show, setShow] = useState(true);
@@ -69,8 +71,9 @@ export function PageCurtain({ storageKey, kicker = "Program Studi Sistem Informa
         style={{ clipPath: "inset(0% 0% 0% 0%)" }}
       >
         <div data-inner className="flex flex-col items-center text-center">
-          <p data-word className="kicker text-gold-soft">{kicker}</p>
-          <p data-word className="mt-4 font-serif text-[clamp(2rem,5vw,3.25rem)] leading-none">
+          {/* kondisi awal disetel di markup (SSR) agar judul tak sempat tampil sebelum anime.js jalan */}
+          <p data-word className="kicker text-gold-soft" style={HIDDEN}>{kicker}</p>
+          <p data-word style={HIDDEN} className="mt-4 font-serif text-[clamp(2rem,5vw,3.25rem)] leading-none">
             {title} {accent && <em className="italic text-gold-soft">{accent}</em>}
           </p>
           <span data-line className="mt-6 block h-[2px] w-40 origin-left scale-x-0 bg-gold" />

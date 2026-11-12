@@ -26,7 +26,11 @@ const nextConfig = {
   
   // Alias rute berbahasa Indonesia
   async redirects() {
-    return [{ source: '/prestasi', destination: '/achievement', permanent: true }];
+    return [
+      { source: '/prestasi', destination: '/achievement', permanent: true },
+      { source: '/kurikulum', destination: '/curiculum', permanent: true },
+      { source: '/peminatan', destination: '/bidang-keahlian', permanent: true },
+    ];
   },
 
   // Compression and optimization

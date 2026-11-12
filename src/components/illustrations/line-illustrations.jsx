@@ -422,7 +422,180 @@ export function PodiumIllustration({ className }) {
   );
 }
 
+/**
+ * "Tangga delapan semester": tumpukan buku di kiri menjadi tangga 8 anak tangga menuju toga.
+ * Tiap anak tangga dibungkus <g data-step="n" data-on> — anak tangga ≤ `active` menyala; yang aktif berdenyut (data-node).
+ */
+export function CurriculumMapIllustration({ className, active = 0 }) {
+  const steps = Array.from({ length: 8 }, (_, i) => {
+    const x = 150 + i * 36;
+    const top = 268 - (i + 1) * 22;
+    return { n: i + 1, x, top };
+  });
+  return (
+    <svg viewBox="0 0 520 320" role="img" aria-label="Ilustrasi tumpukan buku yang menjadi tangga delapan semester menuju toga wisuda" className={className ?? "h-auto w-full text-ink"}>
+      <path data-line {...line} d="M14 268h492" />
+      {/* tumpukan buku */}
+      <rect x="34" y="236" width="104" height="32" rx="3" {...soft} />
+      <path data-line {...line} d="M34 268v-32h104v32M44 252h70M34 236l8-26h88l8 26M52 222h60" />
+      <path data-line {...line} d="M48 210l10-30h64l8 30M66 196h44" />
+      <path data-line {...line} d="M128 180l-8-24M120 156l-26 6" />
+      {/* tangga */}
+      {steps.map((s) => (
+        <g key={s.n} data-step={s.n} data-on={s.n <= active ? "" : undefined} data-current={s.n === active ? "" : undefined}>
+          <rect x={s.x} y={s.top} width="36" height={268 - s.top} {...soft} />
+          <path data-line {...line} d={`M${s.x} ${s.top}h36v${268 - s.top}`} />
+          <text x={s.x + 18} y={s.top + 17} textAnchor="middle" fontSize="12" fontWeight="700" fill="currentColor" fillOpacity="0.6">{s.n}</text>
+          <circle data-node cx={s.x + 18} cy={s.top - 9} r="4" {...node} />
+        </g>
+      ))}
+      {/* toga di puncak */}
+      <g transform="translate(436 40)">
+        <path data-line {...line} d="M0 22L34 8l34 14-34 14z" />
+        <path data-line {...line} d="M14 28v14c0 6 40 6 40 0V28M62 25v18" />
+        <circle cx="62" cy="46" r="3" {...accent} />
+      </g>
+      <path data-line {...line} strokeDasharray="4 7" d="M150 200c60-70 150-120 270-140" />
+      <path data-line {...line} d="M88 104v-10M83 99h10M300 70v-8M296 66h8" />
+    </svg>
+  );
+}
+
+/**
+ * "Empat jalur kelulusan": satu jalan dari bawah bercabang empat — (skripsi) buku, (lomba) piala,
+ * (pkm) bola lampu, (bisnis) toko. Dipakai di permukaan maroon: garis putih, aksen emas.
+ * Tiap cabang dibungkus <g data-branch="key">; titik tujuan bertanda data-node.
+ */
+export function GraduationForkIllustration({ className }) {
+  const gold = { fill: "var(--gold)", style: { transformBox: "fill-box", transformOrigin: "center" } };
+  const glow = { fill: "var(--gold)", fillOpacity: 0.14 };
+  return (
+    <svg viewBox="0 0 520 300" role="img" aria-label="Ilustrasi jalan yang bercabang empat menuju skripsi, lomba, PKM, dan bisnis" className={className ?? "h-auto w-full text-white"}>
+      <path data-line {...line} d="M206 300c20-44 40-80 50-104M314 300c-20-44-40-80-50-104" />
+      <path data-line {...line} strokeDasharray="6 9" d="M260 294v-86" />
+      <circle cx="260" cy="190" r="6" {...gold} />
+
+      <g data-branch="skripsi">
+        <path {...line} strokeDasharray="5 8" d="M260 190c-60-20-120-40-176-92" />
+        <rect x="50" y="34" width="66" height="50" rx="3" {...glow} />
+        <path data-line {...line} d="M50 84V40c12-6 22-6 33 0 11-6 21-6 33 0v44c-12-6-22-6-33 0-11-6-21-6-33 0zM83 40v44" />
+        <circle data-node cx="84" cy="98" r="5" {...gold} />
+      </g>
+      <g data-branch="lomba">
+        <path {...line} strokeDasharray="5 8" d="M260 190c-30-30-50-60-60-104" />
+        <rect x="174" y="22" width="52" height="52" rx="3" {...glow} />
+        <path data-line {...line} d="M184 28h32v14c0 10-7 18-16 18s-16-8-16-18zM184 34h-8c0 10 4 14 10 14M216 34h8c0 10-4 14-10 14M200 60v8M190 74h20v-6h-20z" />
+        <circle data-node cx="200" cy="86" r="5" {...gold} />
+      </g>
+      <g data-branch="pkm">
+        <path {...line} strokeDasharray="5 8" d="M260 190c30-30 50-60 60-104" />
+        <circle cx="320" cy="44" r="24" {...glow} />
+        <path data-line {...line} d="M320 22c-12 0-20 9-20 20 0 8 5 12 8 17v7h24v-7c3-5 8-9 8-17 0-11-8-20-20-20zM310 72h20M314 66v-8l6-6 6 6v8" />
+        <circle data-node cx="320" cy="86" r="5" {...gold} />
+      </g>
+      <g data-branch="bisnis">
+        <path {...line} strokeDasharray="5 8" d="M260 190c60-20 120-40 176-92" />
+        <rect x="404" y="36" width="66" height="46" rx="3" {...glow} />
+        <path data-line {...line} d="M400 50l8-16h58l8 16zM400 50c0 6 6 10 12 10s12-4 12-10c0 6 6 10 12 10s12-4 12-10c0 6 6 10 12 10s12-4 12-10M406 60v22h62V60M430 82V68h14v14" />
+        <circle data-node cx="436" cy="98" r="5" {...gold} />
+      </g>
+    </svg>
+  );
+}
+
+/** Roda gigi sebagai path garis (gigi = garis pendek radial). */
+function gearTeeth(cx, cy, r, len, n = 8) {
+  let d = "";
+  for (let i = 0; i < n; i++) {
+    const a = (i / n) * Math.PI * 2;
+    const c = Math.cos(a), s = Math.sin(a);
+    d += `M${(cx + c * r).toFixed(1)} ${(cy + s * r).toFixed(1)}L${(cx + c * (r + len)).toFixed(1)} ${(cy + s * (r + len)).toFixed(1)}`;
+  }
+  return d;
+}
+
+/**
+ * "Kompas bidang keahlian": dua sumbu (proses bisnis ↔ teknologi & data, kendali ↔ strategi) membagi
+ * empat kuadran — (0) target strategi, (1) grafik data, (2) roda gigi enterprise, (3) perisai audit.
+ * Tiap kuadran dibungkus <g data-quadrant="i"> agar bisa disorot (`.compass[data-active-quadrant]`);
+ * jarum di tengah (`data-needle`) diputar dari luar (GSAP, svgOrigin 260 210). `compact` = tanpa cincin luar (mini).
+ */
+export function CompassQuadrantIllustration({ className, compact = false }) {
+  const gold = { fill: "var(--gold)", style: { transformBox: "fill-box", transformOrigin: "center" } };
+  return (
+    <svg viewBox="0 0 520 420" role="img" aria-label="Ilustrasi kompas empat bidang keahlian: manajemen SI, data science, enterprise systems, dan IT audit" className={className ?? "h-auto w-full text-ink"}>
+      {!compact && (
+        <>
+          <circle {...line} cx="260" cy="210" r="186" strokeDasharray="2 7" opacity="0.5" />
+          <circle data-line {...line} cx="260" cy="210" r="128" opacity="0.35" />
+        </>
+      )}
+      {/* sumbu */}
+      <path data-line {...line} d="M44 210h432M260 30v360" />
+      <path data-line {...line} d="M468 203l9 7-9 7M52 203l-9 7 9 7M253 38l7-9 7 9M253 382l7 9 7-9" />
+      <path {...line} d="M250 120h20M250 300h20M170 200v20M350 200v20" opacity="0.5" />
+
+      {/* 0 — kiri atas: strategi (target + anak panah) */}
+      <g data-quadrant="0">
+        <circle cx="140" cy="112" r="36" {...soft} />
+        <circle data-line {...line} cx="140" cy="112" r="36" />
+        <circle data-line {...line} cx="140" cy="112" r="22" />
+        <circle data-line {...line} cx="140" cy="112" r="9" />
+        <path data-line {...line} d="M198 54l-52 52M198 54v14M198 54h-14M190 46l8 8" />
+        <circle data-node cx="140" cy="112" r="4.5" {...gold} />
+      </g>
+
+      {/* 1 — kanan atas: data (batang + tren) */}
+      <g data-quadrant="1">
+        <rect x="346" y="92" width="72" height="50" rx="3" {...soft} />
+        <path data-line {...line} d="M336 142h92" />
+        <rect data-line {...line} x="348" y="116" width="12" height="26" rx="2" />
+        <rect data-line {...line} x="368" y="102" width="12" height="40" rx="2" />
+        <rect data-line {...line} x="388" y="88" width="12" height="54" rx="2" />
+        <path data-line {...line} d="M344 100l22-14 22-10 30-20" />
+        <path {...line} strokeDasharray="3 6" d="M418 56l14-8" />
+        <circle data-node cx="418" cy="56" r="4.5" {...gold} />
+      </g>
+
+      {/* 2 — kiri bawah: enterprise (dua roda gigi + modul) */}
+      <g data-quadrant="2">
+        <circle cx="124" cy="300" r="18" {...soft} />
+        <circle data-line {...line} cx="124" cy="300" r="18" />
+        <circle data-line {...line} cx="124" cy="300" r="6" />
+        <path data-line {...line} d={gearTeeth(124, 300, 18, 7)} />
+        <circle data-line {...line} cx="163" cy="331" r="12" />
+        <circle data-line {...line} cx="163" cy="331" r="4" />
+        <path data-line {...line} d={gearTeeth(163, 331, 12, 6)} />
+        <rect data-line {...line} x="72" y="338" width="34" height="22" rx="3" />
+        <path {...line} strokeDasharray="3 6" d="M106 349h24c6 0 10-4 12-8" />
+        <circle data-node cx="124" cy="300" r="4.5" {...gold} />
+      </g>
+
+      {/* 3 — kanan bawah: audit (perisai + centang + kaca pembesar) */}
+      <g data-quadrant="3">
+        <path d="M378 268l32 12v30c0 20-14 34-32 42-18-8-32-22-32-42v-30z" {...soft} />
+        <path data-line {...line} d="M378 268l32 12v30c0 20-14 34-32 42-18-8-32-22-32-42v-30z" />
+        <path data-line {...line} d="M364 310l10 10 20-23" />
+        <circle data-line {...line} cx="430" cy="350" r="12" />
+        <path data-line {...line} d="M439 359l12 12" />
+        <circle data-node cx="410" cy="280" r="4.5" {...gold} />
+      </g>
+
+      {/* jarum */}
+      <g data-needle>
+        <path d="M260 146l11 64h-22z" fill="var(--maroon)" />
+        <path d="M249 210h22l-11 64z" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+        <circle cx="260" cy="210" r="7" fill="var(--gold)" />
+        <circle cx="260" cy="210" r="2.4" fill="currentColor" />
+      </g>
+    </svg>
+  );
+}
+
 export const ILLUSTRATIONS = {
+  compass: CompassQuadrantIllustration,
+  "curriculum-map": CurriculumMapIllustration,
+  "graduation-fork": GraduationForkIllustration,
   podium: PodiumIllustration,
   "lecturer-network": LecturerNetworkIllustration,
   "class-paths": ClassPathsIllustration,

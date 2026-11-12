@@ -158,3 +158,27 @@ node prisma/seed-curriculum.js
 ```
 
 Script ini akan mengisi database dengan data kurikulum default 8 semester jika belum ada.
+
+
+## RPS dan Mata Kuliah Pilihan (2026-11)
+
+Halaman publik `/curiculum` kini membaca bentuk data baru (bentuk array lama tetap didukung):
+
+```json
+{
+  "semesters": [{ "semester": 5, "matkul": [{
+    "nama": "Audit TI", "sks": 2, "kode": "SI5203", "rumpun": "tata-kelola",
+    "rps": {
+      "dosen": "Nama Dosen", "revisi": "Rev. 2 · Agustus 2026", "pdf": "/rps/123-audit-ti.pdf",
+      "cpmk": ["..."], "minggu": ["16 topik; minggu 8 & 16 = ujian"],
+      "penilaian": [{ "label": "UTS", "bobot": 25 }]
+    }
+  }]}],
+  "electives": [{ "key": "erp | tata-kelola | data", "name": "...", "matkul": [{ "nama": "...", "sks": 3, "rps": {} }] }]
+}
+```
+
+- Tombol **RPS** di tiap baris mata kuliah (dan di kartu Mata Kuliah Pilihan) membuka editor: kode, rumpun, dosen, revisi, PDF (unggah ke `public/rps`), CPMK, 16 topik, penilaian (`Label: bobot`).
+- Mata kuliah dengan RPS dari CMS tidak lagi bertanda "contoh". Kosongkan semua isian untuk kembali ke "RPS menyusul".
+- Kunci lain di `data` dipertahankan apa adanya saat menyimpan.
+- Jalur Kelulusan dan Regulasi Akademik bukan bagian halaman ini (halaman sendiri di menu Akademik).

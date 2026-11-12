@@ -457,6 +457,29 @@ html.has-cursor, html.has-cursor a, html.has-cursor button { cursor: none; }
 .class-paths[data-active-path="1"] [data-path="1"],
 .class-paths[data-active-path="2"] [data-path="2"] { opacity: 1; }
 
+/* Kurikulum — tangga semester di hero: anak tangga ≤ semester aktif menyala */
+.cur-map [data-step] { opacity: 0.3; transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1); }
+.cur-map [data-step][data-on] { opacity: 1; }
+.cur-map [data-step] { cursor: pointer; }
+.cur-map [data-step]:not([data-on]):hover { opacity: 0.65; }
+.cur-map [data-step] [data-node] { opacity: 0; transition: opacity 0.4s; }
+.cur-map [data-step][data-current] [data-node] { opacity: 1; animation: cur-pulse 1.8s ease-in-out infinite; }
+@keyframes cur-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.6); } }
+
+/* Kurikulum — cabang jalur kelulusan aktif menyala */
+.grad-fork [data-branch] { opacity: 0.25; transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1); }
+.grad-fork [data-branch][data-on] { opacity: 1; }
+.grad-fork [data-branch][data-on] [data-node] { animation: cur-pulse 1.8s ease-in-out infinite; }
+
+/* Kurikulum — peta studi: jalur rumpun lain meredup saat satu rumpun dipilih */
+.study-map [data-lane] { transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1); }
+.study-map[data-focus] [data-lane]:not([data-on]) { opacity: 0.14; }
+.cur-rows[data-focus] .cur-row:not([data-on]) { opacity: 0.32; }
+.cur-row { transition: opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.3s; }
+@media (prefers-reduced-motion: reduce) {
+  .cur-map [data-step][data-current] [data-node], .grad-fork [data-branch][data-on] [data-node] { animation: none; }
+}
+
 /* Dosen — simpul rumpun aktif menyala di ilustrasi hero */
 .lecturer-net [data-field] { transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1); }
 .lecturer-net[data-active-field]:not([data-active-field="all"]) [data-field] { opacity: 0.25; }
@@ -464,6 +487,34 @@ html.has-cursor, html.has-cursor a, html.has-cursor button { cursor: none; }
 .lecturer-net[data-active-field="enterprise"] [data-field="enterprise"],
 .lecturer-net[data-active-field="data"] [data-field="data"],
 .lecturer-net[data-active-field="strategi"] [data-field="strategi"] { opacity: 1; }
+
+/* Bidang Keahlian — kompas: kuadran aktif menyala, lainnya meredup; simpul aktif berdenyut */
+.compass [data-quadrant] { transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1); }
+.compass[data-active-quadrant="0"] [data-quadrant]:not([data-quadrant="0"]),
+.compass[data-active-quadrant="1"] [data-quadrant]:not([data-quadrant="1"]),
+.compass[data-active-quadrant="2"] [data-quadrant]:not([data-quadrant="2"]),
+.compass[data-active-quadrant="3"] [data-quadrant]:not([data-quadrant="3"]) { opacity: 0.22; }
+.compass[data-active-quadrant="0"] [data-quadrant="0"] [data-node],
+.compass[data-active-quadrant="1"] [data-quadrant="1"] [data-node],
+.compass[data-active-quadrant="2"] [data-quadrant="2"] [data-node],
+.compass[data-active-quadrant="3"] [data-quadrant="3"] [data-node] { animation: cur-pulse 1.8s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .compass [data-node] { animation: none !important; } }
+
+/* Bidang Keahlian — mosaik "focus cards": tile lain meredup & sedikit buram saat satu di-hover */
+@media (hover: hover) {
+  .bk-mosaic:hover .bk-tile:not(:hover):not(:focus-within) { opacity: 0.55; filter: saturate(0.6) blur(1.5px); }
+}
+.bk-tile { transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1), filter 0.5s cubic-bezier(0.22, 1, 0.36, 1); }
+
+/* Bidang Keahlian — slider penakar minat: track & isi digambar elemen di belakang (tanpa gradien), input transparan + thumb emas */
+.bk-range { -webkit-appearance: none; appearance: none; position: relative; width: 100%; height: 28px; background: transparent; cursor: pointer; }
+.bk-range:focus { outline: none; }
+.bk-range::-webkit-slider-runnable-track { height: 6px; background: transparent; }
+.bk-range::-moz-range-track { height: 6px; background: transparent; }
+.bk-range::-webkit-slider-thumb { -webkit-appearance: none; margin-top: -8px; width: 22px; height: 22px; border-radius: 999px; background: var(--gold); border: 3px solid white; box-shadow: 0 4px 12px -4px rgb(20 33 61 / 0.5); transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.bk-range::-moz-range-thumb { width: 18px; height: 18px; border-radius: 999px; background: var(--gold); border: 3px solid white; box-shadow: 0 4px 12px -4px rgb(20 33 61 / 0.5); }
+.bk-range:hover::-webkit-slider-thumb, .bk-range:active::-webkit-slider-thumb { transform: scale(1.18); }
+.bk-range:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 4px rgb(201 162 39 / 0.35); }
 
 /* Dosen — mode daftar: baris lain meredup saat satu baris di-hover */
 .dosen-rows:hover .dosen-row { opacity: 0.35; }

@@ -16,7 +16,7 @@ export const CURTAIN_KEY = "sisfor:curtain:struktur";
 
 export const INTRO = {
   title: "Struktur Organisasi",
-  body: "Kenali pimpinan dan dosen Program Studi Sistem Informasi UISI, beserta bidang keahlian masing-masing.",
+  body: "Siapa memimpin, siapa mengajar, dan bagaimana koordinasi berjalan di Program Studi Sistem Informasi UISI.",
 };
 
 /**

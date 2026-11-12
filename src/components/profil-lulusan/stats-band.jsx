@@ -48,21 +48,21 @@ export function StatsBand({ stats }) {
   }, []);
 
   return (
-    <section ref={ref} aria-label="Angka lulusan" className="bg-navy py-12 text-white md:py-14">
+    <section ref={ref} aria-label="Angka lulusan" className="border-y border-gold/30 bg-cream-2 py-12 md:py-14">
       <Container>
         <dl className="grid grid-cols-2 gap-x-6 gap-y-10 lg:grid-cols-4">
           {stats.map((s) => (
             <div key={s.label} className="group flex flex-col">
               <span data-bar aria-hidden className="block h-[3px] w-10 origin-left bg-gold transition-[width] duration-500 ease-cinematic group-hover:w-16" />
-              <dt className="order-last mt-2 text-sm text-white/65">{s.label}</dt>
-              <dd className="mt-4 font-serif text-[clamp(2.4rem,4.4vw,3.5rem)] leading-none tabular-nums text-white">
+              <dt className="order-last mt-2 text-sm text-text/60">{s.label}</dt>
+              <dd className="mt-4 font-serif text-[clamp(2.4rem,4.4vw,3.5rem)] leading-none tabular-nums text-maroon">
                 <span data-num={s.value}>{s.value.toLocaleString("id-ID")}</span>
-                <span className="text-gold-soft">{s.suffix}</span>
+                <span className="text-gold">{s.suffix}</span>
               </dd>
             </div>
           ))}
         </dl>
-        <PlaceholderTag tone="dark" className="mt-8" />
+        <PlaceholderTag className="mt-8" />
       </Container>
     </section>
   );

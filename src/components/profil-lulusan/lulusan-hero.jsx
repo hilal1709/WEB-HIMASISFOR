@@ -51,7 +51,7 @@ export function LulusanHero({ intro, roles, alumni }) {
           <ol className="flex flex-wrap items-center gap-2">
             <li><a href="/" className="u-gold transition-colors hover:text-maroon">Beranda</a></li>
             <li aria-hidden>/</li>
-            <li><a href="/profile" className="u-gold transition-colors hover:text-maroon">Profil</a></li>
+            <li>Profil</li>
             <li aria-hidden>/</li>
             <li aria-current="page" className="text-navy">Profil Lulusan</li>
           </ol>
@@ -108,21 +108,29 @@ export function LulusanHero({ intro, roles, alumni }) {
                 >
                   <span
                     style={{ rotate: `${TILTS[i % TILTS.length]}deg` }}
-                    className="block rounded-md bg-white p-2 pb-3 shadow-[0_18px_40px_-26px_rgb(20_33_61/0.55)] transition-[rotate,translate,box-shadow] duration-500 ease-cinematic group-hover:!rotate-0 group-hover:-translate-y-2 group-hover:shadow-[0_28px_50px_-28px_rgb(20_33_61/0.6)]"
+                    className="block rounded-md bg-white p-2 pb-6 shadow-[0_18px_40px_-26px_rgb(20_33_61/0.55)] transition-[rotate,translate,box-shadow] duration-500 ease-cinematic group-hover:!rotate-0 group-hover:-translate-y-2 group-hover:shadow-[0_28px_50px_-28px_rgb(20_33_61/0.6)]"
                   >
                     <span className="relative block aspect-[4/5] overflow-hidden rounded-sm bg-cream-2">
                       {a.photo ? (
-                        <Image src={a.photo} alt={a.name} fill sizes="(min-width:1024px) 200px, 40vw" className="object-cover grayscale-[0.2] transition-[filter,transform] duration-700 ease-cinematic group-hover:scale-[1.04] group-hover:grayscale-0" />
+                        <Image src={a.photo} alt="" fill sizes="(min-width:1024px) 200px, 40vw" className="object-cover grayscale-[0.2] transition-[filter,transform] duration-700 ease-cinematic group-hover:scale-[1.04] group-hover:grayscale-0" />
                       ) : (
                         <span className="grid h-full place-items-center font-serif text-2xl text-maroon">{initials(a.name)}</span>
                       )}
                     </span>
-                    <span className="mt-2.5 block truncate px-1 text-[13px] font-semibold text-navy">{a.name}</span>
-                    {a.role && <span className="block truncate px-1 text-[11.5px] text-text/55">{a.role}</span>}
                   </span>
                 </li>
               ))}
             </ul>
+            <a
+              href="#alumni"
+              onClick={(e) => {
+                e.preventDefault();
+                smoothTo("alumni");
+              }}
+              className="mt-8 flex justify-center text-[14.5px] font-semibold text-navy"
+            >
+              <span className="u-gold">Lihat cerita mereka ↓</span>
+            </a>
             <div className="absolute -top-32 right-[2%] hidden lg:block">
               <div className="relative"><ElvoPeek pose="proud" size={92} side="left" say="Kakak-kakak alumni sudah di mana-mana, lho!" delay={0.4} /></div>
             </div>

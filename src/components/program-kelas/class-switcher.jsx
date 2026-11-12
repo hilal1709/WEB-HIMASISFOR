@@ -57,7 +57,7 @@ export function ClassSwitcher() {
       <Container>
         <SectionHeader
           title={["Pilih", "ritme belajarmu"]}
-          body="Semua kelas menempuh 144 SKS dengan dosen dan gelar yang sama. Bedanya ada di waktu, cara, dan tempat belajar."
+          body="Bedanya ada di waktu, cara, dan tempat belajar. Geser antartab untuk melihat ritme tiap kelas."
         />
 
         <div className="mt-10 flex justify-start md:mt-12" data-aos="fade-up">

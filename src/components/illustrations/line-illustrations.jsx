@@ -355,7 +355,75 @@ export function LecturerNetworkIllustration({ className }) {
   );
 }
 
+/**
+ * Podium prestasi: tiga anak tangga = tiga tingkat (tengah internasional, kiri nasional, kanan regional).
+ * Piala di puncak, medali di anak tangga lain, konfeti & daun salam. `[data-level]` dipakai `.podium`
+ * untuk menyalakan tingkat aktif; `[data-node]` berdenyut.
+ */
+export function PodiumIllustration({ className }) {
+  return (
+    <svg viewBox="0 0 520 320" role="img" aria-label="Ilustrasi podium juara dengan piala dan medali untuk tingkat internasional, nasional, dan regional" className={className ?? "h-auto w-full text-ink"}>
+      {/* lantai & bayangan */}
+      <path data-line {...line} d="M40 292h440" />
+      <path data-line {...line} strokeDasharray="2 8" d="M70 302h380" />
+
+      {/* konfeti */}
+      <g>
+        <path data-line {...line} d="M150 74l8 6M372 62l-6 8M118 128l10-2M404 118l9 3M196 40l2 9M330 34l-3 9" />
+        <circle cx="176" cy="96" r="3.5" {...accent} />
+        <circle cx="352" cy="92" r="3" fill="var(--gold)" />
+        <rect x="262" y="22" width="7" height="7" rx="1.5" fill="var(--gold)" transform="rotate(20 265 25)" />
+        <rect x="130" y="162" width="6" height="6" rx="1.5" {...accent} transform="rotate(-18 133 165)" />
+        <circle cx="420" cy="166" r="3" {...accent} />
+      </g>
+
+      {/* nasional — kiri */}
+      <g data-level="nasional">
+        <path d="M92 210h108v82H92z" {...soft} />
+        <path data-line {...line} d="M92 292v-82h108v82" />
+        <path data-line {...line} d="M139 238c1-6 13-7 14 0 1 6-14 12-14 18h14" />
+        {/* medali */}
+        <path data-line {...line} d="M134 148l12 24 12-24" />
+        <circle data-line {...line} cx="146" cy="184" r="13" />
+        <path data-line {...line} d="M140 184l4 4 8-8" />
+        <circle data-node cx="146" cy="210" r="4.5" {...node} />
+      </g>
+
+      {/* regional — kanan */}
+      <g data-level="regional">
+        <path d="M320 236h108v56H320z" {...soft} />
+        <path data-line {...line} d="M320 292v-56h108v56" />
+        <path data-line {...line} d="M367 252h13l-7 8c5 0 8 3 8 7s-4 7-8 7c-3 0-6-1-7-4" />
+        <path data-line {...line} d="M362 178l12 22 12-22" />
+        <circle data-line {...line} cx="374" cy="210" r="12" />
+        <circle cx="374" cy="210" r="4" fill="var(--gold)" />
+        <circle data-node cx="374" cy="236" r="4.5" {...node} />
+      </g>
+
+      {/* internasional — tengah */}
+      <g data-level="internasional">
+        <path d="M200 170h120v122H200z" {...soft} />
+        <path data-line {...line} d="M200 292V170h120v122" />
+        <path data-line {...line} d="M254 206l8-6v40M252 240h20" />
+        {/* piala */}
+        <path d="M234 82h52l-4 34c-2 14-12 22-22 22s-20-8-22-22z" fill="var(--gold)" fillOpacity="0.32" />
+        <path data-line {...line} d="M234 82h52l-4 34c-2 14-12 22-22 22s-20-8-22-22zM234 92c-14 0-18 8-16 16 2 8 10 12 18 10M286 92c14 0 18 8 16 16-2 8-10 12-18 10M260 138v14M244 162h32M248 152h24v10h-24z" />
+        <path data-line {...line} d="M252 102l8-6 8 6-3 9h-10z" />
+        {/* daun salam */}
+        <path data-line {...line} d="M206 150c-12-14-14-34-6-50M314 150c12-14 14-34 6-50M202 128l-10-4M200 112l-9-7M318 128l10-4M320 112l9-7" />
+        <circle data-node cx="260" cy="170" r="4.5" {...node} />
+      </g>
+
+      {/* globe kecil (internasional) */}
+      <circle data-line {...line} cx="446" cy="74" r="16" />
+      <path data-line {...line} d="M430 74h32M446 58c-8 9-8 23 0 32M446 58c8 9 8 23 0 32" />
+      <path data-line {...line} strokeDasharray="4 7" d="M430 84c-40 24-90 26-134 10" />
+    </svg>
+  );
+}
+
 export const ILLUSTRATIONS = {
+  podium: PodiumIllustration,
   "lecturer-network": LecturerNetworkIllustration,
   "class-paths": ClassPathsIllustration,
   erp: ErpIllustration,

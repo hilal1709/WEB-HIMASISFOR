@@ -1,8 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
-import { BANNER_KEY } from "@/lib/dosen-content";
 import { CONTACT_URL } from "@/lib/home-content";
-import { Banner } from "@/components/ui/banner";
 import { Container, PillLink } from "@/components/home/shared";
 import { ElvoPeek } from "@/components/home/elvo-peek";
 
@@ -10,67 +7,65 @@ const NEXT = [
   { href: "/struktur-organisasi", kicker: "Profil", title: "Struktur Organisasi", body: "Pimpinan prodi dan Minilab Sistem Informasi." },
   { href: "/curiculum", kicker: "Akademik", title: "Kurikulum", body: "Mata kuliah yang diampu para dosen." },
   { href: "/achievement", kicker: "Profil", title: "Prestasi", body: "Capaian dosen dan mahasiswa." },
+  { href: "/sambutan-kaprodi", kicker: "Profil", title: "Sambutan Kaprodi", body: "Pandangan kaprodi tentang pendidikan Sisfor." },
 ];
 
-/** Penutup: banner kolaborasi (tutup diingat selama sesi) + tautan lanjutan. Elvo `thumbs-up`. */
-export function Closing() {
-  const [show, setShow] = useState(false);
-  useEffect(() => {
-    let hidden = false;
-    try {
-      hidden = sessionStorage.getItem(BANNER_KEY) === "1";
-    } catch {}
-    setShow(!hidden);
-  }, []);
+const WAYS = ["Riset bersama", "Narasumber", "Magang", "Proyek industri"];
 
+/**
+ * Penutup "panel kolaborasi": kiri kartu cream-2 besar (ajakan kolaborasi + cara kerja sama + tombol
+ * emas), kanan tiga tautan lanjutan bertumpuk dengan panah melingkar. Elvo `thumbs-up`.
+ */
+export function Closing() {
   return (
-    <section className="relative py-16 md:py-20">
+    <section className="relative py-16 md:py-24">
       <Container>
-        {show && (
-          <div
-            className="relative mb-10"
-            data-aos="fade-up"
-            onClickCapture={(e) => {
-              if (e.target.closest?.('[aria-label="Tutup banner"]')) {
-                try {
-                  sessionStorage.setItem(BANNER_KEY, "1");
-                } catch {}
-              }
-            }}
-          >
-            <Banner
-              variant="brand"
-              dismissible
-              title="Ingin berkolaborasi dengan dosen kami?"
-              action={
-                <PillLink href={CONTACT_URL} variant="gold" size="sm" target="_blank" rel="noopener noreferrer" className="hidden sm:inline-flex">
-                  Hubungi prodi
-                </PillLink>
-              }
-            >
-              Riset bersama, narasumber, magang, atau proyek industri: sekretariat prodi akan menghubungkan Anda dengan dosen yang tepat.
-            </Banner>
-            <div className="absolute -top-16 right-6 hidden lg:block">
-              <div className="relative"><ElvoPeek pose="thumbs-up" size={72} say="Dosennya ramah, kok!" delay={0.2} /></div>
+        <div className="grid gap-6 lg:grid-cols-[1.25fr_0.75fr] lg:gap-8">
+          <div data-aos="fade-up" className="relative rounded-xl border border-line bg-cream-2 p-7 md:p-10">
+            <span aria-hidden className="block h-[3px] w-10 bg-gold" />
+            <p className="mt-5 font-serif text-[clamp(1.9rem,3.6vw,2.9rem)] leading-[1.1] text-navy">
+              Ingin berkolaborasi dengan <em className="italic text-maroon">dosen kami?</em>
+            </p>
+            <p className="mt-4 max-w-xl text-pretty text-[16px] leading-relaxed text-text/65">
+              Sekretariat prodi akan menghubungkan Anda dengan dosen yang tepat untuk kebutuhan Anda.
+            </p>
+            <ul className="mt-6 flex flex-wrap gap-2">
+              {WAYS.map((w) => (
+                <li key={w} className="rounded-full border border-navy/15 bg-cream px-3.5 py-1 text-[13px] text-navy/80">
+                  {w}
+                </li>
+              ))}
+            </ul>
+            <PillLink href={CONTACT_URL} variant="gold" target="_blank" rel="noopener noreferrer" className="mt-8">
+              Hubungi prodi
+            </PillLink>
+            <div className="absolute -top-14 right-8 hidden lg:block">
+              <div className="relative"><ElvoPeek pose="thumbs-up" size={76} side="left" say="Dosennya ramah, kok!" delay={0.2} /></div>
             </div>
           </div>
-        )}
-        <ul className="divide-y divide-line border-y border-line">
-          {NEXT.map((n, i) => (
-            <li key={n.href} data-aos="fade-up" data-aos-delay={i * 70}>
-              <a href={n.href} className="group grid grid-cols-[1fr_auto] items-center gap-x-6 gap-y-1 py-5 md:grid-cols-[140px_1fr_1.2fr_auto] md:py-6">
-                <p className="kicker text-maroon">{n.kicker}</p>
-                <p className="col-start-1 font-serif text-[1.4rem] leading-tight text-navy md:col-start-auto">
-                  <span className="u-gold">{n.title}</span>
-                </p>
-                <p className="col-start-1 text-sm text-text/60 md:col-start-auto">{n.body}</p>
-                <svg aria-hidden viewBox="0 0 16 16" className="col-start-2 row-span-3 row-start-1 size-5 text-maroon transition-transform duration-500 ease-cinematic group-hover:translate-x-1.5 md:col-start-auto md:row-span-1 md:row-start-auto">
-                  <path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </a>
-            </li>
-          ))}
-        </ul>
+
+          <ul className="flex flex-col gap-3">
+            {NEXT.map((n, i) => (
+              <li key={n.href} data-aos="fade-up" data-aos-delay={i * 80} className="flex-1">
+                <a
+                  href={n.href}
+                  className="group flex h-full items-center gap-5 rounded-xl border border-line bg-white px-6 py-5 transition-[border-color,box-shadow] duration-500 ease-cinematic hover:border-navy/20 hover:shadow-[0_24px_50px_-36px_rgb(20_33_61/0.55)]"
+                >
+                  <span className="min-w-0 flex-1">
+                    <span className="inline-block rounded bg-maroon/8 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-maroon">{n.kicker}</span>
+                    <span className="mt-2 block font-serif text-[1.3rem] leading-tight text-navy">{n.title}</span>
+                    <span className="mt-0.5 block text-sm text-text/60">{n.body}</span>
+                  </span>
+                  <span className="grid size-10 shrink-0 place-items-center rounded-full border border-navy/20 text-navy transition-[background-color,border-color,color,transform] duration-500 ease-cinematic group-hover:-rotate-45 group-hover:border-maroon group-hover:bg-maroon group-hover:text-white">
+                    <svg aria-hidden viewBox="0 0 16 16" className="size-4">
+                      <path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
       </Container>
     </section>
   );

@@ -4,8 +4,8 @@ import { ElvoPeek } from "@/components/home/elvo-peek";
 import { LordIcon } from "@/components/media/lord-icon";
 
 const NEXT = [
-  { href: "/sambutan-kaprodi", kicker: "Profil", title: "Sambutan Kaprodi", body: "Pesan dari ketua program studi." },
-  { href: "/visi-misi", kicker: "Profil", title: "Visi & Misi", body: "Arah program studi menuju 2030." },
+  { href: "/sambutan-kaprodi", kicker: "Profil", title: "Sambutan Kaprodi", body: "Kenali pimpinan prodi lewat pesannya." },
+  { href: "/visi-misi", kicker: "Profil", title: "Visi & Misi", body: "Arah yang dijalankan oleh tim ini." },
   { href: "/profil-lulusan", kicker: "Profil", title: "Profil Lulusan", body: "Kompetensi dan peran lulusan." },
 ];
 

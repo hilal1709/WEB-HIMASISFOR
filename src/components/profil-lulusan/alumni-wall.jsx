@@ -28,7 +28,7 @@ export function AlumniWall({ alumni }) {
       <Container>
         <SectionHeader
           title={["Jejak", "Sisforians", "di industri"]}
-          body="Alumni kami tersebar di perusahaan manufaktur, konsultan, perbankan, hingga instansi pemerintah. Pilih kartu untuk membaca ceritanya."
+          body="Dari ruang kelas Sisfor ke manufaktur, konsultan, perbankan, dan instansi pemerintah. Pilih kartu untuk membaca ceritanya."
           action={<LottieIllustration src="/lottie/grad-cap.json" className="hidden w-28 md:block" />}
         />
       </Container>

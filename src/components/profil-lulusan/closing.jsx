@@ -5,16 +5,15 @@ import { ElvoPeek } from "@/components/home/elvo-peek";
 
 const NEXT = [
   { href: "/curiculum", kicker: "Akademik", title: "Kurikulum", body: "Mata kuliah yang membentuk tiap profil." },
-  { href: "/visi-misi", kicker: "Profil", title: "Visi & Misi", body: "Arah program studi menuju 2030." },
-  { href: "/sambutan-kaprodi", kicker: "Profil", title: "Sambutan Kaprodi", body: "Pesan dari ketua program studi." },
+  { href: "/visi-misi", kicker: "Profil", title: "Visi & Misi", body: "Tiga bidang unggulan yang melahirkan profil-profil ini." },
+  { href: "/sambutan-kaprodi", kicker: "Profil", title: "Sambutan Kaprodi", body: "Harapan kaprodi untuk lulusan Sisfor." },
 ];
 
 /**
- * Penutup band maroon full-bleed: "Mau jadi yang mana?" + chip jabatan + tombol PMB,
+ * Penutup band maroon full-bleed: "Mau jadi yang mana?" + kalimat penjelas + tombol PMB,
  * lalu tautan lanjutan sebagai daftar baris berpemisah garis.
  */
-export function Closing({ roles = [] }) {
-  const chips = roles.slice(0, 9);
+export function Closing() {
   return (
     <>
       <section className="relative overflow-hidden bg-maroon py-16 text-white md:py-24">
@@ -24,20 +23,9 @@ export function Closing({ roles = [] }) {
           <div className="grid gap-10 lg:grid-cols-[1fr_auto] lg:items-end">
             <div>
               <SceneTitle title={["Mau jadi", "yang mana?"]} tone="dark" className="!text-[clamp(2.25rem,5vw,4rem)]" />
-              {chips.length > 0 && (
-                <ul className="mt-8 flex max-w-3xl flex-wrap gap-2.5">
-                  {chips.map((r, i) => (
-                    <li
-                      key={r}
-                      data-aos="fade-up"
-                      data-aos-delay={i * 40}
-                      className="rounded-full border border-white/25 px-4 py-1.5 text-sm text-white/85 transition-colors duration-300 hover:border-gold hover:text-gold-soft"
-                    >
-                      {r}
-                    </li>
-                  ))}
-                </ul>
-              )}
+              <p className="mt-5 max-w-xl text-pretty text-[16.5px] leading-relaxed text-white/70">
+                Semua jalur karier berangkat dari kurikulum yang sama; arahnya kamu tentukan sendiri selama kuliah.
+              </p>
             </div>
             <div className="flex flex-col items-start gap-3 lg:items-end">
               <PillLink href={PMB_URL} variant="white" target="_blank" rel="noopener noreferrer">

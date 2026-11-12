@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { ScrollTrigger } from "@/lib/scroll";
 import { AUDIENCE, MEGA_FEATURE, NAV, PMB_URL } from "@/lib/home-content";
 import { cn } from "@/lib/utils";
@@ -39,8 +40,20 @@ export function Topbar() {
   );
 }
 
+/** Path tanpa hash/query: "/curiculum#kelulusan" → "/curiculum". */
+const pathOf = (href = "") => href.split(/[?#]/)[0] || "/";
+
+/** Menu utama yang memuat halaman aktif: cocok persis dengan salah satu sub-menu (tanpa hash), atau Beranda di "/". */
+function activeMenu(pathname) {
+  if (!pathname || pathname === "/") return "Beranda";
+  const hit = NAV.find((n) => n.items?.some((s) => !s.href.startsWith("/#") && pathOf(s.href) === pathname));
+  return hit?.label ?? null;
+}
+
 /** Header utama putih, sticky, memadat saat di-scroll. Mega menu + pencarian + tombol PMB. */
 export function SiteHeader() {
+  const pathname = usePathname();
+  const current = activeMenu(pathname);
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
     const st = ScrollTrigger.create({ start: 80, end: "max", onToggle: (s) => setScrolled(s.isActive) });
@@ -59,16 +72,21 @@ export function SiteHeader() {
             {NAV.map((item, idx) =>
               item.items ? (
                 <NavigationMenuItem key={item.label} className="relative">
-                  <NavigationMenuTrigger className="text-text/80 hover:text-navy data-[state=open]:text-navy">{item.label}</NavigationMenuTrigger>
+                  <NavigationMenuTrigger
+                    aria-current={current === item.label ? "page" : undefined}
+                    className={cn("text-text/80 hover:text-navy data-[state=open]:text-navy", current === item.label && "text-navy")}
+                  >
+                    {item.label}
+                  </NavigationMenuTrigger>
                   {/* Menu di separuh kanan nav di-anchor ke tepi kanan trigger agar panel tidak keluar viewport */}
                   <NavigationMenuContent className={cn("max-w-[calc(100vw-2rem)] rounded-lg border-line p-0", idx >= NAV.length / 2 ? "left-auto -right-6" : "-left-6")}>
-                    <Mega item={item} />
+                    <Mega item={item} pathname={pathname} />
                   </NavigationMenuContent>
                 </NavigationMenuItem>
               ) : (
                 <NavigationMenuItem key={item.label}>
                   <NavigationMenuLink asChild>
-                    <a href={item.href} className={cn(navTriggerClass, "text-text/80 hover:text-navy")} aria-current={item.href === "/" ? "page" : undefined}>
+                    <a href={item.href} className={cn(navTriggerClass, "text-text/80 hover:text-navy")} aria-current={current === item.label ? "page" : undefined}>
                       {item.label}
                     </a>
                   </NavigationMenuLink>
@@ -90,7 +108,7 @@ export function SiteHeader() {
   );
 }
 
-function Mega({ item }) {
+function Mega({ item, pathname }) {
   const f = MEGA_FEATURE[item.label];
   return (
     <div className={cn("grid max-w-full", f ? "w-[600px] grid-cols-[1fr_232px]" : "w-[360px]")}>
@@ -98,7 +116,12 @@ function Mega({ item }) {
         {item.items.map((sub, i) => (
           <li key={sub.label} className="animate-in fade-in-0 slide-in-from-bottom-1 duration-500" style={{ animationDelay: `${60 + i * 45}ms`, animationFillMode: "both" }}>
             <NavigationMenuLink asChild>
-              <a href={sub.href} className="group/sub flex items-start justify-between gap-4 rounded-md px-3 py-2.5 transition-colors hover:bg-cream focus:bg-cream focus:outline-none">
+              <a
+                href={sub.href}
+                aria-current={pathOf(sub.href) === pathname && !sub.href.includes("#") ? "page" : undefined}
+                className="group/sub relative flex items-start justify-between gap-4 rounded-md px-3 py-2.5 transition-colors hover:bg-cream focus:bg-cream focus:outline-none aria-[current=page]:bg-cream"
+              >
+                <span aria-hidden className="absolute inset-y-2.5 left-0 w-[3px] origin-center scale-y-0 rounded-full bg-gold transition-transform duration-300 group-aria-[current=page]/sub:scale-y-100" />
                 <span>
                   <span className="block text-sm font-semibold text-navy">{sub.label}</span>
                   <span className="mt-0.5 block text-xs text-text/55">{sub.desc}</span>
@@ -112,10 +135,11 @@ function Mega({ item }) {
       {f && (
         <NavigationMenuLink asChild>
           <a href={f.href} className="group/feat m-3 ml-0 flex flex-col overflow-hidden rounded-md bg-navy text-white animate-in fade-in-0 duration-500" style={{ animationDelay: "120ms", animationFillMode: "both" }}>
-            <span className="relative block aspect-[4/3] overflow-hidden">
+            {/* foto mengisi sisa tinggi panel agar tidak ada ruang kosong saat sub-menu panjang */}
+            <span className="relative block min-h-[150px] flex-1 overflow-hidden">
               <Image src={f.image} alt="" fill sizes="240px" className="scale-[1.08] object-cover transition-transform duration-700 group-hover/feat:scale-[1.14]" />
             </span>
-            <span className="flex-1 p-4">
+            <span className="shrink-0 p-4">
               <span className="block font-serif text-lg leading-snug">{f.title}</span>
               <span className="mt-1 block text-xs leading-relaxed text-white/70">{f.body}</span>
             </span>

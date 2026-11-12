@@ -1,15 +1,12 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { animate, stagger, svg } from "animejs";
 import { gsap } from "@/lib/scroll";
 import { prefersReducedMotion } from "@/lib/motion";
 import { CURTAIN_KEY } from "@/lib/dosen-content";
 import { VIDEOS } from "@/lib/home-content";
 import { Container, SceneTitle } from "@/components/home/shared";
 import { ElvoPeek } from "@/components/home/elvo-peek";
-import { LecturerNetworkIllustration } from "@/components/illustrations/line-illustrations";
-import { Magnetic } from "@/components/motion/magnetic";
 import { WordRotate } from "@/components/motion/word-rotate";
 import { Modal, ModalContent, ModalDescription, ModalTitle, ModalTrigger } from "@/components/ui/modal";
 import { cn } from "@/lib/utils";
@@ -20,15 +17,22 @@ export function smoothTo(id) {
 }
 
 /**
- * Hero Dosen: judul serif + WordRotate bidang keahlian, intro + CTA, tumpukan potret dosen yang
- * mengipas saat di-hover (GSAP), lalu ilustrasi "jejaring keahlian" yang tergambar garis demi garis
- * (anime.js). Rumpun aktif menyala di ilustrasi; label rumpun di bawahnya memfilter direktori.
+ * Hero Dosen "pencarian dulu": judul + WordRotate keahlian, kipas potret & video di kanan, lalu panel
+ * pencarian besar yang langsung mengisi `query` direktori, chip rumpun (filter `field`), dan saran topik.
  */
 export function DosenHero() {
-  const { intro, lecturers, fields, field, setField } = useDosen();
+  const { intro, lecturers, fields, field, setField, query, setQuery } = useDosen();
   const ref = useRef(null);
+  const [draft, setDraft] = useState(query);
+  useEffect(() => setDraft(query), [query]);
+  const go = (q) => {
+    setQuery(q);
+    smoothTo("direktori");
+  };
   const fan = useRef(null);
-  const topics = [...new Set(lecturers.flatMap((l) => l.expertise))].filter((t) => t.length <= 22).slice(0, 8);
+  const allTopics = [...new Set(lecturers.flatMap((l) => l.expertise))];
+  const topicCount = allTopics.length;
+  const topics = allTopics.filter((t) => t.length <= 22).slice(0, 8);
 
   useEffect(() => {
     const el = ref.current;
@@ -39,34 +43,14 @@ export function DosenHero() {
     } catch {}
     const delay = seen ? 150 : 1900;
 
-    const draw = animate(svg.createDrawable(el.querySelectorAll("[data-art] [data-line]")), {
-      draw: ["0 0", "0 1"],
-      duration: 1300,
-      delay: stagger(24, { start: delay }),
-      ease: "inOutCubic",
-    });
-    const fills = animate(el.querySelectorAll("[data-art] [fill]:not([fill='none'])"), { opacity: [0, 1], duration: 700, delay: delay + 900, ease: "outCubic" });
     const ctx = gsap.context(() => {
       gsap.from("[data-hero-fade]", { y: 18, opacity: 0, duration: 0.8, stagger: 0.08, ease: "expo.out", delay: delay / 1000 });
       gsap.from("[data-portrait]", { y: 40, opacity: 0, rotate: 0, duration: 0.9, stagger: 0.07, ease: "back.out(1.4)", delay: delay / 1000 + 0.3 });
-      gsap.to("[data-parallax]", { yPercent: -6, ease: "none", scrollTrigger: { trigger: el, start: "top top", end: "bottom top", scrub: 0.8 } });
+      gsap.from("[data-search]", { y: 30, opacity: 0, scale: 0.98, duration: 1, ease: "expo.out", delay: delay / 1000 + 0.2 });
+      gsap.from("[data-chip]", { y: 12, opacity: 0, duration: 0.6, stagger: 0.05, ease: "back.out(1.6)", delay: delay / 1000 + 0.45 });
     }, el);
-    return () => {
-      draw.revert?.();
-      fills.revert?.();
-      ctx.revert();
-    };
+    return () => ctx.revert();
   }, []);
-
-  // titik konektor rumpun aktif berdenyut
-  useEffect(() => {
-    const el = ref.current;
-    if (!el || prefersReducedMotion() || field === "all") return;
-    const n = el.querySelector(`[data-art] [data-field="${field}"] [data-node]`);
-    if (!n) return;
-    const a = animate(n, { scale: [1, 2.1, 1], duration: 1300, loop: true, loopDelay: 400, ease: "inOutSine" });
-    return () => a.revert?.();
-  }, [field]);
 
   // kipas potret
   const spread = (on) => {
@@ -90,108 +74,128 @@ export function DosenHero() {
           <ol className="flex flex-wrap items-center gap-2">
             <li><a href="/" className="u-gold transition-colors hover:text-maroon">Beranda</a></li>
             <li aria-hidden>/</li>
-            <li><a href="/profile" className="u-gold transition-colors hover:text-maroon">Profil</a></li>
+            <li>Profil</li>
             <li aria-hidden>/</li>
             <li aria-current="page" className="text-navy">Dosen</li>
           </ol>
         </nav>
 
-        <div className="mt-10 grid gap-8 lg:mt-14 lg:grid-cols-[1.1fr_0.9fr] lg:items-end lg:gap-16">
-          <div>
-            <span aria-hidden data-hero-fade className="mb-6 block h-[3px] w-10 bg-gold" />
-            <SceneTitle as="h1" trigger="mount" title={["Belajar dari", "yang mengerjakannya"]} className="!text-[clamp(2.75rem,6.4vw,5.25rem)] !leading-[1]" />
-            <p data-hero-fade className="mt-6 font-serif text-[clamp(1.2rem,2.2vw,1.6rem)] leading-tight text-text/60">
+        {/* baris judul: kiri judul, kanan potret + video */}
+        <div className="mt-10 flex flex-col gap-8 lg:mt-12 lg:flex-row lg:items-end lg:justify-between">
+          <div className="max-w-3xl">
+            <SceneTitle as="h1" trigger="mount" title={["Belajar dari", "yang mengerjakannya"]} className="!text-[clamp(2.5rem,5.6vw,4.5rem)] !leading-[1.02]" />
+            <p data-hero-fade className="mt-4 font-serif text-[clamp(1.15rem,2vw,1.45rem)] leading-tight text-text/60">
               Ahli di{" "}
               <span className="inline-block min-w-[12ch] italic text-maroon">
                 <WordRotate words={topics} interval={2400} />
               </span>
             </p>
           </div>
-          <div className="lg:border-l lg:border-line lg:pb-2 lg:pl-10">
-            {/* tumpukan potret */}
+          <div data-hero-fade className="flex flex-wrap items-center gap-x-8 gap-y-4 lg:flex-col lg:items-end lg:gap-3">
             <button
               ref={fan}
               type="button"
-              data-hero-fade
               onPointerEnter={() => spread(true)}
               onPointerLeave={() => spread(false)}
               onFocus={() => spread(true)}
               onBlur={() => spread(false)}
               onClick={() => smoothTo("direktori")}
               aria-label={`Lihat ${lecturers.length} dosen`}
-              className="group mb-6 flex items-center gap-4"
+              className="group flex items-center gap-4"
             >
               <span className="flex pl-3">
                 {lecturers.slice(0, 6).map((l, i) => (
                   <span
                     key={l.slug}
                     data-portrait
-                    className="relative -ml-3 h-16 w-12 overflow-hidden rounded-md border-2 border-cream bg-cream-2 shadow-[0_10px_20px_-12px_rgb(20_33_61/0.6)]"
+                    className="relative -ml-3 h-14 w-11 overflow-hidden rounded-md border-2 border-cream bg-cream-2 shadow-[0_10px_20px_-12px_rgb(20_33_61/0.6)]"
                     style={{ zIndex: 10 - i }}
                   >
-                    {l.photo ? <Image src={l.photo} alt="" fill sizes="48px" className="object-cover object-top" /> : <span className="grid size-full place-items-center text-xs text-maroon">{l.initials}</span>}
+                    {l.photo ? <Image src={l.photo} alt="" fill sizes="44px" className="object-cover object-top" /> : <span className="grid size-full place-items-center text-xs text-maroon">{l.initials}</span>}
                   </span>
                 ))}
               </span>
-              <span className="text-left text-[13.5px] leading-snug text-text/60">
+              <span className="text-left text-[13px] leading-snug text-text/60">
                 <span className="block font-semibold text-navy">{lecturers.length} dosen tetap</span>
-                <span className="u-gold">satu ruang diskusi</span>
+                <span className="u-gold">{topicCount} topik keahlian</span>
               </span>
             </button>
-            <p data-hero-fade className="text-pretty text-[17px] leading-relaxed text-text/70">{intro.body}</p>
-            <div data-hero-fade className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-4">
-              <Magnetic strength={0.25}>
-                <a
-                  href="#direktori"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    smoothTo("direktori");
-                  }}
-                  className="group inline-flex h-12 items-center gap-2 rounded-md bg-maroon px-6 text-[15px] font-semibold text-white transition-[background-color,transform] duration-300 ease-cinematic hover:bg-maroon-deep active:scale-[0.98]"
-                >
-                  Kenali dosen
-                  <svg aria-hidden viewBox="0 0 16 16" className="size-4 transition-transform duration-300 group-hover:translate-y-0.5">
-                    <path d="M8 3v10M4 9l4 4 4-4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </a>
-              </Magnetic>
-              <VideoLink />
-            </div>
+            <VideoLink />
           </div>
         </div>
 
-        {/* ilustrasi jejaring keahlian */}
-        <div className="relative mx-auto mt-12 max-w-[900px] md:mt-14">
-          <div data-art data-parallax data-active-field={field} className="lecturer-net">
-            <LecturerNetworkIllustration className="h-auto w-full text-navy" />
+        {/* panel pencarian */}
+        <div data-search className="relative mt-10 rounded-2xl border border-line bg-white p-4 shadow-[0_30px_60px_-44px_rgb(20_33_61/0.5)] sm:p-6 md:mt-12">
+          <div className="absolute -top-16 right-6 hidden lg:block">
+            <div className="relative"><ElvoPeek pose="wave" size={80} side="left" say="Ketik topiknya, aku carikan dosennya!" delay={0.3} /></div>
           </div>
-          <div className="absolute -right-4 top-0 hidden lg:block xl:-right-24">
-            <div className="relative"><ElvoPeek pose="wave" size={88} side="left" say="Klik rumpunnya, aku tunjukkan dosennya!" delay={0.3} /></div>
-          </div>
-          <div role="group" aria-label="Filter rumpun keahlian" className="mt-6 grid grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-4">
-            {fields.map((f, i) => {
-              const on = field === f.key;
-              const n = lecturers.filter((l) => l.fields.includes(f.key)).length;
-              return (
-                <button
-                  key={f.key}
-                  type="button"
-                  aria-pressed={on}
-                  onClick={() => {
-                    setField(on ? "all" : f.key);
-                    smoothTo("direktori");
-                  }}
-                  className={cn("group border-t-2 pt-3 text-left transition-colors duration-500", on ? "border-gold" : "border-line hover:border-navy/30")}
-                >
-                  <span className="kicker block text-[11px] text-text/45">Rumpun {String(i + 1).padStart(2, "0")} · {n} dosen</span>
-                  <span className={cn("mt-1 block font-serif text-[clamp(1rem,1.6vw,1.25rem)] leading-tight transition-colors", on ? "text-maroon" : "text-navy group-hover:text-maroon")}>
+          <form
+            role="search"
+            onSubmit={(e) => {
+              e.preventDefault();
+              go(draft.trim());
+            }}
+            className="flex items-center gap-2 rounded-xl border border-navy/15 bg-cream/60 p-1.5 pl-4 transition-[border-color,box-shadow] duration-300 focus-within:border-maroon/50 focus-within:shadow-[0_0_0_4px_rgb(110_20_35/0.08)]"
+          >
+            <svg aria-hidden viewBox="0 0 24 24" className="size-5 shrink-0 text-text/40">
+              <circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" strokeWidth="1.8" />
+              <path d="M16 16l4.5 4.5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+            </svg>
+            <label htmlFor="hero-dosen-q" className="sr-only">Cari dosen</label>
+            <input
+              id="hero-dosen-q"
+              type="search"
+              value={draft}
+              onChange={(e) => setDraft(e.target.value)}
+              placeholder="Cari nama dosen, topik, atau mata kuliah…"
+              className="h-12 min-w-0 flex-1 bg-transparent text-[16px] text-navy outline-none placeholder:text-text/40 md:h-14 md:text-[17px]"
+            />
+            <button type="submit" className="h-11 shrink-0 rounded-lg bg-maroon px-5 text-[15px] font-semibold text-white transition-colors duration-300 hover:bg-maroon-deep md:h-12 md:px-7">
+              Cari
+            </button>
+          </form>
+
+          <div className="mt-4 flex flex-col gap-4 md:flex-row md:items-start md:justify-between md:gap-8">
+            <div role="group" aria-label="Filter rumpun keahlian" className="flex flex-wrap gap-2">
+              {[{ key: "all", name: "Semua rumpun" }, ...fields].map((f) => {
+                const on = field === f.key;
+                const n = f.key === "all" ? lecturers.length : lecturers.filter((l) => l.fields.includes(f.key)).length;
+                return (
+                  <button
+                    key={f.key}
+                    type="button"
+                    data-chip
+                    aria-pressed={on}
+                    onClick={() => {
+                      setField(f.key);
+                      smoothTo("direktori");
+                    }}
+                    className={cn(
+                      "inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-[13.5px] transition-colors duration-300",
+                      on ? "border-maroon bg-maroon text-white" : "border-line bg-cream text-navy hover:border-navy/30"
+                    )}
+                  >
                     {f.name}
-                  </span>
-                </button>
-              );
-            })}
+                    <span className={cn("tabular-nums text-[12px]", on ? "text-white/70" : "text-text/45")}>{n}</span>
+                  </button>
+                );
+              })}
+            </div>
+            <p className="shrink-0 text-[13px] text-text/50">
+              Coba:{" "}
+              {topics.slice(0, 3).map((t, i) => (
+                <span key={t}>
+                  {i > 0 && ", "}
+                  <button type="button" onClick={() => go(t)} className="u-gold font-medium text-navy">
+                    {t}
+                  </button>
+                </span>
+              ))}
+            </p>
           </div>
         </div>
+
+        <p data-hero-fade className="mt-6 max-w-2xl text-pretty text-[15.5px] leading-relaxed text-text/65">{intro.body}</p>
       </Container>
     </section>
   );

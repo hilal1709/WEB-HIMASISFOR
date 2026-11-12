@@ -71,7 +71,7 @@ export function VisiHero() {
           <ol className="flex flex-wrap items-center gap-2">
             <li><a href="/" className="u-gold transition-colors hover:text-maroon">Beranda</a></li>
             <li aria-hidden>/</li>
-            <li><a href="/profile" className="u-gold transition-colors hover:text-maroon">Profil</a></li>
+            <li>Profil</li>
             <li aria-hidden>/</li>
             <li aria-current="page" className="text-navy">Visi &amp; Misi</li>
           </ol>
@@ -89,7 +89,7 @@ export function VisiHero() {
           <p data-hero-fade className="kicker relative text-maroon">Menuju 2030 · sejak 2014</p>
           <SceneTitle as="h1" trigger="mount" align="center" title={["Visi", "& Misi"]} className="relative mt-4 !text-[clamp(3rem,7.5vw,6.25rem)]" />
           <p data-hero-fade className="relative mt-6 max-w-xl text-pretty text-[17px] leading-relaxed text-text/70">
-            Arah yang kami tuju dan cara kami menempuhnya: menjadi program studi Sistem Informasi yang unggul dan berdaya saing internasional pada 2030.
+            Satu visi dan lima misi yang menjadi pegangan setiap keputusan program studi, dari ruang kelas sampai kerja sama industri.
           </p>
           <div data-hero-fade className="relative mt-9 flex flex-wrap items-center justify-center gap-3">
             <Magnetic strength={0.25}>
@@ -122,17 +122,6 @@ export function VisiHero() {
         </div>
       </div>
 
-      {/* pita linimasa 2014 → 2030 */}
-      <Container>
-        <div data-hero-fade className="mx-auto mt-2 flex max-w-xl items-center gap-4 text-[13px] font-semibold tabular-nums text-text/55">
-          <span>2014</span>
-          <span aria-hidden className="relative h-px flex-1 border-t border-dashed border-navy/30">
-            <span className="absolute left-0 top-1/2 size-2 -translate-y-1/2 rounded-full bg-navy/40" />
-            <span className="absolute right-0 top-1/2 size-2.5 -translate-y-1/2 rounded-full bg-maroon ring-4 ring-maroon/15" />
-          </span>
-          <span className="text-maroon">2030</span>
-        </div>
-      </Container>
     </section>
   );
 }

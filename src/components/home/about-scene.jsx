@@ -57,7 +57,7 @@ export function AboutScene({ total }) {
               </footer>
             </blockquote>
             <p data-aos="fade-up" className="mt-6 text-[16.5px] leading-relaxed text-text/70">{ABOUT.body[0]}</p>
-            <ArrowLink href="/profile" className="mt-6">Selengkapnya tentang prodi</ArrowLink>
+            <ArrowLink href="/sambutan-kaprodi" className="mt-6">Selengkapnya tentang prodi</ArrowLink>
           </div>
         </div>
 

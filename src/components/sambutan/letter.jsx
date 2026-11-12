@@ -85,10 +85,6 @@ export function Letter({ data }) {
               <div className="relative size-16 shrink-0 overflow-hidden rounded-md bg-cream-2 lg:size-20">
                 <Image src={data.photo} alt="" fill sizes="80px" className="object-cover object-top" />
               </div>
-              <div>
-                <p className="font-serif text-lg leading-tight text-navy">{data.name}</p>
-                <p className="mt-1 text-[13px] text-text/60">{data.role}</p>
-              </div>
             </div>
 
             <div className="mt-8 hidden gap-4 lg:flex">
@@ -158,7 +154,6 @@ export function Letter({ data }) {
                   </span>
                 ))}
               </blockquote>
-              <figcaption className="mt-6 text-sm text-text/55">— {data.name}</figcaption>
             </figure>
 
             <div className="space-y-6 text-[17.5px] leading-[1.8] text-text/80">
@@ -191,7 +186,6 @@ export function Letter({ data }) {
                 {data.name}
                 {data.credentials ? `, ${data.credentials}` : ""}
               </p>
-              <p className="text-sm text-text/60">{data.role}</p>
             </footer>
           </article>
         </div>

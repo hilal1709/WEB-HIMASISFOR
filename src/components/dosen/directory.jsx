@@ -18,17 +18,17 @@ const useIso = typeof window === "undefined" ? useEffect : useLayoutEffect;
 
 /**
  * Direktori dosen (pola 21st.dev "team grid" + horizonx "editorial list").
- * Toolbar sticky: segmented filter rumpun (latar navy meluncur, ←/→), cari (debounce, teks cocok disorot),
- * toggle Grid/Daftar (≥ lg). Grid: kartu sorot emas, foto berwarna yang membesar halus, chip masuk berurutan;
+ * Pencarian & filter rumpun ada di hero; bilah sticky di sini hanya ringkasan hasil, chip filter aktif
+ * (klik untuk menghapus), tautan kembali ke kolom cari, dan toggle Grid/Daftar (≥ lg). Grid: kartu sorot emas, foto berwarna yang membesar halus, chip masuk berurutan;
  * filter beranimasi FLIP (GSAP Flip). Daftar: baris serif besar, foto pratinjau mengikuti kursor.
  * Ponsel: Swiper. Hasil kosong: Lottie + tombol reset.
  */
 export function Directory() {
   const { fields, field, setField, query, setQuery, view, setView, filtered, lecturers, reset } = useDosen();
+  const fieldName = fields.find((f) => f.key === field)?.name;
   const grid = useRef(null);
   const flipState = useRef(null);
   const flipTween = useRef(null);
-  const [draft, setDraft] = useState(query);
 
   // FLIP: tangkap posisi kartu sebelum state berubah
   const withFlip = (fn) => {
@@ -56,54 +56,49 @@ export function Directory() {
     }
   }, [filtered, view]);
 
-  // debounce pencarian
-  useEffect(() => setDraft(query), [query]);
-  useEffect(() => {
-    if (draft === query) return;
-    const id = setTimeout(() => withFlip(() => setQuery(draft)), 220);
-    return () => clearTimeout(id);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [draft]);
-
-  const tabs = [{ key: "all", short: "Semua" }, ...fields];
 
   return (
     <section id="direktori" className="scroll-mt-20 py-16 md:py-24">
       <Container>
         <SectionHeader
           title={["Direktori", "dosen"]}
-          body="Saring berdasarkan rumpun keahlian atau cari nama, topik, dan mata kuliah. Klik dosen untuk melihat profil lengkapnya."
+          body="Klik dosen untuk melihat mata kuliah yang diampu, bidang riset, dan profil lengkapnya."
         />
 
-        {/* toolbar */}
-        <div className="sticky top-16 z-30 -mx-5 mt-10 border-y border-line bg-cream/95 px-5 py-3 backdrop-blur-md md:top-20 md:mx-0 md:mt-12 md:rounded-lg md:border md:px-3">
-          <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-            <Segmented tabs={tabs} value={field} onChange={(k) => withFlip(() => setField(k))} />
-            <div className="flex items-center gap-2">
-              <label className="relative flex-1 lg:w-72 lg:flex-none">
-                <span className="sr-only">Cari dosen</span>
-                <svg aria-hidden viewBox="0 0 20 20" className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-text/40">
-                  <circle cx="9" cy="9" r="5.5" fill="none" stroke="currentColor" strokeWidth="1.6" />
-                  <path d="M13.5 13.5L17 17" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-                </svg>
-                <input
-                  type="search"
-                  value={draft}
-                  onChange={(e) => setDraft(e.target.value)}
-                  placeholder="Cari nama, topik, mata kuliah…"
-                  className="h-10 w-full rounded-md border border-line bg-white pl-9 pr-3 text-[14px] text-navy transition-[border-color,box-shadow] duration-300 placeholder:text-text/40 focus:border-navy/40 focus:shadow-[0_0_0_3px_rgb(201_162_39/0.25)] focus:outline-none"
-                />
-              </label>
-              <ViewToggle value={view} onChange={setView} />
-            </div>
+        {/* bilah hasil (sticky): pencarian & filter ada di hero, di sini ringkasan + reset + tampilan */}
+        <div className="sticky top-16 z-30 -mx-5 mt-10 flex flex-wrap items-center justify-between gap-3 border-y border-line bg-cream/95 px-5 py-3 backdrop-blur-md md:top-20 md:mx-0 md:mt-12 md:rounded-lg md:border md:px-4">
+          <div aria-live="polite" className="flex flex-wrap items-center gap-2 text-[13.5px] text-text/60">
+            <span>
+              Menampilkan <span className="tabular font-semibold text-navy">{filtered.length}</span> dari {lecturers.length} dosen
+            </span>
+            {field !== "all" && (
+              <button type="button" onClick={() => withFlip(() => setField("all"))} className="inline-flex items-center gap-1.5 rounded-full border border-maroon/30 bg-white px-3 py-1 text-[12.5px] text-maroon hover:border-maroon">
+                {fieldName}
+                <span aria-label="Hapus filter rumpun">×</span>
+              </button>
+            )}
+            {query && (
+              <button type="button" onClick={() => withFlip(() => setQuery(""))} className="inline-flex items-center gap-1.5 rounded-full border border-maroon/30 bg-white px-3 py-1 text-[12.5px] text-maroon hover:border-maroon">
+                “{query}”
+                <span aria-label="Hapus pencarian">×</span>
+              </button>
+            )}
+          </div>
+          <div className="flex items-center gap-4">
+            <button
+              type="button"
+              onClick={() => {
+                const el = document.getElementById("hero-dosen-q");
+                el?.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth", block: "center" });
+                setTimeout(() => el?.focus({ preventScroll: true }), 400);
+              }}
+              className="text-[13.5px] font-semibold text-navy"
+            >
+              <span className="u-gold">Ubah pencarian ↑</span>
+            </button>
+            <ViewToggle value={view} onChange={setView} />
           </div>
         </div>
-
-        <p aria-live="polite" className="mt-6 text-[13.5px] text-text/55">
-          Menampilkan <span className="tabular font-semibold text-navy">{filtered.length}</span> dari {lecturers.length} dosen
-          {field !== "all" && <> · {fields.find((f) => f.key === field)?.name}</>}
-          {query && <> · “{query}”</>}
-        </p>
 
         {filtered.length === 0 ? (
           <Empty onReset={() => withFlip(reset)} />
@@ -138,58 +133,6 @@ export function Directory() {
         )}
       </Container>
     </section>
-  );
-}
-
-function Segmented({ tabs, value, onChange }) {
-  const refs = useRef([]);
-  const [pill, setPill] = useState({ x: 0, w: 0 });
-  const active = Math.max(0, tabs.findIndex((t) => t.key === value));
-
-  useIso(() => {
-    const measure = () => {
-      const t = refs.current[active];
-      if (t) setPill({ x: t.offsetLeft, w: t.offsetWidth });
-    };
-    measure();
-    window.addEventListener("resize", measure);
-    return () => window.removeEventListener("resize", measure);
-  }, [active]);
-
-  const onKey = (e) => {
-    if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
-    e.preventDefault();
-    const next = (active + (e.key === "ArrowRight" ? 1 : -1) + tabs.length) % tabs.length;
-    onChange(tabs[next].key);
-    refs.current[next]?.focus();
-  };
-
-  return (
-    <div className="-mx-1 overflow-x-auto px-1 [scrollbar-width:none]">
-      <div role="tablist" aria-label="Rumpun keahlian" onKeyDown={onKey} className="relative inline-flex rounded-md border border-line bg-white p-1">
-        <span
-          aria-hidden
-          className="absolute bottom-1 top-1 left-0 rounded bg-navy transition-[transform,width] duration-500 ease-cinematic"
-          style={{ width: pill.w, transform: `translateX(${pill.x}px)` }}
-        />
-        {tabs.map((t, i) => (
-          <button
-            key={t.key}
-            ref={(el) => (refs.current[i] = el)}
-            role="tab"
-            aria-selected={i === active}
-            tabIndex={i === active ? 0 : -1}
-            onClick={() => onChange(t.key)}
-            className={cn(
-              "relative z-10 whitespace-nowrap rounded px-3.5 py-2 text-[13.5px] font-semibold transition-colors duration-300",
-              i === active ? "text-white" : "text-navy/65 hover:text-navy"
-            )}
-          >
-            {t.short}
-          </button>
-        ))}
-      </div>
-    </div>
   );
 }
 

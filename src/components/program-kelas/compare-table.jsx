@@ -67,7 +67,7 @@ export function CompareTable() {
       <Container>
         <SectionHeader
           title={["Bandingkan", "berdampingan"]}
-          body="Gelar, kurikulum, dan dosen tetap sama. Lihat bagian mana yang berbeda."
+          body="Waktu kuliah, praktikum, magang, dan biaya tiap kelas dalam satu tabel."
           action={
             <div className="flex flex-wrap items-center gap-3">
               <label className="group inline-flex cursor-pointer select-none items-center gap-3 text-[14px] font-medium text-navy">

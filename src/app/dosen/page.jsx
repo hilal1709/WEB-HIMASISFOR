@@ -6,9 +6,7 @@ import { AosReady } from "@/components/motion/aos-provider";
 import { PageCurtain } from "@/components/motion/page-curtain";
 import { DosenProvider } from "@/components/dosen/dosen-provider";
 import { DosenHero } from "@/components/dosen/dosen-hero";
-import { StatsBand } from "@/components/dosen/stats-band";
 import { Directory } from "@/components/dosen/directory";
-import { KaprodiFeature } from "@/components/dosen/kaprodi-feature";
 import { ExpertiseMap } from "@/components/dosen/expertise-map";
 import { Closing } from "@/components/dosen/closing";
 
@@ -40,9 +38,7 @@ export default async function DosenPage() {
       <DosenProvider data={data}>
         <main>
           <DosenHero />
-          <StatsBand />
           <Directory />
-          <KaprodiFeature />
           <ExpertiseMap />
           <Closing />
         </main>

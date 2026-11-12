@@ -471,4 +471,12 @@ html.has-cursor, html.has-cursor a, html.has-cursor button { cursor: none; }
 .dosen-row { transition: opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
 
 /* Dosen — teks yang cocok dengan pencarian */
+/* Prestasi: tingkat aktif di podium hero */
+.podium [data-level] { transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1); }
+.podium[data-active-level]:not([data-active-level="all"]) [data-level] { opacity: 0.25; }
+.podium[data-active-level="internasional"] [data-level="internasional"],
+.podium[data-active-level="nasional"] [data-level="nasional"],
+.podium[data-active-level="regional"] [data-level="regional"] { opacity: 1; }
+.prestasi-rows:hover .prestasi-row:not(:hover) { opacity: 0.45; }
+.prestasi-row { transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1); }
 .dosen-mark { background: rgb(201 162 39 / 0.28); color: inherit; border-radius: 2px; padding: 0 1px; }

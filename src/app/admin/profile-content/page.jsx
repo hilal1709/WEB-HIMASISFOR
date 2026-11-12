@@ -82,6 +82,7 @@ export default function ProfileContentManagement() {
     { id: "akreditasi", label: "Akreditasi" },
     { id: "profil-alumni", label: "Profil Alumni" },
     { id: "infinite-alumni", label: "Daftar Alumni" },
+    { id: "kisah-mawapres", label: "Kisah Mawapres" },
   ];
 
   if (loading) {
@@ -186,6 +187,13 @@ export default function ProfileContentManagement() {
               <ProfilAlumniEditor
                 data={contents["profil-alumni"]}
                 onSave={(data) => handleSave("profil-alumni", data)}
+                saving={saving}
+              />
+            )}
+            {activeTab === "kisah-mawapres" && (
+              <KisahMawapresEditor
+                data={contents["kisah-mawapres"]}
+                onSave={(data) => handleSave("kisah-mawapres", data)}
                 saving={saving}
               />
             )}
@@ -1017,6 +1025,92 @@ function InfiniteAlumniEditor({ data, onSave, saving }) {
         disabled={saving}
         className="w-full bg-red-600 text-white py-3 px-6 rounded-lg hover:bg-red-700 transition-colors disabled:bg-gray-400"
       >
+        {saving ? "Menyimpan..." : "Simpan Perubahan"}
+      </button>
+    </form>
+  );
+}
+
+// Kisah Mawapres Editor — band "Kisah sukses" di halaman Prestasi (/achievement)
+function KisahMawapresEditor({ data, onSave, saving }) {
+  const toForm = (d) => ({
+    title: d?.title || "",
+    content: d?.content || "",
+    subtitle: d?.subtitle || "",
+    image: d?.image || "",
+    data: { people: Array.isArray(d?.data?.people) && d.data.people.length ? d.data.people : [{ name: "", role: "", photo: "" }] },
+  });
+  const [formData, setFormData] = useState(toForm(data));
+  useEffect(() => {
+    if (data) setFormData(toForm(data));
+  }, [data]);
+
+  const people = formData.data.people;
+  const setPeople = (next) => setFormData({ ...formData, data: { people: next } });
+  const updatePerson = (i, field, value) => setPeople(people.map((p, k) => (k === i ? { ...p, [field]: value } : p)));
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSave({ ...formData, data: { people: people.filter((p) => p.name.trim()) } });
+  };
+
+  const input = "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent";
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <p className="text-sm text-gray-600">
+        Tampil di halaman <b>Prestasi</b> (band maroon &ldquo;Kisah sukses&rdquo;). Kosongkan kolom untuk memakai teks bawaan.
+      </p>
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2">Judul kecil</label>
+        <input type="text" value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} className={input} placeholder="Kisah sukses" />
+      </div>
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2">Kutipan / cerita singkat</label>
+        <textarea rows={3} value={formData.content} onChange={(e) => setFormData({ ...formData, content: e.target.value })} className={input} placeholder="Cerita singkat mahasiswa berprestasi…" />
+      </div>
+      <div className="grid gap-4 md:grid-cols-2">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">URL video (.mp4)</label>
+          <input type="text" value={formData.subtitle} onChange={(e) => setFormData({ ...formData, subtitle: e.target.value })} className={input} placeholder="/video/mawapres.mp4" />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Poster video</label>
+          <input type="text" value={formData.image} onChange={(e) => setFormData({ ...formData, image: e.target.value })} className={input} placeholder="/video/mawapres.jpg" />
+        </div>
+      </div>
+
+      <div>
+        <div className="flex items-center justify-between mb-3">
+          <label className="block text-sm font-medium text-gray-700">Mahasiswa di video</label>
+          <button type="button" onClick={() => setPeople([...people, { name: "", role: "", photo: "" }])} className="text-sm font-medium text-red-600 hover:text-red-700">
+            + Tambah mahasiswa
+          </button>
+        </div>
+        <div className="space-y-3">
+          {people.map((p, i) => (
+            <div key={i} className="grid gap-3 rounded-lg border border-gray-200 p-4 md:grid-cols-[1fr_1.4fr_1fr_auto] md:items-end">
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">Nama</label>
+                <input type="text" value={p.name} onChange={(e) => updatePerson(i, "name", e.target.value)} className={input} placeholder="Felix Atmaja" />
+              </div>
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">Keterangan</label>
+                <input type="text" value={p.role} onChange={(e) => updatePerson(i, "role", e.target.value)} className={input} placeholder="Mahasiswa Berprestasi 2023" />
+              </div>
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">Foto</label>
+                <input type="text" value={p.photo} onChange={(e) => updatePerson(i, "photo", e.target.value)} className={input} placeholder="/img/mhs/felix.png" />
+              </div>
+              <button type="button" onClick={() => setPeople(people.filter((_, k) => k !== i))} disabled={people.length === 1} className="h-10 px-3 text-sm text-gray-500 hover:text-red-600 disabled:opacity-40">
+                Hapus
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <button type="submit" disabled={saving} className="w-full bg-red-600 text-white py-3 px-6 rounded-lg hover:bg-red-700 transition-colors disabled:bg-gray-400">
         {saving ? "Menyimpan..." : "Simpan Perubahan"}
       </button>
     </form>

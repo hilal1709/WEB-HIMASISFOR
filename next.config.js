@@ -24,6 +24,11 @@ const nextConfig = {
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
   
+  // Alias rute berbahasa Indonesia
+  async redirects() {
+    return [{ source: '/prestasi', destination: '/achievement', permanent: true }];
+  },
+
   // Compression and optimization
   compress: true,
   

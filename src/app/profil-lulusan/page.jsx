@@ -42,11 +42,11 @@ export default async function ProfilLulusanPage() {
       <ProfileModalProvider profiles={data.profiles}>
         <main>
           <LulusanHero intro={data.intro} roles={data.roles} alumni={data.alumni} />
-          <StatsBand stats={data.stats} />
           <ProfileExplorer profiles={data.profiles} />
           <CplBento cpl={data.cpl} />
+          <StatsBand stats={data.stats} />
           <AlumniWall alumni={data.alumni} />
-          <Closing roles={data.roles} />
+          <Closing />
         </main>
       </ProfileModalProvider>
       <SiteFooter />

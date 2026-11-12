@@ -48,7 +48,7 @@ export function SambutanHero({ data }) {
           <ol className="flex flex-wrap items-center gap-2">
             <li><a href="/" className="u-gold transition-colors hover:text-maroon">Beranda</a></li>
             <li aria-hidden>/</li>
-            <li><a href="/profile" className="u-gold transition-colors hover:text-maroon">Profil</a></li>
+            <li>Profil</li>
             <li aria-hidden>/</li>
             <li aria-current="page" className="text-navy">Sambutan Kaprodi</li>
           </ol>
@@ -59,7 +59,7 @@ export function SambutanHero({ data }) {
             <span aria-hidden data-hero-fade className="mb-6 block h-[3px] w-10 bg-gold" />
             <SceneTitle as="h1" trigger="mount" title={["Sambutan", "Ketua Program Studi"]} className="!text-[clamp(2.5rem,5.4vw,4.5rem)]" />
             <p data-hero-fade className="mt-6 max-w-xl text-pretty text-[17px] leading-relaxed text-text/70">
-              Pesan dari {data.name} untuk calon mahasiswa, orang tua, alumni, dan mitra Sistem Informasi UISI.
+              Pesan untuk calon mahasiswa, orang tua, alumni, dan mitra Sistem Informasi UISI.
             </p>
             <div data-hero-fade className="mt-9 flex flex-wrap items-center gap-3">
               <Magnetic strength={0.25}>

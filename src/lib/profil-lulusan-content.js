@@ -166,7 +166,10 @@ export function mergeProfilLulusan(rows = []) {
 
   const profiles = PROFILES.map((p, i) => {
     const c = Array.isArray(careers) ? careers.find((x) => x?.id === p.cmsId) : null;
-    const summary = c?.description?.trim() || p.summary;
+    // sebagian deskripsi CMS diawali judulnya sendiri ("IT Consultant Berperan …") → buang awalan itu
+    let desc = c?.description?.trim() || "";
+    if (c?.title && desc.toLowerCase().startsWith(c.title.toLowerCase() + " ")) desc = desc.slice(c.title.length).trim();
+    const summary = desc ? desc[0].toUpperCase() + desc.slice(1) : p.summary;
     return { ...p, n: i + 1, summary };
   });
 

@@ -17,6 +17,10 @@ export function AosProvider({ children }) {
     let done = false;
     const run = () => {
       if (done) return;
+      // Halaman dengan loading.js di-stream dalam Suspense boundary terpisah: saat provider ini
+      // terpasang, isinya (dan [data-aos-wait]) bisa belum ada. Cek ulang tepat sebelum init,
+      // dan tunda sampai <AosReady/> memberi sinyal agar AOS tidak mengubah DOM pra-hidrasi.
+      if (!window.__sisforHydrated && document.querySelector("[data-aos-wait]")) return;
       done = true;
       AOS.init({
         duration: 700,
@@ -27,10 +31,9 @@ export function AosProvider({ children }) {
       });
     };
     const later = () => (idle = window.requestIdleCallback ? window.requestIdleCallback(run, { timeout: 1500 }) : setTimeout(run, 300));
-    const waitsForSignal = !!document.querySelector("[data-aos-wait]");
-    if (window.__sisforHydrated) later();
-    else if (waitsForSignal) window.addEventListener(READY, later, { once: true });
-    else if (document.readyState === "complete") later();
+    // sinyal hidrasi selalu didengarkan; jalur `load` hanya untuk halaman tanpa <AosReady/>
+    window.addEventListener(READY, later, { once: true });
+    if (window.__sisforHydrated || document.readyState === "complete") later();
     else window.addEventListener("load", later, { once: true });
     return () => {
       window.removeEventListener(READY, later);

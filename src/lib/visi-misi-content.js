@@ -69,7 +69,7 @@ export const MILESTONES = [
   { year: "2022", title: "Kurikulum OBE", body: "Kurikulum berbasis capaian disusun bersama mitra industri.", sample: true },
   { year: "2024", title: "Akreditasi Baik Sekali", body: "Diraih dari LAM INFOKOM.", sample: true /* tahun perlu dikonfirmasi */ },
   { year: "2027", title: "Rekognisi internasional", body: "Kolaborasi riset dan mobilitas mahasiswa lintas negara.", sample: true },
-  { year: "2030", title: "Unggul & berdaya saing", body: "Visi tercapai: unggul di Sistem Enterprise, Tata Kelola & Audit TI, dan Sains Data.", goal: true },
+  { year: "2030", title: "Unggul & berdaya saing", body: "Titik akhir rencana strategis program studi.", goal: true },
 ];
 
 /** Gabungkan baris CMS ke fallback. */

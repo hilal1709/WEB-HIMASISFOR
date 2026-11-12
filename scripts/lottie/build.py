@@ -259,6 +259,27 @@ def trophy(P):
     return [group(s, "all", s=anim([(56, [100, 100]), (64, [104, 96]), (72, [98, 103]), (80, [100, 100])]), a=(130, 210), p=(130, 210))]
 
 
+def medal(P):
+    """Medali berpita: pita V jatuh dari atas, cakram pop, bintang tergambar lalu berkilau."""
+    s = [group([path([(92, 34), (118, 34), (142, 112), (116, 112)], closed=True), fill(P["a1"])], "rib-l",
+               p=anim([(0, [0, -60]), (16, [0, 4]), (22, [0, 0])]))]
+    s.append(group([path([(168, 34), (142, 34), (118, 112), (144, 112)], closed=True), fill(P["line"], 85)], "rib-r",
+                   p=anim([(4, [0, -60]), (20, [0, 4]), (26, [0, 0])])))
+    s.append(group([ellipse(96, 96, 130, 160), fill(P["a2"])], "disc", s=pop(20, 12), a=(130, 160), p=(130, 160)))
+    s.append(group([ellipse(72, 72, 130, 160), stroke(P["base"], 4, 80), trim(30, 46)], "ring"))
+    star = []
+    for k in range(10):
+        r = 24 if k % 2 == 0 else 10
+        a = math.radians(-90 + k * 36)
+        star.append((130 + r * math.cos(a), 160 + r * math.sin(a)))
+    s.append(group([path(star, closed=True), stroke(P["line"], 3.5), trim(40, 58)], "star"))
+    s.append(group([path(star, closed=True), fill(P["base"])], "starfill", o=anim([(56, 0), (64, 100)])))
+    for k, (x, y) in enumerate([(70, 120), (196, 134), (186, 212)]):
+        s.append(group([path([(x - 7, y), (x + 7, y)]), stroke(P["a2"], 3.5), path([(x, y - 7), (x, y + 7)]), stroke(P["a2"], 3.5)], f"spark{k}",
+                       s=anim([(62 + k * 6, [0, 0]), (70 + k * 6, [120, 120]), (80 + k * 6, [0, 0])]), a=(x, y), p=(x, y)))
+    return [group(s, "all", r=anim([(64, 0), (74, -5), (84, 4), (94, 0)]), a=(130, 34), p=(130, 34))]
+
+
 def calendar(P):
     s = [group([rect(176, 170, 130, 138, 14), fill(P["base"]), stroke(P["line"], 3.5), trim(0, 24)], "frame")]
     s.append(group([rect(176, 40, 130, 73, 12), fill(P["a1"])], "head", s=anim([(14, [100, 0]), (26, [100, 100])]), a=(130, 53), p=(130, 53)))
@@ -402,6 +423,7 @@ def qa_industry(P):
 
 
 SPECS = [
+    ("medal", medal, ["light", "dark"]),
     ("erp-nodes", erp_nodes, ["light"]),
     ("lecturer", lecturer, ["light"]),
     ("industry", industry, ["light"]),

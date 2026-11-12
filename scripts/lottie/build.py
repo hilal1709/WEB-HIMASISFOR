@@ -503,6 +503,95 @@ def rulebook(P):
     return s
 
 
+def briefcase(P):
+    """Magang: tas kerja tergambar, gagang & gesper pop, kartu ID tergantung berayun pelan."""
+    s = []
+    body = rect(150, 100, 130, 150, 10)
+    s.append(group([body, fill(P["base"])], "bfill"))
+    s.append(group([rect(150, 100, 130, 150, 10), fill(P["soft"], P["soft_op"])], "bsoft"))
+    s.append(group([rect(150, 100, 130, 150, 10), stroke(P["line"], 4), trim(0, 24)], "body"))
+    s.append(group([path([(96, 100), (96, 86), (164, 86), (164, 100)]), stroke(P["line"], 4), trim(10, 26)], "handle"))
+    s.append(group([path([(55, 140), (205, 140)]), stroke(P["line"], 3.5, 70), trim(18, 32)], "seam"))
+    s.append(group([rect(26, 18, 130, 140, 4), fill(P["a2"])], "clasp", s=pop(28, 12), a=(130, 140), p=(130, 140)))
+    # kartu ID tergantung di sisi kanan, berayun (rotasi pada titik gantung)
+    tag = [
+        path([(196, 112), (206, 150)]), stroke(P["line"], 3),
+        rect(30, 40, 206, 172, 4), fill(P["a1"]),
+    ]
+    s.append(group(tag, "tag", a=(196, 112), p=(196, 112),
+                   r=anim([(30, -10), (60, 8), (90, -6), (119, -10)]), s=pop(30, 12)))
+    s.append(group([path([(198, 166), (214, 166)]), stroke(P["base"], 3)], "tagline",
+                   a=(196, 112), p=(196, 112), r=anim([(30, -10), (60, 8), (90, -6), (119, -10)]), o=anim([(36, 0), (44, 100)])))
+    return s
+
+
+def credit_swap(P):
+    """Konversi SKS: jam pasir tergambar dan butirnya turun, panah tukar, lembar transkrip baris demi baris + centang."""
+    s = []
+    # jam pasir (kiri)
+    glass = [(46, 70), (110, 70), (84, 130), (110, 190), (46, 190), (72, 130)]
+    s.append(group([path(glass, closed=True), fill(P["base"])], "gfill"))
+    s.append(group([path(glass, closed=True), fill(P["soft"], P["soft_op"])], "gsoft"))
+    s.append(group([path(glass, closed=True), stroke(P["line"], 4), trim(0, 22)], "glass"))
+    s.append(group([path([(40, 70), (116, 70)]), stroke(P["line"], 5)], "gtop", s=pop(14, 10), a=(78, 70), p=(78, 70)))
+    s.append(group([path([(40, 190), (116, 190)]), stroke(P["line"], 5)], "gbot", s=pop(16, 10), a=(78, 190), p=(78, 190)))
+    # pasir atas menyusut, bawah tumbuh
+    s.append(group([path([(58, 84), (98, 84), (78, 116)], closed=True), fill(P["a2"])], "sandtop",
+                   s=anim([(20, [100, 100]), (90, [30, 30])]), a=(78, 116), p=(78, 116)))
+    s.append(group([path([(56, 184), (100, 184), (78, 160)], closed=True), fill(P["a2"])], "sandbot",
+                   s=anim([(20, [20, 20]), (90, [100, 100])]), a=(78, 184), p=(78, 184)))
+    s.append(group([ellipse(5, 5, 78, 0), fill(P["a2"])], "grain",
+                   p=anim([(24, [0, 132]), (40, [0, 176]), (41, [0, 132]), (57, [0, 176]), (58, [0, 132]), (74, [0, 176])], linear=True)))
+    # panah tukar (tengah)
+    s.append(group([path([(122, 116), (148, 116)]), stroke(P["a1"], 4), trim(30, 40)], "arr1"))
+    s.append(group([path([(142, 110), (149, 116), (142, 122)]), stroke(P["a1"], 4), trim(38, 44)], "arr1h"))
+    s.append(group([path([(148, 144), (122, 144)]), stroke(P["a1"], 4), trim(36, 46)], "arr2"))
+    s.append(group([path([(128, 138), (121, 144), (128, 150)]), stroke(P["a1"], 4), trim(44, 50)], "arr2h"))
+    # lembar transkrip (kanan)
+    sheet = rect(72, 110, 194, 130, 6)
+    s.append(group([sheet, fill(P["base"])], "sfill", s=pop(26, 12), a=(194, 130), p=(194, 130)))
+    s.append(group([rect(72, 110, 194, 130, 6), stroke(P["line"], 4), trim(26, 46)], "sheet"))
+    s.append(group([path([(170, 90), (204, 90)]), stroke(P["a1"], 5), trim(40, 48)], "shead"))
+    for k, y in enumerate([112, 132, 152]):
+        s.append(group([path([(170, y), (200, y)]), stroke(P["line"], 3.5, 70), trim(46 + k * 7, 56 + k * 7)], f"row{k}"))
+        s.append(group([path([(208, y), (213, y + 4), (220, y - 5)]), stroke(P["a2"], 3.5), trim(60 + k * 8, 68 + k * 8)], f"ok{k}"))
+    s.append(group([ellipse(16, 16, 214, 174), fill(P["a1"])], "seal", s=pop(86, 12), a=(214, 174), p=(214, 174)))
+    return s
+
+
+def certificate(P):
+    """Bootcamp: lembar sertifikat tergambar, baris teks muncul berurutan, segel emas pop lalu pita turun."""
+    s = []
+    s.append(group([rect(170, 120, 122, 112, 6), fill(P["base"])], "cfill"))
+    s.append(group([rect(170, 120, 122, 112, 6), fill(P["soft"], P["soft_op"])], "csoft"))
+    s.append(group([rect(170, 120, 122, 112, 6), stroke(P["line"], 4), trim(0, 22)], "sheet"))
+    s.append(group([rect(150, 100, 122, 112, 3), stroke(P["a2"], 2, 70), trim(10, 30)], "inner"))
+    s.append(group([path([(64, 82), (140, 82)]), stroke(P["line"], 5), trim(22, 32)], "title"))
+    for i, (x1, t) in enumerate([(160, 30), (128, 36), (148, 42)]):
+        s.append(group([path([(64, 104 + i * 16), (x1, 104 + i * 16)]), stroke(P["line"], 3, 60), trim(t, t + 10)], f"row{i}"))
+    # pita
+    s.append(group([path([(176, 176), (170, 214), (182, 204), (190, 214), (188, 176)], closed=True), fill(P["a1"])], "ribbon",
+                   p=anim([(52, [0, -18]), (64, [0, 0])]), o=anim([(52, 0), (56, 100)])))
+    s.append(group([ellipse(46, 46, 182, 162), fill(P["a2"])], "seal", s=pop(44, 12), a=(182, 162), p=(182, 162)))
+    s.append(group([path([(172, 162), (179, 169), (192, 155)]), stroke(P["base"], 4), trim(56, 66)], "tick"))
+    return s
+
+
+def laptop_code(P):
+    """Bootcamp/course: laptop terbuka tergambar, baris kode mengetik bergantian, kursor berkedip."""
+    s = []
+    s.append(group([rect(150, 96, 130, 112, 8), fill(P["base"])], "sfill"))
+    s.append(group([rect(150, 96, 130, 112, 8), stroke(P["line"], 4), trim(0, 20)], "screen"))
+    s.append(group([path([(40, 172), (220, 172), (206, 186), (54, 186)], closed=True), stroke(P["line"], 4), trim(10, 26)], "base"))
+    rows = [(72, 92, 120, 24), (86, 108, 150, 32), (86, 124, 132, 40), (72, 140, 104, 48)]
+    for i, (x0, y, x1, t) in enumerate(rows):
+        c = P["a2"] if i == 1 else P["line"]
+        s.append(group([path([(x0, y), (x1, y)]), stroke(c, 4, 85), trim(t, t + 8)], f"code{i}"))
+    s.append(group([rect(4, 12, 112, 140, 1), fill(P["a1"])], "caret",
+                   o=anim([(56, 0), (57, 100), (66, 100), (67, 0), (76, 0), (77, 100), (86, 100), (87, 0), (96, 0), (97, 100)])))
+    return s
+
+
 SPECS = [
     ("medal", medal, ["light", "dark"]),
     ("erp-nodes", erp_nodes, ["light"]),
@@ -531,6 +620,13 @@ SPECS = [
     ("biz-shop", biz_shop, ["dark"]),
     # regulasi akademik
     ("rulebook", rulebook, ["dark"]),
+    # magang
+    ("briefcase", briefcase, ["light", "dark"]),
+    # konversi sks
+    ("credit-swap", credit_swap, ["light", "dark"]),
+    # bootcamp & course
+    ("certificate", certificate, ["light", "dark"]),
+    ("laptop-code", laptop_code, ["light", "dark"]),
 ]
 
 

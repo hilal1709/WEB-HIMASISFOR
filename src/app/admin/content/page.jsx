@@ -1,6 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { PROGRAMS as KONVERSI_PROGRAMS, DOCS as KONVERSI_DOCS, RATE as KONVERSI_RATE, CAP as KONVERSI_CAP, LIMITS as KONVERSI_LIMITS } from "@/lib/konversi-content";
+import { BOOTCAMPS, TIERS as BOOTCAMP_TIERS, AUDIENCES as BOOTCAMP_AUDIENCES, TRACKS as BOOTCAMP_TRACKS } from "@/lib/bootcamp-content";
 
 export default function ContentManagement() {
   const router = useRouter();
@@ -82,6 +84,9 @@ export default function ContentManagement() {
     { id: "testimoni", label: "Testimoni Alumni" },
     { id: "jumbotron-promo", label: "Jumbotron Promo" },
     { id: "social-media", label: "Social Media" },
+    { id: "magang", label: "Magang" },
+    { id: "konversi-sks", label: "Konversi SKS" },
+    { id: "bootcamp", label: "Bootcamp & Course" },
   ];
 
   if (loading) {
@@ -188,6 +193,23 @@ export default function ContentManagement() {
                 onSave={(data) => handleSave("social-media", data)}
                 saving={saving}
               />
+            )}
+            {activeTab === "magang" && (
+              <MagangEditor
+                data={contents.magang}
+                onSave={(data) => handleSave("magang", data)}
+                saving={saving}
+              />
+            )}
+            {activeTab === "konversi-sks" && (
+              <KonversiEditor
+                data={contents["konversi-sks"]}
+                onSave={(data) => handleSave("konversi-sks", data)}
+                saving={saving}
+              />
+            )}
+            {activeTab === "bootcamp" && (
+              <BootcampEditor data={contents.bootcamp} onSave={(data) => handleSave("bootcamp", data)} saving={saving} />
             )}
           </div>
         </div>
@@ -1270,6 +1292,375 @@ function SocialMediaEditor({ data, onSave, saving }) {
         disabled={saving}
         className="w-full bg-red-600 text-white py-3 px-6 rounded-lg hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors font-medium"
       >
+        {saving ? "Menyimpan..." : "Simpan Perubahan"}
+      </button>
+    </form>
+  );
+}
+
+
+// Magang Editor — section `magang` (halaman /magang). Lihat src/lib/magang-content.js untuk bentuk data.
+const MAGANG_FIELDS = [
+  ["enterprise", "Enterprise System"],
+  ["data", "Data Science"],
+  ["audit", "Audit & Tata Kelola TI"],
+  ["msi", "Manajemen SI"],
+];
+const MAGANG_MODES = [
+  ["onsite", "Di lokasi"],
+  ["hybrid", "Hibrida"],
+  ["remote", "Jarak jauh"],
+];
+const MAGANG_PROGRAMS = [
+  ["kp", "Kerja Praktik"],
+  ["mandiri", "Magang Mandiri"],
+  ["dikti", "Program Dikti"],
+];
+const MAGANG_DOCS = [
+  ["surat", "Permohonan surat pengantar"],
+  ["logbook", "Templat logbook harian"],
+  ["laporan", "Format laporan magang"],
+];
+const EMPTY_JOB = { title: "", company: "", field: "enterprise", mode: "onsite", program: "mandiri", duration: "", deadline: "", tasks: [], needs: [], href: "" };
+
+function readMagang(d) {
+  const raw = d?.data && typeof d.data === "object" ? d.data : {};
+  return {
+    intro: raw.intro || "",
+    notice: { title: raw.notice?.title || "", body: raw.notice?.body || "" },
+    jobs: Array.isArray(raw.jobs) ? raw.jobs.map((j) => ({ ...EMPTY_JOB, ...j })) : [],
+    docs: MAGANG_DOCS.map(([key]) => ({ key, href: (raw.docs || []).find((x) => x?.key === key)?.href || "" })),
+  };
+}
+
+function MagangEditor({ data, onSave, saving }) {
+  const [form, setForm] = useState(() => readMagang(data));
+  useEffect(() => setForm(readMagang(data)), [data]);
+
+  const setJob = (i, field, value) => setForm((f) => ({ ...f, jobs: f.jobs.map((j, k) => (k === i ? { ...j, [field]: value } : j)) }));
+  const lines = (v) => (Array.isArray(v) ? v.join("\n") : v || "");
+  const toLines = (v) => v.split("\n").map((x) => x.trim()).filter(Boolean);
+  const input = "w-full px-3 py-2 border border-gray-300 rounded-lg text-sm";
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const jobs = form.jobs.filter((j) => j.title.trim() && j.company.trim());
+    onSave({ title: "Magang", data: { ...form, jobs } });
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <p className="text-sm text-gray-600">
+        Mengisi minimal satu lowongan akan mengganti seluruh lowongan contoh di halaman <code>/magang</code>. Lowongan yang lewat tenggat otomatis turun ke bawah dan tidak bisa dilamar.
+      </p>
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2">Intro hero (opsional, minimal 40 karakter)</label>
+        <textarea rows={3} value={form.intro} onChange={(e) => setForm({ ...form, intro: e.target.value })} className={input} />
+      </div>
+      <div className="grid gap-3 sm:grid-cols-2">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Judul banner (kosong = Info Session dari agenda)</label>
+          <input value={form.notice.title} onChange={(e) => setForm({ ...form, notice: { ...form.notice, title: e.target.value } })} className={input} />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Isi banner</label>
+          <input value={form.notice.body} onChange={(e) => setForm({ ...form, notice: { ...form.notice, body: e.target.value } })} className={input} />
+        </div>
+      </div>
+
+      <div className="border-t pt-6">
+        <div className="mb-4 flex items-center justify-between">
+          <h3 className="text-lg font-semibold">Lowongan ({form.jobs.length})</h3>
+          <button type="button" onClick={() => setForm({ ...form, jobs: [...form.jobs, { ...EMPTY_JOB }] })} className="px-3 py-1.5 text-sm bg-gray-900 text-white rounded-lg">
+            + Tambah lowongan
+          </button>
+        </div>
+        {form.jobs.map((j, i) => (
+          <div key={i} className="mb-4 p-4 border border-gray-200 rounded-lg space-y-3">
+            <div className="flex items-center justify-between">
+              <h4 className="font-medium">Lowongan {i + 1}</h4>
+              <button type="button" onClick={() => setForm({ ...form, jobs: form.jobs.filter((_, k) => k !== i) })} className="text-sm text-red-600">
+                Hapus
+              </button>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <input value={j.title} onChange={(e) => setJob(i, "title", e.target.value)} className={input} placeholder="Posisi, mis. Data Analyst Intern" />
+              <input value={j.company} onChange={(e) => setJob(i, "company", e.target.value)} className={input} placeholder="Perusahaan" />
+              <select value={j.field} onChange={(e) => setJob(i, "field", e.target.value)} className={input}>
+                {MAGANG_FIELDS.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
+              </select>
+              <select value={j.program} onChange={(e) => setJob(i, "program", e.target.value)} className={input}>
+                {MAGANG_PROGRAMS.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
+              </select>
+              <select value={j.mode} onChange={(e) => setJob(i, "mode", e.target.value)} className={input}>
+                {MAGANG_MODES.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
+              </select>
+              <input value={j.duration} onChange={(e) => setJob(i, "duration", e.target.value)} className={input} placeholder="Durasi, mis. 3 bulan" />
+              <label className="text-sm text-gray-600">
+                Tenggat
+                <input type="date" value={j.deadline} onChange={(e) => setJob(i, "deadline", e.target.value)} className={input} />
+              </label>
+              <input value={j.href} onChange={(e) => setJob(i, "href", e.target.value)} className={input} placeholder="Tautan lamaran (https://…)" />
+              <textarea rows={3} value={lines(j.tasks)} onChange={(e) => setJob(i, "tasks", toLines(e.target.value))} className={input} placeholder="Tugas — satu per baris" />
+              <textarea rows={3} value={lines(j.needs)} onChange={(e) => setJob(i, "needs", toLines(e.target.value))} className={input} placeholder="Kebutuhan — satu per baris" />
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="border-t pt-6">
+        <h3 className="text-lg font-semibold mb-4">Berkas (URL unduhan)</h3>
+        {MAGANG_DOCS.map(([key, label], i) => (
+          <div key={key} className="mb-3">
+            <label className="block text-sm text-gray-700 mb-1">{label}</label>
+            <input
+              value={form.docs[i].href}
+              onChange={(e) => setForm({ ...form, docs: form.docs.map((d, k) => (k === i ? { ...d, href: e.target.value } : d)) })}
+              className={input}
+              placeholder="/berkas/nama-file.pdf atau https://…"
+            />
+          </div>
+        ))}
+      </div>
+
+      <button type="submit" disabled={saving} className="w-full sm:w-auto px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50">
+        {saving ? "Menyimpan..." : "Simpan Perubahan"}
+      </button>
+    </form>
+  );
+}
+
+/* ---------- Konversi SKS (/konversi-sks) ---------- */
+function readKonversi(d) {
+  const raw = d?.data && typeof d.data === "object" ? d.data : {};
+  return {
+    intro: raw.intro || "",
+    notice: { title: raw.notice?.title || "", body: raw.notice?.body || "" },
+    rate: raw.rate ?? "",
+    cap: raw.cap ?? "",
+    programs: KONVERSI_PROGRAMS.map((p) => {
+      const o = (raw.programs || []).find((x) => x?.key === p.key) || {};
+      return { key: p.key, mode: p.mode, label: o.label || "", lead: o.lead || "", weeks: o.weeks ?? "", hours: o.hours ?? "" };
+    }),
+    docs: KONVERSI_DOCS.map(({ key }) => ({ key, href: (raw.docs || []).find((x) => x?.key === key)?.href || "" })),
+  };
+}
+
+function KonversiEditor({ data, onSave, saving }) {
+  const [form, setForm] = useState(() => readKonversi(data));
+  useEffect(() => setForm(readKonversi(data)), [data]);
+  const input = "w-full px-3 py-2 border border-gray-300 rounded-lg text-sm";
+  const setProgram = (i, field, value) => setForm((f) => ({ ...f, programs: f.programs.map((p, k) => (k === i ? { ...p, [field]: value } : p)) }));
+  const n = (v) => (v === "" || v == null ? undefined : Number(v));
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const programs = form.programs
+      .map(({ key, label, lead, weeks, hours }) => ({ key, label: label.trim(), lead: lead.trim(), weeks: n(weeks), hours: n(hours) }))
+      .filter((p) => p.label || p.lead || p.weeks || p.hours);
+    onSave({ title: "Konversi SKS", data: { ...form, rate: n(form.rate), cap: n(form.cap), programs } });
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <p className="text-sm text-gray-600">
+        Mengatur halaman <code>/konversi-sks</code>. Nama &amp; SKS mata kuliah diambil dari Admin › Kurikulum. Mengisi kurs dan batas menghapus tanda &quot;contoh&quot; pada meja konversi.
+      </p>
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2">Intro hero (opsional, minimal 40 karakter)</label>
+        <textarea rows={3} value={form.intro} onChange={(e) => setForm({ ...form, intro: e.target.value })} className={input} />
+      </div>
+      <div className="grid gap-3 sm:grid-cols-2">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Kurs: jam kegiatan per 1 SKS (contoh {KONVERSI_RATE})</label>
+          <input type="number" min={10} max={120} value={form.rate} onChange={(e) => setForm({ ...form, rate: e.target.value })} className={input} />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Batas SKS konversi per semester (contoh {KONVERSI_CAP})</label>
+          <input type="number" min={6} max={40} value={form.cap} onChange={(e) => setForm({ ...form, cap: e.target.value })} className={input} />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Judul banner (kosong = dari agenda beranda)</label>
+          <input value={form.notice.title} onChange={(e) => setForm({ ...form, notice: { ...form.notice, title: e.target.value } })} className={input} />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Isi banner</label>
+          <input value={form.notice.body} onChange={(e) => setForm({ ...form, notice: { ...form.notice, body: e.target.value } })} className={input} />
+        </div>
+      </div>
+
+      <div className="border-t pt-6">
+        <h3 className="text-lg font-semibold mb-1">Bentuk kegiatan</h3>
+        <p className="mb-4 text-sm text-gray-500">Kosongkan kolom untuk memakai nilai bawaan. Minggu {KONVERSI_LIMITS.weeks.join("–")}, jam/minggu {KONVERSI_LIMITS.hours.join("–")}.</p>
+        {form.programs.map((p, i) => {
+          const base = KONVERSI_PROGRAMS[i];
+          return (
+            <div key={p.key} className="mb-3 grid gap-3 rounded-lg border border-gray-200 p-4 sm:grid-cols-[1fr_2fr_90px_90px]">
+              <input value={p.label} onChange={(e) => setProgram(i, "label", e.target.value)} className={input} placeholder={base.label} />
+              <input value={p.lead} onChange={(e) => setProgram(i, "lead", e.target.value)} className={input} placeholder={base.lead} />
+              {p.mode === "jam" ? (
+                <>
+                  <input type="number" value={p.weeks} onChange={(e) => setProgram(i, "weeks", e.target.value)} className={input} placeholder={`${base.weeks} mgg`} />
+                  <input type="number" value={p.hours} onChange={(e) => setProgram(i, "hours", e.target.value)} className={input} placeholder={`${base.hours} jam`} />
+                </>
+              ) : (
+                <p className="text-xs text-gray-500 sm:col-span-2 self-center">Diakui 1 : 1 dari SKS kampus tujuan</p>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="border-t pt-6">
+        <h3 className="text-lg font-semibold mb-4">Templat berkas (URL unduhan)</h3>
+        {KONVERSI_DOCS.map(({ key, title }, i) => (
+          <div key={key} className="mb-3">
+            <label className="block text-sm text-gray-700 mb-1">{title}</label>
+            <input
+              value={form.docs[i].href}
+              onChange={(e) => setForm({ ...form, docs: form.docs.map((d, k) => (k === i ? { ...d, href: e.target.value } : d)) })}
+              className={input}
+              placeholder="/berkas/nama-file.pdf atau https://…"
+            />
+          </div>
+        ))}
+      </div>
+
+      <button type="submit" disabled={saving} className="w-full sm:w-auto px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50">
+        {saving ? "Menyimpan..." : "Simpan Perubahan"}
+      </button>
+    </form>
+  );
+}
+
+/* ---------- Bootcamp & Course (/bootcamp) ---------- */
+const BC_FIELDS = [
+  ["title", "Judul", "text"],
+  ["start", "Mulai (YYYY-MM-DD)", "text"],
+  ["weeks", "Minggu", "number"],
+  ["hours", "Jam/minggu", "number"],
+  ["seats", "Kursi", "number"],
+  ["seatsLeft", "Sisa kursi", "number"],
+  ["href", "URL pendaftaran", "text"],
+];
+
+function readBootcamp(d) {
+  const raw = d?.data && typeof d.data === "object" ? d.data : {};
+  return {
+    intro: raw.intro || "",
+    notice: { title: raw.notice?.title || "", body: raw.notice?.body || "" },
+    bootcamps: BOOTCAMPS.map((b) => {
+      const o = (raw.bootcamps || []).find((x) => x?.slug === b.slug) || {};
+      return Object.fromEntries([["slug", b.slug], ...BC_FIELDS.map(([k]) => [k, o[k] ?? ""])]);
+    }),
+    tiers: BOOTCAMP_TIERS.map((t) => {
+      const o = (raw.tiers || []).find((x) => x?.key === t.key);
+      return { key: t.key, prices: Object.fromEntries(BOOTCAMP_AUDIENCES.map((a) => [a.key, o?.prices?.[a.key] === null ? "-" : o?.prices?.[a.key] ?? ""])) };
+    }),
+    courses: Array.isArray(raw.courses) && raw.courses.length ? JSON.stringify(raw.courses, null, 2) : "",
+  };
+}
+
+function BootcampEditor({ data, onSave, saving }) {
+  const [form, setForm] = useState(() => readBootcamp(data));
+  const [error, setError] = useState("");
+  useEffect(() => setForm(readBootcamp(data)), [data]);
+  const input = "w-full px-3 py-2 border border-gray-300 rounded-lg text-sm";
+  const setCamp = (i, k, v) => setForm((f) => ({ ...f, bootcamps: f.bootcamps.map((b, j) => (j === i ? { ...b, [k]: v } : b)) }));
+  const setPrice = (i, a, v) => setForm((f) => ({ ...f, tiers: f.tiers.map((t, j) => (j === i ? { ...t, prices: { ...t.prices, [a]: v } } : t)) }));
+  const isNum = (k) => BC_FIELDS.find((f) => f[0] === k)?.[2] === "number";
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    let courses = [];
+    if (form.courses.trim()) {
+      try {
+        courses = JSON.parse(form.courses);
+        if (!Array.isArray(courses)) throw new Error("bukan array");
+      } catch {
+        setError("Daftar kursus harus berupa array JSON yang valid.");
+        return;
+      }
+    }
+    setError("");
+    const bootcamps = form.bootcamps
+      .map((b) => Object.fromEntries(Object.entries(b).filter(([, v]) => v !== "" && v != null).map(([k, v]) => [k, isNum(k) ? Number(v) : String(v).trim()])))
+      .filter((b) => Object.keys(b).length > 1);
+    const tiers = form.tiers
+      .map((t) => ({ key: t.key, prices: Object.fromEntries(Object.entries(t.prices).filter(([, v]) => v !== "").map(([k, v]) => [k, v === "-" ? null : Number(v)])) }))
+      .filter((t) => Object.keys(t.prices).length);
+    onSave({ title: "Bootcamp & Course", data: { intro: form.intro.trim(), notice: form.notice, bootcamps, tiers, courses } });
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <p className="text-sm text-gray-600">
+        Mengatur halaman <code>/bootcamp</code>. Mentor dosen diambil otomatis dari Profil Dosen. Kolom kosong memakai data contoh; mengisi kohort atau harga menghapus tanda &quot;contoh&quot; di bagian itu.
+      </p>
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2">Intro mode Bootcamp (opsional)</label>
+        <textarea rows={2} value={form.intro} onChange={(e) => setForm({ ...form, intro: e.target.value })} className={input} />
+      </div>
+      <div className="grid gap-3 sm:grid-cols-2">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Judul banner pendaftaran</label>
+          <input value={form.notice.title} onChange={(e) => setForm({ ...form, notice: { ...form.notice, title: e.target.value } })} className={input} />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Isi banner</label>
+          <input value={form.notice.body} onChange={(e) => setForm({ ...form, notice: { ...form.notice, body: e.target.value } })} className={input} />
+        </div>
+      </div>
+
+      <div className="border-t pt-6">
+        <h3 className="text-lg font-semibold mb-4">Kohort bootcamp</h3>
+        {form.bootcamps.map((b, i) => {
+          const base = BOOTCAMPS[i];
+          return (
+            <div key={b.slug} className="mb-4 rounded-lg border border-gray-200 p-4">
+              <p className="mb-3 text-sm font-semibold text-gray-700">
+                {base.title} <span className="font-normal text-gray-400">({b.slug})</span>
+              </p>
+              <div className="grid gap-3 sm:grid-cols-4">
+                {BC_FIELDS.map(([k, label, type]) => (
+                  <div key={k} className={k === "title" || k === "href" ? "sm:col-span-2" : ""}>
+                    <label className="block text-xs text-gray-500 mb-1">{label}</label>
+                    <input type={type} value={b[k]} onChange={(e) => setCamp(i, k, e.target.value)} className={input} placeholder={String(base[k] ?? "")} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="border-t pt-6">
+        <h3 className="text-lg font-semibold mb-1">Biaya (Rupiah)</h3>
+        <p className="mb-4 text-sm text-gray-500">0 = gratis, tanda minus (-) = &quot;Hubungi kami&quot;.</p>
+        {form.tiers.map((t, i) => (
+          <div key={t.key} className="mb-3 grid gap-3 rounded-lg border border-gray-200 p-4 sm:grid-cols-[1fr_repeat(3,140px)] sm:items-end">
+            <p className="text-sm font-semibold text-gray-700">{BOOTCAMP_TIERS[i].name}</p>
+            {BOOTCAMP_AUDIENCES.map((a) => (
+              <div key={a.key}>
+                <label className="block text-xs text-gray-500 mb-1">{a.label}</label>
+                <input value={t.prices[a.key]} onChange={(e) => setPrice(i, a.key, e.target.value)} className={input} placeholder={String(BOOTCAMP_TIERS[i].prices[a.key] ?? "-")} />
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+
+      <div className="border-t pt-6">
+        <h3 className="text-lg font-semibold mb-1">Kursus mandiri (JSON)</h3>
+        <p className="mb-3 text-sm text-gray-500">
+          Kosongkan untuk memakai kursus contoh; mengisi akan mengganti semuanya. Per item:{" "}
+          <code>{`{ "title", "topic": ${Object.keys(BOOTCAMP_TRACKS).join(" | ")}, "level": pemula | menengah | mahir, "hours", "perWeek", "lessons": [{ "t", "min" }], "href" }`}</code>
+        </p>
+        <textarea rows={8} value={form.courses} onChange={(e) => setForm({ ...form, courses: e.target.value })} className={`${input} font-mono`} placeholder="[]" />
+        {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
+      </div>
+
+      <button type="submit" disabled={saving} className="w-full sm:w-auto px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50">
         {saving ? "Menyimpan..." : "Simpan Perubahan"}
       </button>
     </form>

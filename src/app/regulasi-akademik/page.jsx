@@ -4,15 +4,15 @@ import { mergeKurikulum } from "@/lib/kurikulum-content";
 import { SiteHeader, Topbar } from "@/components/home/site-header";
 import { SiteFooter } from "@/components/home/site-footer";
 import { AosReady } from "@/components/motion/aos-provider";
-import { PageCurtain } from "@/components/motion/page-curtain";
 import { RegulasiProvider } from "@/components/regulasi/regulasi-provider";
 import { RegulasiHero } from "@/components/regulasi/regulasi-hero";
-import { RegulasiBanner } from "@/components/regulasi/regulasi-banner";
 import { RuleSimulator } from "@/components/regulasi/rule-simulator";
 import { RuleReader } from "@/components/regulasi/rule-reader";
 import { ScenarioFlow } from "@/components/regulasi/scenario-flow";
 import { DocShelf } from "@/components/regulasi/doc-shelf";
 import { RegulasiClosing } from "@/components/regulasi/regulasi-closing";
+import { HeadingStyle } from "@/components/home/shared";
+import { PageCurtain } from "@/components/motion/page-curtain";
 
 export const revalidate = 300;
 
@@ -41,15 +41,16 @@ export default async function RegulasiAkademikPage() {
       <Topbar />
       <SiteHeader />
       <RegulasiProvider data={data}>
+        <HeadingStyle value="bar">
         <main>
           <RegulasiHero />
-          <RegulasiBanner />
           <RuleSimulator />
           <RuleReader />
           <ScenarioFlow />
           <DocShelf />
           <RegulasiClosing />
         </main>
+        </HeadingStyle>
       </RegulasiProvider>
       <SiteFooter />
       <AosReady />

@@ -3,7 +3,6 @@ import { CURTAIN_KEY, mergeProfilLulusan } from "@/lib/profil-lulusan-content";
 import { SiteHeader, Topbar } from "@/components/home/site-header";
 import { SiteFooter } from "@/components/home/site-footer";
 import { AosReady } from "@/components/motion/aos-provider";
-import { PageCurtain } from "@/components/motion/page-curtain";
 import { LulusanHero } from "@/components/profil-lulusan/lulusan-hero";
 import { StatsBand } from "@/components/profil-lulusan/stats-band";
 import { ProfileExplorer } from "@/components/profil-lulusan/profile-explorer";
@@ -11,6 +10,8 @@ import { ProfileModalProvider } from "@/components/profil-lulusan/profile-modal"
 import { CplBento } from "@/components/profil-lulusan/cpl-bento";
 import { AlumniWall } from "@/components/profil-lulusan/alumni-wall";
 import { Closing } from "@/components/profil-lulusan/closing";
+import { HeadingStyle } from "@/components/home/shared";
+import { PageCurtain } from "@/components/motion/page-curtain";
 
 export const revalidate = 300;
 
@@ -40,6 +41,7 @@ export default async function ProfilLulusanPage() {
       <Topbar />
       <SiteHeader />
       <ProfileModalProvider profiles={data.profiles}>
+        <HeadingStyle value="numbered">
         <main>
           <LulusanHero intro={data.intro} roles={data.roles} alumni={data.alumni} />
           <ProfileExplorer profiles={data.profiles} />
@@ -48,6 +50,7 @@ export default async function ProfilLulusanPage() {
           <AlumniWall alumni={data.alumni} />
           <Closing />
         </main>
+        </HeadingStyle>
       </ProfileModalProvider>
       <SiteFooter />
       <AosReady />

@@ -3,6 +3,7 @@ import { useRef, useState } from "react";
 import { gsap } from "@/lib/scroll";
 import { prefersReducedMotion } from "@/lib/motion";
 import { Container, SectionHeader } from "@/components/home/shared";
+import { RegulasiBanner } from "./regulasi-banner";
 import { LottieIllustration } from "@/components/media/lottie-illustration";
 import { cn } from "@/lib/utils";
 import { useRegulasi } from "./regulasi-provider";
@@ -62,6 +63,7 @@ export function DocShelf() {
     <section id="unduhan" className="relative scroll-mt-20 bg-cream-2/60 py-16 md:py-24">
       <Container>
         <SectionHeader title={["Dokumen", "resminya"]} body="Pedoman lengkap untuk dibaca utuh, disimpan, atau dilampirkan saat mengurus berkas." />
+        <RegulasiBanner className="mt-8" />
 
         <div className="mt-10 grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-end lg:gap-12">
           <div data-aos="fade-up" className="relative overflow-hidden rounded-2xl bg-navy-deep px-6 pt-14 sm:px-10" onPointerLeave={rest}>

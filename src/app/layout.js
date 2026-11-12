@@ -17,9 +17,10 @@ const bricolage = Bricolage_Grotesque({
   axes: ['wdth', 'opsz'],
 });
 
-const notoSerif = Noto_Serif_Display({ 
+// Variable font (tanpa `weight`): bobot statis membuat Google mengembalikan URL `l/font?kit=…&skey=…`
+// yang gagal di-resolve Turbopack ("next/font/google queries have exactly one entry"). 300/400 tetap tersedia.
+const notoSerif = Noto_Serif_Display({
   subsets: ['latin'],
-  weight: ['300', '400'],
   style: ['normal', 'italic'],
   display: 'swap',
   variable: '--font-noto-serif',

@@ -2,10 +2,10 @@
 import { useEffect, useState } from "react";
 import { BANNER_KEY } from "@/lib/bidang-keahlian-content";
 import { Banner } from "@/components/ui/banner";
-import { Container, PillLink } from "@/components/home/shared";
+import { PillLink } from "@/components/home/shared";
 
-/** Banner keterangan kapan bidang dipilih (brand). Bila ditutup, tidak muncul lagi selama sesi. */
-export function BidangBanner() {
+/** Catatan kapan bidang dipilih (brand), tampil di rak pilihan saat memutuskan. Ditutup → tidak muncul lagi selama sesi. */
+export function BidangBanner({ className }) {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
@@ -18,7 +18,7 @@ export function BidangBanner() {
 
   if (!show) return null;
   return (
-    <Container className="relative z-10 mb-4 md:mb-8" data-aos="fade-up">
+    <div className={className}>
       <div
         onClickCapture={(e) => {
           if (e.target.closest?.('[aria-label="Tutup banner"]')) {
@@ -41,6 +41,6 @@ export function BidangBanner() {
           Enam semester pertama membekali dasar keempat bidang. Mata kuliah pilihan di semester 7 dan 8 yang menentukan ke mana kamu mendalam.
         </Banner>
       </div>
-    </Container>
+    </div>
   );
 }

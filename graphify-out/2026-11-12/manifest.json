@@ -84,9 +84,9 @@
     "semantic_hash": ""
   },
   "next.config.js": {
-    "mtime": 1794465413.381145,
-    "seen": 1794465802.088838,
-    "ast_hash": "ae69684c45625d5f2d94dd227ecfac74",
+    "mtime": 1794478261.3553617,
+    "seen": 1794478737.7701364,
+    "ast_hash": "d9de1714d7c651084891bc4398473a6a",
     "semantic_hash": ""
   },
   "package.json": {
@@ -192,9 +192,9 @@
     "semantic_hash": ""
   },
   "src/app/achievement/page.jsx": {
-    "mtime": 1794452867.0944207,
-    "seen": 1794453011.4441707,
-    "ast_hash": "859eb8c41383d03b7043ae8a7af8d6da",
+    "mtime": 1794480561.6534197,
+    "seen": 1794480708.5129719,
+    "ast_hash": "3bed06c024b456decbbfacddbd29610c",
     "semantic_hash": ""
   },
   "src/app/admin/achievements/create/page.jsx": {
@@ -216,9 +216,9 @@
     "semantic_hash": ""
   },
   "src/app/admin/content/page.jsx": {
-    "mtime": 1770364611.54822,
-    "seen": 1793008817.645661,
-    "ast_hash": "06152d74f41549e405271ebf015e3e42",
+    "mtime": 1794478309.3630044,
+    "seen": 1794478737.7883756,
+    "ast_hash": "0bb023936c0c7158427f2ba89089f7db",
     "semantic_hash": ""
   },
   "src/app/admin/curriculum/page.jsx": {
@@ -330,15 +330,15 @@
     "semantic_hash": ""
   },
   "src/app/curiculum/page.jsx": {
-    "mtime": 1794460519.9902675,
-    "seen": 1794460612.8442738,
-    "ast_hash": "98ac354bca391b9351b6c9f4d65a4ed1",
+    "mtime": 1794480561.6574533,
+    "seen": 1794480708.5230722,
+    "ast_hash": "0546657c941635a10879d47749475214",
     "semantic_hash": ""
   },
   "src/app/layout.js": {
-    "mtime": 1794401415.7027347,
-    "seen": 1794401632.29654,
-    "ast_hash": "4cd071c397b8c8190f57a4ebc9546498",
+    "mtime": 1794476462.895937,
+    "seen": 1794476725.2032511,
+    "ast_hash": "c3beb3ece16a544673bb972b5e42b28c",
     "semantic_hash": ""
   },
   "src/app/page.jsx": {
@@ -360,9 +360,9 @@
     "semantic_hash": ""
   },
   "src/app/sitemap.js": {
-    "mtime": 1794465413.6932611,
-    "seen": 1794465802.12647,
-    "ast_hash": "76db9ee468dbf4f87ca76f30b7195f09",
+    "mtime": 1794478261.3573735,
+    "seen": 1794478737.7988536,
+    "ast_hash": "e8d88c172cf7692e3c25ecad02ea28e3",
     "semantic_hash": ""
   },
   "src/components/AwardingRecognition.jsx": {
@@ -1572,9 +1572,9 @@
     "semantic_hash": ""
   },
   "src/lib/motion.js": {
-    "mtime": 1794385200.3526244,
-    "seen": 1794386121.1531758,
-    "ast_hash": "f54a36eeda2391b6d2dba9736d9fead6",
+    "mtime": 1794480606.6898744,
+    "seen": 1794480708.6117582,
+    "ast_hash": "959b731fb0ef61a0476747c1982ed6c5",
     "semantic_hash": ""
   },
   "src/lib/utils.js": {
@@ -1584,9 +1584,9 @@
     "semantic_hash": ""
   },
   "DESIGN.md": {
-    "mtime": 1794465773.3450298,
-    "seen": 1794465802.2087321,
-    "ast_hash": "cd63e3611e47891832e81a2576ba57b5",
+    "mtime": 1794478816.403352,
+    "seen": 1794479034.234735,
+    "ast_hash": "2603c71ddb8d5984cb905526f07ca3ff",
     "semantic_hash": ""
   },
   ".claude/launch.json": {
@@ -1650,9 +1650,9 @@
     "semantic_hash": ""
   },
   "src/components/home/shared.jsx": {
-    "mtime": 1794408164.081046,
-    "seen": 1794408374.93931,
-    "ast_hash": "f0ffe1710b882f3af2145840cb6352e9",
+    "mtime": 1794479672.527201,
+    "seen": 1794480333.4784865,
+    "ast_hash": "8782d9779951fa5645b27d3d8a4dfd9f",
     "semantic_hash": ""
   },
   "src/components/home/site-nav.jsx": {
@@ -1716,9 +1716,9 @@
     "semantic_hash": ""
   },
   "src/lib/home-content.js": {
-    "mtime": 1794465413.229808,
-    "seen": 1794465802.1831422,
-    "ast_hash": "12e8915d45794115695a07821bc301c1",
+    "mtime": 1794478273.21953,
+    "seen": 1794478737.8430083,
+    "ast_hash": "0efe2f41fb58463a3f349d18baca90b2",
     "semantic_hash": ""
   },
   "src/lib/scroll.js": {
@@ -2034,9 +2034,9 @@
     "semantic_hash": ""
   },
   "src/components/illustrations/line-illustrations.jsx": {
-    "mtime": 1794464986.3359299,
-    "seen": 1794465802.148605,
-    "ast_hash": "c03138d7d05d860e2d0d55cc212dabd7",
+    "mtime": 1794477823.764247,
+    "seen": 1794478737.8137753,
+    "ast_hash": "225151ecaaf7ca9e9ce8ace2c9d1cdc6",
     "semantic_hash": ""
   },
   "src/components/intro-loader.jsx": {
@@ -2052,9 +2052,9 @@
     "semantic_hash": ""
   },
   "src/components/ui/sheet.jsx": {
-    "mtime": 1794393026.0301886,
-    "seen": 1794401632.3094835,
-    "ast_hash": "10a16649a9234b9a568f3aca89758b5c",
+    "mtime": 1794478066.571742,
+    "seen": 1794478737.8377862,
+    "ast_hash": "71c427657db1ce001c68913b5f399842",
     "semantic_hash": ""
   },
   "src/components/ui/tabs.jsx": {
@@ -2610,9 +2610,9 @@
     "semantic_hash": ""
   },
   "scripts/lottie/build.py": {
-    "mtime": 1794465004.7945259,
-    "seen": 1794465802.1112146,
-    "ast_hash": "1136e896ec06c90b15193c9b6711371d",
+    "mtime": 1794477638.5812428,
+    "seen": 1794478737.786157,
+    "ast_hash": "3a2077d10342c7265396d035d01058ce",
     "semantic_hash": ""
   },
   "public/lottie/qa-alumni.json": {
@@ -2652,9 +2652,9 @@
     "semantic_hash": ""
   },
   "src/app/sambutan-kaprodi/page.jsx": {
-    "mtime": 1794419116.0470512,
-    "seen": 1794419401.0607324,
-    "ast_hash": "78cb66efc38c019408afbc8cd8cb8440",
+    "mtime": 1794480561.6672995,
+    "seen": 1794480708.530207,
+    "ast_hash": "e93d327299acda2c5350087b5d916496",
     "semantic_hash": ""
   },
   "src/components/sambutan/letter.jsx": {
@@ -2676,8 +2676,8 @@
     "semantic_hash": ""
   },
   "src/components/sambutan/sambutan-hero.jsx": {
-    "mtime": 1794452664.8614557,
-    "seen": 1794453011.5206208,
+    "mtime": 1794480606.7118168,
+    "seen": 1794480708.5960126,
     "ast_hash": "7485693eb06089f29bc07592303ff367",
     "semantic_hash": ""
   },
@@ -2694,9 +2694,9 @@
     "semantic_hash": ""
   },
   "src/app/visi-misi/page.jsx": {
-    "mtime": 1794420955.7886963,
-    "seen": 1794421010.456363,
-    "ast_hash": "52846ddc07f4dc992aea30b2b9e152e7",
+    "mtime": 1794480561.6384351,
+    "seen": 1794480708.531722,
+    "ast_hash": "b659880e9fb486fe7b99f2a5b3c76904",
     "semantic_hash": ""
   },
   "src/components/motion/page-curtain.jsx": {
@@ -2730,9 +2730,9 @@
     "semantic_hash": ""
   },
   "src/components/visi-misi/visi-hero.jsx": {
-    "mtime": 1794452646.3966558,
-    "seen": 1794453011.5357509,
-    "ast_hash": "f08dd69e985c88c2ceaae84dc6c950b3",
+    "mtime": 1794480606.6898744,
+    "seen": 1794480708.6043952,
+    "ast_hash": "a52478be3070dbe68e859991dd349316",
     "semantic_hash": ""
   },
   "src/lib/visi-misi-content.js": {
@@ -2748,9 +2748,9 @@
     "semantic_hash": ""
   },
   "src/app/profil-lulusan/page.jsx": {
-    "mtime": 1794452706.6651735,
-    "seen": 1794453011.4569676,
-    "ast_hash": "33edaf832f78be5b01ea576dbaa6f80a",
+    "mtime": 1794480561.6384351,
+    "seen": 1794480708.5276306,
+    "ast_hash": "e420eb2fa7378aa01aae95688e0e5cb1",
     "semantic_hash": ""
   },
   "src/components/profil-lulusan/alumni-wall.jsx": {
@@ -2772,9 +2772,9 @@
     "semantic_hash": ""
   },
   "src/components/profil-lulusan/lulusan-hero.jsx": {
-    "mtime": 1794452718.544789,
-    "seen": 1794453011.5126061,
-    "ast_hash": "8762be844b0997fd370ff1a395f57b8f",
+    "mtime": 1794480606.6936476,
+    "seen": 1794480708.5880065,
+    "ast_hash": "efb00666ab5e6ef2ab9e727ebb9a82c5",
     "semantic_hash": ""
   },
   "src/components/profil-lulusan/profile-explorer.jsx": {
@@ -2808,9 +2808,9 @@
     "semantic_hash": ""
   },
   "src/app/struktur-organisasi/page.jsx": {
-    "mtime": 1794423670.2239969,
-    "seen": 1794423834.7020397,
-    "ast_hash": "18eed48a102c3a8b5e96438bdc0b9961",
+    "mtime": 1794480561.6464584,
+    "seen": 1794480708.531197,
+    "ast_hash": "14cf880598032c010655ef336dac509c",
     "semantic_hash": ""
   },
   "src/components/struktur/closing.jsx": {
@@ -2832,9 +2832,9 @@
     "semantic_hash": ""
   },
   "src/components/struktur/struktur-hero.jsx": {
-    "mtime": 1794452741.0272336,
-    "seen": 1794453011.5267673,
-    "ast_hash": "508794539163259a86c486f1c9e8ab3f",
+    "mtime": 1794480606.6946626,
+    "seen": 1794480708.5996654,
+    "ast_hash": "a6293258e913c1cccae48e5bb22d9612",
     "semantic_hash": ""
   },
   "src/lib/struktur-content.js": {
@@ -2856,9 +2856,9 @@
     "semantic_hash": ""
   },
   "src/app/program-kelas/page.jsx": {
-    "mtime": 1794426196.818143,
-    "seen": 1794426571.2481976,
-    "ast_hash": "759af8addeecd09bd8f6b1e4370e7293",
+    "mtime": 1794480561.651323,
+    "seen": 1794480708.5286121,
+    "ast_hash": "f2fc5079e19099095871cb377dd01004",
     "semantic_hash": ""
   },
   "src/components/program-kelas/class-modal.jsx": {
@@ -2874,9 +2874,9 @@
     "semantic_hash": ""
   },
   "src/components/program-kelas/closing.jsx": {
-    "mtime": 1794452884.167775,
-    "seen": 1794453011.515523,
-    "ast_hash": "2367645bebed12eee291c357a115e75e",
+    "mtime": 1794479928.7198298,
+    "seen": 1794480333.5135024,
+    "ast_hash": "955bb4f68aff00d5af9ac5c4d7cdfec3",
     "semantic_hash": ""
   },
   "src/components/program-kelas/compare-table.jsx": {
@@ -2892,9 +2892,9 @@
     "semantic_hash": ""
   },
   "src/components/program-kelas/kelas-hero.jsx": {
-    "mtime": 1794451371.2762132,
-    "seen": 1794451525.3490307,
-    "ast_hash": "b0eb9ebd0187d34f88f8e13befebe40d",
+    "mtime": 1794480606.6975074,
+    "seen": 1794480708.5905235,
+    "ast_hash": "d9015116658ef6778d2c1122a5509831",
     "semantic_hash": ""
   },
   "src/components/program-kelas/kelas-provider.jsx": {
@@ -2934,9 +2934,9 @@
     "semantic_hash": ""
   },
   "src/app/dosen/page.jsx": {
-    "mtime": 1794452789.9862354,
-    "seen": 1794453011.4557214,
-    "ast_hash": "df20dd59656a4b1a1a99021d77f772de",
+    "mtime": 1794480561.6464584,
+    "seen": 1794480708.5241132,
+    "ast_hash": "175a9f9e9e4618a0b7cbb2ff3dd61ef7",
     "semantic_hash": ""
   },
   "src/components/dosen/closing.jsx": {
@@ -2952,9 +2952,9 @@
     "semantic_hash": ""
   },
   "src/components/dosen/dosen-hero.jsx": {
-    "mtime": 1794451083.6579309,
-    "seen": 1794451525.327093,
-    "ast_hash": "e03fdacfeb21c0bf7ab03d8799df7d37",
+    "mtime": 1794480606.6967516,
+    "seen": 1794480708.5456886,
+    "ast_hash": "23e76b38652db4dcc6e7a1b2f364f288",
     "semantic_hash": ""
   },
   "src/components/dosen/dosen-provider.jsx": {
@@ -3036,9 +3036,9 @@
     "semantic_hash": ""
   },
   "src/components/prestasi/prestasi-hero.jsx": {
-    "mtime": 1794452867.096421,
-    "seen": 1794453011.5101635,
-    "ast_hash": "9238ca164d811a5a1ba8f9c34b7483f2",
+    "mtime": 1794480606.6975074,
+    "seen": 1794480708.5862718,
+    "ast_hash": "9d501be7c7615f140caa259ed902360a",
     "semantic_hash": ""
   },
   "src/components/prestasi/prestasi-provider.jsx": {
@@ -3090,9 +3090,9 @@
     "semantic_hash": ""
   },
   "src/components/kurikulum/kurikulum-hero.jsx": {
-    "mtime": 1794459675.7934353,
-    "seen": 1794459944.0172443,
-    "ast_hash": "c4579a62b8174b32597b8a4540f597c6",
+    "mtime": 1794480606.704239,
+    "seen": 1794480708.572493,
+    "ast_hash": "6c239c41f8f6387bc241d3c9fbfb0b8e",
     "semantic_hash": ""
   },
   "src/components/kurikulum/kurikulum-provider.jsx": {
@@ -3162,21 +3162,21 @@
     "semantic_hash": ""
   },
   "src/app/bidang-keahlian/page.jsx": {
-    "mtime": 1794461483.2384872,
-    "seen": 1794461995.5837865,
-    "ast_hash": "b163351cbc96cbcddce89cb05c954bdd",
+    "mtime": 1794480561.655436,
+    "seen": 1794480708.5225523,
+    "ast_hash": "aa4cb5b481ce93dd91747032d26882a7",
     "semantic_hash": ""
   },
   "src/components/bidang/bidang-banner.jsx": {
-    "mtime": 1794461230.7423775,
-    "seen": 1794461995.5952308,
-    "ast_hash": "1690117194682c16c44554c24ebdb616",
+    "mtime": 1794479746.0429616,
+    "seen": 1794480333.4643478,
+    "ast_hash": "78d46b7ebac98227c6df763619013bb3",
     "semantic_hash": ""
   },
   "src/components/bidang/bidang-hero.jsx": {
-    "mtime": 1794461861.895446,
-    "seen": 1794461995.595235,
-    "ast_hash": "28c5e21a1fef4c6d6b8024f51fdea3bc",
+    "mtime": 1794480606.70247,
+    "seen": 1794480708.5415611,
+    "ast_hash": "f770b71a2c269fa2304064f69e7ae639",
     "semantic_hash": ""
   },
   "src/components/bidang/case-lens.jsx": {
@@ -3204,9 +3204,9 @@
     "semantic_hash": ""
   },
   "src/components/bidang/shortlist-closing.jsx": {
-    "mtime": 1794461808.3227055,
-    "seen": 1794461995.595569,
-    "ast_hash": "21fb5822fd7063952193fc61627b7d3b",
+    "mtime": 1794479746.0429616,
+    "seen": 1794480333.4660347,
+    "ast_hash": "748b873c5c2a2b34ce381c5617606585",
     "semantic_hash": ""
   },
   "public/lottie/biz-shop-dark.json": {
@@ -3234,15 +3234,15 @@
     "semantic_hash": ""
   },
   "src/app/jalur-kelulusan/page.jsx": {
-    "mtime": 1794463699.9141903,
-    "seen": 1794464009.331274,
-    "ast_hash": "e356589c41c1c9e6a190606b80f560b0",
+    "mtime": 1794480561.6603577,
+    "seen": 1794480708.5246108,
+    "ast_hash": "9089013cccf7ad4faae693cd1694581f",
     "semantic_hash": ""
   },
   "src/components/jalur/jalur-banner.jsx": {
-    "mtime": 1794463502.8719487,
-    "seen": 1794464009.3702257,
-    "ast_hash": "c53839461221a9da2ab4e67fe81e1209",
+    "mtime": 1794479861.5809052,
+    "seen": 1794480333.4841444,
+    "ast_hash": "71b76f818de418970ea8c29b42a1cc13",
     "semantic_hash": ""
   },
   "src/components/jalur/jalur-closing.jsx": {
@@ -3252,9 +3252,9 @@
     "semantic_hash": ""
   },
   "src/components/jalur/jalur-hero.jsx": {
-    "mtime": 1794463807.2264843,
-    "seen": 1794464009.3702335,
-    "ast_hash": "dfca5c2fca3a7b3e5892e9deb7a8d274",
+    "mtime": 1794480676.1097066,
+    "seen": 1794480708.562289,
+    "ast_hash": "ea44b7ec14dbf744531ec8d47cdb5278",
     "semantic_hash": ""
   },
   "src/components/jalur/jalur-provider.jsx": {
@@ -3270,9 +3270,9 @@
     "semantic_hash": ""
   },
   "src/components/jalur/readiness-check.jsx": {
-    "mtime": 1794463854.3832054,
-    "seen": 1794464009.3702419,
-    "ast_hash": "30efc923f505a90b64020111144b3eff",
+    "mtime": 1794479861.5809052,
+    "seen": 1794480333.4857588,
+    "ast_hash": "74b97d933e960ff963faef42f10ba74b",
     "semantic_hash": ""
   },
   "src/components/jalur/route-story.jsx": {
@@ -3312,9 +3312,9 @@
     "semantic_hash": ""
   },
   "src/app/regulasi-akademik/page.jsx": {
-    "mtime": 1794465413.1452303,
-    "seen": 1794465802.1255987,
-    "ast_hash": "7206ca96082bd047fabd37b658ecb77e",
+    "mtime": 1794480561.6624491,
+    "seen": 1794480708.529118,
+    "ast_hash": "b7d01105f8066e863ebfb1e31da84b9f",
     "semantic_hash": ""
   },
   "src/components/regulasi/doc-modal.jsx": {
@@ -3324,9 +3324,9 @@
     "semantic_hash": ""
   },
   "src/components/regulasi/doc-shelf.jsx": {
-    "mtime": 1794465649.9298532,
-    "seen": 1794465802.1687953,
-    "ast_hash": "4ce9f7e646e0eab4680a91f49e679b0d",
+    "mtime": 1794479894.242408,
+    "seen": 1794480333.5164144,
+    "ast_hash": "ce1a6ef170abfa5fbb1b4c33b61222f0",
     "semantic_hash": ""
   },
   "src/components/regulasi/procedure-modal.jsx": {
@@ -3336,9 +3336,9 @@
     "semantic_hash": ""
   },
   "src/components/regulasi/regulasi-banner.jsx": {
-    "mtime": 1794465096.441651,
-    "seen": 1794465802.168801,
-    "ast_hash": "fd8c634bae60e2d3bb8c14c44d1a4bdd",
+    "mtime": 1794479894.1965003,
+    "seen": 1794480333.5169156,
+    "ast_hash": "8b2b4ad4bafc1cd7b5e5ee107da043dc",
     "semantic_hash": ""
   },
   "src/components/regulasi/regulasi-closing.jsx": {
@@ -3348,9 +3348,9 @@
     "semantic_hash": ""
   },
   "src/components/regulasi/regulasi-hero.jsx": {
-    "mtime": 1794465515.0267613,
-    "seen": 1794465802.1688075,
-    "ast_hash": "df07fea097292754451638740977ec9c",
+    "mtime": 1794480606.7045407,
+    "seen": 1794480708.5937326,
+    "ast_hash": "077d74a6715b2f811a527d21d1f6b737",
     "semantic_hash": ""
   },
   "src/components/regulasi/regulasi-provider.jsx": {
@@ -3360,9 +3360,9 @@
     "semantic_hash": ""
   },
   "src/components/regulasi/rule-reader.jsx": {
-    "mtime": 1794465726.7230449,
-    "seen": 1794465802.168813,
-    "ast_hash": "c60916e738abb759531fd83edaff334c",
+    "mtime": 1794466166.8792264,
+    "seen": 1794466213.4958684,
+    "ast_hash": "649cea5115cab2fd9cc9bd6aa5eebe50",
     "semantic_hash": ""
   },
   "src/components/regulasi/rule-search.jsx": {
@@ -3387,6 +3387,210 @@
     "mtime": 1794464918.8016036,
     "seen": 1794465802.185842,
     "ast_hash": "9eae7c73122151458ff3deb66d8c8e1d",
+    "semantic_hash": ""
+  },
+  "public/lottie/briefcase-dark.json": {
+    "mtime": 1794466813.8108685,
+    "seen": 1794476725.1837792,
+    "ast_hash": "e8ed1371017aa19ac9c854089b601fd0",
+    "semantic_hash": ""
+  },
+  "public/lottie/briefcase.json": {
+    "mtime": 1794466813.804263,
+    "seen": 1794476725.1837842,
+    "ast_hash": "400bf1213bcbdd86256682fb6aa3524f",
+    "semantic_hash": ""
+  },
+  "src/app/magang/loading.js": {
+    "mtime": 1794466875.2847803,
+    "seen": 1794476725.2036707,
+    "ast_hash": "a2369c47738070455cb3d9cec5fbdae7",
+    "semantic_hash": ""
+  },
+  "src/app/magang/page.jsx": {
+    "mtime": 1794480561.6672995,
+    "seen": 1794480708.5266283,
+    "ast_hash": "55491d60e141a4905fd226c8a82f10b0",
+    "semantic_hash": ""
+  },
+  "src/components/magang/application-tracker.jsx": {
+    "mtime": 1794476604.5130205,
+    "seen": 1794476725.23293,
+    "ast_hash": "d11d0187a077b3b71287c01d1843b524",
+    "semantic_hash": ""
+  },
+  "src/components/magang/doc-modal.jsx": {
+    "mtime": 1794467229.782247,
+    "seen": 1794476725.2329345,
+    "ast_hash": "5e8b4f0dd7fd2fc4c21addc813df932a",
+    "semantic_hash": ""
+  },
+  "src/components/magang/job-board.jsx": {
+    "mtime": 1794479978.128457,
+    "seen": 1794480333.4971795,
+    "ast_hash": "2ede55aa1b3af41977d8e327be1931ca",
+    "semantic_hash": ""
+  },
+  "src/components/magang/job-modal.jsx": {
+    "mtime": 1794467110.4210455,
+    "seen": 1794476725.2329416,
+    "ast_hash": "ec20940a45125d47e333299c2e4ebd90",
+    "semantic_hash": ""
+  },
+  "src/components/magang/logbook.jsx": {
+    "mtime": 1794467207.8772924,
+    "seen": 1794476725.232944,
+    "ast_hash": "499bdb217696562d30964613e0eafa40",
+    "semantic_hash": ""
+  },
+  "src/components/magang/magang-banner.jsx": {
+    "mtime": 1794479978.128457,
+    "seen": 1794480333.4981847,
+    "ast_hash": "551933a3485a5c9f08da5a2e94a2cc11",
+    "semantic_hash": ""
+  },
+  "src/components/magang/magang-closing.jsx": {
+    "mtime": 1794478261.3502135,
+    "seen": 1794478737.8195999,
+    "ast_hash": "af9f90978a5707a31638ba584ef62a18",
+    "semantic_hash": ""
+  },
+  "src/components/magang/magang-hero.jsx": {
+    "mtime": 1794480606.7108111,
+    "seen": 1794480708.576992,
+    "ast_hash": "a099dfe37812226d243750d9f9252a61",
+    "semantic_hash": ""
+  },
+  "src/components/magang/magang-provider.jsx": {
+    "mtime": 1794467110.4210455,
+    "seen": 1794476725.2329552,
+    "ast_hash": "e7dda95ba3c8edf3be8cea41647e7c48",
+    "semantic_hash": ""
+  },
+  "src/components/magang/route-doors.jsx": {
+    "mtime": 1794478261.3502135,
+    "seen": 1794478737.8199198,
+    "ast_hash": "d1f513cb967c52655bb549370eb453cb",
+    "semantic_hash": ""
+  },
+  "src/lib/magang-content.js": {
+    "mtime": 1794466994.644395,
+    "seen": 1794476725.262342,
+    "ast_hash": "457f7922d1d4662d711d3557cd64a54f",
+    "semantic_hash": ""
+  },
+  "public/lottie/credit-swap-dark.json": {
+    "mtime": 1794477647.8901353,
+    "seen": 1794478737.7791831,
+    "ast_hash": "75f964c129ad6ce41733fc34dfbee267",
+    "semantic_hash": ""
+  },
+  "public/lottie/credit-swap.json": {
+    "mtime": 1794477647.882226,
+    "seen": 1794478737.779186,
+    "ast_hash": "061460a95adf63034f0691cf027e7e73",
+    "semantic_hash": ""
+  },
+  "src/app/konversi-sks/loading.js": {
+    "mtime": 1794478241.6942236,
+    "seen": 1794478737.7950675,
+    "ast_hash": "d33ffd5672a322dc0b6bf328b92d9532",
+    "semantic_hash": ""
+  },
+  "src/app/konversi-sks/page.jsx": {
+    "mtime": 1794480561.6639633,
+    "seen": 1794480708.5251176,
+    "ast_hash": "48c55243d7aad786a6c2181118924547",
+    "semantic_hash": ""
+  },
+  "src/components/konversi/claim-stepper.jsx": {
+    "mtime": 1794479978.128457,
+    "seen": 1794480333.486998,
+    "ast_hash": "029a1dffe504177f75047e2825649e3b",
+    "semantic_hash": ""
+  },
+  "src/components/konversi/course-modal.jsx": {
+    "mtime": 1794478241.4256492,
+    "seen": 1794478737.8162534,
+    "ast_hash": "c2d2510f580d11724b330a554ef8ebe5",
+    "semantic_hash": ""
+  },
+  "src/components/konversi/exchange-desk.jsx": {
+    "mtime": 1794479161.842978,
+    "seen": 1794479229.2395868,
+    "ast_hash": "b114ef45fd3a4c3ef000ac6d4cf64240",
+    "semantic_hash": ""
+  },
+  "src/components/konversi/konversi-banner.jsx": {
+    "mtime": 1794479978.128457,
+    "seen": 1794480333.4879577,
+    "ast_hash": "6ffcaeba8a19283c463975118c91722b",
+    "semantic_hash": ""
+  },
+  "src/components/konversi/konversi-closing.jsx": {
+    "mtime": 1794478181.226231,
+    "seen": 1794478737.8162599,
+    "ast_hash": "78ac35e7b0d178e031a7538f931556fd",
+    "semantic_hash": ""
+  },
+  "src/components/konversi/konversi-hero.jsx": {
+    "mtime": 1794480606.7085612,
+    "seen": 1794480708.5675607,
+    "ast_hash": "21d33133a97aba652a2ce150aea8af4b",
+    "semantic_hash": ""
+  },
+  "src/components/konversi/konversi-provider.jsx": {
+    "mtime": 1794478816.3339753,
+    "seen": 1794479034.1614065,
+    "ast_hash": "76137ced51ba58d454b76e2fed1a4907",
+    "semantic_hash": ""
+  },
+  "src/components/konversi/receipt.jsx": {
+    "mtime": 1794478816.3339753,
+    "seen": 1794479034.161416,
+    "ast_hash": "6f79dca9f0aff7ef7af4bcb18bd5cc6e",
+    "semantic_hash": ""
+  },
+  "src/components/konversi/rolling-number.jsx": {
+    "mtime": 1794479115.448466,
+    "seen": 1794479229.241823,
+    "ast_hash": "a5dafa549f82b9e025b566a8a3ff6447",
+    "semantic_hash": ""
+  },
+  "src/components/konversi/scrub-field.jsx": {
+    "mtime": 1794477873.8600168,
+    "seen": 1794478737.816268,
+    "ast_hash": "e01b73ef25e7202d9e034707ea3fc937",
+    "semantic_hash": ""
+  },
+  "src/components/konversi/split-flap.jsx": {
+    "mtime": 1794477860.3078697,
+    "seen": 1794478737.81627,
+    "ast_hash": "a15d6bfe46313b2c87e544cea103ab07",
+    "semantic_hash": ""
+  },
+  "src/components/konversi/template-modal.jsx": {
+    "mtime": 1794478225.381768,
+    "seen": 1794478737.8162715,
+    "ast_hash": "f525349bfc7ed11c20771c9f054d9335",
+    "semantic_hash": ""
+  },
+  "src/components/konversi/transcript-compare.jsx": {
+    "mtime": 1794478172.570187,
+    "seen": 1794478737.816273,
+    "ast_hash": "1ac66f69c49eb8ee735e1ad3385b0af2",
+    "semantic_hash": ""
+  },
+  "src/lib/ics.js": {
+    "mtime": 1794477933.0214286,
+    "seen": 1794478737.8430126,
+    "ast_hash": "5658fcc931c7a4554c1a0d329842998f",
+    "semantic_hash": ""
+  },
+  "src/lib/konversi-content.js": {
+    "mtime": 1794479123.696575,
+    "seen": 1794479229.2961984,
+    "ast_hash": "24d34be436132ea4726f9fe2d11c1300",
     "semantic_hash": ""
   }
 }

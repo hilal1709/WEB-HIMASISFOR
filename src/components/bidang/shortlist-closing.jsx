@@ -6,6 +6,7 @@ import { PMB_URL } from "@/lib/home-content";
 import { Container, PillLink, SceneTitle } from "@/components/home/shared";
 import { LottieIllustration } from "@/components/media/lottie-illustration";
 import { cn } from "@/lib/utils";
+import { BidangBanner } from "./bidang-banner";
 import { smoothTo } from "./bidang-hero";
 import { useBidang } from "./bidang-provider";
 
@@ -41,6 +42,7 @@ export function ShortlistClosing() {
                   ? `${first.title} sudah kamu simpan. Bandingkan dengan bidang lain sebelum memutuskan.`
                   : `${picked.length} bidang tersimpan. Bawa daftar ini saat konsultasi dengan dosen wali.`}
             </p>
+            <BidangBanner className="mt-6" />
             <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-3">
               <PillLink href={PMB_URL} variant="gold" target="_blank" rel="noopener noreferrer">Daftar PMB</PillLink>
               {picked.length === 0 && (

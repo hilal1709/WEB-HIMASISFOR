@@ -433,7 +433,7 @@ html.has-cursor, html.has-cursor a, html.has-cursor button { cursor: none; }
   --color-text: var(--text);
   --color-line: var(--line);
 }
-.kampus { background: var(--cream); color: var(--text); }
+.kampus { background: var(--cream); color: var(--text); counter-reset: sec; }
 .kicker { font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; }
 .u-gold { background-image: none; position: relative; }
 .u-gold::after {

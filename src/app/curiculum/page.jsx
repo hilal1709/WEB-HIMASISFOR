@@ -3,7 +3,6 @@ import { CURTAIN_KEY, mergeKurikulum } from "@/lib/kurikulum-content";
 import { SiteHeader, Topbar } from "@/components/home/site-header";
 import { SiteFooter } from "@/components/home/site-footer";
 import { AosReady } from "@/components/motion/aos-provider";
-import { PageCurtain } from "@/components/motion/page-curtain";
 import { KurikulumProvider } from "@/components/kurikulum/kurikulum-provider";
 import { KurikulumHero } from "@/components/kurikulum/kurikulum-hero";
 import { StudyMap } from "@/components/kurikulum/study-map";
@@ -11,6 +10,8 @@ import { SemesterLedger } from "@/components/kurikulum/semester-ledger";
 import { ElectiveTracks } from "@/components/kurikulum/elective-tracks";
 import { RpsAnatomy } from "@/components/kurikulum/rps-anatomy";
 import { Closing } from "@/components/kurikulum/closing";
+import { HeadingStyle } from "@/components/home/shared";
+import { PageCurtain } from "@/components/motion/page-curtain";
 
 export const revalidate = 300;
 
@@ -38,6 +39,7 @@ export default async function KurikulumPage() {
       <Topbar />
       <SiteHeader />
       <KurikulumProvider data={data}>
+        <HeadingStyle value="numbered">
         <main>
           <KurikulumHero />
           <StudyMap />
@@ -46,6 +48,7 @@ export default async function KurikulumPage() {
           <RpsAnatomy />
           <Closing />
         </main>
+        </HeadingStyle>
       </KurikulumProvider>
       <SiteFooter />
       <AosReady />

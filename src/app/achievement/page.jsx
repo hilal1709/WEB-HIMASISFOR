@@ -5,12 +5,13 @@ import { CURTAIN_KEY, STORY_SECTION, mergePrestasi, mergeStory } from "@/lib/pre
 import { SiteHeader, Topbar } from "@/components/home/site-header";
 import { SiteFooter } from "@/components/home/site-footer";
 import { AosReady } from "@/components/motion/aos-provider";
-import { PageCurtain } from "@/components/motion/page-curtain";
 import { PrestasiProvider } from "@/components/prestasi/prestasi-provider";
 import { PrestasiHero } from "@/components/prestasi/prestasi-hero";
 import { Archive } from "@/components/prestasi/archive";
 import { StoryBand } from "@/components/prestasi/story-band";
 import { Closing } from "@/components/prestasi/closing";
+import { HeadingStyle } from "@/components/home/shared";
+import { PageCurtain } from "@/components/motion/page-curtain";
 
 export const revalidate = 300;
 
@@ -48,12 +49,14 @@ export default async function PrestasiPage() {
       <Topbar />
       <SiteHeader />
       <PrestasiProvider data={data}>
+        <HeadingStyle value="bar">
         <main>
           <PrestasiHero />
           <Archive />
           <StoryBand />
           <Closing />
         </main>
+        </HeadingStyle>
       </PrestasiProvider>
       <SiteFooter />
       <AosReady />

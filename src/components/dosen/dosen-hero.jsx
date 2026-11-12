@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { gsap } from "@/lib/scroll";
-import { prefersReducedMotion } from "@/lib/motion";
+import { prefersReducedMotion, curtainDelay } from "@/lib/motion";
 import { CURTAIN_KEY } from "@/lib/dosen-content";
 import { VIDEOS } from "@/lib/home-content";
 import { Container, SceneTitle } from "@/components/home/shared";
@@ -37,11 +37,7 @@ export function DosenHero() {
   useEffect(() => {
     const el = ref.current;
     if (!el || prefersReducedMotion()) return;
-    let seen = false;
-    try {
-      seen = sessionStorage.getItem(CURTAIN_KEY) === "1";
-    } catch {}
-    const delay = seen ? 150 : 1900;
+    const delay = curtainDelay(CURTAIN_KEY) * 1000;
 
     const ctx = gsap.context(() => {
       gsap.from("[data-hero-fade]", { y: 18, opacity: 0, duration: 0.8, stagger: 0.08, ease: "expo.out", delay: delay / 1000 });

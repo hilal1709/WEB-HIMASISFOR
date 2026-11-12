@@ -2,7 +2,7 @@
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { gsap } from "@/lib/scroll";
-import { prefersReducedMotion } from "@/lib/motion";
+import { prefersReducedMotion, curtainDelay } from "@/lib/motion";
 import { CURTAIN_KEY } from "@/lib/struktur-content";
 import { Container, SceneTitle } from "@/components/home/shared";
 import { ElvoPeek } from "@/components/home/elvo-peek";
@@ -61,11 +61,7 @@ export function StrukturHero({ intro, people }) {
   useEffect(() => {
     const el = ref.current;
     if (!el || prefersReducedMotion()) return;
-    let seen = false;
-    try {
-      seen = sessionStorage.getItem(CURTAIN_KEY) === "1";
-    } catch {}
-    const delay = seen ? 0.15 : 1.9;
+    const delay = curtainDelay(CURTAIN_KEY);
     const ctx = gsap.context(() => {
       gsap.from("[data-hero-fade]", { y: 18, opacity: 0, duration: 0.8, stagger: 0.08, ease: "expo.out", delay });
       gsap.fromTo("[data-tile]", { clipPath: "inset(100% 0 0 0)" }, { clipPath: "inset(0% 0 0 0)", duration: 1.1, stagger: 0.07, ease: "expo.out", delay: delay + 0.1 });

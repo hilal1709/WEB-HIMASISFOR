@@ -75,6 +75,24 @@ export default function sitemap() {
       priority: 0.7,
     },
     {
+      url: `${baseUrl}/magang`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/konversi-sks`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/bootcamp`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.7,
+    },
+    {
       url: `${baseUrl}/achievement`,
       lastModified: new Date(),
       changeFrequency: 'weekly',

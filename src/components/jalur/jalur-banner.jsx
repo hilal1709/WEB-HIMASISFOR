@@ -2,11 +2,11 @@
 import { useEffect, useState } from "react";
 import { BANNER_KEY } from "@/lib/jalur-kelulusan-content";
 import { Banner } from "@/components/ui/banner";
-import { Container, PillLink, PlaceholderTag } from "@/components/home/shared";
+import { PillLink, PlaceholderTag } from "@/components/home/shared";
 import { useJalur } from "./jalur-provider";
 
-/** Pengumuman periode sidang (brand). Bila ditutup, tidak muncul lagi selama sesi. */
-export function JalurBanner() {
+/** Pengumuman periode sidang (brand), tampil di "Cek kesiapanku". Ditutup → tidak muncul lagi selama sesi. */
+export function JalurBanner({ className }) {
   const { notice } = useJalur();
   const [show, setShow] = useState(false);
 
@@ -20,7 +20,7 @@ export function JalurBanner() {
 
   if (!show || !notice) return null;
   return (
-    <Container className="relative z-10 mb-4 md:mb-8" data-aos="fade-up">
+    <div className={className}>
       <div
         onClickCapture={(e) => {
           if (e.target.closest?.('[aria-label="Tutup banner"]')) {
@@ -44,6 +44,6 @@ export function JalurBanner() {
           {notice.sample && <PlaceholderTag tone="dark" className="ml-2 align-middle" />}
         </Banner>
       </div>
-    </Container>
+    </div>
   );
 }

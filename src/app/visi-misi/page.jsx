@@ -3,12 +3,13 @@ import { CURTAIN_KEY, mergeVisiMisi } from "@/lib/visi-misi-content";
 import { SiteHeader, Topbar } from "@/components/home/site-header";
 import { SiteFooter } from "@/components/home/site-footer";
 import { AosReady } from "@/components/motion/aos-provider";
-import { PageCurtain } from "@/components/motion/page-curtain";
 import { VisiHero, VisiStatement } from "@/components/visi-misi/visi-hero";
 import { MisiStack } from "@/components/visi-misi/misi-stack";
 import { MisiModalProvider } from "@/components/visi-misi/misi-modal";
 import { Roadmap } from "@/components/visi-misi/roadmap";
 import { Closing } from "@/components/visi-misi/closing";
+import { HeadingStyle } from "@/components/home/shared";
+import { PageCurtain } from "@/components/motion/page-curtain";
 
 export const revalidate = 300;
 
@@ -35,6 +36,7 @@ export default async function VisiMisiPage() {
       <Topbar />
       <SiteHeader />
       <MisiModalProvider misi={data.misi}>
+        <HeadingStyle value="centered">
         <main>
           <VisiHero />
           <VisiStatement visi={data.visi} highlights={data.highlights} />
@@ -42,6 +44,7 @@ export default async function VisiMisiPage() {
           <Roadmap milestones={data.milestones} />
           <Closing />
         </main>
+        </HeadingStyle>
       </MisiModalProvider>
       <SiteFooter />
       <AosReady />

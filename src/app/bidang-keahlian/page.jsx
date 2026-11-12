@@ -5,14 +5,14 @@ import { mergeDosen } from "@/lib/dosen-content";
 import { SiteHeader, Topbar } from "@/components/home/site-header";
 import { SiteFooter } from "@/components/home/site-footer";
 import { AosReady } from "@/components/motion/aos-provider";
-import { PageCurtain } from "@/components/motion/page-curtain";
 import { BidangProvider } from "@/components/bidang/bidang-provider";
 import { BidangHero } from "@/components/bidang/bidang-hero";
-import { BidangBanner } from "@/components/bidang/bidang-banner";
 import { FieldMosaic } from "@/components/bidang/field-mosaic";
 import { InterestRadar } from "@/components/bidang/interest-radar";
 import { CaseLens } from "@/components/bidang/case-lens";
 import { ShortlistClosing } from "@/components/bidang/shortlist-closing";
+import { HeadingStyle } from "@/components/home/shared";
+import { PageCurtain } from "@/components/motion/page-curtain";
 
 export const revalidate = 300;
 
@@ -41,14 +41,15 @@ export default async function BidangKeahlianPage() {
       <Topbar />
       <SiteHeader />
       <BidangProvider data={data}>
+        <HeadingStyle value="split">
         <main>
           <BidangHero />
-          <BidangBanner />
           <FieldMosaic />
           <InterestRadar />
           <CaseLens />
           <ShortlistClosing />
         </main>
+        </HeadingStyle>
       </BidangProvider>
       <SiteFooter />
       <AosReady />

@@ -3,10 +3,10 @@ import { mergeSambutan } from "@/lib/sambutan-content";
 import { SiteHeader, Topbar } from "@/components/home/site-header";
 import { SiteFooter } from "@/components/home/site-footer";
 import { AosReady } from "@/components/motion/aos-provider";
-import { PageCurtain } from "@/components/sambutan/page-curtain";
 import { SambutanHero } from "@/components/sambutan/sambutan-hero";
 import { Letter } from "@/components/sambutan/letter";
 import { ProfileModalProvider } from "@/components/sambutan/profile-modal";
+import { PageCurtain } from "@/components/sambutan/page-curtain";
 
 export const revalidate = 300;
 

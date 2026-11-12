@@ -2,11 +2,11 @@
 import { useEffect, useState } from "react";
 import { BANNER_KEY } from "@/lib/regulasi-content";
 import { Banner } from "@/components/ui/banner";
-import { Container, PlaceholderTag } from "@/components/home/shared";
+import { PlaceholderTag } from "@/components/home/shared";
 import { useRegulasi } from "./regulasi-provider";
 
 /** Pengumuman berlakunya pedoman (brand). Tombolnya membuka modal dokumen Pedoman. Tutup diingat per sesi. */
-export function RegulasiBanner() {
+export function RegulasiBanner({ className }) {
   const { notice, openDoc } = useRegulasi();
   const [show, setShow] = useState(false);
 
@@ -20,7 +20,7 @@ export function RegulasiBanner() {
 
   if (!show || !notice) return null;
   return (
-    <Container className="relative z-10 -mt-4 mb-6 md:mb-10" data-aos="fade-up">
+    <div className={className}>
       <div
         onClickCapture={(e) => {
           if (e.target.closest?.('[aria-label="Tutup banner"]')) {
@@ -48,6 +48,6 @@ export function RegulasiBanner() {
           {notice.sample && <PlaceholderTag tone="dark" className="ml-2 align-middle" />}
         </Banner>
       </div>
-    </Container>
+    </div>
   );
 }

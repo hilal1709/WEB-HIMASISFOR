@@ -3,12 +3,13 @@ import { CURTAIN_KEY, mergeDosen } from "@/lib/dosen-content";
 import { SiteHeader, Topbar } from "@/components/home/site-header";
 import { SiteFooter } from "@/components/home/site-footer";
 import { AosReady } from "@/components/motion/aos-provider";
-import { PageCurtain } from "@/components/motion/page-curtain";
 import { DosenProvider } from "@/components/dosen/dosen-provider";
 import { DosenHero } from "@/components/dosen/dosen-hero";
 import { Directory } from "@/components/dosen/directory";
 import { ExpertiseMap } from "@/components/dosen/expertise-map";
 import { Closing } from "@/components/dosen/closing";
+import { HeadingStyle } from "@/components/home/shared";
+import { PageCurtain } from "@/components/motion/page-curtain";
 
 export const revalidate = 300;
 
@@ -36,12 +37,14 @@ export default async function DosenPage() {
       <Topbar />
       <SiteHeader />
       <DosenProvider data={data}>
+        <HeadingStyle value="edge">
         <main>
           <DosenHero />
           <Directory />
           <ExpertiseMap />
           <Closing />
         </main>
+        </HeadingStyle>
       </DosenProvider>
       <SiteFooter />
       <AosReady />

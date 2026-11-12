@@ -30,7 +30,7 @@ export function Closing() {
           <div className="relative flex-1 bg-maroon p-7 text-white md:p-10">
             <div className="flex items-start justify-between gap-6">
               <div>
-                <p className="kicker text-gold-soft">Tiket PMB 2027 · Sistem Informasi</p>
+                <p className="kicker text-gold-soft">PMB 2027 sudah dibuka · Sistem Informasi</p>
                 <SceneTitle title={["Siap mulai", "kelasmu?"]} tone="dark" className="mt-3 !text-[clamp(2rem,4.2vw,3.25rem)]" />
               </div>
               <div className="hidden w-20 shrink-0 md:block" aria-hidden>
@@ -57,7 +57,7 @@ export function Closing() {
               <PillLink href={PMB_URL} variant="white" target="_blank" rel="noopener noreferrer">
                 Daftar PMB 2027
               </PillLink>
-              <p className="text-sm text-white/60">Pilih kelasnya saat mengisi formulir.</p>
+              <p className="text-sm text-white/60">Kuota Kelas Karyawan & Kemitraan terbatas. Pilih kelasnya saat mengisi formulir.</p>
             </div>
           </div>
 

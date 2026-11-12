@@ -37,11 +37,11 @@ export const NAV = [
   },
   {
     label: "Belajar Luar Prodi",
-    href: "/profile#mbkm",
+    href: "/magang",
     items: [
-      { label: "Magang", href: "/profile#magang", desc: "Magang mandiri dan program Dikti" },
-      { label: "Konversi SKS", href: "/profile#konversi", desc: "Panduan dan klaim konversi" },
-      { label: "Bootcamp & Course", href: "/profile#bootcamp", desc: "Belajar independen bersertifikat" },
+      { label: "Magang", href: "/magang", desc: "Kerja praktik, magang mandiri, dan program Dikti" },
+      { label: "Konversi SKS", href: "/konversi-sks", desc: "Hitung SKS dari kegiatan luar kelas" },
+      { label: "Bootcamp & Course", href: "/bootcamp", desc: "Kohort intensif dan kursus mandiri bersertifikat" },
     ],
   },
   {
@@ -220,7 +220,7 @@ export const FOOTER = {
   instagram: "https://www.instagram.com/sisforuisi/",
   columns: [
     { title: "Profil", links: [["Sambutan Kaprodi", "/sambutan-kaprodi"], ["Visi & Misi", "/visi-misi"], ["Struktur Organisasi", "/struktur-organisasi"], ["Profil Lulusan", "/profil-lulusan"], ["Dosen", "/dosen"]] },
-    { title: "Akademik", links: [["Kurikulum & RPS", "/curiculum"], ["Bidang Keahlian", "/bidang-keahlian"], ["Jalur Kelulusan", "/jalur-kelulusan"], ["Prestasi", "/achievement"]] },
+    { title: "Akademik", links: [["Kurikulum & RPS", "/curiculum"], ["Bidang Keahlian", "/bidang-keahlian"], ["Jalur Kelulusan", "/jalur-kelulusan"], ["Konversi SKS", "/konversi-sks"], ["Bootcamp & Course", "/bootcamp"], ["Prestasi", "/achievement"]] },
     { title: "Tautan Penting", links: [["Universitas (UISI)", "https://uisi.ac.id"], ["PMB UISI", PMB_URL], ["Instagram Prodi", "https://www.instagram.com/sisforuisi/"]] },
   ],
 };
@@ -309,7 +309,7 @@ export const HERO_V3 = {
 export const MEGA_FEATURE = {
   Profil: { image: "/img/heroprofile.png", title: "Mengenal SISFOR", body: "Sejarah, visi misi, dan dosen program studi.", href: "/profile" },
   Akademik: { image: "/img/erp.jpeg", title: "Kurikulum berbasis ERP", body: "Struktur mata kuliah dan empat bidang keahlian.", href: "/curiculum" },
-  "Belajar Luar Prodi": { image: "/img/award/image-1.png", title: "Magang & MBKM", body: "Belajar langsung di industri, dikonversi ke SKS.", href: "/profile#mbkm" },
+  "Belajar Luar Prodi": { image: "/img/award/image-1.png", title: "Magang & MBKM", body: "Belajar langsung di industri, dikonversi ke SKS.", href: "/magang" },
   Layanan: { image: "/img/governance.jpeg", title: "Layanan akademik", body: "Persuratan, approval kaprodi, dan kontak.", href: "/profile#layanan" },
 };
 

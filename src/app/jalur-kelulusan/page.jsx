@@ -4,14 +4,14 @@ import { mergeKurikulum } from "@/lib/kurikulum-content";
 import { SiteHeader, Topbar } from "@/components/home/site-header";
 import { SiteFooter } from "@/components/home/site-footer";
 import { AosReady } from "@/components/motion/aos-provider";
-import { PageCurtain } from "@/components/motion/page-curtain";
 import { JalurProvider } from "@/components/jalur/jalur-provider";
 import { JalurHero } from "@/components/jalur/jalur-hero";
-import { JalurBanner } from "@/components/jalur/jalur-banner";
 import { RouteStory } from "@/components/jalur/route-story";
 import { ReadinessCheck } from "@/components/jalur/readiness-check";
 import { TradeoffCards } from "@/components/jalur/tradeoff-cards";
 import { JalurClosing } from "@/components/jalur/jalur-closing";
+import { HeadingStyle } from "@/components/home/shared";
+import { PageCurtain } from "@/components/motion/page-curtain";
 
 export const revalidate = 300;
 
@@ -40,14 +40,15 @@ export default async function JalurKelulusanPage() {
       <Topbar />
       <SiteHeader />
       <JalurProvider data={data}>
+        <HeadingStyle value="edge">
         <main>
           <JalurHero />
-          <JalurBanner />
           <RouteStory />
           <ReadinessCheck />
           <TradeoffCards />
           <JalurClosing />
         </main>
+        </HeadingStyle>
       </JalurProvider>
       <SiteFooter />
       <AosReady />

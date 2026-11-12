@@ -1,4 +1,5 @@
 "use client";
+import { createContext, useContext } from "react";
 import { SplitReveal } from "@/components/motion/split-reveal";
 import { cn } from "@/lib/utils";
 
@@ -49,9 +50,102 @@ export function SceneTitle({ lines, title, as = "h2", tone = "light", align = "l
   );
 }
 
-/** Header section: judul + deskripsi (+ aksi di kanan). Garis emas pendek sebagai penanda. */
-export function SectionHeader({ title, body, tone = "light", align = "left", size, action, className }) {
-  const center = align === "center";
+/**
+ * Gaya judul section per halaman, agar tiap halaman punya "suara" sendiri. Dipasang sekali di
+ * app/<halaman>/page.jsx: <HeadingStyle value="numbered">…</HeadingStyle>.
+ * - bar      : garis emas pendek di atas judul (bawaan)
+ * - edge     : garis tegak maroon di kiri judul & paragraf
+ * - numbered : nomor section otomatis (CSS counter `sec`, di-reset oleh `.kampus`)
+ * - split    : judul kiri, paragraf + aksi kanan
+ * - centered : rata tengah, tanpa garis
+ * - rule     : garis tipis selebar konten di atas judul
+ */
+const HeadingCtx = createContext("bar");
+export function HeadingStyle({ value, children }) {
+  return <HeadingCtx.Provider value={value}>{children}</HeadingCtx.Provider>;
+}
+
+function SectionBody({ body, tone, className }) {
+  if (!body) return null;
+  return (
+    <p data-aos="fade-up" data-aos-delay="100" className={cn("text-pretty text-[16.5px] leading-relaxed", tone === "light" ? "text-text/65" : "text-white/70", className)}>
+      {body}
+    </p>
+  );
+}
+
+/** Header section: judul + deskripsi (+ aksi). Tampilannya mengikuti `HeadingStyle` halaman. */
+export function SectionHeader({ title, body, tone = "light", align = "left", size, action, className, variant }) {
+  const ctx = useContext(HeadingCtx);
+  const v = align === "center" ? "centered" : variant ?? ctx;
+  const light = tone === "light";
+  const act = action && (
+    <div data-aos="fade-up" data-aos-delay="150" className={cn("shrink-0", v === "centered" && "mt-6")}>
+      {action}
+    </div>
+  );
+
+  if (v === "centered")
+    return (
+      <div className={cn("mx-auto flex max-w-2xl flex-col items-center text-center", className)}>
+        <SceneTitle title={title} tone={tone} align="center" size={size} />
+        <SectionBody body={body} tone={tone} className="mt-4" />
+        {act}
+      </div>
+    );
+
+  if (v === "split")
+    return (
+      <div className={cn("grid gap-5 md:grid-cols-[1.1fr_0.9fr] md:items-end md:gap-14", className)}>
+        <SceneTitle title={title} tone={tone} size={size} />
+        <div className="flex flex-col gap-5 md:pb-1">
+          <SectionBody body={body} tone={tone} />
+          {act}
+        </div>
+      </div>
+    );
+
+  if (v === "numbered")
+    return (
+      <div className={cn("flex flex-col gap-6 md:flex-row md:items-end md:justify-between", className)}>
+        <div className="grid max-w-3xl grid-cols-[auto_1fr] gap-x-5 md:gap-x-8 [counter-increment:sec]">
+          <span
+            aria-hidden
+            className={cn(
+              "pt-1 font-serif text-[clamp(1.6rem,3vw,2.5rem)] leading-none tabular-nums before:content-[counter(sec,decimal-leading-zero)]",
+              light ? "text-gold" : "text-gold-soft"
+            )}
+          />
+          <div>
+            <SceneTitle title={title} tone={tone} size={size} />
+            <SectionBody body={body} tone={tone} className="mt-4" />
+          </div>
+        </div>
+        {act}
+      </div>
+    );
+
+  const lead =
+    v === "edge" ? (
+      <div className={cn("max-w-2xl border-l-[3px] pl-5 md:pl-7", light ? "border-maroon" : "border-gold-soft")}>
+        <SceneTitle title={title} tone={tone} size={size} />
+        <SectionBody body={body} tone={tone} className="mt-4" />
+      </div>
+    ) : v === "rule" ? (
+      <div className="max-w-2xl">
+        <SceneTitle title={title} tone={tone} size={size} />
+        <SectionBody body={body} tone={tone} className="mt-4" />
+      </div>
+    ) : null;
+  if (lead)
+    return (
+      <div className={cn("flex flex-col gap-6 md:flex-row md:items-end md:justify-between", v === "rule" && cn("border-t pt-7 md:pt-9", light ? "border-navy/15" : "border-white/15"), className)}>
+        {lead}
+        {act}
+      </div>
+    );
+
+  const center = false;
   return (
     <div className={cn(center ? "mx-auto flex max-w-2xl flex-col items-center text-center" : "flex flex-col gap-6 md:flex-row md:items-end md:justify-between", className)}>
       <div className={cn(!center && "max-w-2xl")}>

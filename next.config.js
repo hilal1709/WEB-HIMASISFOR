@@ -32,6 +32,13 @@ const nextConfig = {
       { source: '/peminatan', destination: '/bidang-keahlian', permanent: true },
       { source: '/kelulusan', destination: '/jalur-kelulusan', permanent: true },
       { source: '/regulasi', destination: '/regulasi-akademik', permanent: true },
+      { source: '/internship', destination: '/magang', permanent: true },
+      { source: '/kerja-praktik', destination: '/magang', permanent: true },
+      { source: '/konversi', destination: '/konversi-sks', permanent: true },
+      { source: '/mbkm', destination: '/konversi-sks', permanent: true },
+      { source: '/course', destination: '/bootcamp', permanent: true },
+      { source: '/kursus', destination: '/bootcamp', permanent: true },
+      { source: '/studi-independen', destination: '/bootcamp', permanent: true },
     ];
   },
 

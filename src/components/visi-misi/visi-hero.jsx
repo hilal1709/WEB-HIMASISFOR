@@ -2,12 +2,12 @@
 import { useEffect, useMemo, useRef } from "react";
 import { animate, stagger, svg } from "animejs";
 import { gsap } from "@/lib/scroll";
-import { prefersReducedMotion } from "@/lib/motion";
+import { prefersReducedMotion, curtainDelay } from "@/lib/motion";
+import { CURTAIN_KEY } from "@/lib/visi-misi-content";
 import { Container, SceneTitle } from "@/components/home/shared";
 import { ElvoPeek } from "@/components/home/elvo-peek";
 import { HorizonIllustration } from "@/components/illustrations/line-illustrations";
 import { Magnetic } from "@/components/motion/magnetic";
-import { CURTAIN_KEY } from "@/lib/visi-misi-content";
 
 
 function smoothTo(id) {
@@ -26,11 +26,7 @@ export function VisiHero() {
     const el = ref.current;
     if (!el) return;
     const reduce = prefersReducedMotion();
-    let seen = false;
-    try {
-      seen = sessionStorage.getItem(CURTAIN_KEY) === "1";
-    } catch {}
-    const delay = seen ? 150 : 1900;
+    const delay = curtainDelay(CURTAIN_KEY) * 1000;
     if (reduce) return;
 
     const paths = el.querySelectorAll("[data-horizon] [data-line]");

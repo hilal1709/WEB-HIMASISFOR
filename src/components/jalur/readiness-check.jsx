@@ -6,6 +6,7 @@ import { gsap } from "@/lib/scroll";
 import { prefersReducedMotion } from "@/lib/motion";
 import { useToast } from "@/components/ui/toast";
 import { Container, PlaceholderTag, SectionHeader } from "@/components/home/shared";
+import { JalurBanner } from "./jalur-banner";
 import { LottieIllustration } from "@/components/media/lottie-illustration";
 import { cn } from "@/lib/utils";
 import { useJalur } from "./jalur-provider";
@@ -81,6 +82,7 @@ export function ReadinessCheck() {
     <section id="kesiapan" className="relative scroll-mt-20 py-16 md:py-24">
       <Container>
         <SectionHeader title={["Cek", "kesiapanku"]} body="Centang yang sudah benar-benar kamu punya. Jawabanmu hanya tersimpan di perangkat ini." />
+        <JalurBanner className="mt-8" />
 
         <div className="mt-10 flex gap-1 overflow-x-auto rounded-lg border border-line bg-white p-1 sm:inline-flex" role="tablist" aria-label="Jalur yang dicek" onKeyDown={(e) => {
           if (e.key === "ArrowRight") setActive((active + 1) % paths.length);

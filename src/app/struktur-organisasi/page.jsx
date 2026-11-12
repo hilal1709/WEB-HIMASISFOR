@@ -3,12 +3,13 @@ import { CURTAIN_KEY, mergeStruktur } from "@/lib/struktur-content";
 import { SiteHeader, Topbar } from "@/components/home/site-header";
 import { SiteFooter } from "@/components/home/site-footer";
 import { AosReady } from "@/components/motion/aos-provider";
-import { PageCurtain } from "@/components/motion/page-curtain";
 import { StrukturHero } from "@/components/struktur/struktur-hero";
 import { PersonModalProvider } from "@/components/struktur/person-modal";
 import { OrgChart } from "@/components/struktur/org-chart";
 import { Minilab } from "@/components/struktur/minilab";
 import { Closing } from "@/components/struktur/closing";
+import { HeadingStyle } from "@/components/home/shared";
+import { PageCurtain } from "@/components/motion/page-curtain";
 
 export const revalidate = 300;
 
@@ -36,12 +37,14 @@ export default async function StrukturOrganisasiPage() {
       <Topbar />
       <SiteHeader />
       <PersonModalProvider people={data.people}>
+        <HeadingStyle value="rule">
         <main>
           <StrukturHero intro={data.intro} people={data.people} />
           <OrgChart people={data.people} confirmed={data.confirmed} />
           <Minilab minilab={data.minilab} people={data.people} />
           <Closing />
         </main>
+        </HeadingStyle>
       </PersonModalProvider>
       <SiteFooter />
       <AosReady />

@@ -44,3 +44,16 @@ export function staggerIn(targets, { delay = 80 } = {}) {
     ease: "outCubic",
   });
 }
+
+/**
+ * Jeda animasi hero agar mulai setelah tirai pembuka (PageCurtain) terangkat. Tirai menulis `key` ke
+ * sessionStorage saat selesai; kunjungan berikutnya di sesi yang sama tidak menampilkan tirai → jeda pendek.
+ */
+export function curtainDelay(key, short = 0.15) {
+  if (typeof window === "undefined") return short;
+  try {
+    return sessionStorage.getItem(key) === "1" ? short : 1.9;
+  } catch {
+    return 1.9;
+  }
+}

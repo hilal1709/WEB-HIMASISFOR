@@ -3,15 +3,15 @@ import { CURTAIN_KEY, mergeProgramKelas } from "@/lib/program-kelas-content";
 import { SiteHeader, Topbar } from "@/components/home/site-header";
 import { SiteFooter } from "@/components/home/site-footer";
 import { AosReady } from "@/components/motion/aos-provider";
-import { PageCurtain } from "@/components/motion/page-curtain";
 import { KelasProvider } from "@/components/program-kelas/kelas-provider";
 import { KelasHero } from "@/components/program-kelas/kelas-hero";
-import { PmbBanner } from "@/components/program-kelas/pmb-banner";
 import { ClassSwitcher } from "@/components/program-kelas/class-switcher";
 import { WeekSchedule } from "@/components/program-kelas/week-schedule";
 import { CompareTable } from "@/components/program-kelas/compare-table";
 import { Faq } from "@/components/program-kelas/faq";
 import { Closing } from "@/components/program-kelas/closing";
+import { HeadingStyle } from "@/components/home/shared";
+import { PageCurtain } from "@/components/motion/page-curtain";
 
 export const revalidate = 300;
 
@@ -39,15 +39,16 @@ export default async function ProgramKelasPage() {
       <Topbar />
       <SiteHeader />
       <KelasProvider data={data}>
+        <HeadingStyle value="split">
         <main>
           <KelasHero />
-          <PmbBanner />
           <ClassSwitcher />
           <WeekSchedule />
           <CompareTable />
           <Faq />
           <Closing />
         </main>
+        </HeadingStyle>
       </KelasProvider>
       <SiteFooter />
       <AosReady />

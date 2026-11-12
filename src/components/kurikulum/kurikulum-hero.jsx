@@ -1,13 +1,11 @@
 "use client";
 import { useEffect, useRef } from "react";
-import { animate, stagger, svg } from "animejs";
 import { gsap } from "@/lib/scroll";
-import { countUp, prefersReducedMotion } from "@/lib/motion";
+import { prefersReducedMotion, curtainDelay } from "@/lib/motion";
 import { CURTAIN_KEY } from "@/lib/kurikulum-content";
 import { Container, SceneTitle } from "@/components/home/shared";
 import { ElvoPeek } from "@/components/home/elvo-peek";
 import { LordIcon } from "@/components/media/lord-icon";
-import { CurriculumMapIllustration } from "@/components/illustrations/line-illustrations";
 import { useKurikulum } from "./kurikulum-provider";
 
 export function smoothTo(id) {
@@ -15,43 +13,30 @@ export function smoothTo(id) {
 }
 
 /**
- * Hero Kurikulum: judul serif besar di kiri, tangga delapan semester di kanan (tergambar anime.js;
- * anak tangga ≤ semester aktif menyala). Tiga angka dihitung dari data kurikulum, bukan dikarang.
+ * Hero Kurikulum "daftar isi": judul + palet cari mata kuliah di kiri, halaman "Daftar isi" bergaya buku
+ * di kanan (bab I–IV dengan titik penuntun) yang menggulir ke tiap bagian. Angka ringkas dihitung dari data.
  */
 export function KurikulumHero() {
-  const { totals, semester, setSemester, openSearch } = useKurikulum();
+  const { totals, openSearch } = useKurikulum();
   const ref = useRef(null);
-  const art = useRef(null);
 
   useEffect(() => {
     const el = ref.current;
-    if (!el) return;
-    let seen = false;
-    try {
-      seen = sessionStorage.getItem(CURTAIN_KEY) === "1";
-    } catch {}
-    const delay = seen ? 0.15 : 1.9;
-    const nums = el.querySelectorAll("[data-count]");
-    if (prefersReducedMotion()) return;
-    nums.forEach((n) => (n.textContent = "0"));
+    if (!el || prefersReducedMotion()) return;
+    const d = curtainDelay(CURTAIN_KEY);
     const ctx = gsap.context(() => {
-      gsap.from("[data-hero-fade]", { y: 18, opacity: 0, duration: 0.8, stagger: 0.08, ease: "expo.out", delay });
+      gsap.from("[data-hero-fade]", { y: 18, opacity: 0, duration: 0.8, stagger: 0.08, ease: "expo.out", delay: d });
+      gsap.from("[data-toc]", { y: 24, opacity: 0, rotate: -1, duration: 1, ease: "expo.out", delay: d + 0.15 });
+      gsap.from("[data-toc-row]", { opacity: 0, x: 16, duration: 0.6, stagger: 0.07, ease: "expo.out", delay: d + 0.4 });
     }, el);
-    const lines = art.current.querySelectorAll("[data-line]");
-    const d = svg.createDrawable(lines);
-    const draw = animate(d, { draw: ["0 0", "0 1"], duration: 1300, delay: stagger(30, { start: delay * 1000 }), ease: "inOutCubic" });
-    const t = setTimeout(() => nums.forEach((n) => countUp(n, Number(n.dataset.count))), delay * 1000 + 300);
-    return () => {
-      ctx.revert();
-      draw.revert?.();
-      clearTimeout(t);
-    };
+    return () => ctx.revert();
   }, []);
 
-  const facts = [
-    { n: totals.sks, label: "SKS untuk lulus" },
-    { n: totals.wajib, label: "mata kuliah wajib" },
-    { n: totals.pilihan, label: "mata kuliah pilihan" },
+  const toc = [
+    { id: "peta", title: "Peta studi", note: "rumpun & prasyarat", page: "Smt 1–8" },
+    { id: "semester", title: "Buku semester", note: "mata kuliah per semester", page: `${totals.sks} SKS` },
+    { id: "pilihan", title: "Mata kuliah pilihan", note: "semester 7 & 8", page: `${totals.pilihan} mk` },
+    { id: "rps", title: "Cara membaca RPS", note: "capaian, topik, penilaian", page: "4 bagian" },
   ];
 
   return (
@@ -95,37 +80,39 @@ export function KurikulumHero() {
                 <kbd className="ml-3 rounded border border-line bg-cream px-1.5 py-0.5 font-sans text-[11px] text-text/50">Ctrl K</kbd>
               </button>
             </div>
-            <dl data-hero-fade className="mt-10 grid max-w-lg grid-cols-3 divide-x divide-line border-y border-line">
-              {facts.map((f) => (
-                <div key={f.label} className="px-4 py-4 first:pl-0">
-                  <dt className="sr-only">{f.label}</dt>
-                  <dd>
-                    <span data-count={f.n} className="block font-serif text-[clamp(1.9rem,3.4vw,2.6rem)] leading-none tabular-nums text-navy">
-                      {f.n.toLocaleString("id-ID")}
-                    </span>
-                    <span className="mt-1.5 block text-[13px] text-text/55">{f.label}</span>
-                  </dd>
-                </div>
-              ))}
-            </dl>
+            <p data-hero-fade className="mt-8 text-[14px] text-text/55">
+              <span className="font-semibold text-navy">{totals.sks} SKS</span> untuk lulus · {totals.wajib} mata kuliah wajib · {totals.pilihan} pilihan
+            </p>
           </div>
 
+          {/* daftar isi bergaya halaman buku */}
           <div className="relative">
-            <div
-              ref={art}
-              className="cur-map relative"
-              onClick={(e) => {
-                const g = e.target.closest?.("[data-step]");
-                if (g) setSemester(Number(g.dataset.step));
-              }}
+            <span aria-hidden className="absolute inset-0 translate-x-2.5 translate-y-2.5 rounded-sm border border-line bg-cream-2" />
+            <nav
+              data-toc
+              aria-label="Daftar isi halaman kurikulum"
+              className="relative rounded-sm border border-line bg-white px-6 pb-7 pt-8 shadow-[0_40px_80px_-50px_rgb(20_33_61/0.45)] sm:px-10 sm:pb-9 sm:pt-10"
             >
-              <CurriculumMapIllustration active={semester} className="h-auto w-full text-ink" />
-            </div>
-            <p aria-live="polite" className="mt-2 text-right text-[13px] text-text/50">
-              Kamu sedang melihat <span className="font-semibold text-navy">semester {semester}</span>
-            </p>
-            <div className="absolute -top-6 left-2 hidden xl:block">
-              <div className="relative"><ElvoPeek pose="think" size={80} side="right" say="Klik anak tangga untuk melompat ke semesternya." delay={0.3} /></div>
+              <p className="text-center font-serif text-[1.6rem] italic text-navy">Daftar isi</p>
+              <span aria-hidden className="mx-auto mt-3 block h-px w-12 bg-gold" />
+              <ol className="mt-7 space-y-1">
+                {toc.map((t, i) => (
+                  <li key={t.id} data-toc-row>
+                    <button type="button" onClick={() => smoothTo(t.id)} className="group flex w-full items-baseline gap-3 rounded py-2.5 text-left outline-none focus-visible:bg-cream">
+                      <span className="w-6 shrink-0 font-serif text-[15px] tabular-nums text-gold">{["I", "II", "III", "IV"][i]}</span>
+                      <span className="min-w-0">
+                        <span className="block font-serif text-[1.2rem] leading-tight text-navy transition-colors group-hover:text-maroon sm:text-[1.3rem]">{t.title}</span>
+                        <span className="block text-[12.5px] text-text/50">{t.note}</span>
+                      </span>
+                      <span aria-hidden className="mx-1 min-w-6 flex-1 translate-y-[-4px] border-b border-dotted border-navy/30" />
+                      <span className="shrink-0 text-[13px] tabular-nums text-text/60 transition-colors group-hover:text-maroon">{t.page}</span>
+                    </button>
+                  </li>
+                ))}
+              </ol>
+            </nav>
+            <div className="absolute -right-6 -top-16 hidden xl:block">
+              <div className="relative"><ElvoPeek pose="think" size={80} side="left" say="Mulai dari bab mana pun, semuanya saling terhubung." delay={0.3} /></div>
             </div>
           </div>
         </div>

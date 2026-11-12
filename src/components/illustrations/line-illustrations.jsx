@@ -638,7 +638,167 @@ export function RulebookIllustration({ className, keys = ["1", "2", "3", "4", "5
   );
 }
 
+/**
+ * Kawasan industri Gresik untuk hero Magang: silo semen, kiln miring, cerobong, ban berjalan, derek pelabuhan,
+ * dan gedung kantor. Garis `[data-line]` digambar anime.js; asap `[data-smoke]` dianimasikan dari luar;
+ * jendela kantor `[data-window]` bisa dinyalakan bergiliran. Warna garis = currentColor.
+ */
+export function IndustrySkylineIllustration({ className }) {
+  const gold = { fill: "var(--gold)" };
+  const glow = { fill: "var(--gold)", fillOpacity: 0.14 };
+  return (
+    <svg viewBox="0 0 560 240" role="img" aria-label="Ilustrasi kawasan industri: silo semen, kiln, cerobong, ban berjalan, derek pelabuhan, dan gedung kantor" className={className ?? "h-auto w-full text-navy"}>
+      <circle cx="430" cy="62" r="34" {...glow} />
+      <circle cx="430" cy="62" r="14" {...gold} fillOpacity="0.55" />
+      {/* tanah */}
+      <path data-line {...line} d="M8 222h544" />
+      <path data-line {...line} strokeDasharray="4 8" opacity="0.5" d="M30 232h500" />
+      {/* silo */}
+      <path data-line {...line} d="M40 222V108c0-8 26-8 26 0v114M66 222V96c0-8 26-8 26 0v126M92 222V116c0-8 26-8 26 0v106" />
+      <path data-line {...line} opacity="0.6" d="M40 140h26M66 130h26M92 148h26M40 180h78" />
+      <rect x="66" y="96" width="26" height="126" {...glow} />
+      {/* cerobong + asap */}
+      <path data-line {...line} d="M140 222V60h14v162M136 60h22" />
+      <path data-line {...line} opacity="0.6" d="M140 90h14M140 120h14" />
+      <g data-smoke>
+        <circle cx="150" cy="44" r="7" {...line} opacity="0.55" />
+        <circle cx="162" cy="30" r="9" {...line} opacity="0.4" />
+        <circle cx="178" cy="18" r="6" {...line} opacity="0.3" />
+      </g>
+      {/* kiln miring */}
+      <path data-line {...line} d="M168 200l120-34M172 214l120-34M168 200c-6 2-4 16 4 14M288 166c8-2 10 12 4 14" />
+      <path data-line {...line} d="M196 222v-20M262 222v-38" />
+      <circle cx="204" cy="198" r="4" {...gold} />
+      <circle cx="252" cy="184" r="4" {...gold} />
+      {/* ban berjalan ke gudang */}
+      <path data-line {...line} d="M296 176l74-64M304 184l74-64" />
+      <path data-line {...line} strokeDasharray="3 7" d="M300 180l74-64" />
+      <path data-line {...line} d="M370 222v-62h46v62M366 160l27-18 27 18" />
+      {/* gedung kantor */}
+      <path data-line {...line} d="M432 222V118h56v104M424 118h72" />
+      {[0, 1, 2, 3].map((r) =>
+        [0, 1, 2].map((c) => <rect key={`${r}${c}`} data-window x={442 + c * 14} y={130 + r * 20} width="8" height="10" rx="1" fill="var(--gold)" fillOpacity="0.18" />)
+      )}
+      <path data-line {...line} d="M452 222v-16h16v16" />
+      {/* derek pelabuhan */}
+      <path data-line {...line} d="M516 222V92M506 222l10-20 10 20M516 96h-56M516 96l26 8M478 96v34" />
+      <rect x="470" y="130" width="16" height="12" rx="1.5" {...gold} />
+    </svg>
+  );
+}
+
+/**
+ * Meja tukar untuk hero Konversi SKS: jam dinding + tumpukan blok jam kegiatan (kiri) → lengkung jalur bertitik →
+ * lembar transkrip bertumpuk dengan stempel (kanan). `[data-line]` digambar anime.js; `[data-route]` = jalur
+ * yang dilalui keping `[data-coin]` (dianimasikan dari luar); `[data-hand]` = jarum jam yang berputar;
+ * `[data-row]` = baris transkrip yang menyala bergiliran. Warna garis = currentColor.
+ */
+export function CreditExchangeIllustration({ className }) {
+  const gold = { fill: "var(--gold)" };
+  const glow = { fill: "var(--gold)", fillOpacity: 0.14 };
+  return (
+    <svg viewBox="0 0 520 170" role="img" aria-label="Ilustrasi jam kegiatan yang ditukar menjadi baris SKS di lembar transkrip" className={className ?? "h-auto w-full text-white"}>
+      {/* lantai meja */}
+      <path data-line {...line} d="M10 156h500" />
+      <path data-line {...line} strokeDasharray="3 8" opacity="0.45" d="M40 165h440" />
+      {/* jam dinding */}
+      <circle cx="74" cy="58" r="34" {...glow} />
+      <circle data-line cx="74" cy="58" r="34" {...line} />
+      <path data-line {...line} opacity="0.6" d="M74 28v6M74 82v6M44 58h6M98 58h6" />
+      <g data-hand style={{ transformBox: "view-box", transformOrigin: "74px 58px" }}>
+        <path {...line} strokeWidth="2.4" d="M74 58V38" />
+      </g>
+      <path {...line} strokeWidth="2.4" d="M74 58l12 7" />
+      <circle cx="74" cy="58" r="3" {...gold} />
+      {/* blok jam kegiatan bertumpuk */}
+      <path data-line {...line} d="M40 156v-22h28v22M68 156v-34h28v34M96 156v-14h28v14" />
+      <rect x="68" y="122" width="28" height="34" {...glow} />
+      <path data-line {...line} opacity="0.55" d="M40 145h28M68 133h28M68 145h28" />
+      {/* jalur tukar */}
+      <path data-route data-line {...line} strokeDasharray="2 7" d="M128 120C190 30 320 30 382 106" />
+      <path data-line {...line} d="M372 98l10 8 2-13" />
+      {[0, 1, 2].map((i) => (
+        <g key={i} data-coin opacity="0">
+          <circle r="9" fill="var(--gold)" />
+          <path d="M-3.5 -1.5h7M-3.5 1.5h7" stroke="var(--navy)" strokeWidth="1.4" strokeLinecap="round" />
+        </g>
+      ))}
+      {/* lembar transkrip bertumpuk */}
+      <path data-line {...line} opacity="0.45" d="M408 64l84 -4 4 96" />
+      <path data-line {...line} opacity="0.7" d="M402 60h86v96" />
+      <rect data-line x="394" y="54" width="88" height="102" rx="4" {...line} />
+      <path data-line {...line} strokeWidth="3" d="M406 70h40" />
+      {[0, 1, 2, 3].map((r) => (
+        <g key={r}>
+          <path data-line {...line} opacity="0.7" d={`M406 ${90 + r * 15}h44`} />
+          <rect data-row x="458" y={85 + r * 15} width="14" height="9" rx="1.5" fill="var(--gold)" fillOpacity="0.2" />
+        </g>
+      ))}
+      <circle cx="470" cy="146" r="13" {...line} stroke="var(--gold)" />
+      <path {...line} stroke="var(--gold)" strokeWidth="2" d="M464 146l4 4 8-8" />
+    </svg>
+  );
+}
+
+
+/**
+ * Hero Bootcamp & Course: dua adegan dalam satu kanvas, dipilih lewat `mode`.
+ * - bootcamp: lintasan lari menuju garis finis — gawang = minggu, bendera finis = sertifikat, pelari = titik emas `[data-runner]`
+ * - course  : rak terbuka — buku berdiri dengan tinggi berbeda, satu buku ditarik, jalur bebas berliku ke lampu baca
+ * Garis `[data-line]` di adegan aktif digambar ulang anime.js saat mode berganti (dikendalikan dari luar).
+ */
+export function SprintTrackIllustration({ className, mode = "bootcamp", hurdles = 8 }) {
+  const gold = { fill: "var(--gold)" };
+  const glow = { fill: "var(--gold)", fillOpacity: 0.14 };
+  const on = (m) => ({ "data-scene": m, style: { opacity: mode === m ? 1 : 0, transition: "opacity .45s ease" }, "aria-hidden": mode !== m });
+  return (
+    <svg viewBox="0 0 520 260" role="img" aria-label={mode === "bootcamp" ? "Ilustrasi lintasan lari: gawang per minggu menuju garis finis bersertifikat" : "Ilustrasi rak buku terbuka dengan jalur belajar yang bebas"} className={className ?? "h-auto w-full text-navy"}>
+      <path data-line {...line} d="M10 238h500" />
+      <g {...on("bootcamp")}>
+        <path data-line {...line} d="M30 226C170 222 300 186 470 104" />
+        <path data-line {...line} opacity="0.5" d="M30 238C170 236 310 208 490 132" />
+        <path data-line {...line} strokeDasharray="5 9" opacity="0.45" d="M30 232C170 229 305 197 480 118" />
+        {Array.from({ length: hurdles }, (_, i) => {
+          const t = (i + 1) / (hurdles + 1);
+          const x = 30 + t * 440;
+          const y = 226 - (4 + Math.pow(t, 1.7) * 118);
+          return (
+            <g key={i} data-hurdle>
+              <path data-line {...line} d={`M${x} ${y + 8}v-22M${x + 12} ${y + 5}v-22M${x - 2} ${y - 12}h16`} />
+              <text x={x + 6} y={y - 20} textAnchor="middle" fontSize="9" fill="currentColor" opacity="0.5" fontFamily="var(--font-sans)">{i + 1}</text>
+            </g>
+          );
+        })}
+        <path data-line {...line} d="M470 104V30" />
+        <path data-line {...line} d="M470 32h40l-10 14 10 14h-40" />
+        <rect x="470" y="32" width="34" height="28" {...glow} />
+        <circle cx="487" cy="46" r="6" {...gold} />
+        <circle data-runner cx="30" cy="226" r="7" {...gold} />
+      </g>
+      <g {...on("course")}>
+        <path data-line {...line} d="M40 238V96h300v142M40 168h300M40 96h300" />
+        {[[56, 30], [82, 46], [104, 22], [132, 40], [160, 54]].map(([x, h], i) => (
+          <path key={`a${i}`} data-line {...line} d={`M${x} 168v-${h}h18v${h}`} />
+        ))}
+        <rect x="104" y="146" width="18" height="22" {...glow} />
+        {[[200, 36], [224, 50], [252, 28]].map(([x, h], i) => (
+          <path key={`b${i}`} data-line {...line} d={`M${x} 238v-${h}h18v${h}`} />
+        ))}
+        <path data-line {...line} d="M290 168l20-52 16 6-20 52" />
+        <rect x="224" y="188" width="18" height="50" {...glow} />
+        <path data-line {...line} strokeDasharray="4 8" d="M360 228c30-10 10-50 50-60s20-60 60-70" />
+        <path data-line {...line} d="M460 238v-120M440 118h40l-8-22h-24z" />
+        <circle cx="460" cy="124" r="22" {...glow} />
+        <circle cx="460" cy="110" r="5" {...gold} />
+      </g>
+    </svg>
+  );
+}
+
 export const ILLUSTRATIONS = {
+  "sprint-track": SprintTrackIllustration,
+  "credit-exchange": CreditExchangeIllustration,
+  "industry-skyline": IndustrySkylineIllustration,
   rulebook: RulebookIllustration,
   compass: CompassQuadrantIllustration,
   "curriculum-map": CurriculumMapIllustration,

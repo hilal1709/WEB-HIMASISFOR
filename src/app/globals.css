@@ -480,6 +480,21 @@ html.has-cursor, html.has-cursor a, html.has-cursor button { cursor: none; }
   .cur-map [data-step][data-current] [data-node], .grad-fork [data-branch][data-on] [data-node] { animation: none; }
 }
 
+/* Jalur Kelulusan — peta jalan sticky, centang kesiapan, kartu bolak-balik */
+.jk-node { fill: var(--navy); stroke: rgb(255 255 255 / 0.55); stroke-width: 2; transition: fill 0.4s, stroke 0.4s, opacity 0.4s; }
+.jk-node[data-passed] { fill: var(--gold); stroke: var(--gold); }
+.jk-walker-halo { transform-box: fill-box; transform-origin: center; animation: cur-pulse 1.8s ease-in-out infinite; }
+.jk-tick { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 0.35s cubic-bezier(0.22, 1, 0.36, 1); }
+.jk-tick-on { stroke-dashoffset: 0; }
+.jk-flip { perspective: 1200px; transform-style: preserve-3d; }
+.jk-flip-inner { transform-style: preserve-3d; }
+.jk-face { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.jk-face-back { transform: rotateY(180deg); }
+@media (prefers-reduced-motion: reduce) {
+  .jk-walker-halo { animation: none; }
+  .jk-tick { transition: none; }
+}
+
 /* Dosen — simpul rumpun aktif menyala di ilustrasi hero */
 .lecturer-net [data-field] { transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1); }
 .lecturer-net[data-active-field]:not([data-active-field="all"]) [data-field] { opacity: 0.25; }
@@ -531,3 +546,35 @@ html.has-cursor, html.has-cursor a, html.has-cursor button { cursor: none; }
 .prestasi-rows:hover .prestasi-row:not(:hover) { opacity: 0.45; }
 .prestasi-row { transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1); }
 .dosen-mark { background: rgb(201 162 39 / 0.28); color: inherit; border-radius: 2px; padding: 0 1px; }
+
+/* Regulasi Akademik — pita pembatas buku hero: pita aktif turun sedikit & berwarna emas */
+.rulebook [data-ribbon] { transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.5s; opacity: 0.55; }
+.rulebook [data-rib] { fill: transparent; stroke: rgb(255 255 255 / 0.7); stroke-width: 1.6; stroke-linejoin: round; transition: fill 0.45s, stroke 0.45s; }
+.rulebook [data-ribbon][data-on] { opacity: 1; transform: translateY(10px); }
+.rulebook [data-ribbon][data-on] [data-rib] { fill: var(--gold); stroke: var(--gold); }
+
+/* Regulasi — minimap pembaca (proximity): garis memanjang mendekati kursor, aktif = emas */
+.rg-dash { display: block; height: 2px; border-radius: 2px; background: rgb(20 33 61 / 0.22); width: var(--w, 14px); transition: width 0.25s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.3s; }
+.rg-dash[data-on] { background: var(--gold); }
+.rg-dash-label { opacity: var(--o, 0); transform: translateX(calc((1 - var(--o, 0)) * -6px)); transition: opacity 0.25s, transform 0.25s; }
+
+/* Regulasi — pasal yang baru dituju disorot sebentar */
+.rg-pasal { transition: background-color 0.6s, box-shadow 0.6s; }
+.rg-pasal[data-flash] { background-color: rgb(201 162 39 / 0.12); box-shadow: inset 3px 0 0 var(--gold); }
+.rg-term { text-decoration: underline; text-decoration-color: rgb(201 162 39 / 0.8); text-decoration-thickness: 2px; text-underline-offset: 4px; cursor: help; }
+
+/* Regulasi — daftar situasi editorial: baris lain meredup saat hover */
+@media (hover: hover) {
+  .rg-rows:hover .rg-row:not(:hover) { opacity: 0.4; }
+}
+.rg-row { transition: opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1); }
+
+/* Regulasi — rak dokumen (punggung map) */
+.rg-binder { transform-origin: 50% 100%; will-change: transform; }
+
+/* Regulasi — tangga nilai simulator */
+.rg-step { transition: background-color 0.35s, color 0.35s, transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.rg-step[data-on] { background: var(--gold); color: var(--navy); transform: translateX(10px); }
+@media (prefers-reduced-motion: reduce) {
+  .rulebook [data-ribbon], .rg-step, .rg-dash, .rg-dash-label { transition: none; }
+}

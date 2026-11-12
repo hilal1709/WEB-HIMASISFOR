@@ -1,0 +1,58 @@
+import prisma from "@/lib/prisma";
+import { CURTAIN_KEY, mergeRegulasi } from "@/lib/regulasi-content";
+import { mergeKurikulum } from "@/lib/kurikulum-content";
+import { SiteHeader, Topbar } from "@/components/home/site-header";
+import { SiteFooter } from "@/components/home/site-footer";
+import { AosReady } from "@/components/motion/aos-provider";
+import { PageCurtain } from "@/components/motion/page-curtain";
+import { RegulasiProvider } from "@/components/regulasi/regulasi-provider";
+import { RegulasiHero } from "@/components/regulasi/regulasi-hero";
+import { RegulasiBanner } from "@/components/regulasi/regulasi-banner";
+import { RuleSimulator } from "@/components/regulasi/rule-simulator";
+import { RuleReader } from "@/components/regulasi/rule-reader";
+import { ScenarioFlow } from "@/components/regulasi/scenario-flow";
+import { DocShelf } from "@/components/regulasi/doc-shelf";
+import { RegulasiClosing } from "@/components/regulasi/regulasi-closing";
+
+export const revalidate = 300;
+
+export const metadata = {
+  title: "Regulasi Akademik — Sistem Informasi UISI",
+  description:
+    "Pedoman akademik S1 Sistem Informasi UISI: batas SKS, penilaian & IPK, kehadiran, cuti, evaluasi studi, dan etika — dengan pencarian pasal, simulator, prosedur, dan dokumen resmi.",
+};
+
+async function getData() {
+  try {
+    const rows = await prisma.pageContent.findMany({ where: { section: { in: ["regulasi-akademik", "curriculum"] }, isActive: true } });
+    const row = (s) => rows.find((r) => r.section === s) ?? null;
+    return mergeRegulasi(row("regulasi-akademik"), { kurikulum: mergeKurikulum(row("curriculum")) });
+  } catch {
+    return mergeRegulasi(null, { kurikulum: mergeKurikulum(null) });
+  }
+}
+
+/** Regulasi Akademik — tema beranda "Kampus v3" (maroon + navy + gold di atas cream). */
+export default async function RegulasiAkademikPage() {
+  const data = await getData();
+  return (
+    <div className="kampus" data-aos-wait>
+      <PageCurtain storageKey={CURTAIN_KEY} title="Regulasi" accent="Akademik" label="Memuat regulasi akademik" />
+      <Topbar />
+      <SiteHeader />
+      <RegulasiProvider data={data}>
+        <main>
+          <RegulasiHero />
+          <RegulasiBanner />
+          <RuleSimulator />
+          <RuleReader />
+          <ScenarioFlow />
+          <DocShelf />
+          <RegulasiClosing />
+        </main>
+      </RegulasiProvider>
+      <SiteFooter />
+      <AosReady />
+    </div>
+  );
+}

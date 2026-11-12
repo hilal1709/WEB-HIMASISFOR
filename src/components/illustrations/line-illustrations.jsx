@@ -592,7 +592,54 @@ export function CompassQuadrantIllustration({ className, compact = false }) {
   );
 }
 
+/**
+ * "Buku pedoman": buku terbuka dengan enam pita pembatas yang menjuntai dari bawah — satu pita per bab.
+ * Dipakai di permukaan maroon: garis putih, aksen emas. Pita dibungkus <g data-ribbon="key"> (urut `keys`)
+ * agar bisa dinyalakan dari luar (`.rulebook [data-ribbon][data-on]`). Pita digambar sebelum halaman
+ * sehingga pangkalnya tertutup buku.
+ */
+export function RulebookIllustration({ className, keys = ["1", "2", "3", "4", "5", "6"] }) {
+  const xs = [96, 150, 204, 316, 370, 424];
+  const glow = { fill: "var(--gold)", fillOpacity: 0.12 };
+  const page = "M260 84C206 62 118 58 44 72v188c74-14 162-10 216 12z";
+  const pageR = "M260 84c54-22 142-26 216-12v188c-74-14-162-10-216 12z";
+  return (
+    <svg viewBox="0 0 520 320" role="img" aria-label="Ilustrasi buku pedoman terbuka dengan enam pita pembatas" className={className ?? "h-auto w-full text-white"}>
+      {keys.slice(0, 6).map((k, i) => (
+        <g key={k} data-ribbon={k} style={{ transformBox: "fill-box", transformOrigin: "50% 0%" }}>
+          <path data-rib d={`M${xs[i] - 9} 238V${300 - (i % 3) * 8}l9-8 9 8V238z`} />
+        </g>
+      ))}
+      {/* tumpukan halaman */}
+      <path data-line {...line} d="M44 260v10c74-14 162-10 216 12 54-22 142-26 216-12v-10" />
+      <path {...line} opacity="0.45" d="M44 270v8c74-14 162-10 216 12 54-22 142-26 216-12v-8" />
+      <path d={page} fill="var(--maroon)" />
+      <path d={pageR} fill="var(--maroon)" />
+      <path d={page} {...glow} />
+      <path data-line {...line} d={page} />
+      <path data-line {...line} d={pageR} />
+      <path data-line {...line} d="M260 84v188" />
+      {/* halaman kiri: judul bab + baris teks */}
+      <path data-line {...line} strokeWidth="3" d="M78 104c40-6 88-6 128 2" />
+      <path data-line {...line} opacity="0.7" d="M78 132c52-6 104-4 150 6M78 152c52-6 104-4 150 6M78 172c52-6 104-4 150 6M78 192c40-5 80-4 112 3M78 220c52-6 104-4 150 6" />
+      <circle cx="70" cy="132" r="2.5" fill="var(--gold)" />
+      {/* halaman kanan: tanda pasal + butir bercentang */}
+      <text x="296" y="128" fill="var(--gold)" fontFamily="var(--font-noto-serif), serif" fontSize="38" fontStyle="italic">§</text>
+      <path data-line {...line} d="M330 112c40-8 84-8 114-2M330 126c30-5 60-5 84-1" />
+      <rect data-line {...line} x="296" y="150" width="14" height="14" rx="3" />
+      <path data-line {...line} stroke="var(--gold)" strokeWidth="2.2" d="M299 157l3.5 3.5 6-7" />
+      <path data-line {...line} opacity="0.7" d="M322 158c40-6 80-6 120-1" />
+      <rect data-line {...line} x="296" y="180" width="14" height="14" rx="3" />
+      <path data-line {...line} stroke="var(--gold)" strokeWidth="2.2" d="M299 187l3.5 3.5 6-7" />
+      <path data-line {...line} opacity="0.7" d="M322 188c40-6 80-6 120-1" />
+      <rect data-line {...line} x="296" y="210" width="14" height="14" rx="3" />
+      <path data-line {...line} opacity="0.7" d="M322 218c30-5 62-5 92-1" />
+    </svg>
+  );
+}
+
 export const ILLUSTRATIONS = {
+  rulebook: RulebookIllustration,
   compass: CompassQuadrantIllustration,
   "curriculum-map": CurriculumMapIllustration,
   "graduation-fork": GraduationForkIllustration,

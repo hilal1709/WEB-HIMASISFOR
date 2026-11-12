@@ -422,6 +422,87 @@ def qa_industry(P):
     ]
 
 
+# ---------- jalur kelulusan (dipakai di permukaan navy/maroon → varian dark) ----------
+def thesis_book(P):
+    """Skripsi: buku terbuka, halaman kanan membalik, baris teks tergambar, pena mengangguk."""
+    left = [(44, 92), (44, 196), (130, 206), (130, 102)]
+    right = [(130, 102), (130, 206), (216, 196), (216, 92)]
+    s = [group([path(left, closed=True), fill(P["soft"], P["soft_op"])], "lpage")]
+    s.append(group([path(right, closed=True), fill(P["soft"], P["soft_op"])], "rpage"))
+    s.append(group([path(left, closed=True), stroke(P["line"], 4), trim(0, 22)], "lbook"))
+    s.append(group([path(right, closed=True), stroke(P["line"], 4), trim(4, 26)], "rbook"))
+    for k, y in enumerate([124, 144, 164]):
+        s.append(group([path([(60, y - 2), (114, y + 4)]), stroke(P["line"], 3.5, 70), trim(24 + k * 6, 34 + k * 6)], f"tl{k}"))
+    s.append(group([path([(146, 122), (200, 116)]), stroke(P["a1"], 4), trim(40, 50)], "hl"))
+    flip = group([path([(130, 102), (130, 206), (190, 196), (190, 92)], closed=True), fill(P["a2"], 70)], "flip",
+                 s=anim([(50, [100, 100]), (64, [0, 100]), (78, [-100, 100]), (84, [-100, 100])]), a=(130, 150), p=(130, 150),
+                 o=anim([(48, 0), (52, 100), (80, 100), (86, 0)]))
+    s.append(flip)
+    pen = group([path([(170, 40), (206, 76)]), stroke(P["a1"], 7), path([(206, 76), (214, 88), (200, 82)], closed=True), fill(P["a1"])], "pen",
+                r=anim([(30, 0), (42, -10), (54, 6), (66, 0)]), a=(206, 80), p=(206, 80))
+    s.append(pen)
+    return s
+
+
+def pkm_bulb(P):
+    """PKM: bola lampu tergambar, filamen menyala emas, sinar memancar berurutan."""
+    bulb = arc(130, 106, 54, 140, 400, 18) + [(150, 170), (110, 170)]
+    s = [group([path(bulb, closed=True), fill(P["a2"])], "glow", o=anim([(26, 0), (40, 90), (70, 60), (90, 90)]))]
+    s.append(group([path(bulb, closed=True), stroke(P["line"], 4), trim(0, 24)], "bulb"))
+    s.append(group([path([(112, 120), (122, 104), (130, 120), (138, 104), (148, 120)]), stroke(P["a1"], 4), trim(20, 34)], "fil"))
+    for k, y in enumerate([182, 196]):
+        s.append(group([path([(110, y), (150, y)]), stroke(P["line"], 5), trim(10 + k * 4, 20 + k * 4)], f"base{k}"))
+    s.append(group([path([(120, 210), (140, 210)]), stroke(P["line"], 5), trim(18, 26)], "tip"))
+    for k, a in enumerate([200, 235, 270, 305, 340]):
+        r0, r1 = 72, 90
+        x0, y0 = 130 + r0 * math.cos(math.radians(a)), 106 + r0 * math.sin(math.radians(a))
+        x1, y1 = 130 + r1 * math.cos(math.radians(a)), 106 + r1 * math.sin(math.radians(a))
+        s.append(group([path([(x0, y0), (x1, y1)]), stroke(P["a1"], 4.5), trim(36 + k * 4, 44 + k * 4)], f"ray{k}"))
+    return s
+
+
+def biz_shop(P):
+    """Bisnis: kanopi bergelombang pop, etalase tergambar, papan "buka" berayun, grafik naik."""
+    s = [group([path([(52, 116), (52, 204), (208, 204), (208, 116)]), stroke(P["line"], 4), trim(0, 20)], "wall")]
+    s.append(group([rect(56, 52, 98, 166, 4), fill(P["soft"], P["soft_op"]), stroke(P["line"], 3.5)], "window", s=pop(16, 10), a=(98, 166), p=(98, 166)))
+    s.append(group([path([(150, 204), (150, 146), (186, 146), (186, 204)]), stroke(P["line"], 4), trim(18, 30)], "door"))
+    awn = [(40, 116), (60, 72), (200, 72), (220, 116)]
+    s.append(group([path(awn, closed=True), fill(P["a1"])], "awning", s=pop(6, 12), a=(130, 72), p=(130, 72)))
+    for k in range(4):
+        x = 40 + k * 45
+        s.append(group([path(arc(x + 22.5, 116, 22.5, 0, 180, 8)), fill(P["a1"])], f"sc{k}", s=pop(10 + k * 2, 10), a=(x + 22.5, 116), p=(x + 22.5, 116)))
+    s.append(group([path([(130, 72), (130, 52)]), stroke(P["line"], 3)], "hook"))
+    sign = group([rect(44, 22, 130, 40, 4), fill(P["a2"])], "sign", r=anim([(30, 0), (40, 12), (52, -8), (64, 4), (74, 0)]), a=(130, 30), p=(130, 30))
+    s.append(sign)
+    s.append(group([path([(72, 186), (90, 172), (104, 178), (122, 154)]), stroke(P["a2"], 5), trim(42, 60)], "growth"))
+    return s
+
+
+def rulebook(P):
+    """Regulasi: buku pedoman tergambar, pita pembatas turun, tanda pasal pop, butir dicentang berurutan."""
+    left = [(40, 96), (40, 200), (130, 212), (130, 108)]
+    right = [(130, 108), (130, 212), (220, 200), (220, 96)]
+    s = []
+    for k, x in enumerate([86, 174]):
+        rib = [(x - 8, 196), (x - 8, 236), (x, 228), (x + 8, 236), (x + 8, 196)]
+        s.append(group([path(rib, closed=True), fill(P["a1"] if k == 0 else P["a2"])], f"rib{k}",
+                       s=anim([(28 + k * 6, [100, 0]), (40 + k * 6, [100, 100])]), a=(x, 196), p=(x, 196)))
+    s.append(group([path(left, closed=True), fill(P["base"])], "lfill"))
+    s.append(group([path(right, closed=True), fill(P["base"])], "rfill"))
+    s.append(group([path(left, closed=True), fill(P["soft"], P["soft_op"])], "lsoft"))
+    s.append(group([path(left, closed=True), stroke(P["line"], 4), trim(0, 22)], "lbook"))
+    s.append(group([path(right, closed=True), stroke(P["line"], 4), trim(4, 26)], "rbook"))
+    for k, y in enumerate([132, 152, 172]):
+        s.append(group([path([(58, y - 2), (112, y + 4)]), stroke(P["line"], 3.5, 70), trim(22 + k * 5, 32 + k * 5)], f"tl{k}"))
+    s.append(group([path([(56, 116), (100, 118)]), stroke(P["a2"], 5), trim(18, 28)], "head"))
+    for k, y in enumerate([130, 158, 186]):
+        box = rect(14, 14, 152, y, 3)
+        s.append(group([box, stroke(P["line"], 3)], f"box{k}", s=pop(30 + k * 6, 10), a=(152, y), p=(152, y)))
+        s.append(group([path([(147, y), (151, y + 4), (158, y - 4)]), stroke(P["a2"], 3.5), trim(44 + k * 8, 52 + k * 8)], f"tick{k}"))
+        s.append(group([path([(168, y), (204, y - 3)]), stroke(P["line"], 3, 70), trim(32 + k * 6, 42 + k * 6)], f"tx{k}"))
+    return s
+
+
 SPECS = [
     ("medal", medal, ["light", "dark"]),
     ("erp-nodes", erp_nodes, ["light"]),
@@ -444,6 +525,12 @@ SPECS = [
     ("qa-student", qa_student, ["light"]),
     ("qa-alumni", qa_alumni, ["light"]),
     ("qa-industry", qa_industry, ["light"]),
+    # jalur kelulusan
+    ("thesis-book", thesis_book, ["dark"]),
+    ("pkm-bulb", pkm_bulb, ["dark"]),
+    ("biz-shop", biz_shop, ["dark"]),
+    # regulasi akademik
+    ("rulebook", rulebook, ["dark"]),
 ]
 
 

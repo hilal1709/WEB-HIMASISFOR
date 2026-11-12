@@ -84,9 +84,9 @@
     "semantic_hash": ""
   },
   "next.config.js": {
-    "mtime": 1794461494.9726505,
-    "seen": 1794461995.5577059,
-    "ast_hash": "6114e1d9db88d98aa0b8e0b28924896c",
+    "mtime": 1794465413.381145,
+    "seen": 1794465802.088838,
+    "ast_hash": "ae69684c45625d5f2d94dd227ecfac74",
     "semantic_hash": ""
   },
   "package.json": {
@@ -360,9 +360,9 @@
     "semantic_hash": ""
   },
   "src/app/sitemap.js": {
-    "mtime": 1794461494.9744465,
-    "seen": 1794461995.5884714,
-    "ast_hash": "05fce2c2fa1b7e6fd6b5926412f691c7",
+    "mtime": 1794465413.6932611,
+    "seen": 1794465802.12647,
+    "ast_hash": "76db9ee468dbf4f87ca76f30b7195f09",
     "semantic_hash": ""
   },
   "src/components/AwardingRecognition.jsx": {
@@ -1584,9 +1584,9 @@
     "semantic_hash": ""
   },
   "DESIGN.md": {
-    "mtime": 1794462392.5809438,
-    "seen": 1794462455.9916058,
-    "ast_hash": "fccac33a61e1dcd46728c68e6a753b40",
+    "mtime": 1794466159.002166,
+    "seen": 1794466213.534527,
+    "ast_hash": "c45ce5a482d1cddef0b3d6cd3e9db63d",
     "semantic_hash": ""
   },
   ".claude/launch.json": {
@@ -1716,9 +1716,9 @@
     "semantic_hash": ""
   },
   "src/lib/home-content.js": {
-    "mtime": 1794461808.2587664,
-    "seen": 1794461995.635826,
-    "ast_hash": "e43b0a9b25f8a10b2d23043b044723eb",
+    "mtime": 1794465413.229808,
+    "seen": 1794465802.1831422,
+    "ast_hash": "12e8915d45794115695a07821bc301c1",
     "semantic_hash": ""
   },
   "src/lib/scroll.js": {
@@ -2034,9 +2034,9 @@
     "semantic_hash": ""
   },
   "src/components/illustrations/line-illustrations.jsx": {
-    "mtime": 1794461121.651022,
-    "seen": 1794461144.136949,
-    "ast_hash": "afef7044ddde37e1b21e229d0f6e969b",
+    "mtime": 1794464986.3359299,
+    "seen": 1794465802.148605,
+    "ast_hash": "c03138d7d05d860e2d0d55cc212dabd7",
     "semantic_hash": ""
   },
   "src/components/intro-loader.jsx": {
@@ -2610,9 +2610,9 @@
     "semantic_hash": ""
   },
   "scripts/lottie/build.py": {
-    "mtime": 1794429030.074709,
-    "seen": 1794448936.0304008,
-    "ast_hash": "316e5181acf0bef8397cd47ad056f425",
+    "mtime": 1794465004.7945259,
+    "seen": 1794465802.1112146,
+    "ast_hash": "1136e896ec06c90b15193c9b6711371d",
     "semantic_hash": ""
   },
   "public/lottie/qa-alumni.json": {
@@ -3207,6 +3207,186 @@
     "mtime": 1794461808.3227055,
     "seen": 1794461995.595569,
     "ast_hash": "21fb5822fd7063952193fc61627b7d3b",
+    "semantic_hash": ""
+  },
+  "public/lottie/biz-shop-dark.json": {
+    "mtime": 1794463283.9039905,
+    "seen": 1794464009.3107193,
+    "ast_hash": "fa4bec60d237981cc6993c27a3f78b27",
+    "semantic_hash": ""
+  },
+  "public/lottie/pkm-bulb-dark.json": {
+    "mtime": 1794463283.8969603,
+    "seen": 1794464009.3151276,
+    "ast_hash": "dcbfb40f222d61a18f33f746abacd1d0",
+    "semantic_hash": ""
+  },
+  "public/lottie/thesis-book-dark.json": {
+    "mtime": 1794463283.8854988,
+    "seen": 1794464009.3174486,
+    "ast_hash": "1beb2184052ccd86b6934d987c70f250",
+    "semantic_hash": ""
+  },
+  "src/app/jalur-kelulusan/loading.js": {
+    "mtime": 1794463699.7996385,
+    "seen": 1794464009.3312697,
+    "ast_hash": "ed95f3de5259cca9a7ad7512d7a3cc87",
+    "semantic_hash": ""
+  },
+  "src/app/jalur-kelulusan/page.jsx": {
+    "mtime": 1794463699.9141903,
+    "seen": 1794464009.331274,
+    "ast_hash": "e356589c41c1c9e6a190606b80f560b0",
+    "semantic_hash": ""
+  },
+  "src/components/jalur/jalur-banner.jsx": {
+    "mtime": 1794463502.8719487,
+    "seen": 1794464009.3702257,
+    "ast_hash": "c53839461221a9da2ab4e67fe81e1209",
+    "semantic_hash": ""
+  },
+  "src/components/jalur/jalur-closing.jsx": {
+    "mtime": 1794463682.5543854,
+    "seen": 1794464009.3702307,
+    "ast_hash": "967fd4b426c2dbc84219c93298a364a2",
+    "semantic_hash": ""
+  },
+  "src/components/jalur/jalur-hero.jsx": {
+    "mtime": 1794463807.2264843,
+    "seen": 1794464009.3702335,
+    "ast_hash": "dfca5c2fca3a7b3e5892e9deb7a8d274",
+    "semantic_hash": ""
+  },
+  "src/components/jalur/jalur-provider.jsx": {
+    "mtime": 1794463383.997009,
+    "seen": 1794464009.3702364,
+    "ast_hash": "497ac6190f3e1c8969c291c9ab672532",
+    "semantic_hash": ""
+  },
+  "src/components/jalur/path-modal.jsx": {
+    "mtime": 1794463446.3147075,
+    "seen": 1794464009.370239,
+    "ast_hash": "5bb6d04a02321a2b63c97d1bc6c59a26",
+    "semantic_hash": ""
+  },
+  "src/components/jalur/readiness-check.jsx": {
+    "mtime": 1794463854.3832054,
+    "seen": 1794464009.3702419,
+    "ast_hash": "30efc923f505a90b64020111144b3eff",
+    "semantic_hash": ""
+  },
+  "src/components/jalur/route-story.jsx": {
+    "mtime": 1794463598.9730184,
+    "seen": 1794464009.370244,
+    "ast_hash": "f56e02673fca0522eda43017501f37af",
+    "semantic_hash": ""
+  },
+  "src/components/jalur/stage-modal.jsx": {
+    "mtime": 1794463421.325238,
+    "seen": 1794464009.3702474,
+    "ast_hash": "07cf325aabe9f423c725e6871e6dc6e5",
+    "semantic_hash": ""
+  },
+  "src/components/jalur/tradeoff-cards.jsx": {
+    "mtime": 1794463682.2634676,
+    "seen": 1794464009.370251,
+    "ast_hash": "74cf80c35ba0d4806dfa5699f6f7796f",
+    "semantic_hash": ""
+  },
+  "src/lib/jalur-kelulusan-content.js": {
+    "mtime": 1794463361.5127044,
+    "seen": 1794464009.508945,
+    "ast_hash": "5d8d013b11d16dbbca47ececb480977b",
+    "semantic_hash": ""
+  },
+  "public/lottie/rulebook-dark.json": {
+    "mtime": 1794465005.1094644,
+    "seen": 1794465802.1091394,
+    "ast_hash": "00367a48c2b95075a5a73ef53b8ad9ce",
+    "semantic_hash": ""
+  },
+  "src/app/regulasi-akademik/loading.js": {
+    "mtime": 1794465413.0646324,
+    "seen": 1794465802.125594,
+    "ast_hash": "8c04552cb2563fa350722aafee5ad038",
+    "semantic_hash": ""
+  },
+  "src/app/regulasi-akademik/page.jsx": {
+    "mtime": 1794465413.1452303,
+    "seen": 1794465802.1255987,
+    "ast_hash": "7206ca96082bd047fabd37b658ecb77e",
+    "semantic_hash": ""
+  },
+  "src/components/regulasi/doc-modal.jsx": {
+    "mtime": 1794465394.088033,
+    "seen": 1794465802.1687913,
+    "ast_hash": "b2ad63f0d136cd77764eae02527c8657",
+    "semantic_hash": ""
+  },
+  "src/components/regulasi/doc-shelf.jsx": {
+    "mtime": 1794465649.9298532,
+    "seen": 1794465802.1687953,
+    "ast_hash": "4ce9f7e646e0eab4680a91f49e679b0d",
+    "semantic_hash": ""
+  },
+  "src/components/regulasi/procedure-modal.jsx": {
+    "mtime": 1794465330.7655897,
+    "seen": 1794465802.1687987,
+    "ast_hash": "77e85b2647696c7fc7eeeb5cba866f9c",
+    "semantic_hash": ""
+  },
+  "src/components/regulasi/regulasi-banner.jsx": {
+    "mtime": 1794465096.441651,
+    "seen": 1794465802.168801,
+    "ast_hash": "fd8c634bae60e2d3bb8c14c44d1a4bdd",
+    "semantic_hash": ""
+  },
+  "src/components/regulasi/regulasi-closing.jsx": {
+    "mtime": 1794465394.3355746,
+    "seen": 1794465802.1688044,
+    "ast_hash": "fa469d03463e5f0fece8b422d8b48664",
+    "semantic_hash": ""
+  },
+  "src/components/regulasi/regulasi-hero.jsx": {
+    "mtime": 1794465515.0267613,
+    "seen": 1794465802.1688075,
+    "ast_hash": "df07fea097292754451638740977ec9c",
+    "semantic_hash": ""
+  },
+  "src/components/regulasi/regulasi-provider.jsx": {
+    "mtime": 1794464949.706291,
+    "seen": 1794465802.1688101,
+    "ast_hash": "071e43eba5c5e37346092d5328d5659a",
+    "semantic_hash": ""
+  },
+  "src/components/regulasi/rule-reader.jsx": {
+    "mtime": 1794466166.8792264,
+    "seen": 1794466213.4958684,
+    "ast_hash": "649cea5115cab2fd9cc9bd6aa5eebe50",
+    "semantic_hash": ""
+  },
+  "src/components/regulasi/rule-search.jsx": {
+    "mtime": 1794465536.7649186,
+    "seen": 1794465802.1688151,
+    "ast_hash": "ec32d56b133217f8c482800a767d37ae",
+    "semantic_hash": ""
+  },
+  "src/components/regulasi/rule-simulator.jsx": {
+    "mtime": 1794465162.8794732,
+    "seen": 1794465802.1688178,
+    "ast_hash": "8898d2e0ee84cf22619a8ee95ebfe925",
+    "semantic_hash": ""
+  },
+  "src/components/regulasi/scenario-flow.jsx": {
+    "mtime": 1794465272.5098379,
+    "seen": 1794465802.16882,
+    "ast_hash": "2f692f8464696470b2b32605ccebf058",
+    "semantic_hash": ""
+  },
+  "src/lib/regulasi-content.js": {
+    "mtime": 1794464918.8016036,
+    "seen": 1794465802.185842,
+    "ast_hash": "9eae7c73122151458ff3deb66d8c8e1d",
     "semantic_hash": ""
   }
 }

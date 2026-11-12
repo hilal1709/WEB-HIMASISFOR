@@ -30,6 +30,8 @@ const nextConfig = {
       { source: '/prestasi', destination: '/achievement', permanent: true },
       { source: '/kurikulum', destination: '/curiculum', permanent: true },
       { source: '/peminatan', destination: '/bidang-keahlian', permanent: true },
+      { source: '/kelulusan', destination: '/jalur-kelulusan', permanent: true },
+      { source: '/regulasi', destination: '/regulasi-akademik', permanent: true },
     ];
   },
 

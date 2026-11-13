@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import { broadcast } from "@/lib/realtime/server";
 import { estimateReady } from "@/lib/layanan-content";
 import { clientIp, loadServices, makeCode, noStore, rateLimit, validateSubmission } from "@/lib/layanan-server";
 
@@ -47,6 +48,7 @@ export async function POST(request) {
       }
     }
     if (!created) throw new Error("Kode tiket gagal dibuat");
+    await broadcast("private-admin", "layanan:new", { code: created.code, service: service.name ?? service.title ?? created.service ?? "" });
     return noStore(
       { success: true, code: created.code, estimate: estimateReady(service.sla, created.createdAt, data.hours) },
       { status: 201 }

@@ -1,19 +1,20 @@
-import { QUICK_LINKS } from "@/lib/home-content";
+import { HOME_DEFAULTS } from "@/lib/home-cms/defaults";
 import { Container } from "./shared";
 import { ArrowGlyph } from "./glyphs";
 import { LottieIllustration } from "@/components/media/lottie-illustration";
 
 /** Tautan cepat per audiens — kartu putih yang menumpang di tepi bawah hero (pola situs kampus). */
-export function QuickLinks() {
+export function QuickLinks({ content: c = HOME_DEFAULTS.quicklinks }) {
+  if (!c.items?.length) return null;
   return (
-    <section aria-label="Tautan cepat" className="relative z-10 -mt-20 md:-mt-24">
+    <section id="tautan-cepat" aria-label="Tautan cepat" className="relative z-10 -mt-20 md:-mt-24">
       <Container>
         <ul className="grid gap-px overflow-hidden rounded-lg bg-line shadow-[0_24px_50px_-30px_rgb(20_33_61/0.45)] sm:grid-cols-2 lg:grid-cols-4">
-          {QUICK_LINKS.map((q, i) => (
-            <li key={q.title} data-aos="fade-up" data-aos-delay={i * 70}>
+          {c.items.map((q, i) => (
+            <li key={q.title + i} data-aos="fade-up" data-aos-delay={i * 70}>
               <a
                 href={q.href}
-                {...(q.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                {...(/^https?:\/\//.test(q.href) ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                 className={`ql-${i} group relative flex h-full gap-4 bg-white p-6 transition-colors duration-300 hover:bg-cream md:p-7`}
               >
                 <span aria-hidden className="absolute inset-x-0 top-0 h-[3px] bg-gold transition-colors duration-500 group-hover:bg-maroon" />

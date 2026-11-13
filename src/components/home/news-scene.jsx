@@ -1,12 +1,12 @@
 import Image from "next/image";
-import { NEWS } from "@/lib/home-content";
+import { HOME_DEFAULTS } from "@/lib/home-cms/defaults";
 import { dateParts, fmtShort, fmtTime } from "@/lib/berita-content";
-import { ArrowLink, Container, PlaceholderTag, SectionHeader } from "./shared";
+import { ArrowLink, Container, SectionHeader } from "./shared";
 import { ElvoPeek } from "./elvo-peek";
 import { LottieIllustration } from "@/components/media/lottie-illustration";
 
 /** Berita (2/3) + Agenda dengan blok tanggal (1/3) — tata letak khas situs kampus. */
-export function NewsScene({ data }) {
+export function NewsScene({ data, content: c = HOME_DEFAULTS.news }) {
   const news = (data?.posts ?? []).filter((p) => p.type === "berita");
   const lead0 = news.find((p) => p.featured) ?? news[0];
   const items = lead0 ? [lead0, ...news.filter((p) => p !== lead0)].slice(0, 4).map((p) => ({ ...p, tag: p.category, date: fmtShort(p.publishedAt), body: p.excerpt, image: p.cover, href: `/berita/${p.slug}` })) : [];
@@ -17,16 +17,14 @@ export function NewsScene({ data }) {
     .sort((a, b) => new Date(a.startAt) - new Date(b.startAt))
     .slice(0, 4)
     .map((e) => ({ ...e, day: dateParts(e.startAt).day, month: dateParts(e.startAt).month.slice(0, 3), time: `${fmtTime(e.startAt)} WIB`, href: `/berita?rubrik=agenda#agenda-${e.slug}` }));
-  const sample = data ? data.sample.posts || data.sample.events : true;
   return (
     <section id="berita" className="py-16 md:py-24">
       <Container>
         <SectionHeader
-          title={["Berita", "&", "agenda"]}
-          body={NEWS.body}
-          action={<ArrowLink href="/berita">Buka Warta SISFOR</ArrowLink>}
+          title={c.title}
+          body={c.body}
+          action={c.more?.label ? <ArrowLink href={c.more.href}>{c.more.label}</ArrowLink> : null}
         />
-        {sample && <PlaceholderTag className="mt-4" />}
 
         <div className="mt-10 grid gap-10 lg:grid-cols-[2fr_1fr] lg:gap-12">
           <div className="grid gap-6 md:grid-cols-2">
@@ -55,19 +53,19 @@ export function NewsScene({ data }) {
 
           <aside aria-label="Agenda" className="relative rounded-lg border border-line bg-white p-6 md:p-7">
             <div className="absolute -top-[70px] right-3 z-10">
-              <div className="relative"><ElvoPeek pose="thumbs-up" size={78} say="Catat tanggalnya, jangan sampai ketinggalan!" delay={0.4} /></div>
+              <div className="relative"><ElvoPeek pose={c.mascot.pose} size={78} say={c.mascot.say} delay={0.4} /></div>
             </div>
             <div className="flex items-baseline justify-between">
               <h3 className="flex items-center gap-2 font-serif text-2xl text-navy">
-                <LottieIllustration src="/lottie/calendar.json" className="size-11 shrink-0" />
-                Agenda
+                {c.agendaLottie && <LottieIllustration src={c.agendaLottie} className="size-11 shrink-0" />}
+                {c.agendaTitle}
               </h3>
-              <a href="/berita?rubrik=agenda" className="u-gold text-sm font-semibold text-maroon">Kalender</a>
+              {c.calendar?.label && <a href={c.calendar.href} className="u-gold text-sm font-semibold text-maroon">{c.calendar.label}</a>}
             </div>
             {!AGENDA.length && (
               <div className="flex flex-col items-center py-8 text-center">
-                <LottieIllustration src="/lottie/empty-news.json" className="w-28" />
-                <p className="mt-2 text-sm text-text/55">Belum ada agenda terdekat.</p>
+                {c.emptyLottie && <LottieIllustration src={c.emptyLottie} className="w-28" />}
+                <p className="mt-2 text-sm text-text/55">{c.emptyText}</p>
               </div>
             )}
             <ul className="mt-5 divide-y divide-line">

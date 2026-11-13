@@ -4,7 +4,7 @@ import { A11y, Keyboard } from "swiper/modules";
 import "swiper/css";
 import { FOOTER } from "@/lib/home-content";
 import { Container, SceneTitle } from "@/components/home/shared";
-import { SOCIAL_ICON } from "@/components/home/site-footer";
+import { SOCIAL_ICON } from "@/components/home/site-footer-view";
 import { cn } from "@/lib/utils";
 
 const handle = (href) => {

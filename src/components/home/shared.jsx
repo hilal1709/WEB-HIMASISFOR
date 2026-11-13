@@ -25,9 +25,12 @@ export function Eyebrow({ children, tone = "light", className }) {
 /** Judul serif. `title` = string atau [sebelum, aksen-italic, sesudah?]. */
 export function SceneTitle({ lines, title, as = "h2", tone = "light", align = "left", size = "lg", className, trigger = "scroll" }) {
   const parts = title ?? lines;
-  const [a, accent, c] = Array.isArray(parts) ? parts : [parts];
+  const [a, accent, ...tail] = Array.isArray(parts) ? parts : [parts];
+  const c = tail.filter(Boolean).join(" ");
   return (
     <SplitReveal
+      // SplitText memecah DOM; remount saat teks berubah (mis. pratinjau CMS) agar teks baru tidak tertimpa revert
+      key={JSON.stringify(parts)}
       as={as}
       trigger={trigger}
       className={cn(

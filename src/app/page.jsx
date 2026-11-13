@@ -16,8 +16,11 @@ import { NewsScene } from "@/components/home/news-scene";
 import { JoinScene } from "@/components/home/join-scene";
 import { SiteFooter } from "@/components/home/site-footer";
 import { AosReady } from "@/components/motion/aos-provider";
+import { PreviewBridge } from "@/components/home/preview-bridge";
+import { getHomeContent } from "@/lib/home-cms/server";
 
-export const revalidate = 300;
+// Dinamis: isi diambil dari Studio Beranda setiap permintaan; perubahan terbit disiarkan via Pusher.
+export const dynamic = "force-dynamic";
 
 /** CMS menyimpan path relatif (mis. "../img/dosen/x.png") → jadikan "/img/dosen/x.png". */
 function normalizeSrc(src) {
@@ -56,28 +59,41 @@ async function getAchievements() {
   }
 }
 
-/** Beranda — "Kampus v3": situs kampus dengan sentuhan premium (maroon + navy + gold di atas cream). */
+const SCENES = {
+  hero: (c) => <HeroScene content={c.hero} />,
+  quicklinks: (c) => <QuickLinks content={c.quicklinks} />,
+  about: (c, d) => <AboutScene content={c.about} total={d.achievements?.total} />,
+  accreditation: (c) => <AccreditationBand content={c.accreditation} />,
+  expertise: (c) => <ExpertiseScene content={c.expertise} />,
+  achievements: (c, d) => <AchievementScene content={c.achievements} data={d.achievements} />,
+  news: (c, d) => <NewsScene content={c.news} data={d.warta} />,
+  alumni: (c) => <AlumniScene content={c.alumni} />,
+  partners: (c) => <PartnersMarquee content={c.partners} />,
+  join: (c) => <JoinScene content={c.join} />,
+};
+
+/** Beranda — seluruh isi, urutan, dan visibilitas section dikelola di Studio Beranda (/admin/home). */
 export default async function Home() {
-  const [achievements, warta] = await Promise.all([getAchievements(), getWarta()]);
+  const [achievements, warta, c] = await Promise.all([getAchievements(), getWarta(), getHomeContent()]);
+  const data = { achievements, warta };
   return (
     <div className="kampus" data-aos-wait>
-      <IntroLoader />
+      {/* pratinjau Studio: intro dimatikan, tetapi tetap memberi sinyal "siap" agar animasi hero berjalan */}
+      <IntroLoader content={c.preview ? { ...c.intro, enabled: false } : c.intro} />
       <Topbar />
       <SiteHeader />
       <main>
-        <HeroScene />
-        <QuickLinks />
-        <AboutScene total={achievements?.total} />
-        <AccreditationBand />
-        <ExpertiseScene />
-        <AchievementScene data={achievements} />
-        <NewsScene data={warta} />
-        <AlumniScene />
-        <PartnersMarquee />
-        <JoinScene />
+        {c.layout.sections
+          .filter((s) => s.visible && SCENES[s.key])
+          .map((s) => (
+            <div key={s.key} data-home-section={s.key} className="contents">
+              {SCENES[s.key](c, data)}
+            </div>
+          ))}
       </main>
       <SiteFooter />
       <AosReady />
+      {c.preview && <PreviewBridge />}
     </div>
   );
 }

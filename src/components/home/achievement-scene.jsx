@@ -1,29 +1,28 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
-import { ACHIEVEMENTS, VIDEOS } from "@/lib/home-content";
+import { HOME_DEFAULTS } from "@/lib/home-cms/defaults";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
-import { ArrowLink, Container, PlaceholderTag, SceneTitle } from "./shared";
+import { ArrowLink, Container, SceneTitle } from "./shared";
 import { VideoCard } from "./video-player";
 import { ElvoPeek } from "./elvo-peek";
 import { LottieIllustration } from "@/components/media/lottie-illustration";
 
-const TABS = [
-  { value: "mahasiswa", label: "Mahasiswa" },
-  { value: "dosen", label: "Dosen" },
-];
 
 /**
  * Mahasiswa Berprestasi — section navy: video Kisah Sukses Mawapres + daftar prestasi (CMS)
  * dengan Tabs Dosen/Mahasiswa.
  */
-export function AchievementScene({ data }) {
+export function AchievementScene({ data, content: c = HOME_DEFAULTS.achievements }) {
+  const TABS = [
+    { value: "mahasiswa", label: c.tabStudent },
+    { value: "dosen", label: c.tabLecturer },
+  ];
   const [tab, setTab] = useState("mahasiswa");
-  const fromCms = Boolean(data?.dosen?.length || data?.mahasiswa?.length);
   const tabs = {
-    dosen: data?.dosen?.length ? data.dosen : ACHIEVEMENTS.tabs.dosen,
-    mahasiswa: data?.mahasiswa?.length ? data.mahasiswa : ACHIEVEMENTS.tabs.mahasiswa,
+    dosen: data?.dosen?.length ? data.dosen : c.fallbackLecturer,
+    mahasiswa: data?.mahasiswa?.length ? data.mahasiswa : c.fallbackStudent,
   };
   const index = TABS.findIndex((t) => t.value === tab);
 
@@ -31,24 +30,24 @@ export function AchievementScene({ data }) {
     <section id="prestasi" className="relative bg-maroon-deep py-16 text-white md:py-24">
       <Container className="relative">
         <div className="absolute -top-4 right-[30%] z-10 hidden lg:block">
-          <div className="relative"><ElvoPeek pose="proud" size={100} say="Bangga sama prestasi kakak-kakak tingkat!" tone="dark" delay={0.9} /></div>
+          <div className="relative"><ElvoPeek pose={c.mascot.pose} size={100} say={c.mascot.say} tone="dark" delay={0.9} /></div>
         </div>
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div className="max-w-2xl">
             <span aria-hidden className="mb-5 block h-[3px] w-10 bg-gold" />
-            <SceneTitle title={["Mahasiswa", "berprestasi", "& rekognisi dosen"]} tone="dark" />
-            <p data-aos="fade-up" className="mt-4 text-[16.5px] leading-relaxed text-white/70">{ACHIEVEMENTS.body}</p>
+            <SceneTitle title={c.title} tone="dark" />
+            <p data-aos="fade-up" className="mt-4 text-[16.5px] leading-relaxed text-white/70">{c.body}</p>
           </div>
           <div className="flex items-end gap-5">
-            <LottieIllustration src="/lottie/trophy-dark.json" className="hidden w-24 md:block" />
-            <ArrowLink href="/achievement" tone="dark">Semua prestasi</ArrowLink>
+            {c.lottie && <LottieIllustration src={c.lottie} className="hidden w-24 md:block" />}
+            {c.more?.label && <ArrowLink href={c.more.href} tone="dark">{c.more.label}</ArrowLink>}
           </div>
         </div>
 
         <div className="mt-10 grid gap-10 md:mt-12 lg:grid-cols-[1.15fr_1fr] lg:gap-14">
           <div data-aos="fade-up">
-            <VideoCard video={VIDEOS.mawapres} label="Kisah sukses" />
-            <p className="mt-4 text-sm leading-relaxed text-white/65">Felix Atmaja, mahasiswa berprestasi Sistem Informasi UISI 2023, bercerita tentang magang bersertifikat, pertukaran mahasiswa, dan kompetisi.</p>
+            {c.video?.src && <VideoCard video={c.video} label={c.videoLabel} />}
+            {c.caption && <p className="mt-4 text-sm leading-relaxed text-white/65">{c.caption}</p>}
           </div>
 
           <Tabs value={tab} onValueChange={setTab}>
@@ -65,7 +64,7 @@ export function AchievementScene({ data }) {
                 <ul className="divide-y divide-white/10 border-y border-white/10">
                   {tabs[t.value].slice(0, 4).map((a, i) => (
                     <li key={a.title + i} className="animate-in fade-in-0 slide-in-from-bottom-1 duration-500" style={{ animationDelay: `${i * 70}ms`, animationFillMode: "both" }}>
-                      <a href="/achievement" className="group flex items-center gap-4 py-4">
+                      <a href={c.more?.href || "/achievement"} className="group flex items-center gap-4 py-4">
                         <span className="relative size-14 shrink-0 overflow-hidden rounded bg-white/10">
                           {a.image && <Image src={a.image} alt="" fill sizes="56px" className="object-cover object-top transition-transform duration-500 group-hover:scale-110" />}
                         </span>
@@ -80,7 +79,6 @@ export function AchievementScene({ data }) {
                     </li>
                   ))}
                 </ul>
-                {!fromCms && <PlaceholderTag tone="dark" className="mt-4" />}
               </TabsContent>
             ))}
           </Tabs>

@@ -4,6 +4,8 @@ import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { signOut } from 'next-auth/react'
 import { BrandLoader } from '@/components/ui/loader'
+import { useToast } from '@/components/ui/toast'
+import { useChannel } from '@/lib/realtime/client'
 
 export default function AdminLayout({ children }) {
   const [session, setSession] = useState(null)
@@ -12,6 +14,16 @@ export default function AdminLayout({ children }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const router = useRouter()
   const pathname = usePathname()
+  const toast = useToast()
+
+  // Realtime: pengajuan layanan baru langsung terlihat di semua halaman admin
+  useChannel('private-admin', {
+    'layanan:new': ({ code, service }) =>
+      toast.info('Pengajuan layanan baru', {
+        description: [code, service].filter(Boolean).join(' · '),
+        action: { label: 'Buka kotak masuk', onClick: () => router.push('/admin/layanan') },
+      }),
+  }, Boolean(session))
 
   useEffect(() => {
     checkSession()
@@ -73,9 +85,15 @@ export default function AdminLayout({ children }) {
     return null
   }
 
+  // Studio Beranda memakai kanvas layar penuh sendiri
+  if (pathname === '/admin/home') {
+    return children
+  }
+
   const menuItems = [
     { href: '/admin/dashboard', label: 'Dashboard' },
     { href: '/admin/layanan', label: 'Kotak Masuk Layanan' },
+    { href: '/admin/home', label: 'Studio Beranda' },
     { href: '/admin/warta', label: 'Warta (Berita & Agenda)' },
     { href: '/admin/content', label: 'Konten Web Utama' },
     { href: '/admin/profile-content', label: 'Konten Halaman Profil' },

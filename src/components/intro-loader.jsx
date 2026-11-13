@@ -34,7 +34,9 @@ export function useIntroReady() {
  * Intro loader beranda — sekali per sesi.
  * Logo digambar garis demi garis + penghitung 0–100 (anime.js), lalu tirai terbelah atas/bawah (GSAP).
  */
-export function IntroLoader() {
+const INTRO_DEFAULT = { enabled: true, title: "Sistem Informasi", subtitle: "Universitas Internasional Semen Indonesia", caption: "Sistem Informasi · UISI" };
+
+export function IntroLoader({ content: c = INTRO_DEFAULT }) {
   const ref = useRef(null);
   const count = useRef(null);
   const [show, setShow] = useState(true);
@@ -44,7 +46,7 @@ export function IntroLoader() {
     try {
       seen = sessionStorage.getItem(KEY) === "1";
     } catch {}
-    if (seen || prefersReducedMotion()) {
+    if (seen || !c.enabled || prefersReducedMotion()) {
       setShow(false);
       markDone();
       return;
@@ -77,7 +79,7 @@ export function IntroLoader() {
     };
   }, []);
 
-  if (!show) return null;
+  if (!show || !c.enabled) return null;
   return (
     <>
       {/* sebelum hidrasi: sembunyikan intro jika sudah pernah dilihat sesi ini (cegah kedip) */}
@@ -90,13 +92,13 @@ export function IntroLoader() {
         <div data-curtain-top className="absolute inset-x-0 top-0 h-1/2 bg-cream" />
         <div data-curtain-bottom className="absolute inset-x-0 bottom-0 h-1/2 bg-cream" />
         <div data-intro-inner className="absolute inset-0 grid place-items-center">
-          <LogoDraw />
+          <LogoDraw label={c.title} sub={c.subtitle} />
         </div>
         <div data-intro-inner className="absolute bottom-6 left-6 right-6 flex items-end justify-between md:bottom-10 md:left-10 md:right-10">
           <span ref={count} className="font-serif tabular text-[clamp(3rem,9vw,7rem)] leading-none text-navy">
             000
           </span>
-          <span className="pb-3 text-xs font-medium uppercase tracking-[0.18em] text-navy/50">Sistem Informasi · UISI</span>
+          <span className="pb-3 text-xs font-medium uppercase tracking-[0.18em] text-navy/50">{c.caption}</span>
         </div>
       </div>
     </>

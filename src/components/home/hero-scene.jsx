@@ -3,7 +3,9 @@ import { useLayoutEffect as useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { gsap, SplitText } from "@/lib/scroll";
 import { prefersReducedMotion } from "@/lib/motion";
-import { HERO_V3, PMB_URL, VIDEOS } from "@/lib/home-content";
+import { HOME_DEFAULTS } from "@/lib/home-cms/defaults";
+
+const ext = (href = "") => (/^https?:\/\//.test(href) ? { target: "_blank", rel: "noopener noreferrer" } : {});
 import { useIntroReady } from "@/components/intro-loader";
 import { Magnetic } from "@/components/motion/magnetic";
 import { Container, PillLink } from "./shared";
@@ -15,7 +17,7 @@ import { ElvoPeek } from "./elvo-peek";
  * panel navy solid (tanpa gradien) berisi judul serif. Video berhenti saat keluar layar;
  * reduced-motion / hemat data → poster diam.
  */
-export function HeroScene() {
+export function HeroScene({ content: c = HOME_DEFAULTS.hero }) {
   const root = useRef(null);
   const video = useRef(null);
   const ready = useIntroReady();
@@ -58,7 +60,7 @@ export function HeroScene() {
       ctx.revert();
       split?.revert();
     };
-  }, [ready]);
+  }, [ready, c.titleLead, c.titleAccent, c.titleTail]);
 
   const toggle = () => {
     const v = video.current;
@@ -76,38 +78,42 @@ export function HeroScene() {
     <section ref={root} id="beranda" className="relative isolate flex min-h-[calc(100svh-8.5rem)] overflow-hidden bg-maroon-deep">
       <div data-hero-media className="absolute inset-0 -z-10">
         {useVideo ? (
-          <video ref={video} src={VIDEOS.heroLoop.src} poster={VIDEOS.heroLoop.poster} autoPlay muted loop playsInline preload="auto" aria-hidden className="h-full w-full object-cover" />
+          <video ref={video} src={c.background.src} poster={c.background.poster} autoPlay muted loop playsInline preload="auto" aria-hidden className="h-full w-full object-cover" />
         ) : (
-          <Image src={VIDEOS.heroLoop.poster} alt="" fill priority sizes="100vw" className="object-cover" />
+          <Image src={c.background.poster} alt="" fill priority sizes="100vw" className="object-cover" />
         )}
         <div className="absolute inset-0 bg-maroon-deep/20" />
       </div>
 
       <Container className="flex w-full items-end pb-28 pt-12 md:pb-36 md:pt-16">
         <div data-hero-in data-hero-panel className="invisible max-w-2xl border-t-4 border-gold bg-maroon/[0.92] p-6 text-white sm:p-7 md:p-10">
-          <h1 className="font-serif text-[clamp(2rem,3.6vw,3.25rem)] font-normal leading-[1.08] tracking-[-0.01em]">
-            {HERO_V3.title[0]} <em className="italic text-gold-soft">{HERO_V3.title[1]}</em> {HERO_V3.title[2]}
+          <h1 key={`${c.titleLead}|${c.titleAccent}|${c.titleTail}`} className="font-serif text-[clamp(2rem,3.6vw,3.25rem)] font-normal leading-[1.08] tracking-[-0.01em]">
+            {c.titleLead} {c.titleAccent && <em className="italic text-gold-soft">{c.titleAccent}</em>} {c.titleTail}
           </h1>
           <p data-hero-fade className="mt-5 max-w-lg text-pretty text-[16.5px] leading-relaxed text-white/75">
-            {HERO_V3.body}
+            {c.body}
           </p>
           <div data-hero-fade className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3">
-            <Magnetic strength={0.2}>
-              <PillLink href={PMB_URL} variant="gold" target="_blank" rel="noopener noreferrer">
-                Daftar PMB
+            {c.primary?.label && (
+              <Magnetic strength={0.2}>
+                <PillLink href={c.primary.href} variant="gold" {...ext(c.primary.href)}>
+                  {c.primary.label}
+                </PillLink>
+              </Magnetic>
+            )}
+            {c.secondary?.label && (
+              <PillLink href={c.secondary.href} variant="outline-light" {...ext(c.secondary.href)}>
+                {c.secondary.label}
               </PillLink>
-            </Magnetic>
-            <PillLink href="#bidang" variant="outline-light">
-              Jelajahi Program
-            </PillLink>
-            <VideoButton video={VIDEOS.mawapres}>Tonton kisah mawapres</VideoButton>
+            )}
+            {c.story?.src && c.storyLabel && <VideoButton video={c.story}>{c.storyLabel}</VideoButton>}
           </div>
         </div>
       </Container>
 
       <div className="pointer-events-none absolute bottom-24 right-[16%] z-10 hidden lg:block">
         <div className="relative">
-          <ElvoPeek pose="wave" size={170} say="Hai! Aku Si Elvo, maskot Sistem Informasi UISI. Yuk jelajahi!" />
+          <ElvoPeek pose={c.mascot.pose} size={170} say={c.mascot.say} />
         </div>
       </div>
 

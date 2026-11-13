@@ -3,6 +3,7 @@
  * Publik hanya melihat status "terbit". DB kosong/gagal → contoh (`sample: true`).
  */
 import { revalidatePath } from "next/cache";
+import { refreshSite } from "@/lib/realtime/server";
 import prisma from "@/lib/prisma";
 import { SAMPLE_EVENTS, SAMPLE_POSTS, normalizeEvent, normalizePost, slugify } from "@/lib/berita-content";
 
@@ -122,5 +123,7 @@ export function refresh() {
   revalidatePath("/berita", "layout");
   revalidatePath("/");
   revalidatePath("/sitemap.xml");
+  // pengunjung yang sedang membuka beranda/warta langsung melihat perubahan
+  refreshSite(["/", "/berita", "/berita/*"]);
 }
 

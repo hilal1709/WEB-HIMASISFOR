@@ -228,9 +228,9 @@
     "semantic_hash": ""
   },
   "src/app/admin/dashboard/page.jsx": {
-    "mtime": 1770364611.54822,
-    "seen": 1793008817.64567,
-    "ast_hash": "ba80e8caa416fd4cdd9abc0ce2b3ff3b",
+    "mtime": 1794541003.117375,
+    "seen": 1794541237.538641,
+    "ast_hash": "f6bc167f881a9dde8f9803671ec8a26a",
     "semantic_hash": ""
   },
   "src/app/admin/gallery/create/page.jsx": {
@@ -252,9 +252,9 @@
     "semantic_hash": ""
   },
   "src/app/admin/layout.jsx": {
-    "mtime": 1794505227.85765,
-    "seen": 1794512808.9404917,
-    "ast_hash": "0c1b58a5a50db2c57da264d3e139bee6",
+    "mtime": 1794541019.8218842,
+    "seen": 1794541237.5398357,
+    "ast_hash": "283ce79ba7d1c28c08806860665b97f7",
     "semantic_hash": ""
   },
   "src/app/admin/login/page.jsx": {
@@ -4323,6 +4323,48 @@
     "mtime": 1794539567.5575335,
     "seen": 1794539734.465619,
     "ast_hash": "fe767a7fdfc00934d39c4430e65aee88",
+    "semantic_hash": ""
+  },
+  "src/app/api/dashboard/route.js": {
+    "mtime": 1794541003.1183937,
+    "seen": 1794541237.5425332,
+    "ast_hash": "79f8aa24d8d671d6934388597393e268",
+    "semantic_hash": ""
+  },
+  "src/components/admin-dashboard/agenda-desk.jsx": {
+    "mtime": 1794541032.5492868,
+    "seen": 1794541237.5661192,
+    "ast_hash": "1e1970d66d5254debb585f7a7bb6a8ae",
+    "semantic_hash": ""
+  },
+  "src/components/admin-dashboard/dash-hero.jsx": {
+    "mtime": 1794540996.9067998,
+    "seen": 1794541237.566125,
+    "ast_hash": "743b8f3e47825193ab10ab3a434a9daa",
+    "semantic_hash": ""
+  },
+  "src/components/admin-dashboard/detail-modal.jsx": {
+    "mtime": 1794540959.0249882,
+    "seen": 1794541237.566128,
+    "ast_hash": "3dc0b2c1e97007b99da6f566d10dfd6a",
+    "semantic_hash": ""
+  },
+  "src/components/admin-dashboard/inbox-timeline.jsx": {
+    "mtime": 1794541032.5492868,
+    "seen": 1794541237.5661306,
+    "ast_hash": "59e9f32541476b7653228c55dacc374e",
+    "semantic_hash": ""
+  },
+  "src/components/admin-dashboard/quick-desk.jsx": {
+    "mtime": 1794541003.1150131,
+    "seen": 1794541237.566133,
+    "ast_hash": "3e5ed5c7bcec3bf561fa7ed6d04902e0",
+    "semantic_hash": ""
+  },
+  "src/components/admin-dashboard/stat-rail.jsx": {
+    "mtime": 1794540996.9043176,
+    "seen": 1794541237.5661354,
+    "ast_hash": "9b1bb8f7189fa3695d2258979819dfc9",
     "semantic_hash": ""
   }
 }

@@ -4314,9 +4314,9 @@
     "semantic_hash": ""
   },
   "src/components/login/login-shell.jsx": {
-    "mtime": 1794539603.0547712,
-    "seen": 1794539734.4656165,
-    "ast_hash": "381262ad960b6177b5eb7ef8901132db",
+    "mtime": 1794542712.8002343,
+    "seen": 1794542778.6938179,
+    "ast_hash": "dc0be938487b22e3d0e88fe7e59c06d9",
     "semantic_hash": ""
   },
   "src/components/login/login-stage.jsx": {

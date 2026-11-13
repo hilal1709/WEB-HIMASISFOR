@@ -1,7 +1,7 @@
 # Graph Report - Web Sisfor  (2026-11-13)
 
 ## Corpus Check
-- 578 files · ~2,382,607 words
+- 578 files · ~2,382,601 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 9 file(s) not represented in the graph (top: (none) 3, .css 3, .cmd 1)
 
@@ -11,7 +11,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `761803b0`
+- Built from commit: `abc35fab`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -772,11 +772,11 @@ Nodes (4): Impeccable Documenter, Input Contract, Output Contract, Workflow
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `Flap()` connect `cn` to `prefersReducedMotion`, `startVariantObserver`?**
-  _High betweenness centrality (0.145) - this node is a cross-community bridge._
+  _High betweenness centrality (0.149) - this node is a cross-community bridge._
 - **Why does `tick()` connect `startVariantObserver` to `live-browser.js`, `connectSSE`, `cn`, `actOnAgentTarget`?**
-  _High betweenness centrality (0.145) - this node is a cross-community bridge._
+  _High betweenness centrality (0.149) - this node is a cross-community bridge._
 - **Why does `cn()` connect `cn` to `dashboard/page.jsx`, `layanan-content.js`, `Container`, `loader.jsx`, `bidang-keahlian/page.jsx`, `regulasi-akademik/page.jsx`, `line-illustrations.jsx`, `site-footer.jsx`, `prefersReducedMotion`, `berita-content.js`, `modal.jsx`, `dosen-hero.jsx`, `konversi-provider.jsx`, `visi-misi/page.jsx`, `useToast`, `design-system/page.jsx`, `beasiswa-content.js`, `exchange-desk.jsx`, `site-header.jsx`, `react`, `scroll.js`, `agenda-desk.jsx`, `rule-reader.jsx`, `scholarship-modal.jsx`, `find-us.jsx`, `jalur-kelulusan/page.jsx`, `program-kelas/page.jsx`, `job-board.jsx`, `app/page.jsx`, `konversi-sks/page.jsx`, `field-mosaic.jsx`, `curiculum/page.jsx`, `course-catalog.jsx`, `archive.jsx`, `struktur-organisasi/page.jsx`, `bootcamp/page.jsx`, `letter-form.jsx`?**
-  _High betweenness centrality (0.129) - this node is a cross-community bridge._
+  _High betweenness centrality (0.130) - this node is a cross-community bridge._
 - **What connects `prisma`, `$schema`, `style` to the rest of the system?**
   _906 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `live-browser.js` be split into smaller, more focused modules?**

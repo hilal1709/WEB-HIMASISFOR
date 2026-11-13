@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { gsap } from "@/lib/scroll";
 import { prefersReducedMotion } from "@/lib/motion";
@@ -24,7 +24,6 @@ function strengthOf(pw) {
 }
 
 export function LoginShell() {
-  const router = useRouter();
   const params = useSearchParams();
   const toast = useToast();
   const formRef = useRef(null);
@@ -87,8 +86,7 @@ export function LoginShell() {
       setDone(true);
       toast.success("Selamat datang kembali", { description: "Membuka dashboard…" });
       setTimeout(() => {
-        router.push("/admin/dashboard");
-        router.refresh();
+        window.location.assign("/admin/dashboard");
       }, prefersReducedMotion() ? 500 : 1700);
     } catch {
       fail("Server tidak merespons. Coba lagi sebentar lagi.");

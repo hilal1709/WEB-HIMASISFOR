@@ -342,9 +342,9 @@
     "semantic_hash": ""
   },
   "src/app/page.jsx": {
-    "mtime": 1794553289.2949066,
-    "seen": 1794554160.564504,
-    "ast_hash": "5e70a5fd4bb9ec2a3479a87295b2187d",
+    "mtime": 1794554436.9306312,
+    "seen": 1794554982.9780893,
+    "ast_hash": "7493c4054a081ec219e7cd34df3aa13c",
     "semantic_hash": ""
   },
   "src/app/profile/page.jsx": {
@@ -1632,9 +1632,9 @@
     "semantic_hash": ""
   },
   "src/components/home/hero-scene.jsx": {
-    "mtime": 1794553074.6921203,
-    "seen": 1794554160.612316,
-    "ast_hash": "fb2e72e5030fae28b5bcf31afdea47ca",
+    "mtime": 1794554492.9400003,
+    "seen": 1794554983.0517652,
+    "ast_hash": "6973e79fe16cdd804a58afc29f662e3f",
     "semantic_hash": ""
   },
   "src/components/home/join-scene.jsx": {
@@ -1650,9 +1650,9 @@
     "semantic_hash": ""
   },
   "src/components/home/shared.jsx": {
-    "mtime": 1794539256.2010996,
-    "seen": 1794539339.8386197,
-    "ast_hash": "c20292dcf64910cc8dca1fc5a490ec12",
+    "mtime": 1794554492.9359334,
+    "seen": 1794554983.0555162,
+    "ast_hash": "8bb8ba2a843cb985cb3fa9ddf61a835b",
     "semantic_hash": ""
   },
   "src/components/home/site-nav.jsx": {
@@ -4482,21 +4482,21 @@
     "semantic_hash": ""
   },
   "src/lib/home-cms/schema.js": {
-    "mtime": 1794552868.3938243,
-    "seen": 1794554160.6852415,
-    "ast_hash": "01d18fb3c7c9b6a6ab31bfbfab60f81c",
+    "mtime": 1794554738.458496,
+    "seen": 1794554983.16105,
+    "ast_hash": "165230d2835696cbbcf2a623f8779901",
     "semantic_hash": ""
   },
   "src/lib/home-cms/server.js": {
-    "mtime": 1794552888.1991632,
-    "seen": 1794554160.6852443,
-    "ast_hash": "e7b0223edc0ecf38de0974f7357101cc",
+    "mtime": 1794554737.5067306,
+    "seen": 1794554983.1610568,
+    "ast_hash": "e460ad240770da6cd178680ecf59a6df",
     "semantic_hash": ""
   },
   "src/lib/home-cms/store.js": {
-    "mtime": 1794553350.672043,
-    "seen": 1794554160.6852465,
-    "ast_hash": "2d598c4ae8a539c3d24ecc219b54f660",
+    "mtime": 1794554737.9089572,
+    "seen": 1794554983.1610634,
+    "ast_hash": "a99c7f2996ff03597a95deff60be653f",
     "semantic_hash": ""
   },
   "src/lib/realtime/client.js": {

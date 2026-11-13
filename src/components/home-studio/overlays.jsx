@@ -341,17 +341,19 @@ const FOLDERS = {
 const ACCEPT = { image: /\.(png|jpe?g|webp|gif|svg|avif)$/i, video: /\.(mp4|webm|jpe?g|png|webp)$/i, lottie: /\.json$/i };
 const KIND_LABEL = { image: "gambar", video: "video atau poster", lottie: "animasi Lottie" };
 
-export function MediaPicker({ open, onOpenChange, kind = "image", current, onPick }) {
-  const folders = FOLDERS[kind];
+export function MediaPicker({ open, onOpenChange, kind = "image", current, onPick, uploadFolder = "uploads/home", folders: extraFolders, notify }) {
+  const folders = extraFolders ?? FOLDERS[kind];
   const [folder, setFolder] = useState(folders[0]);
   const [files, setFiles] = useState(null);
   const [drag, setDrag] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [err, setErr] = useState(null);
-  const toast = useStudioToast();
+  const studioToast = useStudioToast();
+  const toast = notify ?? studioToast;
 
   useEffect(() => {
-    if (open) setFolder(FOLDERS[kind][0]);
+    if (open) setFolder(folders[0]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, kind]);
 
   useEffect(() => {
@@ -376,7 +378,7 @@ export function MediaPicker({ open, onOpenChange, kind = "image", current, onPic
     try {
       const fd = new FormData();
       fd.append("file", file);
-      fd.append("folder", "uploads/home");
+      fd.append("folder", uploadFolder);
       const j = await fetch("/api/upload", { method: "POST", body: fd }).then((r) => r.json());
       if (!j.success) throw new Error(j.error);
       toast("Berkas terunggah", { detail: j.filename });

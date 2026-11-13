@@ -962,3 +962,12 @@ html.has-cursor, html.has-cursor a, html.has-cursor button { cursor: none; }
    bila JS gagal/lambat, supaya halaman tak pernah terkunci kosong. */
 html[data-prehydrate] [data-aos-wait] { opacity: 0; animation: prehydrate-safety 1ms linear 3s forwards; }
 @keyframes prehydrate-safety { to { opacity: 1; } }
+
+/* ==========================================================================
+   MEJA SAMBUTAN (/admin/sambutan) — meja cream bertitik, kertas surat di atasnya
+   ========================================================================== */
+.meja-desk {
+  background-color: var(--cream-2);
+  background-image: radial-gradient(rgb(20 33 61 / 0.09) 1px, transparent 1.2px);
+  background-size: 22px 22px;
+}

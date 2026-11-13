@@ -1,10 +1,7 @@
 /**
- * Konten fallback halaman Sambutan Kaprodi.
- * Bisa ditimpa dari CMS: PageContent section "sambutan-kaprodi"
- *   title    → nama kaprodi, subtitle → jabatan, image → foto,
- *   content  → paragraf surat (dipisah baris kosong),
- *   data     → JSON { greeting, quote, closing, credentials, research, education, certifications }.
- * Teks di bawah adalah CONTOH (PRODUCT.md) — tampil dengan PlaceholderTag sampai CMS terisi.
+ * Isi dasar Sambutan Kaprodi (dipakai oleh `src/lib/sambutan-cms/defaults.js`).
+ * Sumber kebenaran sekarang Meja Sambutan (/admin/sambutan, baris PageContent `sambutan`).
+ * `mergeSambutan` hanya membaca baris lama "sambutan-kaprodi" agar data sebelum Meja tidak hilang.
  */
 export const SAMBUTAN = {
   name: "Grandys Frieska Prassida",

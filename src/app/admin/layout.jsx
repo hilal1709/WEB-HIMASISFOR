@@ -85,8 +85,8 @@ export default function AdminLayout({ children }) {
     return null
   }
 
-  // Studio Beranda memakai kanvas layar penuh sendiri
-  if (pathname === '/admin/home') {
+  // Studio Beranda & Meja Sambutan memakai kanvas layar penuh sendiri
+  if (pathname === '/admin/home' || pathname === '/admin/sambutan') {
     return children
   }
 
@@ -94,6 +94,7 @@ export default function AdminLayout({ children }) {
     { href: '/admin/dashboard', label: 'Dashboard' },
     { href: '/admin/layanan', label: 'Kotak Masuk Layanan' },
     { href: '/admin/home', label: 'Studio Beranda' },
+    { href: '/admin/sambutan', label: 'Meja Sambutan Kaprodi' },
     { href: '/admin/warta', label: 'Warta (Berita & Agenda)' },
     { href: '/admin/content', label: 'Konten Web Utama' },
     { href: '/admin/profile-content', label: 'Konten Halaman Profil' },

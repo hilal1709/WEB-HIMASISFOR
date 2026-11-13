@@ -4,31 +4,26 @@ import Image from "next/image";
 import { animate } from "animejs";
 import { gsap, ScrollTrigger } from "@/lib/scroll";
 import { prefersReducedMotion } from "@/lib/motion";
-import { PMB_URL } from "@/lib/home-content";
 import { Banner } from "@/components/ui/banner";
 import { ArrowLink, Container } from "@/components/home/shared";
 import { LordIcon } from "@/components/media/lord-icon";
 import { useProfileModal } from "./profile-modal";
+import { Signature, drawSignature, hideSignature } from "./signature";
 
-/** Tanda tangan bergaya tulisan tangan (dekoratif), digambar dengan anime.js. */
-const SIGNATURE = [
-  "M6 58c10-22 22-44 30-48 6-3 4 14-2 30-5 13-9 22-6 22 6 0 18-30 26-30 5 0 0 18 4 18s10-14 16-14c4 0 2 10 6 10 6 0 12-16 20-16",
-  "M108 44c-4 8-6 16 0 16 8 0 14-22 22-22-6 0-8 20 0 20 6 0 10-10 14-18 2 10 2 18 8 18 8 0 16-26 26-26",
-  "M60 74c40-6 90-10 140-8",
-];
-
-const SECTIONS = ["Salam pembuka", "Tentang kami", "Pesan Kaprodi", "Penutup"];
+const external = (href) => (/^https?:/.test(href) ? { target: "_blank", rel: "noopener noreferrer" } : {});
 
 /**
  * Surat editorial dua kolom. Kiri (sticky di lg): potret kecil, progress baca, tombol profil.
  * Kanan: banner pengumuman, drop cap, paragraf, pull quote yang "menyala" kata demi kata saat di-scroll,
- * penutup dengan tanda tangan tergambar.
+ * penutup dengan tanda tangan tergambar. Semua teks dari CMS (bab "Surat").
  */
-export function Letter({ data }) {
+export function Letter({ content }) {
+  const { person: p, letter: l, signature } = content;
   const ref = useRef(null);
   const quote = useRef(null);
   const sign = useRef(null);
   const openProfile = useProfileModal();
+  const sigKey = JSON.stringify(signature);
 
   useEffect(() => {
     const el = ref.current;
@@ -40,7 +35,7 @@ export function Letter({ data }) {
         { scaleY: 0 },
         { scaleY: 1, ease: "none", scrollTrigger: { trigger: "[data-article]", start: "top 60%", end: "bottom 70%", scrub: 0.4 } }
       );
-      if (reduce) return;
+      if (reduce || !quote.current) return;
       gsap.fromTo(
         quote.current.querySelectorAll("[data-w]"),
         { opacity: 0.16 },
@@ -48,33 +43,45 @@ export function Letter({ data }) {
       );
     }, el);
 
-    // tanda tangan: sembunyikan lewat dash, lalu gambar saat terlihat
     let anim;
-    const paths = reduce ? [] : [...(sign.current?.querySelectorAll("path") ?? [])];
-    paths.forEach((p) => {
-      const len = p.getTotalLength();
-      p.style.strokeDasharray = `${len}`;
-      p.style.strokeDashoffset = `${len}`;
-    });
-    const st = paths.length
-      ? ScrollTrigger.create({
-          trigger: sign.current,
-          start: "top 88%",
-          once: true,
-          onEnter: () => {
-            anim = animate(paths, { strokeDashoffset: 0, duration: 1400, delay: (_, i) => i * 380, ease: "inOutQuad" });
-          },
-        })
-      : null;
+    const st =
+      !reduce && sign.current
+        ? ScrollTrigger.create({
+            trigger: sign.current,
+            start: "top 88%",
+            once: true,
+            onEnter: () => {
+              anim = drawSignature(animate, sign.current);
+            },
+          })
+        : null;
+    if (st) hideSignature(sign.current); // goresan tersembunyi sampai terlihat
     return () => {
       ctx.revert();
       st?.kill();
       anim?.revert?.();
     };
-  }, []);
+  }, [l.quote, l.quoteAfter, sigKey]);
 
-  const [first, ...rest] = data.paragraphs;
-  const mid = Math.ceil(rest.length / 2);
+  const paragraphs = l.paragraphs ?? [];
+  const cut = Math.min(Math.max(l.quoteAfter ?? 0, 0), paragraphs.length);
+  const before = paragraphs.slice(0, cut);
+  const after = paragraphs.slice(cut);
+  const b = l.banner;
+
+  const para = (text, i, dropCap) => (
+    <p
+      key={i}
+      data-aos="fade-up"
+      className={
+        dropCap
+          ? "first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:font-serif first-letter:text-[4.2rem] first-letter:leading-[0.85] first-letter:text-maroon"
+          : undefined
+      }
+    >
+      {text}
+    </p>
+  );
 
   return (
     <section id="surat" ref={ref} className="scroll-mt-24 border-t border-line bg-white py-16 md:py-24">
@@ -83,108 +90,94 @@ export function Letter({ data }) {
           <aside className="lg:sticky lg:top-28 lg:self-start">
             <div className="flex items-center gap-4 lg:flex-col lg:items-start">
               <div className="relative size-16 shrink-0 overflow-hidden rounded-md bg-cream-2 lg:size-20">
-                <Image src={data.photo} alt="" fill sizes="80px" className="object-cover object-top" />
+                <Image src={p.photo} alt="" fill sizes="80px" className="object-cover object-top" />
               </div>
             </div>
 
-            <div className="mt-8 hidden gap-4 lg:flex">
-              <span className="relative block h-40 w-[2px] overflow-hidden rounded-full bg-line">
-                <span data-progress className="absolute inset-0 origin-top bg-gold" />
-              </span>
-              <ol className="flex flex-col justify-between py-1 text-[13px] text-text/55">
-                {SECTIONS.map((s) => (
-                  <li key={s}>{s}</li>
-                ))}
-              </ol>
-            </div>
+            {l.progressLabels?.length > 0 && (
+              <div className="mt-8 hidden gap-4 lg:flex">
+                <span className="relative block h-40 w-[2px] overflow-hidden rounded-full bg-line">
+                  <span data-progress className="absolute inset-0 origin-top bg-gold" />
+                </span>
+                <ol className="flex flex-col justify-between py-1 text-[13px] text-text/55">
+                  {l.progressLabels.map((s, i) => (
+                    <li key={i}>{s}</li>
+                  ))}
+                </ol>
+              </div>
+            )}
 
-            <div className="mt-8 flex flex-wrap gap-2">
-              <button
-                type="button"
-                onClick={openProfile}
-                className="profile-btn inline-flex h-10 items-center gap-2 rounded-md bg-navy px-4 text-sm font-semibold text-white transition-[background-color,transform] duration-300 hover:bg-navy-deep active:scale-[0.98]"
-              >
-                <LordIcon name="account" size={20} target=".profile-btn" colors="primary:#ffffff,secondary:#e0c56a" />
-                Profil
-              </button>
-            </div>
+            {l.profileButtonLabel && (
+              <div className="mt-8 flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={openProfile}
+                  className="profile-btn inline-flex h-10 items-center gap-2 rounded-md bg-navy px-4 text-sm font-semibold text-white transition-[background-color,transform] duration-300 hover:bg-navy-deep active:scale-[0.98]"
+                >
+                  <LordIcon name="account" size={20} target=".profile-btn" colors="primary:#ffffff,secondary:#e0c56a" />
+                  {l.profileButtonLabel}
+                </button>
+              </div>
+            )}
           </aside>
 
           <article data-article className="min-w-0 max-w-[68ch]">
-            <Banner
-              variant="brand"
-              dismissible
-              title="Pendaftaran mahasiswa baru telah dibuka"
-              action={
-                <ArrowLink href={PMB_URL} tone="dark" target="_blank" rel="noopener noreferrer" className="hidden sm:inline-flex">
-                  Daftar
-                </ArrowLink>
-              }
-              className="mb-12"
-            >
-              Bergabunglah bersama Sisforians angkatan berikutnya.
-            </Banner>
-
-            <p data-aos="fade-up" className="font-serif text-[1.45rem] italic leading-snug text-maroon">
-              {data.greeting}
-            </p>
-
-            <div className="mt-8 space-y-6 text-[17.5px] leading-[1.8] text-text/80">
-              <p
-                data-aos="fade-up"
-                className="first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:font-serif first-letter:text-[4.2rem] first-letter:leading-[0.85] first-letter:text-maroon"
+            {b.show && b.title && (
+              <Banner
+                variant={b.variant}
+                dismissible
+                title={b.title}
+                action={
+                  b.href && b.linkLabel ? (
+                    <ArrowLink href={b.href} tone={b.variant === "brand" ? "dark" : "light"} {...external(b.href)} className="hidden sm:inline-flex">
+                      {b.linkLabel}
+                    </ArrowLink>
+                  ) : null
+                }
+                className="mb-12"
               >
-                {first}
-              </p>
-              {rest.slice(0, mid).map((p, i) => (
-                <p key={i} data-aos="fade-up">
-                  {p}
-                </p>
-              ))}
-            </div>
+                {b.body || null}
+              </Banner>
+            )}
 
-            <figure ref={quote} className="relative my-14 border-y border-line py-12 md:my-16 md:py-14">
-              <span aria-hidden className="absolute -top-7 left-0 bg-white pr-4 font-serif text-[5.5rem] leading-none text-gold">
-                &ldquo;
-              </span>
-              <blockquote className="font-serif text-[clamp(1.6rem,3vw,2.35rem)] leading-[1.25] text-navy">
-                {data.quote.split(" ").map((w, i) => (
-                  <span key={i} data-w>
-                    {w}{" "}
-                  </span>
-                ))}
-              </blockquote>
-            </figure>
-
-            <div className="space-y-6 text-[17.5px] leading-[1.8] text-text/80">
-              {rest.slice(mid).map((p, i) => (
-                <p key={i} data-aos="fade-up">
-                  {p}
-                </p>
-              ))}
-              <p data-aos="fade-up" className="font-serif text-[1.2rem] italic text-maroon">
-                {data.closing}
+            {l.greeting && (
+              <p data-aos="fade-up" className="font-serif text-[1.45rem] italic leading-snug text-maroon">
+                {l.greeting}
               </p>
+            )}
+
+            {before.length > 0 && <div className="mt-8 space-y-6 text-[17.5px] leading-[1.8] text-text/80">{before.map((t, i) => para(t, i, i === 0))}</div>}
+
+            {l.quote && (
+              <figure ref={quote} className="relative my-14 border-y border-line py-12 md:my-16 md:py-14">
+                <span aria-hidden className="absolute -top-7 left-0 bg-white pr-4 font-serif text-[5.5rem] leading-none text-gold">
+                  &ldquo;
+                </span>
+                <blockquote className="font-serif text-[clamp(1.6rem,3vw,2.35rem)] leading-[1.25] text-navy">
+                  {l.quote.split(" ").map((w, i) => (
+                    <span key={i} data-w>
+                      {w}{" "}
+                    </span>
+                  ))}
+                </blockquote>
+              </figure>
+            )}
+
+            <div className={`space-y-6 text-[17.5px] leading-[1.8] text-text/80 ${!l.quote && before.length ? "mt-6" : ""}`}>
+              {after.map((t, i) => para(t, cut + i, cut === 0 && i === 0))}
+              {l.closing && (
+                <p data-aos="fade-up" className="font-serif text-[1.2rem] italic text-maroon">
+                  {l.closing}
+                </p>
+              )}
             </div>
 
             <footer className="mt-12">
-              <p className="text-sm text-text/60">Salam hangat,</p>
-              <svg ref={sign} viewBox="0 0 210 84" aria-hidden className="mt-2 h-20 w-auto text-navy">
-                {SIGNATURE.map((d, i) => (
-                  <path
-                    key={i}
-                    d={d}
-                    fill="none"
-                    stroke={i === 2 ? "var(--gold)" : "currentColor"}
-                    strokeWidth={i === 2 ? 1.4 : 2.2}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                ))}
-              </svg>
+              {l.signOff && <p className="text-sm text-text/60">{l.signOff}</p>}
+              <Signature ref={sign} signature={signature} className="mt-2" />
               <p className="mt-2 font-serif text-xl text-navy">
-                {data.name}
-                {data.credentials ? `, ${data.credentials}` : ""}
+                {p.name}
+                {p.credentials ? `, ${p.credentials}` : ""}
               </p>
             </footer>
           </article>

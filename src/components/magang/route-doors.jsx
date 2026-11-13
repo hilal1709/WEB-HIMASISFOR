@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useLayoutEffect as useEffect, useRef } from "react";
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { A11y, Keyboard } from "swiper/modules";
@@ -60,7 +60,7 @@ export function RouteDoors() {
   const r = routes[route];
 
   return (
-    <section id="pintu" className="relative scroll-mt-24 bg-white py-20 md:py-28">
+    <section id="pintu" className="relative scroll-mt-24 bg-white py-20 md:py-20">
       <Container>
         <SectionHeader
           title={["Pilih pintu", "yang paling pas"]}

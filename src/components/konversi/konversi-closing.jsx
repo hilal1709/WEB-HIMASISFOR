@@ -51,11 +51,10 @@ export function KonversiClosing() {
   ];
 
   return (
-    <section className="relative border-t border-line bg-cream pb-20 pt-16 md:pb-24 md:pt-20 lg:pt-24">
+    <section className="relative border-t border-line bg-cream pb-20 pt-16 md:pb-20 md:pt-20 lg:pt-20">
       <Container className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
         <div className="relative overflow-hidden rounded-xl bg-maroon p-7 text-white sm:p-9">
           <LottieIllustration src="/lottie/credit-swap-dark.json" className="pointer-events-none absolute -right-6 -top-6 hidden size-44 opacity-90 sm:block" />
-          <span aria-hidden className="mb-5 block h-[3px] w-10 bg-gold" />
           <SceneTitle tone="dark" title={["Bawa strukmu", "ke koordinator"]} className="max-w-[14ch]" />
           <p className="mt-4 max-w-md text-pretty text-[15.5px] leading-relaxed text-white/75">
             {credits > 0

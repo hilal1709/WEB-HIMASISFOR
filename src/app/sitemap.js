@@ -1,6 +1,9 @@
-export default function sitemap() {
+import { getWarta } from '@/lib/berita-server';
+
+export default async function sitemap() {
   const baseUrl = 'https://sisfor.uisi.ac.id';
   
+  const { posts } = await getWarta();
   return [
     {
       url: baseUrl,
@@ -31,6 +34,18 @@ export default function sitemap() {
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.6,
+    },
+    {
+      url: `${baseUrl}/kontak`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/faq`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.7,
     },
     {
       url: `${baseUrl}/bidang-keahlian`,
@@ -93,10 +108,34 @@ export default function sitemap() {
       priority: 0.7,
     },
     {
+      url: `${baseUrl}/beasiswa`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/layanan-akademik`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
       url: `${baseUrl}/achievement`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.7,
     },
+    {
+      url: `${baseUrl}/berita`,
+      lastModified: posts[0] ? new Date(posts[0].publishedAt) : new Date(),
+      changeFrequency: 'daily',
+      priority: 0.8,
+    },
+    ...posts.map((p) => ({
+      url: `${baseUrl}/berita/${p.slug}`,
+      lastModified: new Date(p.publishedAt),
+      changeFrequency: 'monthly',
+      priority: 0.6,
+    })),
   ];
 }

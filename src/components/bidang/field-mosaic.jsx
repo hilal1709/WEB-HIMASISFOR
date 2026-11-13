@@ -39,7 +39,7 @@ function sideOf(e, el) {
 export function FieldMosaic() {
   const { fields } = useBidang();
   return (
-    <section id="bidang" className="relative scroll-mt-24 bg-cream-2/60 py-16 md:py-24">
+    <section id="bidang" className="relative scroll-mt-24 bg-cream-2/60 py-16 md:py-20">
       <Container>
         <SectionHeader
           title={["Pilih pertanyaan", "yang ingin", "kamu jawab"]}

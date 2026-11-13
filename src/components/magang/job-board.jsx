@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useLayoutEffect as useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { motion } from "motion/react";
 import { gsap, Flip } from "@/lib/scroll";
 import { prefersReducedMotion } from "@/lib/motion";
@@ -161,7 +161,7 @@ export function JobBoard() {
   const active = filter.field !== "all" || filter.mode !== "all" || filter.program !== "all" || filter.q;
 
   return (
-    <section id="lowongan" className="scroll-mt-20 py-20 md:py-28">
+    <section id="lowongan" className="scroll-mt-20 py-20 md:py-20">
       <Container>
         <SectionHeader
           title={["Posisi yang", "sedang dibuka"]}

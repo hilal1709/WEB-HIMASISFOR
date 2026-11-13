@@ -22,7 +22,7 @@ export function Roadmap({ milestones }) {
   };
 
   return (
-    <section className="overflow-hidden bg-white py-16 md:py-24">
+    <section className="overflow-hidden bg-white py-16 md:py-20">
       <Container>
         <SectionHeader
           title={["Perjalanan", "menuju 2030"]}

@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useLayoutEffect as useEffect, useMemo, useRef, useState } from "react";
 import { animate } from "animejs";
 import { gsap, ScrollTrigger } from "@/lib/scroll";
 import { prefersReducedMotion } from "@/lib/motion";

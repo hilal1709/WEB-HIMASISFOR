@@ -29,7 +29,7 @@ export default function JumbotronPromo() {
 
   // Move useMemo hooks before early return to maintain hook order
   const buttonText = useMemo(() => promoData?.data?.buttonText || "Mari Bergabung", [promoData?.data?.buttonText]);
-  const buttonUrl = useMemo(() => promoData?.data?.buttonUrl || "https://s.id/DaftarSisforUISI", [promoData?.data?.buttonUrl]);
+  const buttonUrl = useMemo(() => promoData?.data?.buttonUrl || "https://pmb.uisi.ac.id/prosedur", [promoData?.data?.buttonUrl]);
 
   if (loading || !promoData) {
     return (

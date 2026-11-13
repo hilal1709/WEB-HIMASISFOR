@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useLayoutEffect as useEffect, useRef, useState } from "react";
 import { animate, stagger, svg, utils } from "animejs";
 import { prefersReducedMotion } from "@/lib/motion";
 import { Container, PlaceholderTag, SectionHeader } from "@/components/home/shared";
@@ -63,7 +63,7 @@ export function CompareTable() {
   const cols = "grid-cols-[150px_repeat(3,minmax(150px,1fr))] md:grid-cols-[1.1fr_repeat(3,1fr)]";
 
   return (
-    <section id="banding" className="scroll-mt-24 py-16 md:py-24">
+    <section id="banding" className="scroll-mt-24 py-16 md:py-20">
       <Container>
         <SectionHeader
           title={["Bandingkan", "berdampingan"]}

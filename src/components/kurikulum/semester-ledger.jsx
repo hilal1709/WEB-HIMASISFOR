@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useLayoutEffect as useEffect, useRef } from "react";
 import { animate } from "animejs";
 import { gsap } from "@/lib/scroll";
 import { prefersReducedMotion } from "@/lib/motion";
@@ -56,7 +56,7 @@ export function SemesterLedger() {
   };
 
   return (
-    <section id="semester" className="relative scroll-mt-24 bg-cream py-16 md:py-24">
+    <section id="semester" className="relative scroll-mt-24 bg-cream py-16 md:py-20">
       <Container>
         <div
           className="grid gap-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-16"
@@ -67,7 +67,6 @@ export function SemesterLedger() {
         >
           {/* kolom angka */}
           <div className="lg:sticky lg:top-28 lg:self-start">
-            <span aria-hidden className="mb-5 block h-[3px] w-10 bg-gold" />
             <SceneTitle title={["Buku", "semester"]} size="sm" />
             <div className="mt-6 flex items-end gap-5">
               <div className="overflow-hidden">

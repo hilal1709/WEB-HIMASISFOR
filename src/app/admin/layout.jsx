@@ -63,7 +63,7 @@ export default function AdminLayout({ children }) {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-zinc-100">
+      <div className="min-h-screen flex items-center justify-center bg-cream">
         <BrandLoader label="Memuat CMS…" />
       </div>
     )
@@ -75,6 +75,8 @@ export default function AdminLayout({ children }) {
 
   const menuItems = [
     { href: '/admin/dashboard', label: 'Dashboard' },
+    { href: '/admin/layanan', label: 'Kotak Masuk Layanan' },
+    { href: '/admin/warta', label: 'Warta (Berita & Agenda)' },
     { href: '/admin/content', label: 'Konten Web Utama' },
     { href: '/admin/profile-content', label: 'Konten Halaman Profil' },
     { href: '/admin/curriculum', label: 'Kelola Kurikulum' },
@@ -88,7 +90,7 @@ export default function AdminLayout({ children }) {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-50">
+    <div className="min-h-screen bg-cream text-text">
       {/* Mobile Overlay */}
       {mobileMenuOpen && (
         <div 
@@ -98,21 +100,21 @@ export default function AdminLayout({ children }) {
       )}
 
       {/* Sidebar - Desktop */}
-      <aside className={`fixed top-0 left-0 h-full bg-white shadow-lg transition-all duration-300 z-50 hidden lg:block ${sidebarOpen ? 'w-64' : 'w-20'}`}>
-        <div className="p-6 border-b border-zinc-200">
+      <aside className={`fixed top-0 left-0 h-full bg-maroon-deep text-cream shadow-[0_0_60px_-20px_rgb(26_6_7/0.6)] transition-all duration-300 z-50 hidden lg:block ${sidebarOpen ? 'w-64' : 'w-20'}`}>
+        <div className="p-6 border-b border-white/10">
           <div className="flex items-center justify-between">
             {sidebarOpen ? (
               <>
                 <div>
-                  <h2 className="font-bold text-xl text-red-600">CMS Admin</h2>
-                  <p className="text-xs text-zinc-500 mt-1">Sistem Informasi</p>
+                  <h2 className="font-serif text-2xl text-gold-soft">CMS Admin</h2>
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-cream/55 mt-1">Sistem Informasi</p>
                 </div>
-                <button onClick={() => setSidebarOpen(false)} className="text-zinc-400 hover:text-zinc-600 text-2xl">
+                <button onClick={() => setSidebarOpen(false)} className="text-cream/50 hover:text-cream text-2xl">
                   ‹
                 </button>
               </>
             ) : (
-              <button onClick={() => setSidebarOpen(true)} className="text-zinc-400 hover:text-zinc-600 mx-auto text-2xl">
+              <button onClick={() => setSidebarOpen(true)} className="text-cream/50 hover:text-cream mx-auto text-2xl">
                 ›
               </button>
             )}
@@ -126,8 +128,8 @@ export default function AdminLayout({ children }) {
               href={item.href}
               className={`flex items-center gap-3 px-4 py-3 rounded-lg mb-2 transition ${
                 pathname === item.href
-                  ? 'bg-red-50 text-red-600 font-semibold'
-                  : 'text-zinc-600 hover:bg-zinc-100'
+                  ? 'bg-white/10 text-white font-semibold shadow-[inset_3px_0_0_var(--gold)]'
+                  : 'text-cream/70 hover:bg-white/5 hover:text-cream'
               } ${!sidebarOpen ? 'justify-center' : ''}`}
               title={!sidebarOpen ? item.label : ''}
             >
@@ -137,10 +139,10 @@ export default function AdminLayout({ children }) {
           ))}
         </nav>
 
-        <div className="absolute bottom-0 w-full p-4 border-t border-zinc-200">
+        <div className="absolute bottom-0 w-full p-4 border-t border-white/10">
           <Link
             href="/"
-            className={`flex items-center gap-3 px-4 py-3 rounded-lg mb-2 text-zinc-600 hover:bg-zinc-100 transition ${!sidebarOpen ? 'justify-center' : ''}`}
+            className={`flex items-center gap-3 px-4 py-3 rounded-lg mb-2 text-cream/70 hover:bg-white/5 hover:text-cream transition ${!sidebarOpen ? 'justify-center' : ''}`}
             title={!sidebarOpen ? 'Lihat Website' : ''}
           >
             {sidebarOpen && <span className="text-sm">Lihat Website</span>}
@@ -148,7 +150,7 @@ export default function AdminLayout({ children }) {
           </Link>
           <button
             onClick={handleLogout}
-            className={`flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 transition w-full ${!sidebarOpen ? 'justify-center' : ''}`}
+            className={`flex items-center gap-3 px-4 py-3 rounded-lg text-cream/70 hover:bg-white/5 hover:text-gold-soft transition w-full ${!sidebarOpen ? 'justify-center' : ''}`}
             title={!sidebarOpen ? 'Logout' : ''}
           >
             {sidebarOpen && <span className="text-sm">Logout</span>}
@@ -158,14 +160,14 @@ export default function AdminLayout({ children }) {
       </aside>
 
       {/* Sidebar - Mobile */}
-      <aside className={`fixed top-0 left-0 h-full bg-white shadow-lg transition-transform duration-300 z-50 lg:hidden w-64 ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-        <div className="p-6 border-b border-zinc-200">
+      <aside className={`fixed top-0 left-0 h-full bg-maroon-deep text-cream shadow-[0_0_60px_-20px_rgb(26_6_7/0.6)] transition-transform duration-300 z-50 lg:hidden w-64 ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+        <div className="p-6 border-b border-white/10">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="font-bold text-xl text-red-600">CMS Admin</h2>
-              <p className="text-xs text-zinc-500 mt-1">Sistem Informasi</p>
+              <h2 className="font-serif text-2xl text-gold-soft">CMS Admin</h2>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-cream/55 mt-1">Sistem Informasi</p>
             </div>
-            <button onClick={closeMobileMenu} className="text-zinc-400 hover:text-zinc-600 text-2xl">
+            <button onClick={closeMobileMenu} className="text-cream/50 hover:text-cream text-2xl">
               ×
             </button>
           </div>
@@ -179,8 +181,8 @@ export default function AdminLayout({ children }) {
               onClick={closeMobileMenu}
               className={`flex items-center gap-3 px-4 py-3 rounded-lg mb-2 transition ${
                 pathname === item.href
-                  ? 'bg-red-50 text-red-600 font-semibold'
-                  : 'text-zinc-600 hover:bg-zinc-100'
+                  ? 'bg-white/10 text-white font-semibold shadow-[inset_3px_0_0_var(--gold)]'
+                  : 'text-cream/70 hover:bg-white/5 hover:text-cream'
               }`}
             >
               <span className="text-sm">{item.label}</span>
@@ -188,17 +190,17 @@ export default function AdminLayout({ children }) {
           ))}
         </nav>
 
-        <div className="absolute bottom-0 w-full p-4 border-t border-zinc-200">
+        <div className="absolute bottom-0 w-full p-4 border-t border-white/10">
           <Link
             href="/"
             onClick={closeMobileMenu}
-            className="flex items-center gap-3 px-4 py-3 rounded-lg mb-2 text-zinc-600 hover:bg-zinc-100 transition"
+            className="flex items-center gap-3 px-4 py-3 rounded-lg mb-2 text-cream/70 hover:bg-white/5 hover:text-cream transition"
           >
             <span className="text-sm">Lihat Website</span>
           </Link>
           <button
             onClick={handleLogout}
-            className="flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 transition w-full"
+            className="flex items-center gap-3 px-4 py-3 rounded-lg text-cream/70 hover:bg-white/5 hover:text-gold-soft transition w-full"
           >
             <span className="text-sm">Logout</span>
           </button>
@@ -208,28 +210,29 @@ export default function AdminLayout({ children }) {
       {/* Main Content */}
       <div className={`transition-all duration-300 lg:ml-20 ${sidebarOpen ? 'lg:ml-64' : 'lg:ml-20'}`}>
         {/* Header */}
-        <header className="bg-white shadow-sm border-b border-zinc-200 sticky top-0 z-30">
+        <header className="relative bg-cream/90 backdrop-blur-md border-b border-navy/10 sticky top-0 z-30">
+          <span aria-hidden className="absolute inset-x-0 top-0 h-[3px] bg-maroon" />
           <div className="px-4 lg:px-6 py-4 flex justify-between items-center">
             {/* Mobile Menu Button */}
             <button 
               onClick={() => setMobileMenuOpen(true)}
-              className="lg:hidden text-zinc-600 hover:text-zinc-800 mr-3"
+              className="lg:hidden text-navy hover:text-maroon mr-3"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </button>
 
-            <h1 className="text-lg lg:text-2xl font-bold text-zinc-800 truncate">
+            <h1 className="font-serif text-xl lg:text-[1.75rem] leading-none text-navy truncate">
               {menuItems.find(item => item.href === pathname)?.label || 'Dashboard'}
             </h1>
             
             <div className="flex items-center gap-2 lg:gap-4">
               <div className="text-right hidden sm:block">
-                <p className="text-xs lg:text-sm font-semibold text-zinc-800">{session.name}</p>
-                <p className="text-xs text-zinc-500">{session.email}</p>
+                <p className="text-xs lg:text-sm font-semibold text-navy">{session.name}</p>
+                <p className="text-xs text-text/55">{session.email}</p>
               </div>
-              <div className="w-8 h-8 lg:w-10 lg:h-10 rounded-full bg-red-100 flex items-center justify-center text-red-600 font-semibold text-sm lg:text-base">
+              <div className="w-8 h-8 lg:w-10 lg:h-10 rounded-full bg-gold-soft flex items-center justify-center text-maroon font-serif text-sm lg:text-base">
                 {session.name?.charAt(0).toUpperCase()}
               </div>
             </div>

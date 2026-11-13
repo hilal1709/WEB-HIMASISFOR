@@ -1,5 +1,5 @@
 "use client";
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useCallback, useContext, useLayoutEffect as useEffect, useMemo, useState } from "react";
 import { READY_KEY } from "@/lib/jalur-kelulusan-content";
 import { prefersReducedMotion } from "@/lib/motion";
 import { StageModal } from "./stage-modal";

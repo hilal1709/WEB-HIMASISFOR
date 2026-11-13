@@ -1,27 +1,27 @@
 # Graph Report - Web Sisfor  (2026-11-12)
 
 ## Corpus Check
-- 449 files · ~2,301,694 words
+- 471 files · ~2,317,068 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 9 file(s) not represented in the graph (top: (none) 3, .css 3, .cmd 1)
 
 ## Summary
-- 2894 nodes · 7895 edges · 148 communities (120 shown, 28 thin omitted)
-- Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 219 edges (avg confidence: 0.89)
+- 3008 nodes · 8354 edges · 156 communities (131 shown, 25 thin omitted)
+- Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 236 edges (avg confidence: 0.9)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `487b3734`
+- Built from commit: `761803b0`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - live-browser.js
 - modern-screenshot.umd.js
-- magang/page.jsx
-- bidang-keahlian/page.jsx
+- aos-provider.jsx
+- bidang-keahlian-content.js
 - [slug]/page.jsx
-- magang-content.js
+- prefersReducedMotion
 - shared.jsx
 - 🚀 Panduan Deploy ke Vercel dengan Database
 - package.json
@@ -29,16 +29,16 @@
 - What You Must Do When Invoked
 - CMS Kurikulum - Dokumentasi
 - Ringkasan Optimasi yang Telah Dilakukan
-- rule-simulator.jsx
+- regulasi-content.js
 - live.md
 - new-work.md
 - onboard.md
-- study-map.jsx
+- rps-drawer.jsx
 - The Toolkit
 - job-board.jsx
-- next
+- modal.jsx
 - Simplify the Design
-- prefersReducedMotion
+- program-kelas/page.jsx
 - polish.md
 - Responsive Design
 - createLiveBrowserSessionState
@@ -53,15 +53,15 @@
 - Handle `generate`
 - scripts
 - Generate Report
-- jalur-kelulusan/page.jsx
+- home-content.js
 - optimize.md
 - cn
 - el
-- colorize.md
-- profil-lulusan/page.jsx
+- design-system/page.jsx
+- profil-lulusan-content.js
 - eslint.config.mjs
 - site-header.jsx
-- program-kelas/page.jsx
+- program-kelas-content.js
 - build.py
 - @prisma/client
 - critique.md
@@ -71,11 +71,11 @@
 - injectSvelteComponentsFromManifest
 - clarify.md
 - Nielsen's 10 Heuristics
-- document.md
+- dosen-hero.jsx
 - Scan mode (approach C: auto-extract, then confirm descriptive language)
 - quieter.md
 - Testimoni.jsx
-- curriculum/page.jsx
+- bootcamp/page.jsx
 - Web Sisfor - Next.js dengan PostgreSQL
 - Extract Flow
 - dependencies
@@ -93,14 +93,14 @@
 - onAnnotDown
 - react
 - Android platform
-- prestasi-provider.jsx
+- struktur-organisasi/page.jsx
 - Persona-Based Design Testing
 - actOnAgentTarget
-- Operate mode depth (and Read notes)
+- bidang-keahlian/page.jsx
 - route-story.jsx
-- Generate Report
+- magang-content.js
 - Cognitive Load Assessment
-- downloadIcs
+- Impeccable Asset Producer
 - Impeccable Manual Edit Applier
 - impeccable
 - live-browser-ignores.js
@@ -112,22 +112,26 @@
 - Visualize: Direction Comps & Asset Production
 - resumeSession
 - app/page.jsx
-- story.jsx
+- prestasi-content.js
 - 20260205020326_init/migration.sql
-- aos-provider.jsx
-- field-mosaic.jsx
-- adapt.md
-- exchange-desk.jsx
-- line-illustrations.jsx
+- job-modal.jsx
+- interest-radar.jsx
+- document.md
+- useToast
+- bootcamp-content.js
+- road-hero.jsx
 - WEB-HIMASISFOR
 - charts.jsx
 - graphify reference: add a URL and watch a folder
 - graphify reference: commit hook and native CLAUDE.md integration
 - graphify reference: incremental update and cluster-only
 - Heuristics Scoring Guide
-- Beranda Kampus v3 (2026-11 — menggantikan Premium v2)
-- motion.js
+- line-illustrations.jsx
+- useBootcamp
+- Hardening Dimensions
+- bootcamp-provider.jsx
 - KnowledgeImg.jsx
+- cover-art.jsx
 - build
 - graphify reference: GitHub clone and cross-repo merge
 - graphify reference: transcribe video and audio
@@ -143,49 +147,56 @@
 - 20260205062108_add_navbar_items/migration.sql
 - New visual work
 - { GET, POST }
+- doctor.md
 - devDependencies
-- PageLoader
+- loader.jsx
 - Beranda — si.uisi.ac.id
-- jalur-kelulusan-content.js
-- useToast
+- jalur-kelulusan/page.jsx
+- motion.js
+- Beranda Kampus v3 (2026-11 — menggantikan Premium v2)
+- sambutan-kaprodi/page.jsx
 - Impeccable Finish Reviewer
+- Halaman Bootcamp & Course (`/bootcamp`, alias `/course`, `/kursus`, `/studi-independen`)
+- bootcamp-hero.jsx
 - bolder.md
 - enableInlineEdit
-- Persuade and Experience
+- partners-marquee.jsx
+- Impeccable Documenter
+- bottom-nav.jsx
 - Design System — Sisfor UISI
+- Halaman Prestasi (`/achievement`, alias `/prestasi`)
 - ref_field_modal
 - prisma.js
-- Operate
 
 ## God Nodes (most connected - your core abstractions)
-1. `cn()` - 278 edges
-2. `react` - 157 edges
-3. `prefersReducedMotion()` - 149 edges
-4. `Container()` - 85 edges
-5. `next` - 76 edges
-6. `PlaceholderTag()` - 63 edges
-7. `LottieIllustration()` - 46 edges
-8. `useToast()` - 44 edges
-9. `SectionHeader()` - 37 edges
-10. `connectSSE()` - 34 edges
+1. `cn()` - 302 edges
+2. `react` - 168 edges
+3. `prefersReducedMotion()` - 162 edges
+4. `Container()` - 92 edges
+5. `next` - 77 edges
+6. `PlaceholderTag()` - 71 edges
+7. `LottieIllustration()` - 51 edges
+8. `useToast()` - 50 edges
+9. `SectionHeader()` - 42 edges
+10. `ElvoPeek()` - 36 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `Step 1: Run the pass` --references--> `path()`  [INFERRED]
   .claude/skills/impeccable/reference/doctor.md → scripts/lottie/build.py
 - `Write the config` --references--> `path()`  [INFERRED]
   .claude/skills/impeccable/reference/live-setup.md → scripts/lottie/build.py
+- `Assemble and review` --references--> `box()`  [INFERRED]
+  .claude/skills/impeccable/reference/component-review.md → src/components/home/road-hero.jsx
+- `Comp-led: the comp is a measured contract` --references--> `box()`  [INFERRED]
+  .claude/skills/impeccable/reference/new-work.md → src/components/home/road-hero.jsx
 - `Halaman Sambutan Kaprodi (`/sambutan-kaprodi`)` --references--> `PlaceholderTag()`  [INFERRED]
   DESIGN.md → src/components/home/shared.jsx
-- `Navigasi (berlaku untuk semua halaman)` --references--> `SiteHeader()`  [INFERRED]
-  DESIGN.md → src/components/home/site-header.jsx
-- `Halaman Profil Lulusan (`/profil-lulusan`)` --references--> `GraduatePathIllustration()`  [INFERRED]
-  DESIGN.md → src/components/illustrations/line-illustrations.jsx
 
 ## Import Cycles
 - 3-file cycle: `src/components/regulasi/doc-modal.jsx -> src/components/regulasi/doc-shelf.jsx -> src/components/regulasi/regulasi-provider.jsx -> src/components/regulasi/doc-modal.jsx`
 - 4-file cycle: `src/components/regulasi/doc-modal.jsx -> src/components/regulasi/doc-shelf.jsx -> src/components/regulasi/regulasi-banner.jsx -> src/components/regulasi/regulasi-provider.jsx -> src/components/regulasi/doc-modal.jsx`
 
-## Communities (148 total, 28 thin omitted)
+## Communities (156 total, 25 thin omitted)
 
 ### Community 0 - "live-browser.js"
 Cohesion: 0.03
@@ -195,25 +206,25 @@ Nodes (136): addManualContextText(), applyGlobalBarLabelState(), applyLiveBarPre
 Cohesion: 0.09
 Nodes (55): ae(), be(), bt(), Ce(), s(), Ct(), de(), dt() (+47 more)
 
-### Community 2 - "magang/page.jsx"
-Cohesion: 0.09
-Nodes (29): getData(), MagangPage(), metadata, revalidate, getData(), metadata, RegulasiAkademikPage(), revalidate (+21 more)
+### Community 2 - "aos-provider.jsx"
+Cohesion: 0.20
+Nodes (8): src_app_globals, bricolage, inter, metadata, notoSerif, AosProvider(), Providers(), ToastProvider()
 
-### Community 3 - "bidang-keahlian/page.jsx"
-Cohesion: 0.12
-Nodes (20): BidangKeahlianPage(), getData(), metadata, revalidate, BidangProvider(), setHash(), AosReady(), AXES (+12 more)
+### Community 3 - "bidang-keahlian-content.js"
+Cohesion: 0.14
+Nodes (17): BidangProvider(), Ctx, setHash(), AXES, BANNER_KEY, BASE, CASE, CURTAIN_KEY (+9 more)
 
 ### Community 4 - "[slug]/page.jsx"
 Cohesion: 0.06
 Nodes (25): Profile(), DynamicPage(), generateMetadata(), getPageData(), renderSection(), CareerSection(), Footer(), InfiniteAlumni() (+17 more)
 
-### Community 5 - "magang-content.js"
-Cohesion: 0.11
-Nodes (22): MagangProvider(), setHash(), BANNER_KEY, CURTAIN_KEY, daysLeft(), DOCS, FIELDS, infoSession() (+14 more)
+### Community 5 - "prefersReducedMotion"
+Cohesion: 0.05
+Nodes (57): Halaman Kurikulum & RPS (`/curiculum`, alias `/kurikulum`), gsap, Price(), Card(), Cylinder(), HeroScene(), WhyScene(), IntroLoader() (+49 more)
 
 ### Community 6 - "shared.jsx"
-Cohesion: 0.06
-Nodes (53): NEXT, WAYS, AboutScene(), LEFT, RIGHT, ElvoPeek(), W, ArrowLink() (+45 more)
+Cohesion: 0.10
+Nodes (35): next, NEXT, WAYS, TABS, ElvoPeek(), W, ArrowLink(), Container() (+27 more)
 
 ### Community 7 - "🚀 Panduan Deploy ke Vercel dengan Database"
 Cohesion: 0.06
@@ -221,7 +232,7 @@ Nodes (32): 1. Push Code ke GitHub, Build Error: "prisma:client" not found, 🌐
 
 ### Community 8 - "package.json"
 Cohesion: 0.08
-Nodes (24): name, private, version, clsx, eslint, eslint-config-next, gsap, @gsap/react (+16 more)
+Nodes (23): name, private, version, clsx, eslint, eslint-config-next, @gsap/react, jose (+15 more)
 
 ### Community 9 - "createLiveBrowserDomHelpers"
 Cohesion: 0.16
@@ -239,45 +250,45 @@ Nodes (27): 1. Kelola Informasi Umum, 2. Kelola Semester, 3. Kelola Mata Kuliah,
 Cohesion: 0.07
 Nodes (26): 1. Google PageSpeed Insights, 1. **Next.js Configuration Optimization**, 2. Chrome DevTools Lighthouse, 2. **Font Loading Optimization**, 3. Chrome DevTools Performance, 3. **Image Optimization**, 4. Bundle Analyzer (Optional), 4. **Code Splitting & Dynamic Imports** (+18 more)
 
-### Community 13 - "rule-simulator.jsx"
-Cohesion: 0.12
-Nodes (22): dec(), Lever(), RollNumber(), RuleSimulator(), BANNER_KEY, byKey(), CHAPTERS, DOCS (+14 more)
+### Community 13 - "regulasi-content.js"
+Cohesion: 0.13
+Nodes (19): dec(), RuleSimulator(), BANNER_KEY, byKey(), CHAPTERS, CURTAIN_KEY, DOCS, fill() (+11 more)
 
 ### Community 14 - "live.md"
-Cohesion: 0.07
-Nodes (26): Step 1: Parse the request, Step 2: Reuse the page, then start, Step 3: Generate, Step 4: Accept and close, Cleanup, Exit, First-time setup, Handle `accept` (+18 more)
+Cohesion: 0.06
+Nodes (33): Apply at system scale, Audit before choosing, Choose a strategy, Contrast and perception, Live-mode signature params, Verify, Visitor mode, Step 1: Parse the request (+25 more)
 
 ### Community 15 - "new-work.md"
 Cohesion: 0.06
-Nodes (29): Recommended Actions, Craft (deprecated alias), Impeccable Documenter, Input Contract, Output Contract, Workflow, Monorepo notes, Opting out of the boot check (+21 more)
+Nodes (31): Audit Health Score, Detailed Findings by Severity, Executive Summary, Generate Report, Patterns & Systemic Issues, Platform Conformance Verdict, Positive Findings, Recommended Actions (+23 more)
 
 ### Community 16 - "onboard.md"
 Cohesion: 0.09
 Nodes (22): Assess Onboarding Needs, Context Over Ceremony, Contextual Help, Design Onboarding Experiences, Documentation & Help, Empty State Design, Feature Discovery & Adoption, Guided Tours & Walkthroughs (+14 more)
 
-### Community 17 - "study-map.jsx"
-Cohesion: 0.16
-Nodes (16): ElectiveTracks(), Ctx, KurikulumProvider(), setHash(), useKurikulum(), RpsDrawer(), RumpunDot(), STYLE (+8 more)
+### Community 17 - "rps-drawer.jsx"
+Cohesion: 0.14
+Nodes (15): LINKS, CourseSearch(), Mark(), norm(), SUGGEST, Ctx, KurikulumProvider(), setHash() (+7 more)
 
 ### Community 18 - "The Toolkit"
 Cohesion: 0.10
 Nodes (20): Animate complex properties, Assess What "Extraordinary" Means Here, For data-heavy interfaces, For functional UI, For performance-critical UI, For visual/marketing surfaces, Implement with Discipline, Interact with the device (+12 more)
 
 ### Community 19 - "job-board.jsx"
-Cohesion: 0.12
-Nodes (28): ApplicationTracker(), colAt(), SPRING, TrackCard(), DocModal(), ChipGroup(), DeadlineChip(), fieldLabel() (+20 more)
+Cohesion: 0.09
+Nodes (34): Halaman Magang (`/magang`, alias `/internship`, `/kerja-praktik`), KonversiBanner(), ApplicationTracker(), colAt(), SPRING, TrackCard(), DocModal(), ChipGroup() (+26 more)
 
-### Community 20 - "next"
-Cohesion: 0.10
-Nodes (33): lucide-react, next, LECTURERS, PlaceholderTag(), VideoCard(), CourseSearch(), Mark(), norm() (+25 more)
+### Community 20 - "modal.jsx"
+Cohesion: 0.13
+Nodes (22): lucide-react, CohortModal(), fmt(), TABS, Ctx, pad(), ProfileModalProvider(), ClassModal() (+14 more)
 
 ### Community 21 - "Simplify the Design"
 Cohesion: 0.17
 Nodes (11): Assess Current State, Code Simplification, Content Simplification, Document Removed Complexity, Information Architecture, Interaction Simplification, Layout Simplification, Plan Simplification (+3 more)
 
-### Community 22 - "prefersReducedMotion"
-Cohesion: 0.07
-Nodes (41): animejs, StatsDemo(), AccreditationScene(), BentoScene(), Tile(), WhyScene(), ILLUSTRATIONS, ScrubField() (+33 more)
+### Community 22 - "program-kelas/page.jsx"
+Cohesion: 0.15
+Nodes (22): metadata, revalidate, ClassSwitcher(), pad(), Panel(), Closing(), CompareTable(), same() (+14 more)
 
 ### Community 23 - "polish.md"
 Cohesion: 0.18
@@ -285,7 +296,7 @@ Nodes (10): 1. Establish the system, 2. Gather the evidence, 3. Triage, 4. Polis
 
 ### Community 24 - "Responsive Design"
 Cohesion: 0.06
-Nodes (30): Breakpoints: Content-Driven, Content Adaptation, Detect Input Method, Not Just Screen Size, Implement Adaptations, Layout Adaptation Patterns, Layout Adaptation Techniques, Mobile-First: Write It Right, Navigation Adaptation (+22 more)
+Nodes (34): Assess Adaptation Challenge, Breakpoints: Content-Driven, Content Adaptation, Desktop Adaptation (Mobile → Desktop), Detect Input Method, Not Just Screen Size, Email Adaptation (Web → Email), Implement Adaptations, Layout Adaptation Patterns (+26 more)
 
 ### Community 25 - "createLiveBrowserSessionState"
 Cohesion: 0.19
@@ -296,7 +307,7 @@ Cohesion: 0.11
 Nodes (17): aliases, components, hooks, lib, ui, utils, iconLibrary, rsc (+9 more)
 
 ### Community 27 - "auth.js"
-Cohesion: 0.23
+Cohesion: 0.19
 Nodes (8): next-auth, auth, authConfig, handlers, signIn, signOut, { auth }, config
 
 ### Community 28 - "connectSSE"
@@ -316,8 +327,8 @@ Cohesion: 0.09
 Nodes (47): applyParamDefaults(), applyParamValue(), buildCyclingRow(), closedClipPath(), closeTunePopover(), commitAcceptedVariantToDom(), completeParameterPublication(), cycleVariant() (+39 more)
 
 ### Community 32 - "archive.jsx"
-Cohesion: 0.19
-Nodes (11): Archive(), Rows(), Segmented(), FeatureCard(), Featured(), pad(), LevelBadge(), usePrestasi() (+3 more)
+Cohesion: 0.09
+Nodes (28): StatsDemo(), AboutScene(), AccreditationScene(), BentoScene(), LECTURERS, Tile(), Eyebrow(), AchieverModal() (+20 more)
 
 ### Community 33 - "animate.md"
 Cohesion: 0.12
@@ -335,45 +346,45 @@ Nodes (7): scripts, build, dev, export, lint, postinstall, start
 Cohesion: 0.13
 Nodes (14): 1. Accessibility (A11y), 2. Performance, 3. Theming, 4. Responsive Design, 5. Implementation Integrity (CRITICAL), Audit Health Score, Detailed Findings by Severity, Diagnostic Scan (+6 more)
 
-### Community 37 - "jalur-kelulusan/page.jsx"
-Cohesion: 0.25
-Nodes (8): getData(), JalurKelulusanPage(), metadata, revalidate, JalurClosing(), JalurProvider(), setHash(), TradeoffCards()
+### Community 37 - "home-content.js"
+Cohesion: 0.08
+Nodes (17): ACH_ICONS, WHY_ICONS, ABOUT, ABOUT_V3, ACCREDITATION, CHAPTERS, ELVO_LINES, HERO_CARDS (+9 more)
 
 ### Community 38 - "optimize.md"
 Cohesion: 0.14
 Nodes (13): Animation Performance, Assess Performance Issues, Core Web Vitals Optimization, Cumulative Layout Shift (CLS < 0.1), Interaction to Next Paint (INP < 200ms), Largest Contentful Paint (LCP < 2.5s), Loading Performance, Network Optimization (+5 more)
 
 ### Community 39 - "cn"
-Cohesion: 0.06
-Nodes (51): class-variance-authority, swiper, LoginPage(), SWATCHES, BackgroundPaths(), MovingBorderButton(), Spotlight(), TiltCard() (+43 more)
+Cohesion: 0.05
+Nodes (59): motion, swiper, BackgroundPaths(), MovingBorderButton(), Spotlight(), TiltCard(), CohortCard(), fmtDate() (+51 more)
 
 ### Community 40 - "el"
 Cohesion: 0.09
 Nodes (46): actionLabel(), applyConfigureBarChrome(), bindConfigureCountPillTooltip(), bindConfigureInlineControlHover(), bindConfigureModifierPillHover(), buildConfigureActionControl(), buildConfigureCountControl(), buildConfigureRow() (+38 more)
 
-### Community 41 - "colorize.md"
-Cohesion: 0.25
-Nodes (7): Apply at system scale, Audit before choosing, Choose a strategy, Contrast and perception, Live-mode signature params, Verify, Visitor mode
+### Community 41 - "design-system/page.jsx"
+Cohesion: 0.14
+Nodes (16): Aturan pakai, class-variance-authority, SWATCHES, Badge(), badgeVariants, Card(), CardContent(), CardDescription() (+8 more)
 
-### Community 42 - "profil-lulusan/page.jsx"
+### Community 42 - "profil-lulusan-content.js"
 Cohesion: 0.20
-Nodes (10): getData(), metadata, ProfilLulusanPage(), revalidate, AlumniCard(), AlumniWall(), initials(), Closing() (+2 more)
+Nodes (11): ALUMNI, CPL, CURTAIN_KEY, FALLBACK_ALUMNI, INTRO, mergeProfilLulusan(), normImg(), parse() (+3 more)
 
 ### Community 43 - "eslint.config.mjs"
 Cohesion: 0.14
 Nodes (8): compat, __dirname, eslintConfig, __filename, @eslint/eslintrc, ref_fs, ref_path, ref_url
 
 ### Community 44 - "site-header.jsx"
-Cohesion: 0.08
-Nodes (33): ArrowUpGlyph(), base, ChevronGlyph(), CloseGlyph(), MenuGlyph(), SOCIAL_ICON, activeMenu(), Mega() (+25 more)
-
-### Community 45 - "program-kelas/page.jsx"
 Cohesion: 0.13
-Nodes (17): getData(), metadata, ProgramKelasPage(), revalidate, KelasProvider(), setHash(), BANNER_KEY, CLASSES (+9 more)
+Nodes (23): ArrowGlyph(), base, ChevronGlyph(), CloseGlyph(), MenuGlyph(), activeMenu(), Mega(), MobileMenu() (+15 more)
+
+### Community 45 - "program-kelas-content.js"
+Cohesion: 0.15
+Nodes (13): getData(), ProgramKelasPage(), BANNER_KEY, CLASSES, COMPARE, DAYS, FAQ, HOURS (+5 more)
 
 ### Community 46 - "build.py"
-Cohesion: 0.13
-Nodes (68): For /graphify add and --watch, For /graphify query, For the commit hook and native CLAUDE.md integration, For --update and --cluster-only, /graphify, Honesty Rules, Interpreter guard for subcommands, PowerShell 5.1: Vertical scrolling stops working (+60 more)
+Cohesion: 0.12
+Nodes (72): For /graphify add and --watch, For /graphify query, For the commit hook and native CLAUDE.md integration, For --update and --cluster-only, /graphify, Honesty Rules, Interpreter guard for subcommands, PowerShell 5.1: Vertical scrolling stops working (+64 more)
 
 ### Community 47 - "@prisma/client"
 Cohesion: 0.06
@@ -389,11 +400,11 @@ Nodes (14): getVisiMisi(), metadata, revalidate, VisiMisiPage(), Closing(), Misi
 
 ### Community 50 - "konversi-content.js"
 Cohesion: 0.14
-Nodes (15): NEWS, BANNER_KEY, CAP, CASES, CURTAIN_KEY, DOCS, INTRO, LIMITS (+7 more)
+Nodes (15): NEWS, BANNER_KEY, CAP, CASES, DOCS, INTRO, LIMITS, mergeKonversi() (+7 more)
 
 ### Community 51 - "dosen/page.jsx"
-Cohesion: 0.07
-Nodes (43): DosenPage(), getData(), metadata, revalidate, Closing(), Directory(), LecturerCard(), pad() (+35 more)
+Cohesion: 0.14
+Nodes (21): DosenPage(), getData(), metadata, revalidate, Closing(), BANNER_KEY, build(), CERTS (+13 more)
 
 ### Community 52 - "injectSvelteComponentsFromManifest"
 Cohesion: 0.06
@@ -407,9 +418,9 @@ Nodes (10): Actions and navigation, Audit the language, Errors and permissions, 
 Cohesion: 0.18
 Nodes (11): 10. Help and Documentation, 1. Visibility of System Status, 2. Match Between System and Real World, 3. User Control and Freedom, 4. Consistency and Standards, 5. Error Prevention, 6. Recognition Rather Than Recall, 7. Flexibility and Efficiency of Use (+3 more)
 
-### Community 55 - "document.md"
-Cohesion: 0.17
-Nodes (11): Pitfalls, Seed mode, Step 1: Route through new-work's workshop, Step 2: Write seed DESIGN.md, Step 3: Confirm, Style guidelines, The frontmatter: token schema, The markdown body: eight sections (canonical order) (+3 more)
+### Community 55 - "dosen-hero.jsx"
+Cohesion: 0.15
+Nodes (18): Directory(), LecturerCard(), pad(), Rows(), ViewToggle(), DosenHero(), smoothTo(), Ctx (+10 more)
 
 ### Community 56 - "Scan mode (approach C: auto-extract, then confirm descriptive language)"
 Cohesion: 0.15
@@ -419,9 +430,9 @@ Nodes (13): Component translation rules, Narrative mapping, Scan mode (approach 
 Cohesion: 0.18
 Nodes (10): Assess Current State, Color Refinement, Composition Refinement, Motion Reduction, Plan Refinement, Refine the Design, Simplification, Verify Quality (+2 more)
 
-### Community 59 - "curriculum/page.jsx"
-Cohesion: 0.27
-Nodes (7): CurriculumManagement(), fetchCurriculum(), defaultElectives(), AdminRpsEditor(), lines(), toGrading(), ELECTIVES
+### Community 59 - "bootcamp/page.jsx"
+Cohesion: 0.15
+Nodes (15): BootcampPage(), getData(), metadata, revalidate, BootcampClosing(), BootcampHero(), smoothTo(), Catalog() (+7 more)
 
 ### Community 60 - "Web Sisfor - Next.js dengan PostgreSQL"
 Cohesion: 0.18
@@ -433,7 +444,7 @@ Nodes (7): Extract Flow, Step 1: Discover the Design System, Step 2: Identify Pa
 
 ### Community 62 - "dependencies"
 Cohesion: 0.06
-Nodes (32): dependencies, animejs, aos, bcryptjs, chart.js, class-variance-authority, clsx, gsap (+24 more)
+Nodes (33): dependencies, animejs, aos, bcryptjs, chart.js, class-variance-authority, clsx, gsap (+25 more)
 
 ### Community 64 - "Init flow"
 Cohesion: 0.20
@@ -452,8 +463,8 @@ Cohesion: 0.20
 Nodes (9): Cara Menambah Galeri di Production, Error yang Sudah Diperbaiki, File Structure, Masalah di Vercel Production, Opsi 1: Upload Manual ke Folder Public (Recommended), Opsi 2: Gunakan External Storage (Future Implementation), Panduan Kelola Galeri Prestasi, Solusi untuk Menambah Galeri (+1 more)
 
 ### Community 68 - "content/page.jsx"
-Cohesion: 0.11
-Nodes (11): ContentManagement(), EMPTY_JOB, KonversiEditor(), MAGANG_DOCS, MAGANG_FIELDS, MAGANG_MODES, MAGANG_PROGRAMS, MagangEditor() (+3 more)
+Cohesion: 0.09
+Nodes (16): BC_FIELDS, BootcampEditor(), ContentManagement(), EMPTY_JOB, KonversiEditor(), MAGANG_DOCS, MAGANG_FIELDS, MAGANG_MODES (+8 more)
 
 ### Community 69 - "graphify reference: extra exports and benchmark"
 Cohesion: 0.22
@@ -468,8 +479,8 @@ Cohesion: 0.22
 Nodes (9): Color & materials, Components & controls, iOS platform, Layout & structure, Motion, The iOS slop test, Touch targets, Typography (+1 more)
 
 ### Community 72 - "impeccable/SKILL.md"
-Cohesion: 0.10
-Nodes (16): Craft floor, Refuse, Verify, Constraints, Failure modes, Flow, /impeccable hooks, Routing (+8 more)
+Cohesion: 0.07
+Nodes (25): Craft floor, Refuse, Verify, Constraints, Failure modes, Flow, /impeccable hooks, Routing (+17 more)
 
 ### Community 73 - "Shape"
 Cohesion: 0.22
@@ -480,16 +491,16 @@ Cohesion: 0.14
 Nodes (22): applyPlaceholderDimensions(), beginEditPin(), buildAnnotationsForCapture(), buildPinElement(), cancelEditingPin(), clampPlaceholderSize(), finalizeEditingPin(), initAnnotOverlay() (+14 more)
 
 ### Community 75 - "react"
-Cohesion: 0.08
-Nodes (15): react, SpotlightCard(), ViewToggle(), PARTS, Minilab(), Conn(), PersonCard(), Avatar() (+7 more)
+Cohesion: 0.07
+Nodes (13): react, Letter(), SECTIONS, SIGNATURE, useProfileModal(), SambutanHero(), Minilab(), Conn() (+5 more)
 
 ### Community 76 - "Android platform"
 Cohesion: 0.25
 Nodes (8): Android platform, Color & theming, Components & motion, Layout & structure, The Android slop test, Touch targets, Typography, Verifying the build
 
-### Community 77 - "prestasi-provider.jsx"
-Cohesion: 0.36
-Nodes (7): AchieverModal(), Ctx, Highlight(), norm(), PAGE, PrestasiProvider(), setHash()
+### Community 77 - "struktur-organisasi/page.jsx"
+Cohesion: 0.14
+Nodes (15): getData(), metadata, revalidate, StrukturOrganisasiPage(), Closing(), Avatar(), Ctx, PersonModalProvider() (+7 more)
 
 ### Community 78 - "Persona-Based Design Testing"
 Cohesion: 0.25
@@ -499,25 +510,25 @@ Nodes (8): 1. Impatient Power User: "Alex", 2. Confused First-Timer: "Jordan", 3
 Cohesion: 0.20
 Nodes (21): actOnAgentTarget(), agentTargetBusyReason(), agentTargetOverlayGone(), agentTargetTaken(), claimAgentTarget(), claimAndActOnAgentTarget(), declineAgentTargetBusy(), declineAgentTargetUnresolvable() (+13 more)
 
-### Community 80 - "Operate mode depth (and Read notes)"
-Cohesion: 0.22
-Nodes (9): Color, Components, Layout, Motion, Operate mode depth (and Read notes), Product constraints, Product permissions, The product slop test (+1 more)
+### Community 80 - "bidang-keahlian/page.jsx"
+Cohesion: 0.08
+Nodes (34): BidangKeahlianPage(), getData(), metadata, revalidate, getData(), KonversiSksPage(), metadata, revalidate (+26 more)
 
 ### Community 81 - "route-story.jsx"
-Cohesion: 0.14
-Nodes (20): @radix-ui/react-dialog, JalurBanner(), Ctx, smoothTo(), useJalur(), EASE, pad(), PathModal() (+12 more)
+Cohesion: 0.16
+Nodes (18): JalurBanner(), JalurClosing(), JalurHero(), Ctx, smoothTo(), useJalur(), EASE, pad() (+10 more)
 
-### Community 82 - "Generate Report"
-Cohesion: 0.29
-Nodes (7): Audit Health Score, Detailed Findings by Severity, Executive Summary, Generate Report, Patterns & Systemic Issues, Platform Conformance Verdict, Positive Findings
+### Community 82 - "magang-content.js"
+Cohesion: 0.13
+Nodes (19): AGENDA, BANNER_KEY, CURTAIN_KEY, DOCS, FIELDS, infoSession(), initials(), INTRO (+11 more)
 
 ### Community 83 - "Cognitive Load Assessment"
 Cohesion: 0.29
 Nodes (7): Cognitive Load Assessment, Cognitive Load Checklist, Extraneous Load: Bad Design, Germane Load: Learning Effort, Intrinsic Load: The Task Itself, The Working Memory Rule, Three Types of Cognitive Load
 
-### Community 84 - "downloadIcs"
-Cohesion: 0.60
-Nodes (4): downloadIcs(), eventDate(), MONTHS, stamp()
+### Community 84 - "Impeccable Asset Producer"
+Cohesion: 0.15
+Nodes (11): Act on the receipt, Assemble and review, Plan and asset review, Plan, capture, serve, Core Rule, Decision Comps, Impeccable Asset Producer, Input Contract (+3 more)
 
 ### Community 85 - "Impeccable Manual Edit Applier"
 Cohesion: 0.29
@@ -532,8 +543,8 @@ Cohesion: 0.52
 Nodes (6): globToRegex(), matchesScope(), normalizeIgnoreRule(), normalizeIgnoreValue(), pageCandidates(), resolveDetectIgnores()
 
 ### Community 88 - "curiculum/page.jsx"
-Cohesion: 0.09
-Nodes (27): getData(), KurikulumPage(), metadata, revalidate, getData(), KonversiSksPage(), metadata, revalidate (+19 more)
+Cohesion: 0.14
+Nodes (19): getData(), KurikulumPage(), metadata, revalidate, Closing(), BANNER_KEY, buildCourse(), COURSE_RUMPUN (+11 more)
 
 ### Community 89 - "Hero.jsx"
 Cohesion: 0.38
@@ -561,35 +572,39 @@ Nodes (49): applySavedSessionMeta(), averageRgb01(), captureAndEmit(), captureEl
 
 ### Community 95 - "app/page.jsx"
 Cohesion: 0.10
-Nodes (23): ref_node_fs, ref_node_path, getData(), metadata, normalizeSrc(), PrestasiPage(), revalidate, getAchievements() (+15 more)
+Nodes (22): ref_node_fs, ref_node_path, getData(), metadata, normalizeSrc(), PrestasiPage(), revalidate, getAchievements() (+14 more)
 
-### Community 96 - "story.jsx"
-Cohesion: 0.05
-Nodes (36): ElvoSays(), ParallaxScene(), ACH_ICONS, WHY_ICONS, ACHIEVEMENTS, ALUMNI, ELVO_LINES, EXPERTISE (+28 more)
+### Community 96 - "prestasi-content.js"
+Cohesion: 0.16
+Nodes (18): ACHIEVEMENTS, BANNER_KEY, build(), CATEGORIES, CURTAIN_KEY, initials(), INTRO, LEVELS (+10 more)
 
 ### Community 97 - "20260205020326_init/migration.sql"
 Cohesion: 0.47
 Nodes (5): "Achievement", "Alumni", Alumni_nim_key, "User", User_email_key
 
-### Community 98 - "aos-provider.jsx"
-Cohesion: 0.18
-Nodes (9): aos, src_app_globals, bricolage, inter, metadata, notoSerif, AosProvider(), Providers() (+1 more)
+### Community 98 - "job-modal.jsx"
+Cohesion: 0.17
+Nodes (14): @radix-ui/react-dialog, EASE, NavBtn(), pad(), StageModal(), EASE, fieldLabel(), JobModal() (+6 more)
 
-### Community 99 - "field-mosaic.jsx"
-Cohesion: 0.13
-Nodes (18): BidangBanner(), BidangHero(), smoothTo(), Ctx, useBidang(), CaseLens(), SURFACE, Body() (+10 more)
+### Community 99 - "interest-radar.jsx"
+Cohesion: 0.10
+Nodes (22): BidangBanner(), BidangHero(), smoothTo(), useBidang(), CaseLens(), SURFACE, Body(), EASE (+14 more)
 
-### Community 100 - "adapt.md"
-Cohesion: 0.11
-Nodes (16): Assess Adaptation Challenge, Desktop Adaptation (Mobile → Desktop), Email Adaptation (Web → Email), Mobile Adaptation (Desktop → Mobile), Adaptation Strategies, Assess Adaptation Challenge, Implement & Verify, Orientation & foldables (+8 more)
+### Community 100 - "document.md"
+Cohesion: 0.17
+Nodes (11): Pitfalls, Seed mode, Step 1: Route through new-work's workshop, Step 2: Write seed DESIGN.md, Step 3: Confirm, Style guidelines, The frontmatter: token schema, The markdown body: eight sections (canonical order) (+3 more)
 
-### Community 101 - "exchange-desk.jsx"
-Cohesion: 0.12
-Nodes (25): motion, SectionHeader(), ClaimStepper(), pad(), StepBody(), CourseModal(), Inputs(), MobileDock() (+17 more)
+### Community 101 - "useToast"
+Cohesion: 0.10
+Nodes (23): CurriculumManagement(), fetchCurriculum(), defaultElectives(), LoginPage(), DesignSystemPage(), CourseModal(), Ctx, TemplateModal() (+15 more)
 
-### Community 103 - "line-illustrations.jsx"
-Cohesion: 0.13
-Nodes (9): accent, CompassQuadrantIllustration(), gearTeeth(), GraduatePathIllustration(), KnowledgeIllustration(), line, node, RulebookIllustration() (+1 more)
+### Community 102 - "bootcamp-content.js"
+Cohesion: 0.15
+Nodes (15): KonversiHero(), pad(), KonversiProvider(), rankCourses(), smoothTo(), BANNER_KEY, COURSES, INTRO (+7 more)
+
+### Community 103 - "road-hero.jsx"
+Cohesion: 0.22
+Nodes (9): Containment, Painted material, Region map, What varies independently, ParallaxScene(), box(), pct(), RoadHero() (+1 more)
 
 ### Community 104 - "WEB-HIMASISFOR"
 Cohesion: 0.40
@@ -615,37 +630,73 @@ Nodes (3): For --cluster-only, For --update (incremental re-extraction), graphif
 Cohesion: 0.50
 Nodes (4): Heuristics Scoring Guide, Issue Severity (P0–P3), Reference Material, Score Summary
 
-### Community 110 - "Beranda Kampus v3 (2026-11 — menggantikan Premium v2)"
-Cohesion: 0.08
-Nodes (28): check(), Beranda Kampus v3 (2026-11 — menggantikan Premium v2), Halaman Bidang Keahlian (`/bidang-keahlian`, alias `/peminatan`), Halaman Dosen (`/dosen`), Halaman Konversi SKS (`/konversi-sks`, alias `/konversi`, `/mbkm`), Halaman Kurikulum & RPS (`/curiculum`, alias `/kurikulum`), Halaman Magang (`/magang`, alias `/internship`, `/kerja-praktik`), Halaman Prestasi (`/achievement`, alias `/prestasi`) (+20 more)
+### Community 110 - "line-illustrations.jsx"
+Cohesion: 0.11
+Nodes (13): accent, ClassPathsIllustration(), CompassQuadrantIllustration(), CurriculumMapIllustration(), gearTeeth(), GraduatePathIllustration(), IndustrySkylineIllustration(), KnowledgeIllustration() (+5 more)
 
-### Community 112 - "motion.js"
-Cohesion: 0.09
-Nodes (27): Halaman Profil Lulusan (`/profil-lulusan`), Card(), Cylinder(), HeroScene(), VideoButton(), IntroLoader(), markDone(), useIntroReady() (+19 more)
+### Community 111 - "useBootcamp"
+Cohesion: 0.20
+Nodes (13): @radix-ui/react-popover, useBootcamp(), CohortSwiper(), Blank(), CourseCard(), CourseGrid(), SentenceFilter(), Popover (+5 more)
+
+### Community 112 - "Hardening Dimensions"
+Cohesion: 0.18
+Nodes (10): Accessibility Resilience, Assess Hardening Needs, Edge Cases & Boundary Conditions, Error Handling, Hardening Dimensions, Input Validation & Sanitization, Internationalization (i18n), Performance Resilience (+2 more)
+
+### Community 113 - "bootcamp-provider.jsx"
+Cohesion: 0.20
+Nodes (9): aos, BootcampBanner(), BootcampProvider(), Ctx, refreshScroll(), CourseModal(), FILTERS, PLAN_KEY (+1 more)
+
+### Community 115 - "cover-art.jsx"
+Cohesion: 0.25
+Nodes (4): ART, CoverArt(), line, seed()
 
 ### Community 116 - "build"
 Cohesion: 0.50
 Nodes (3): build, env, PRISMA_GENERATE_SKIP_AUTOINSTALL
 
 ### Community 129 - "New visual work"
-Cohesion: 0.06
-Nodes (32): Act on the receipt, Assemble and review, Plan and asset review, Plan, capture, serve, Core Rule, Decision Comps, Impeccable Asset Producer, Input Contract (+24 more)
+Cohesion: 0.14
+Nodes (14): 1. Decide what is already true, 2. Ask what will change the work, 3. Choose the right amount of invention, 4. Commit the world, 5. Record the decision, 6. Build with full commitment, 7. Inspect and finish, Both paths (+6 more)
+
+### Community 131 - "doctor.md"
+Cohesion: 0.25
+Nodes (7): Monorepo notes, Opting out of the boot check, Step 1: Run the pass, Step 2: Act by severity, Step 3: Deprecated fields are binding, Step 4: Do not overclaim on truth drift, What this owns, and what it does not
 
 ### Community 132 - "devDependencies"
 Cohesion: 0.33
 Nodes (6): devDependencies, eslint, eslint-config-next, @eslint/eslintrc, tailwindcss, @tailwindcss/postcss
 
-### Community 140 - "jalur-kelulusan-content.js"
-Cohesion: 0.20
-Nodes (11): Halaman Jalur Kelulusan (`/jalur-kelulusan`, alias `/kelulusan`), GraduationForkIllustration(), AGENDA, BANNER_KEY, CURTAIN_KEY, INTRO, mergeJalur(), nextDefense() (+3 more)
+### Community 138 - "loader.jsx"
+Cohesion: 0.08
+Nodes (4): BrandLoader(), LOGO_PATHS, PageLoader(), Spinner()
 
-### Community 141 - "useToast"
+### Community 140 - "jalur-kelulusan/page.jsx"
+Cohesion: 0.17
+Nodes (14): getData(), JalurKelulusanPage(), metadata, revalidate, JalurProvider(), setHash(), BANNER_KEY, CURTAIN_KEY (+6 more)
+
+### Community 141 - "motion.js"
 Cohesion: 0.07
-Nodes (39): Aturan pakai, Halaman Regulasi Akademik (`/regulasi-akademik`, alias `/regulasi`), DesignSystemPage(), angleOf(), InterestRadar(), poly(), pt(), STROKE (+31 more)
+Nodes (35): Halaman Dosen (`/dosen`), Halaman Profil Lulusan (`/profil-lulusan`), Halaman Program Kelas (`/program-kelas`), Halaman Regulasi Akademik (`/regulasi-akademik`, alias `/regulasi`), animejs, SpotlightCard(), PlaceholderTag(), SectionHeader() (+27 more)
+
+### Community 142 - "Beranda Kampus v3 (2026-11 — menggantikan Premium v2)"
+Cohesion: 0.18
+Nodes (11): Beranda Kampus v3 (2026-11 — menggantikan Premium v2), Halaman Sambutan Kaprodi (`/sambutan-kaprodi`), Halaman Visi & Misi (`/visi-misi`), Lottie (Kampus v3), Maskot — Si Elvo (v3), Palet (`globals.css` › KAMPUS v3), Teknis, Tipografi & bentuk (+3 more)
+
+### Community 143 - "sambutan-kaprodi/page.jsx"
+Cohesion: 0.27
+Nodes (8): getSambutan(), metadata, revalidate, SambutanKaprodiPage(), Topbar(), ProfileModalProvider(), mergeSambutan(), SAMBUTAN
 
 ### Community 144 - "Impeccable Finish Reviewer"
 Cohesion: 0.29
 Nodes (6): Checks, in order, Disposition, Impeccable Finish Reviewer, Input Contract, Output Contract, Verdict Pass
+
+### Community 145 - "Halaman Bootcamp & Course (`/bootcamp`, alias `/course`, `/kursus`, `/studi-independen`)"
+Cohesion: 0.25
+Nodes (9): check(), Halaman Bidang Keahlian (`/bidang-keahlian`, alias `/peminatan`), Halaman Bootcamp & Course (`/bootcamp`, alias `/course`, `/kursus`, `/studi-independen`), Halaman Jalur Kelulusan (`/jalur-kelulusan`, alias `/kelulusan`), Halaman Konversi SKS (`/konversi-sks`, alias `/konversi`, `/mbkm`), brand(), CreditExchangeIllustration(), GraduationForkIllustration() (+1 more)
+
+### Community 146 - "bootcamp-hero.jsx"
+Cohesion: 0.32
+Nodes (7): Countdown(), Digit(), MODES, ModeSwitch(), pad(), TRACKS, untilStart()
 
 ### Community 147 - "bolder.md"
 Cohesion: 0.33
@@ -655,37 +706,41 @@ Nodes (5): Before you finish, Scope is sovereign, The amplification, The skeleto
 Cohesion: 0.40
 Nodes (5): collectEditableTextRows(), visit(), enableInlineEdit(), onInlineInput(), wrapMixedContentTextNodes()
 
-### Community 151 - "Persuade and Experience"
-Cohesion: 0.50
-Nodes (3): Comps, Directions, Persuade and Experience
+### Community 149 - "partners-marquee.jsx"
+Cohesion: 0.43
+Nodes (3): PartnersMarquee(), Marquee(), HERO
+
+### Community 150 - "Impeccable Documenter"
+Cohesion: 0.40
+Nodes (4): Impeccable Documenter, Input Contract, Output Contract, Workflow
 
 ### Community 152 - "Design System — Sisfor UISI"
 Cohesion: 0.40
 Nodes (4): Auth.js, Design System — Sisfor UISI, Stack, Token
 
-### Community 159 - "Operate"
+### Community 153 - "Halaman Prestasi (`/achievement`, alias `/prestasi`)"
 Cohesion: 0.50
-Nodes (3): Comps, Directions, Operate
+Nodes (4): Halaman Prestasi (`/achievement`, alias `/prestasi`), Navigasi (berlaku untuk semua halaman), PodiumIllustration(), parseYears()
 
 ## Knowledge Gaps
-- **813 isolated node(s):** `prisma`, `$schema`, `style`, `rsc`, `tsx` (+808 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 1030 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **28 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **828 isolated node(s):** `prisma`, `$schema`, `style`, `rsc`, `tsx` (+823 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 1059 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **25 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Flap()` connect `prefersReducedMotion` to `cn`, `startVariantObserver`?**
-  _High betweenness centrality (0.161) - this node is a cross-community bridge._
-- **Why does `tick()` connect `startVariantObserver` to `live-browser.js`, `connectSSE`, `prefersReducedMotion`, `actOnAgentTarget`?**
-  _High betweenness centrality (0.161) - this node is a cross-community bridge._
-- **Why does `cn()` connect `cn` to `shared.jsx`, `useToast`, `rule-simulator.jsx`, `study-map.jsx`, `job-board.jsx`, `next`, `prefersReducedMotion`, `archive.jsx`, `profil-lulusan/page.jsx`, `site-header.jsx`, `visi-misi/page.jsx`, `dosen/page.jsx`, `react`, `prestasi-provider.jsx`, `route-story.jsx`, `curiculum/page.jsx`, `story.jsx`, `field-mosaic.jsx`, `exchange-desk.jsx`, `motion.js`?**
-  _High betweenness centrality (0.132) - this node is a cross-community bridge._
+- **Why does `Flap()` connect `cn` to `prefersReducedMotion`, `startVariantObserver`?**
+  _High betweenness centrality (0.157) - this node is a cross-community bridge._
+- **Why does `tick()` connect `startVariantObserver` to `live-browser.js`, `connectSSE`, `cn`, `actOnAgentTarget`?**
+  _High betweenness centrality (0.157) - this node is a cross-community bridge._
+- **Why does `cn()` connect `cn` to `prefersReducedMotion`, `shared.jsx`, `loader.jsx`, `motion.js`, `regulasi-content.js`, `rps-drawer.jsx`, `bootcamp-hero.jsx`, `job-board.jsx`, `modal.jsx`, `partners-marquee.jsx`, `program-kelas/page.jsx`, `archive.jsx`, `design-system/page.jsx`, `site-header.jsx`, `visi-misi/page.jsx`, `dosen-hero.jsx`, `bootcamp/page.jsx`, `react`, `struktur-organisasi/page.jsx`, `route-story.jsx`, `job-modal.jsx`, `interest-radar.jsx`, `useToast`, `bootcamp-content.js`, `useBootcamp`, `bootcamp-provider.jsx`?**
+  _High betweenness centrality (0.124) - this node is a cross-community bridge._
 - **What connects `prisma`, `$schema`, `style` to the rest of the system?**
-  _813 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _828 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `live-browser.js` be split into smaller, more focused modules?**
   _Cohesion score 0.02866036925719193 - nodes in this community are weakly interconnected._
 - **Should `modern-screenshot.umd.js` be split into smaller, more focused modules?**
   _Cohesion score 0.08897243107769423 - nodes in this community are weakly interconnected._
-- **Should `magang/page.jsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.0873015873015873 - nodes in this community are weakly interconnected._
+- **Should `bidang-keahlian-content.js` be split into smaller, more focused modules?**
+  _Cohesion score 0.14035087719298245 - nodes in this community are weakly interconnected._

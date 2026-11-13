@@ -84,15 +84,15 @@
     "semantic_hash": ""
   },
   "next.config.js": {
-    "mtime": 1794478261.3553617,
-    "seen": 1794478737.7701364,
-    "ast_hash": "d9de1714d7c651084891bc4398473a6a",
+    "mtime": 1794484121.4101856,
+    "seen": 1794484899.3855326,
+    "ast_hash": "3d05ae9a3ab22a9459b4b6ba5d5d32ab",
     "semantic_hash": ""
   },
   "package.json": {
-    "mtime": 1794392588.9282472,
-    "seen": 1794401632.2831156,
-    "ast_hash": "bf5acf278b27cdfe06a564355d76be41",
+    "mtime": 1794481258.5852475,
+    "seen": 1794484899.3855388,
+    "ast_hash": "36857c3cae8414b8289798bb1a766464",
     "semantic_hash": ""
   },
   "postcss.config.mjs": {
@@ -216,9 +216,9 @@
     "semantic_hash": ""
   },
   "src/app/admin/content/page.jsx": {
-    "mtime": 1794478309.3630044,
-    "seen": 1794478737.7883756,
-    "ast_hash": "0bb023936c0c7158427f2ba89089f7db",
+    "mtime": 1794484213.2014816,
+    "seen": 1794484899.4084814,
+    "ast_hash": "6b11a32fc251dc49bfd4dae46348a690",
     "semantic_hash": ""
   },
   "src/app/admin/curriculum/page.jsx": {
@@ -360,9 +360,9 @@
     "semantic_hash": ""
   },
   "src/app/sitemap.js": {
-    "mtime": 1794478261.3573735,
-    "seen": 1794478737.7988536,
-    "ast_hash": "e8d88c172cf7692e3c25ecad02ea28e3",
+    "mtime": 1794484121.4101856,
+    "seen": 1794484899.4248292,
+    "ast_hash": "963d0edcbaed5d70d37611345876f08e",
     "semantic_hash": ""
   },
   "src/components/AwardingRecognition.jsx": {
@@ -1584,9 +1584,9 @@
     "semantic_hash": ""
   },
   "DESIGN.md": {
-    "mtime": 1794478816.403352,
-    "seen": 1794479034.234735,
-    "ast_hash": "2603c71ddb8d5984cb905526f07ca3ff",
+    "mtime": 1794496070.1823487,
+    "seen": 1794496102.9200704,
+    "ast_hash": "9b44277006c6be20832ba5db4e08a91b",
     "semantic_hash": ""
   },
   ".claude/launch.json": {
@@ -1716,9 +1716,9 @@
     "semantic_hash": ""
   },
   "src/lib/home-content.js": {
-    "mtime": 1794478273.21953,
-    "seen": 1794478737.8430083,
-    "ast_hash": "0efe2f41fb58463a3f349d18baca90b2",
+    "mtime": 1794484137.204786,
+    "seen": 1794484899.4951653,
+    "ast_hash": "91e36ec58c997859e2fd8e8553d4fd10",
     "semantic_hash": ""
   },
   "src/lib/scroll.js": {
@@ -2034,9 +2034,9 @@
     "semantic_hash": ""
   },
   "src/components/illustrations/line-illustrations.jsx": {
-    "mtime": 1794477823.764247,
-    "seen": 1794478737.8137753,
-    "ast_hash": "225151ecaaf7ca9e9ce8ace2c9d1cdc6",
+    "mtime": 1794484500.8586917,
+    "seen": 1794484899.448828,
+    "ast_hash": "99ca6c0fc4751a33ca1936996cd37be1",
     "semantic_hash": ""
   },
   "src/components/intro-loader.jsx": {
@@ -2610,9 +2610,9 @@
     "semantic_hash": ""
   },
   "scripts/lottie/build.py": {
-    "mtime": 1794477638.5812428,
-    "seen": 1794478737.786157,
-    "ast_hash": "3a2077d10342c7265396d035d01058ce",
+    "mtime": 1794484094.918991,
+    "seen": 1794484899.4053185,
+    "ast_hash": "ce953a8f33f8cc45ae00e8e4e63779da",
     "semantic_hash": ""
   },
   "public/lottie/qa-alumni.json": {
@@ -3504,9 +3504,9 @@
     "semantic_hash": ""
   },
   "src/components/konversi/claim-stepper.jsx": {
-    "mtime": 1794479978.128457,
-    "seen": 1794480333.486998,
-    "ast_hash": "029a1dffe504177f75047e2825649e3b",
+    "mtime": 1794496057.2374525,
+    "seen": 1794496102.8478308,
+    "ast_hash": "f1e150a83a43535be9eef3164f58bf70",
     "semantic_hash": ""
   },
   "src/components/konversi/course-modal.jsx": {
@@ -3591,6 +3591,138 @@
     "mtime": 1794479123.696575,
     "seen": 1794479229.2961984,
     "ast_hash": "24d34be436132ea4726f9fe2d11c1300",
+    "semantic_hash": ""
+  },
+  "public/lottie/certificate-dark.json": {
+    "mtime": 1794484095.244869,
+    "seen": 1794484899.3974748,
+    "ast_hash": "9980146307c644ad4b934ae54165e568",
+    "semantic_hash": ""
+  },
+  "public/lottie/certificate.json": {
+    "mtime": 1794484095.2408397,
+    "seen": 1794484899.3974795,
+    "ast_hash": "7ae8e1e145303caec0bde575266d728c",
+    "semantic_hash": ""
+  },
+  "public/lottie/laptop-code-dark.json": {
+    "mtime": 1794484095.255743,
+    "seen": 1794484899.4003866,
+    "ast_hash": "a81900d649f2acfe818c6fe08f5caed7",
+    "semantic_hash": ""
+  },
+  "public/lottie/laptop-code.json": {
+    "mtime": 1794484095.2493298,
+    "seen": 1794484899.4003916,
+    "ast_hash": "5ce24d145deac46fb393a9306c905663",
+    "semantic_hash": ""
+  },
+  "src/app/bootcamp/loading.js": {
+    "mtime": 1794481394.7606618,
+    "seen": 1794484899.4163868,
+    "ast_hash": "ef888dc0c783be230b4abb766023da0f",
+    "semantic_hash": ""
+  },
+  "src/app/bootcamp/page.jsx": {
+    "mtime": 1794481394.368126,
+    "seen": 1794484899.4163914,
+    "ast_hash": "8816e57a1b006a1b897197a6f004b28e",
+    "semantic_hash": ""
+  },
+  "src/components/bootcamp/bootcamp-banner.jsx": {
+    "mtime": 1794485557.2456207,
+    "seen": 1794496102.8275082,
+    "ast_hash": "e3b4162e461031bd4652da2cb63a3e51",
+    "semantic_hash": ""
+  },
+  "src/components/bootcamp/bootcamp-closing.jsx": {
+    "mtime": 1794484060.9246924,
+    "seen": 1794484899.4337356,
+    "ast_hash": "b8ded936a28a90427248e4377bbb3b24",
+    "semantic_hash": ""
+  },
+  "src/components/bootcamp/bootcamp-hero.jsx": {
+    "mtime": 1794484500.8586917,
+    "seen": 1794484899.433738,
+    "ast_hash": "14bbc6f0dfb11e8568a0765dc0ee3c0d",
+    "semantic_hash": ""
+  },
+  "src/components/bootcamp/bootcamp-provider.jsx": {
+    "mtime": 1794485605.6572125,
+    "seen": 1794496102.8281004,
+    "ast_hash": "06bf824f869c0dc773fe6dc8484049fb",
+    "semantic_hash": ""
+  },
+  "src/components/bootcamp/catalog.jsx": {
+    "mtime": 1794485231.4095495,
+    "seen": 1794496102.8281052,
+    "ast_hash": "b470eb814e27a4696e1ef22ee7f0a146",
+    "semantic_hash": ""
+  },
+  "src/components/bootcamp/certificate-lens.jsx": {
+    "mtime": 1794484627.985746,
+    "seen": 1794484899.4337463,
+    "ast_hash": "d385487c255cbf9aa3f4f8530209a137",
+    "semantic_hash": ""
+  },
+  "src/components/bootcamp/cohort-modal.jsx": {
+    "mtime": 1794484783.8397264,
+    "seen": 1794484899.4337504,
+    "ast_hash": "8ae885ee20a73411c0ab57ee0ad44e3f",
+    "semantic_hash": ""
+  },
+  "src/components/bootcamp/course-catalog.jsx": {
+    "mtime": 1794481596.4758399,
+    "seen": 1794484899.433753,
+    "ast_hash": "9bf26db589550201938d34a47f11a981",
+    "semantic_hash": ""
+  },
+  "src/components/bootcamp/course-modal.jsx": {
+    "mtime": 1794484764.7728992,
+    "seen": 1794484899.4337559,
+    "ast_hash": "e05dd64c22dd1257c8e2100d1349ea2a",
+    "semantic_hash": ""
+  },
+  "src/components/bootcamp/cover-art.jsx": {
+    "mtime": 1794481562.4491954,
+    "seen": 1794484899.4337585,
+    "ast_hash": "1bdf219bd5acac6f30a63fb634a824f2",
+    "semantic_hash": ""
+  },
+  "src/components/bootcamp/mentor-stack.jsx": {
+    "mtime": 1794484765.0627337,
+    "seen": 1794484899.433761,
+    "ast_hash": "081555e0e02273c376b7631030147728",
+    "semantic_hash": ""
+  },
+  "src/components/bootcamp/plan-dock.jsx": {
+    "mtime": 1794481802.15586,
+    "seen": 1794484899.4337628,
+    "ast_hash": "971c1367a69afbad50f6cd5a71128e6a",
+    "semantic_hash": ""
+  },
+  "src/components/bootcamp/pricing-tiers.jsx": {
+    "mtime": 1794484662.827988,
+    "seen": 1794484899.4337654,
+    "ast_hash": "fad540a631e31714356f17cfd062854a",
+    "semantic_hash": ""
+  },
+  "src/components/bootcamp/syllabus-playhead.jsx": {
+    "mtime": 1794481666.9398143,
+    "seen": 1794484899.433768,
+    "ast_hash": "157bd3517a93cde616d36f8cd067dade",
+    "semantic_hash": ""
+  },
+  "src/components/ui/popover.jsx": {
+    "mtime": 1794481271.9747858,
+    "seen": 1794484899.488264,
+    "ast_hash": "d0e8c40eb2867db28d596711c89dd7d8",
+    "semantic_hash": ""
+  },
+  "src/lib/bootcamp-content.js": {
+    "mtime": 1794481358.674344,
+    "seen": 1794484899.4948788,
+    "ast_hash": "d1496cb7cd8333a58397687ddfc4ff2e",
     "semantic_hash": ""
   }
 }

@@ -1,5 +1,5 @@
 "use client";
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useCallback, useContext, useLayoutEffect as useEffect, useMemo, useState } from "react";
 import { TRACK_KEY, daysLeft } from "@/lib/magang-content";
 import { prefersReducedMotion } from "@/lib/motion";
 import { useToast } from "@/components/ui/toast";

@@ -20,7 +20,7 @@ const NEXT = [
 export function Closing() {
   const { classes, active, setActive } = useKelas();
   return (
-    <section className="relative bg-cream py-16 md:py-24">
+    <section className="relative bg-cream py-16 md:py-20">
       <Container className="relative">
         <div className="absolute -top-12 right-10 z-10 hidden xl:block">
           <div className="relative"><ElvoPeek pose="run" size={76} side="left" say="Ayo, kursinya terbatas!" delay={0.2} /></div>

@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useLayoutEffect as useEffect, useRef, useState } from "react";
 import { gsap } from "@/lib/scroll";
 import { prefersReducedMotion } from "@/lib/motion";
 import { Container, SectionHeader } from "@/components/home/shared";
@@ -33,7 +33,7 @@ export function ElectiveTracks() {
   }, [open]);
 
   return (
-    <section id="pilihan" className="relative scroll-mt-24 bg-white py-16 md:py-24">
+    <section id="pilihan" className="relative scroll-mt-24 bg-white py-16 md:py-20">
       <Container>
         <SectionHeader
           title={["Tiga bidang", "pilihan"]}

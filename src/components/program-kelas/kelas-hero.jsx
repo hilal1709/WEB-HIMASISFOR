@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useLayoutEffect as useEffect, useRef, useState } from "react";
 import { gsap } from "@/lib/scroll";
 import { prefersReducedMotion, curtainDelay } from "@/lib/motion";
 import { CURTAIN_KEY, QUIZ } from "@/lib/program-kelas-content";
@@ -54,7 +54,7 @@ export function KelasHero() {
   const result = pick !== null ? classes[pick] : null;
 
   return (
-    <section ref={ref} className="relative overflow-hidden pb-16 pt-10 md:pb-24 md:pt-14">
+    <section ref={ref} className="relative overflow-hidden pb-10 pt-10 md:pb-14 md:pt-14">
       <Container>
         <nav aria-label="Breadcrumb" data-hero-fade className="text-sm text-text/55">
           <ol className="flex flex-wrap items-center gap-2">

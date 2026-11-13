@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect as useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { A11y, FreeMode, Keyboard } from "swiper/modules";
 import "swiper/css";
@@ -125,7 +125,7 @@ export function RouteStory() {
   }, [p.key]);
 
   return (
-    <section id="jalur" ref={root} className="relative scroll-mt-20 bg-white py-16 md:py-24">
+    <section id="jalur" ref={root} className="relative scroll-mt-20 overflow-x-clip bg-white py-16 md:py-20">
       <Container>
         <SectionHeader title={["Jalan yang", "kamu tempuh"]} body="Dari pengajuan sampai sidang, setiap jalur punya urutan tahapnya sendiri. Ketuk sebuah tahap untuk melihat apa yang perlu kamu siapkan." />
 

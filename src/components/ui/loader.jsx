@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useLayoutEffect as useEffect, useRef } from "react";
 import { createTimeline, stagger, svg } from "animejs";
 import { cn } from "@/lib/utils";
 
@@ -35,7 +35,7 @@ export function DotsLoader({ className }) {
 }
 
 /** Path logo Sistem Informasi UISI (public/img/sisfor.svg) — dipakai untuk animasi gambar-garis. */
-const LOGO_PATHS = [
+export const LOGO_PATHS = [
   "M54.1231 93.0173V101.555H35.1504V92.0687C35.1504 59.5859 61.4829 33.2534 93.9656 33.2534H171.754V53.1747H93.9657C71.9612 53.1747 54.1231 71.0129 54.1231 93.0173Z",
   "M23.0168 84.6695L22.8182 101.555H1.94824L2.55053 80.2745C3.79978 36.1342 39.9424 1 84.1003 1H171.754V20.9213H87.5194C52.1892 20.9213 23.4325 49.3417 23.0168 84.6695Z",
   "M118.631 75.942L118.631 71.1989L137.604 71.1989L137.604 76.8907C137.604 109.373 111.271 135.706 78.7883 135.706L69.3019 135.706L69.3019 115.785L78.7883 115.785C100.793 115.785 118.631 97.9465 118.631 75.942Z",

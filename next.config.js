@@ -39,6 +39,18 @@ const nextConfig = {
       { source: '/course', destination: '/bootcamp', permanent: true },
       { source: '/kursus', destination: '/bootcamp', permanent: true },
       { source: '/studi-independen', destination: '/bootcamp', permanent: true },
+      { source: '/layanan', destination: '/layanan-akademik', permanent: true },
+      { source: '/scholarship', destination: '/beasiswa', permanent: true },
+      { source: '/kip-kuliah', destination: '/beasiswa', permanent: true },
+      { source: '/persuratan', destination: '/layanan-akademik', permanent: true },
+      { source: '/tanya', destination: '/faq', permanent: true },
+      { source: '/pertanyaan', destination: '/faq', permanent: true },
+      { source: '/contact', destination: '/kontak', permanent: true },
+      { source: '/hubungi', destination: '/kontak', permanent: true },
+      { source: '/news', destination: '/berita', permanent: true },
+      { source: '/warta', destination: '/berita', permanent: true },
+      { source: '/artikel', destination: '/berita?rubrik=artikel', permanent: true },
+      { source: '/agenda', destination: '/berita?rubrik=agenda', permanent: true },
     ];
   },
 

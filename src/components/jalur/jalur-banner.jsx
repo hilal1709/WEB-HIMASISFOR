@@ -35,7 +35,7 @@ export function JalurBanner({ className }) {
           dismissible
           title={notice.title}
           action={
-            <PillLink href="/#berita" variant="gold" size="sm" className="hidden sm:inline-flex">
+            <PillLink href="/berita?rubrik=agenda" variant="gold" size="sm" className="hidden sm:inline-flex">
               Agenda prodi
             </PillLink>
           }

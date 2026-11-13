@@ -23,7 +23,7 @@ const LAYOUT = {
  */
 export function CplBento({ cpl }) {
   return (
-    <section id="cpl" className="scroll-mt-24 bg-white py-16 md:py-24">
+    <section id="cpl" className="scroll-mt-24 bg-white py-16 md:py-20">
       <Container>
         <SectionHeader
           title={["Capaian", "pembelajaran", "lulusan"]}

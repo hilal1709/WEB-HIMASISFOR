@@ -37,6 +37,8 @@ export default function RootLayout({ children }) {
     <html lang="id" suppressHydrationWarning className={`${inter.variable} ${notoSerif.variable} ${bricolage.variable}`}>
       <head>
         <meta charSet="UTF-8" />
+        {/* Tahan konten halaman sampai hidrasi + kondisi awal animasi siap (dibuka oleh <AosReady/>); lihat globals.css */}
+        <script dangerouslySetInnerHTML={{ __html: 'document.documentElement.setAttribute("data-prehydrate","")' }} />
         <meta
           name="description"
           content="Program Studi Sistem Informasi UISI - Info kurikulum, prestasi, profil dosen dan mahasiswa"

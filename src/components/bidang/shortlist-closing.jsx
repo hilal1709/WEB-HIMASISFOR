@@ -29,11 +29,10 @@ export function ShortlistClosing() {
   ];
 
   return (
-    <section id="rak" className="relative scroll-mt-24 bg-cream-2/60 pb-20 pt-16 md:pb-24 md:pt-24">
+    <section id="rak" className="relative scroll-mt-24 bg-cream-2/60 pb-20 pt-16 md:pb-20 md:pt-20">
       <Container>
         <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-end lg:gap-14">
           <div>
-            <span aria-hidden className="mb-5 block h-[3px] w-10 bg-gold" />
             <SceneTitle title={["Rak", "pilihanmu"]} />
             <p className="mt-4 max-w-md text-pretty text-[16px] leading-relaxed text-text/65" aria-live="polite">
               {picked.length === 0

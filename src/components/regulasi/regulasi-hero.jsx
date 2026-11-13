@@ -1,11 +1,10 @@
 "use client";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useLayoutEffect as useEffect, useMemo, useRef } from "react";
 import { gsap } from "@/lib/scroll";
 import { prefersReducedMotion, curtainDelay } from "@/lib/motion";
 import { CURTAIN_KEY } from "@/lib/regulasi-content";
 import { Container, SceneTitle } from "@/components/home/shared";
 import { ElvoPeek } from "@/components/home/elvo-peek";
-import { cn } from "@/lib/utils";
 import { useRegulasi } from "./regulasi-provider";
 import { RuleSearch } from "./rule-search";
 
@@ -20,13 +19,12 @@ const POPULAR = [
 
 /**
  * Hero "pertanyaan populer": kiri judul + pencarian pasal (RuleSearch), kanan lima pertanyaan bernomor
- * yang paling sering ditanyakan. Klik → jawaban versi bahasa sehari-hari (`plain`) dari pasalnya terbuka
- * di tempat, plus tautan ke pasal lengkap di pembaca (goPasal).
+ * yang paling sering ditanyakan, masing-masing berlabel pasalnya. Klik → pasal itu dibuka di pembaca (goPasal),
+ * jadi jawabannya hanya ada di satu tempat.
  */
 export function RegulasiHero() {
   const { intro, version, chapters, goPasal, pasalCount } = useRegulasi();
   const ref = useRef(null);
-  const [open, setOpen] = useState(0);
 
   const items = useMemo(() => {
     const all = chapters.flatMap((c) => c.pasal);
@@ -45,7 +43,7 @@ export function RegulasiHero() {
   }, []);
 
   return (
-    <section ref={ref} className="relative pb-14 pt-10 md:pb-20 md:pt-14">
+    <section ref={ref} className="relative pb-10 pt-10 md:pb-14 md:pt-14">
       <Container>
         <nav aria-label="Breadcrumb" data-hero-fade className="text-sm text-text/55">
           <ol className="flex flex-wrap items-center gap-2">
@@ -73,34 +71,27 @@ export function RegulasiHero() {
           <div className="relative">
             <p data-hero-fade className="mb-4 text-[13px] font-semibold uppercase tracking-[0.14em] text-text/45">Paling sering ditanyakan</p>
             <ol className="border-t border-navy/15">
-              {items.map((x, i) => {
-                const on = open === i;
-                return (
-                  <li key={x.no} data-faq className="border-b border-navy/15">
-                    <button
-                      type="button"
-                      aria-expanded={on}
-                      aria-controls={`faq-${x.pasal.id}`}
-                      onClick={() => setOpen(on ? null : i)}
-                      className="group flex w-full items-baseline gap-4 py-5 text-left outline-none focus-visible:bg-white/60 md:gap-6"
-                    >
-                      <span className={cn("w-8 shrink-0 font-serif text-[1.35rem] tabular-nums transition-colors", on ? "text-maroon" : "text-gold")}>{String(i + 1).padStart(2, "0")}</span>
-                      <span className={cn("flex-1 font-serif text-[clamp(1.2rem,2.2vw,1.6rem)] leading-snug transition-colors", on ? "text-maroon" : "text-navy group-hover:text-maroon")}>{x.q}</span>
-                      <span aria-hidden className={cn("grid size-8 shrink-0 place-items-center rounded-full border text-lg leading-none transition-[transform,background-color,border-color,color] duration-300", on ? "rotate-45 border-maroon bg-maroon text-white" : "border-navy/20 text-navy")}>+</span>
-                    </button>
-                    <div id={`faq-${x.pasal.id}`} className={cn("grid transition-[grid-template-rows] duration-500 ease-cinematic", on ? "grid-rows-[1fr]" : "grid-rows-[0fr]")}>
-                      <div className="overflow-hidden">
-                        <div className="pb-6 pl-12 md:pl-14">
-                          <p className="max-w-xl text-pretty text-[16px] leading-relaxed text-text/75">{x.pasal.plain}</p>
-                          <button type="button" onClick={() => goPasal(x.no)} tabIndex={on ? 0 : -1} className="mt-3 text-[14px] font-semibold text-navy">
-                            <span className="u-gold">Pasal {x.no} · {x.pasal.title} →</span>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                );
-              })}
+              {items.map((x, i) => (
+                <li key={x.no} data-faq className="border-b border-navy/15">
+                  <button
+                    type="button"
+                    onClick={() => goPasal(x.no)}
+                    aria-label={`${x.q} Buka pasal ${x.no}, ${x.pasal.title}`}
+                    className="group flex w-full items-baseline gap-4 py-5 text-left outline-none focus-visible:bg-white/60 md:gap-6"
+                  >
+                    <span className="w-8 shrink-0 font-serif text-[1.35rem] tabular-nums text-gold transition-colors group-hover:text-maroon">{String(i + 1).padStart(2, "0")}</span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block font-serif text-[clamp(1.2rem,2.2vw,1.6rem)] leading-snug text-navy transition-colors group-hover:text-maroon">{x.q}</span>
+                      <span className="mt-1 block text-[12.5px] text-text/50">Pasal {x.no} · {x.pasal.title}</span>
+                    </span>
+                    <span aria-hidden className="grid size-9 shrink-0 place-items-center rounded-full border border-navy/20 text-navy transition-[transform,background-color,border-color,color] duration-300 group-hover:translate-y-0.5 group-hover:border-maroon group-hover:bg-maroon group-hover:text-white">
+                      <svg viewBox="0 0 16 16" className="size-4">
+                        <path d="M8 3v10M4 9l4 4 4-4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </span>
+                  </button>
+                </li>
+              ))}
             </ol>
             <div className="pointer-events-none absolute -right-4 -top-20 hidden xl:block">
               <div className="relative"><ElvoPeek pose="think" size={84} side="left" say="Pertanyaanmu tidak ada? Ketik saja di kolom cari." delay={0.3} /></div>

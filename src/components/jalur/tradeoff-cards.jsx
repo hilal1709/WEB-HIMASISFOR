@@ -22,7 +22,7 @@ const FACE = [
 export function TradeoffCards() {
   const { paths } = useJalur();
   return (
-    <section id="bandingkan" className="relative scroll-mt-20 bg-cream-2/60 py-16 md:py-24">
+    <section id="bandingkan" className="relative scroll-mt-20 bg-cream-2/60 py-16 md:py-20">
       <Container>
         <SectionHeader title={["Kalau aku pilih", "jalur ini,", "apa taruhannya?"]} body="Balik kartunya untuk melihat siapa yang paling cocok dan apa yang perlu kamu pertimbangkan." />
         <ul className="mt-12 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">

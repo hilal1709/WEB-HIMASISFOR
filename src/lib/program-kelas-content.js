@@ -182,7 +182,7 @@ export const FAQ = [
   { q: "Bisakah pindah kelas di tengah studi?", a: "Bisa, dengan pengajuan ke program studi di awal semester dan selama kuota kelas tujuan masih tersedia." },
   { q: "Kelas Karyawan wajib sudah bekerja?", a: "Diutamakan untuk yang sudah bekerja atau berwirausaha. Calon mahasiswa lain tetap bisa mendaftar setelah wawancara dengan program studi." },
   { q: "Bagaimana cara masuk Kelas Kemitraan Industri?", a: "Melalui rekomendasi perusahaan mitra atau seleksi khusus jalur mitra pada periode PMB. Informasi kuota diumumkan bersama jadwal PMB." },
-  { q: "Apakah ada beasiswa?", a: "Ada beasiswa prestasi, beasiswa mitra industri, dan KIP Kuliah sesuai ketentuan universitas. Detail tiap periode diumumkan di laman PMB." },
+  { q: "Apakah ada beasiswa?", a: "Ada beasiswa prestasi, beasiswa mitra industri, dan KIP Kuliah sesuai ketentuan universitas. Cakupan, syarat, dan jadwal tiap beasiswa ada di halaman Beasiswa (/beasiswa)." },
 ];
 
 const parse = (v) => {

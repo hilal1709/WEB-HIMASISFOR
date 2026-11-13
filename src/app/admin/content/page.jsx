@@ -2,6 +2,10 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { PROGRAMS as KONVERSI_PROGRAMS, DOCS as KONVERSI_DOCS, RATE as KONVERSI_RATE, CAP as KONVERSI_CAP, LIMITS as KONVERSI_LIMITS } from "@/lib/konversi-content";
+import { SERVICES as LAYANAN_SERVICES, HOURS as LAYANAN_HOURS, DAYS as LAYANAN_DAYS } from "@/lib/layanan-content";
+import { DESKS as KONTAK_DESKS } from "@/lib/kontak-content";
+import { CARDS as FAQ_CARDS, DRAWERS as FAQ_DRAWERS, PERSONAS as FAQ_PERSONAS } from "@/lib/faq-content";
+import { SCHOLARSHIPS as BEASISWA_ITEMS } from "@/lib/beasiswa-content";
 import { BOOTCAMPS, TIERS as BOOTCAMP_TIERS, AUDIENCES as BOOTCAMP_AUDIENCES, TRACKS as BOOTCAMP_TRACKS } from "@/lib/bootcamp-content";
 
 export default function ContentManagement() {
@@ -87,6 +91,10 @@ export default function ContentManagement() {
     { id: "magang", label: "Magang" },
     { id: "konversi-sks", label: "Konversi SKS" },
     { id: "bootcamp", label: "Bootcamp & Course" },
+    { id: "layanan-akademik", label: "Layanan Akademik" },
+    { id: "beasiswa", label: "Beasiswa" },
+    { id: "kontak", label: "Kontak" },
+    { id: "faq", label: "FAQ" },
   ];
 
   if (loading) {
@@ -194,6 +202,13 @@ export default function ContentManagement() {
                 saving={saving}
               />
             )}
+            {activeTab === "beasiswa" && (
+              <BeasiswaEditor
+                data={contents.beasiswa}
+                onSave={(data) => handleSave("beasiswa", data)}
+                saving={saving}
+              />
+            )}
             {activeTab === "magang" && (
               <MagangEditor
                 data={contents.magang}
@@ -210,6 +225,15 @@ export default function ContentManagement() {
             )}
             {activeTab === "bootcamp" && (
               <BootcampEditor data={contents.bootcamp} onSave={(data) => handleSave("bootcamp", data)} saving={saving} />
+            )}
+            {activeTab === "layanan-akademik" && (
+              <LayananEditor data={contents["layanan-akademik"]} onSave={(data) => handleSave("layanan-akademik", data)} saving={saving} />
+            )}
+            {activeTab === "kontak" && (
+              <KontakEditor data={contents.kontak} onSave={(data) => handleSave("kontak", data)} saving={saving} />
+            )}
+            {activeTab === "faq" && (
+              <FaqEditor data={contents.faq} onSave={(data) => handleSave("faq", data)} saving={saving} />
             )}
           </div>
         </div>
@@ -361,7 +385,7 @@ function HeroEditor({ data, onSave, saving }) {
               value={formData.data.buttons[0].url}
               onChange={(e) => updateDataField("buttons.0.url", e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-              placeholder="https://s.id/DaftarSisforUISI"
+              placeholder="https://pmb.uisi.ac.id/prosedur"
             />
           </div>
 
@@ -1122,7 +1146,7 @@ function JumbotronPromoEditor({ data, onSave, saving }) {
             })
           }
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-          placeholder="https://s.id/DaftarSisforUISI"
+          placeholder="https://pmb.uisi.ac.id/prosedur"
         />
       </div>
 
@@ -1430,6 +1454,116 @@ function MagangEditor({ data, onSave, saving }) {
   );
 }
 
+/* ---------- Beasiswa (/beasiswa) — lihat src/lib/beasiswa-content.js ---------- */
+const winToText = (ws) => (Array.isArray(ws) ? ws.map((w) => `${w.open} ${w.close} ${w.label || ""}`.trim()).join("\n") : "");
+const textToWin = (t) =>
+  t
+    .split("\n")
+    .map((l) => l.trim().match(/^(\d{2}-\d{2})\s+(\d{2}-\d{2})\s*(.*)$/))
+    .filter(Boolean)
+    .map(([, open, close, label]) => ({ open, close, label: label || "Pendaftaran" }));
+
+function readBeasiswa(d) {
+  const raw = d?.data && typeof d.data === "object" ? d.data : {};
+  const cms = Array.isArray(raw.items) ? raw.items : [];
+  return {
+    intro: raw.intro || "",
+    notice: { title: raw.notice?.title || "", body: raw.notice?.body || "" },
+    items: BEASISWA_ITEMS.map((b) => {
+      const o = cms.find((x) => x?.slug === b.slug) || {};
+      return {
+        slug: b.slug,
+        name: o.name ?? b.name,
+        coverage: o.coverage ?? b.coverage,
+        living: o.living ?? b.living,
+        href: o.href || "",
+        windows: winToText(o.windows ?? b.windows),
+        ipk: o.rules?.ipk ?? b.rules.ipk,
+        semMin: o.rules?.semester?.[0] ?? b.rules.semester[0],
+        semMax: o.rules?.semester?.[1] ?? b.rules.semester[1],
+        official: Boolean(o.rules || o.href),
+        hidden: Boolean(o.hidden),
+      };
+    }),
+  };
+}
+
+function BeasiswaEditor({ data, onSave, saving }) {
+  const [form, setForm] = useState(() => readBeasiswa(data));
+  useEffect(() => setForm(readBeasiswa(data)), [data]);
+  const input = "w-full px-3 py-2 border border-gray-300 rounded-lg text-sm";
+  const setItem = (i, field, value) => setForm((f) => ({ ...f, items: f.items.map((it, k) => (k === i ? { ...it, [field]: value } : it)) }));
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const items = form.items.map((it) => {
+      const base = BEASISWA_ITEMS.find((b) => b.slug === it.slug);
+      const out = { slug: it.slug, name: it.name, coverage: Number(it.coverage), living: it.living, windows: textToWin(it.windows), hidden: it.hidden };
+      if (it.href.trim()) out.href = it.href.trim();
+      if (it.official) out.rules = { ...base.rules, ipk: Number(it.ipk) || 0, semester: [Number(it.semMin) || 1, Number(it.semMax) || 8] };
+      return out;
+    });
+    onSave({ title: "Beasiswa", data: { intro: form.intro, notice: form.notice, items } });
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <p className="text-sm text-gray-600">
+        Semua beasiswa di <code>/beasiswa</code> masih contoh. Centang &quot;Data resmi&quot; atau isi tautan resmi untuk menghapus label contoh pada beasiswa itu.
+        Jendela pendaftaran ditulis satu per baris: <code>MM-DD MM-DD Label</code>, mis. <code>03-01 07-31 Bersamaan dengan PMB</code>.
+      </p>
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2">Intro hero (opsional, minimal 40 karakter)</label>
+        <textarea rows={3} value={form.intro} onChange={(e) => setForm({ ...form, intro: e.target.value })} className={input} />
+      </div>
+      <div className="grid gap-3 sm:grid-cols-2">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Judul banner (kosong = periode terdekat otomatis)</label>
+          <input value={form.notice.title} onChange={(e) => setForm({ ...form, notice: { ...form.notice, title: e.target.value } })} className={input} />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Isi banner</label>
+          <input value={form.notice.body} onChange={(e) => setForm({ ...form, notice: { ...form.notice, body: e.target.value } })} className={input} />
+        </div>
+      </div>
+
+      {form.items.map((it, i) => (
+        <div key={it.slug} className="p-4 border border-gray-200 rounded-lg space-y-3">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h4 className="font-medium">{it.name}</h4>
+            <div className="flex gap-4 text-sm">
+              <label className="flex items-center gap-2"><input type="checkbox" checked={it.official} onChange={(e) => setItem(i, "official", e.target.checked)} /> Data resmi</label>
+              <label className="flex items-center gap-2"><input type="checkbox" checked={it.hidden} onChange={(e) => setItem(i, "hidden", e.target.checked)} /> Sembunyikan</label>
+            </div>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-3">
+            <input value={it.name} onChange={(e) => setItem(i, "name", e.target.value)} className={input} placeholder="Nama beasiswa" />
+            <label className="text-sm text-gray-600">Cakupan UKT (%)
+              <input type="number" min="0" max="100" value={it.coverage} onChange={(e) => setItem(i, "coverage", e.target.value)} className={input} />
+            </label>
+            <label className="flex items-center gap-2 text-sm text-gray-600"><input type="checkbox" checked={it.living} onChange={(e) => setItem(i, "living", e.target.checked)} /> Ada biaya hidup</label>
+            <label className="text-sm text-gray-600">IPK minimum (0 = tanpa syarat)
+              <input type="number" step="0.01" min="0" max="4" value={it.ipk} onChange={(e) => setItem(i, "ipk", e.target.value)} className={input} />
+            </label>
+            <label className="text-sm text-gray-600">Semester dari
+              <input type="number" min="1" max="8" value={it.semMin} onChange={(e) => setItem(i, "semMin", e.target.value)} className={input} />
+            </label>
+            <label className="text-sm text-gray-600">sampai
+              <input type="number" min="1" max="8" value={it.semMax} onChange={(e) => setItem(i, "semMax", e.target.value)} className={input} />
+            </label>
+            <input value={it.href} onChange={(e) => setItem(i, "href", e.target.value)} className={`${input} sm:col-span-3`} placeholder="Tautan pendaftaran resmi (https://…)" />
+            <textarea rows={2} value={it.windows} onChange={(e) => setItem(i, "windows", e.target.value)} className={`${input} sm:col-span-3`} placeholder="03-01 07-31 Bersamaan dengan PMB" />
+          </div>
+        </div>
+      ))}
+
+      <button type="submit" disabled={saving} className="w-full sm:w-auto px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50">
+        {saving ? "Menyimpan..." : "Simpan Perubahan"}
+      </button>
+    </form>
+  );
+}
+
 /* ---------- Konversi SKS (/konversi-sks) ---------- */
 function readKonversi(d) {
   const raw = d?.data && typeof d.data === "object" ? d.data : {};
@@ -1658,6 +1792,339 @@ function BootcampEditor({ data, onSave, saving }) {
         </p>
         <textarea rows={8} value={form.courses} onChange={(e) => setForm({ ...form, courses: e.target.value })} className={`${input} font-mono`} placeholder="[]" />
         {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
+      </div>
+
+      <button type="submit" disabled={saving} className="w-full sm:w-auto px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50">
+        {saving ? "Menyimpan..." : "Simpan Perubahan"}
+      </button>
+    </form>
+  );
+}
+
+
+/* ---------- FAQ (/faq) ---------- */
+const FAQ_PERSONA_KEYS = FAQ_PERSONAS.filter((p) => p.key !== "all");
+function readFaq(d) {
+  const raw = d?.data && typeof d.data === "object" ? d.data : {};
+  return {
+    intro: d?.content || "",
+    cards: FAQ_CARDS.map((c) => {
+      const o = (raw.cards || []).find((x) => x?.slug === c.slug) || {};
+      return { slug: c.slug, drawer: c.drawer, defQ: c.q, defA: c.a, defPersonas: c.personas, q: o.q || "", a: o.a || "", personas: Array.isArray(o.personas) ? o.personas : null };
+    }),
+    extra: (raw.extra || []).map((x) => ({ slug: x.slug || "", drawer: x.drawer || FAQ_DRAWERS[0].key, q: x.q || "", a: x.a || "", href: x.source?.href || "", label: x.source?.label || "" })),
+  };
+}
+
+const faqSlug = (v) =>
+  v
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "")
+    .slice(0, 48);
+
+function FaqEditor({ data, onSave, saving }) {
+  const [form, setForm] = useState(() => readFaq(data));
+  useEffect(() => setForm(readFaq(data)), [data]);
+  const input = "w-full px-3 py-2 border border-gray-300 rounded-lg text-sm";
+  const setCard = (i, k, v) => setForm((f) => ({ ...f, cards: f.cards.map((c, j) => (j === i ? { ...c, [k]: v } : c)) }));
+  const setExtra = (i, k, v) => setForm((f) => ({ ...f, extra: f.extra.map((c, j) => (j === i ? { ...c, [k]: v } : c)) }));
+  const togglePersona = (i, key) =>
+    setForm((f) => ({
+      ...f,
+      cards: f.cards.map((c, j) => {
+        if (j !== i) return c;
+        const cur = c.personas ?? c.defPersonas;
+        return { ...c, personas: cur.includes(key) ? cur.filter((p) => p !== key) : [...cur, key] };
+      }),
+    }));
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const cards = form.cards
+      .map((c) => ({
+        slug: c.slug,
+        ...(c.q.trim() ? { q: c.q.trim() } : {}),
+        ...(c.a.trim() ? { a: c.a.trim() } : {}),
+        ...(c.personas && c.personas.length ? { personas: c.personas } : {}),
+      }))
+      .filter((c) => Object.keys(c).length > 1);
+    const extra = form.extra
+      .filter((x) => x.q.trim() && x.a.trim())
+      .map((x) => ({
+        slug: x.slug.trim() || faqSlug(x.q),
+        drawer: x.drawer,
+        q: x.q.trim(),
+        a: x.a.trim(),
+        ...(x.href.trim() ? { source: { href: x.href.trim(), label: x.label.trim() } } : {}),
+      }));
+    onSave({ title: "FAQ", content: form.intro.trim(), data: { cards, extra } });
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <p className="text-sm text-gray-600">
+        Pengaturan halaman <code>/faq</code> (lemari katalog). Jawaban sebaiknya pendek dan menunjuk halaman sumber. Mengisi jawaban sebuah kartu menghapus tanda
+        &quot;Contoh konten&quot;. Pertanyaan baru dari pengunjung tidak disimpan di server.
+      </p>
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2">Intro hero (minimal 40 karakter; kosong = teks bawaan)</label>
+        <textarea rows={3} value={form.intro} onChange={(e) => setForm({ ...form, intro: e.target.value })} className={input} />
+      </div>
+
+      {FAQ_DRAWERS.map((d) => (
+        <div key={d.key} className="border-t pt-6">
+          <h3 className="text-lg font-semibold mb-3">Laci {d.label}</h3>
+          {form.cards.map((c, i) =>
+            c.drawer !== d.key ? null : (
+              <div key={c.slug} className="mb-3 space-y-3 rounded-lg border border-gray-200 p-4">
+                <input value={c.q} onChange={(e) => setCard(i, "q", e.target.value)} placeholder={c.defQ} className={input} aria-label={`Pertanyaan ${c.slug}`} />
+                <textarea rows={2} value={c.a} onChange={(e) => setCard(i, "a", e.target.value)} placeholder={c.defA} className={input} aria-label={`Jawaban ${c.slug}`} />
+                <div className="flex flex-wrap gap-3 text-sm text-gray-600">
+                  <span>Ditampilkan untuk:</span>
+                  {FAQ_PERSONA_KEYS.map((p) => (
+                    <label key={p.key} className="inline-flex items-center gap-1.5">
+                      <input type="checkbox" checked={(c.personas ?? c.defPersonas).includes(p.key)} onChange={() => togglePersona(i, p.key)} />
+                      {p.label}
+                    </label>
+                  ))}
+                </div>
+              </div>
+            )
+          )}
+        </div>
+      ))}
+
+      <div className="border-t pt-6">
+        <h3 className="text-lg font-semibold mb-1">Kartu tambahan</h3>
+        <p className="mb-4 text-sm text-gray-500">Kartu baru tampil untuk semua persona. Tautan sumber opsional.</p>
+        {form.extra.map((x, i) => (
+          <div key={i} className="mb-3 space-y-3 rounded-lg border border-gray-200 p-4">
+            <div className="grid gap-3 sm:grid-cols-[1fr_200px]">
+              <input value={x.q} onChange={(e) => setExtra(i, "q", e.target.value)} placeholder="Pertanyaan" className={input} />
+              <select value={x.drawer} onChange={(e) => setExtra(i, "drawer", e.target.value)} className={input} aria-label="Laci">
+                {FAQ_DRAWERS.map((d) => (
+                  <option key={d.key} value={d.key}>{d.label}</option>
+                ))}
+              </select>
+            </div>
+            <textarea rows={2} value={x.a} onChange={(e) => setExtra(i, "a", e.target.value)} placeholder="Jawaban singkat" className={input} />
+            <div className="grid gap-3 sm:grid-cols-2">
+              <input value={x.href} onChange={(e) => setExtra(i, "href", e.target.value)} placeholder="Tautan sumber, mis. /magang" className={input} />
+              <input value={x.label} onChange={(e) => setExtra(i, "label", e.target.value)} placeholder="Nama halaman sumber" className={input} />
+            </div>
+            <button type="button" onClick={() => setForm((f) => ({ ...f, extra: f.extra.filter((_, j) => j !== i) }))} className="text-sm text-red-600">
+              Hapus kartu
+            </button>
+          </div>
+        ))}
+        <button
+          type="button"
+          onClick={() => setForm((f) => ({ ...f, extra: [...f.extra, { slug: "", drawer: FAQ_DRAWERS[0].key, q: "", a: "", href: "", label: "" }] }))}
+          className="px-4 py-2 border border-gray-300 rounded-lg text-sm"
+        >
+          + Tambah kartu
+        </button>
+      </div>
+
+      <button type="submit" disabled={saving} className="w-full sm:w-auto px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50">
+        {saving ? "Menyimpan..." : "Simpan Perubahan"}
+      </button>
+    </form>
+  );
+}
+
+/* ---------- Kontak (/kontak) ---------- */
+function readKontak(d) {
+  const raw = d?.data && typeof d.data === "object" ? d.data : {};
+  return {
+    intro: raw.intro || "",
+    email: raw.email || "",
+    whatsapp: raw.whatsapp || "",
+    desks: KONTAK_DESKS.map((k) => {
+      const o = (raw.desks || []).find((x) => x?.key === k.key) || {};
+      return { key: k.key, name: o.name || "", handles: o.handles || "", defName: k.name, defHandles: k.handles };
+    }),
+  };
+}
+
+function KontakEditor({ data, onSave, saving }) {
+  const [form, setForm] = useState(() => readKontak(data));
+  useEffect(() => setForm(readKontak(data)), [data]);
+  const input = "w-full px-3 py-2 border border-gray-300 rounded-lg text-sm";
+  const setDesk = (i, k, v) => setForm((f) => ({ ...f, desks: f.desks.map((d, j) => (j === i ? { ...d, [k]: v } : d)) }));
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const desks = form.desks
+      .map((d) => ({ key: d.key, ...(d.name.trim() ? { name: d.name.trim() } : {}), ...(d.handles.trim() ? { handles: d.handles.trim() } : {}) }))
+      .filter((d) => Object.keys(d).length > 1);
+    onSave({ title: "Kontak", data: { intro: form.intro, email: form.email.trim(), whatsapp: form.whatsapp.trim(), desks } });
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <p className="text-sm text-gray-600">
+        Pengaturan halaman <code>/kontak</code>. Surat dari pengunjung tidak disimpan di server: tombol kirim membuka aplikasi email atau WhatsApp
+        pengunjung ke alamat di bawah. Bila email & WhatsApp kosong, dipakai kontak dari tab Layanan Akademik; bila keduanya kosong, pengunjung hanya bisa menyalin surat.
+      </p>
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2">Intro hero</label>
+        <textarea rows={3} value={form.intro} onChange={(e) => setForm({ ...form, intro: e.target.value })} className={input} />
+      </div>
+      <div className="grid gap-3 sm:grid-cols-2">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Email resmi prodi</label>
+          <input type="email" value={form.email} placeholder="sisfor@…" onChange={(e) => setForm({ ...form, email: e.target.value })} className={input} />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">WhatsApp resmi</label>
+          <input value={form.whatsapp} placeholder="08… atau 628…" onChange={(e) => setForm({ ...form, whatsapp: e.target.value })} className={input} />
+        </div>
+      </div>
+      <div className="border-t pt-6">
+        <h3 className="text-lg font-semibold mb-1">Meja tujuan (papan sambung)</h3>
+        <p className="mb-4 text-sm text-gray-500">Kosongkan untuk memakai teks bawaan. Mengisi "menangani" menghapus tanda contoh.</p>
+        {form.desks.map((d, i) => (
+          <div key={d.key} className="mb-3 grid gap-3 rounded-lg border border-gray-200 p-4 sm:grid-cols-2">
+            <input value={d.name} onChange={(e) => setDesk(i, "name", e.target.value)} placeholder={d.defName} className={input} aria-label={`Nama meja ${d.defName}`} />
+            <input value={d.handles} onChange={(e) => setDesk(i, "handles", e.target.value)} placeholder={d.defHandles} className={input} aria-label={`Urusan yang ditangani ${d.defName}`} />
+          </div>
+        ))}
+      </div>
+      <button type="submit" disabled={saving} className="w-full sm:w-auto px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50">
+        {saving ? "Menyimpan..." : "Simpan Perubahan"}
+      </button>
+    </form>
+  );
+}
+
+/* ---------- Layanan Akademik (/layanan-akademik) ---------- */
+const LAYANAN_DAY_ORDER = [1, 2, 3, 4, 5, 6, 0];
+function readLayanan(d) {
+  const raw = d?.data && typeof d.data === "object" ? d.data : {};
+  const hours = Array.isArray(raw.hours) && raw.hours.length ? raw.hours : LAYANAN_HOURS;
+  return {
+    intro: raw.intro || "",
+    notice: { title: raw.notice?.title || "", body: raw.notice?.body || "", service: raw.notice?.service || "" },
+    contact: { email: raw.contact?.email || "", whatsapp: raw.contact?.whatsapp || "", room: raw.contact?.room || "", building: raw.contact?.building || "" },
+    hours: LAYANAN_DAY_ORDER.map((day) => {
+      const h = hours.find((x) => x.day === day);
+      return { day, open: h?.open || "", close: h?.close || "", restFrom: h?.rest?.[0] || "", restTo: h?.rest?.[1] || "" };
+    }),
+    services: LAYANAN_SERVICES.map((s) => {
+      const o = (raw.services || []).find((x) => x?.key === s.key) || {};
+      return { key: s.key, title: s.title, sla: o.sla ?? "", needs: Array.isArray(o.needs) ? o.needs.join("\n") : "", hidden: o.hidden === true };
+    }),
+  };
+}
+
+function LayananEditor({ data, onSave, saving }) {
+  const [form, setForm] = useState(() => readLayanan(data));
+  useEffect(() => setForm(readLayanan(data)), [data]);
+  const input = "w-full px-3 py-2 border border-gray-300 rounded-lg text-sm";
+  const setHour = (i, k, v) => setForm((f) => ({ ...f, hours: f.hours.map((h, j) => (j === i ? { ...h, [k]: v } : h)) }));
+  const setSvc = (i, k, v) => setForm((f) => ({ ...f, services: f.services.map((s, j) => (j === i ? { ...s, [k]: v } : s)) }));
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const hours = form.hours
+      .filter((h) => h.open && h.close)
+      .map((h) => ({ day: h.day, open: h.open, close: h.close, ...(h.restFrom && h.restTo ? { rest: [h.restFrom, h.restTo] } : {}) }));
+    const services = form.services
+      .map((s) => ({
+        key: s.key,
+        ...(Number(s.sla) > 0 ? { sla: Number(s.sla) } : {}),
+        ...(s.needs.trim() ? { needs: s.needs.split("\n").map((x) => x.trim()).filter(Boolean) } : {}),
+        ...(s.hidden ? { hidden: true } : {}),
+      }))
+      .filter((s) => Object.keys(s).length > 1);
+    onSave({ title: "Layanan Akademik", data: { intro: form.intro, notice: form.notice, contact: form.contact, hours, services } });
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <p className="text-sm text-gray-600">
+        Pengaturan halaman <code>/layanan-akademik</code>. Pengajuan yang masuk dikelola di menu{" "}
+        <a href="/admin/layanan" className="text-red-600 underline">Kotak Masuk Layanan</a>. Kolom kosong memakai nilai bawaan (bertanda contoh).
+      </p>
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2">Intro hero</label>
+        <textarea rows={3} value={form.intro} onChange={(e) => setForm({ ...form, intro: e.target.value })} className={input} />
+      </div>
+      <div className="grid gap-3 sm:grid-cols-3">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Judul banner</label>
+          <input value={form.notice.title} onChange={(e) => setForm({ ...form, notice: { ...form.notice, title: e.target.value } })} className={input} />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Isi banner</label>
+          <input value={form.notice.body} onChange={(e) => setForm({ ...form, notice: { ...form.notice, body: e.target.value } })} className={input} />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Tombol banner membuka layanan</label>
+          <select value={form.notice.service} onChange={(e) => setForm({ ...form, notice: { ...form.notice, service: e.target.value } })} className={input}>
+            <option value="">(pilih di wizard)</option>
+            {LAYANAN_SERVICES.map((s) => (
+              <option key={s.key} value={s.key}>
+                {s.title}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      <div className="border-t pt-6">
+        <h3 className="text-lg font-semibold mb-4">Kontak & lokasi</h3>
+        <div className="grid gap-3 sm:grid-cols-2">
+          {[
+            ["email", "Email sekretariat", "sisfor@…"],
+            ["whatsapp", "WhatsApp layanan", "08…"],
+            ["room", "Nama ruang", "Sekretariat Prodi Sistem Informasi"],
+            ["building", "Gedung & lantai", "Gedung …, Lantai …"],
+          ].map(([k, label, ph]) => (
+            <div key={k}>
+              <label className="block text-sm text-gray-700 mb-1">{label}</label>
+              <input value={form.contact[k]} placeholder={ph} onChange={(e) => setForm({ ...form, contact: { ...form.contact, [k]: e.target.value } })} className={input} />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="border-t pt-6">
+        <h3 className="text-lg font-semibold mb-1">Jam loket</h3>
+        <p className="mb-4 text-sm text-gray-500">Kosongkan jam buka/tutup untuk hari libur.</p>
+        <div className="space-y-2">
+          {form.hours.map((h, i) => (
+            <div key={h.day} className="grid grid-cols-[6rem_repeat(4,1fr)] items-center gap-2 text-sm">
+              <span className="font-medium">{LAYANAN_DAYS[h.day]}</span>
+              <input type="time" value={h.open} onChange={(e) => setHour(i, "open", e.target.value)} className={input} aria-label={`Buka ${LAYANAN_DAYS[h.day]}`} />
+              <input type="time" value={h.close} onChange={(e) => setHour(i, "close", e.target.value)} className={input} aria-label={`Tutup ${LAYANAN_DAYS[h.day]}`} />
+              <input type="time" value={h.restFrom} onChange={(e) => setHour(i, "restFrom", e.target.value)} className={input} aria-label={`Mulai istirahat ${LAYANAN_DAYS[h.day]}`} />
+              <input type="time" value={h.restTo} onChange={(e) => setHour(i, "restTo", e.target.value)} className={input} aria-label={`Selesai istirahat ${LAYANAN_DAYS[h.day]}`} />
+            </div>
+          ))}
+          <p className="text-xs text-gray-400">Kolom: buka · tutup · mulai istirahat · selesai istirahat</p>
+        </div>
+      </div>
+
+      <div className="border-t pt-6">
+        <h3 className="text-lg font-semibold mb-1">Layanan</h3>
+        <p className="mb-4 text-sm text-gray-500">
+          Isi estimasi (hari kerja) dan syarat resmi; syarat yang diisi menghapus tanda contoh. Centang Sembunyikan untuk layanan yang belum dibuka.
+        </p>
+        {form.services.map((s, i) => (
+          <div key={s.key} className="mb-3 grid gap-3 rounded-lg border border-gray-200 p-4 sm:grid-cols-[1fr_7rem_2fr_auto] sm:items-start">
+            <p className="text-sm font-medium">{s.title}</p>
+            <input type="number" min="1" value={s.sla} onChange={(e) => setSvc(i, "sla", e.target.value)} className={input} placeholder="Hari" aria-label={`Estimasi ${s.title}`} />
+            <textarea rows={2} value={s.needs} onChange={(e) => setSvc(i, "needs", e.target.value)} className={input} placeholder="Syarat, satu per baris" aria-label={`Syarat ${s.title}`} />
+            <label className="flex items-center gap-2 text-sm text-gray-600">
+              <input type="checkbox" checked={s.hidden} onChange={(e) => setSvc(i, "hidden", e.target.checked)} /> Sembunyikan
+            </label>
+          </div>
+        ))}
       </div>
 
       <button type="submit" disabled={saving} className="w-full sm:w-auto px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50">

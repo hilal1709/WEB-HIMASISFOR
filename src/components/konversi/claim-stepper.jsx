@@ -1,17 +1,25 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useLayoutEffect as useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { A11y, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import { gsap, ScrollTrigger } from "@/lib/scroll";
-import { Container, PlaceholderTag, SceneTitle } from "@/components/home/shared";
+import { Container, PlaceholderTag, SectionHeader } from "@/components/home/shared";
 import { KonversiBanner } from "./konversi-banner";
 import { cn } from "@/lib/utils";
 import { useKonversi } from "./konversi-provider";
 
 const pad = (n) => String(n).padStart(2, "0");
+
+/** Tinggi header situs yang menempel + sedikit jarak → posisi kunci rel & panel. */
+function headerOffset() {
+  const h = document.querySelector("header")?.getBoundingClientRect().height ?? 72;
+  const top = Math.round(h + 24);
+  document.documentElement.style.setProperty("--stepper-top", `${top}px`);
+  return top;
+}
 
 function StepBody({ step, onDoc, tone = "light" }) {
   const dark = tone === "dark";
@@ -79,7 +87,9 @@ export function ClaimStepper() {
     mm.add("(min-width: 1024px) and (prefers-reduced-motion: no-preference)", () => {
       st.current = ScrollTrigger.create({
         trigger: el,
-        start: "top top",
+        // kunci hanya rel + panel, tepat di bawah header situs; judul & banner ikut tergulir normal
+        // (dulu seluruh section dikunci di "top top" → di layar pendek panel terpotong dan tak bisa digulir)
+        start: () => `top ${headerOffset()}px`,
         end: () => `+=${window.innerHeight * 0.55 * (n - 1)}`,
         pin: true,
         anticipatePin: 1,
@@ -115,20 +125,17 @@ export function ClaimStepper() {
 
   return (
     <section id="alur" className="scroll-mt-20 bg-cream max-lg:overflow-x-clip">
-      <div ref={pin} className="relative z-0 bg-cream py-16 md:py-24 lg:min-h-screen lg:pb-10 lg:pt-28">
+      <div className="relative z-0 bg-cream py-16 md:py-20 lg:pb-16 lg:pt-20">
         <Container>
-          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-            <div className="max-w-2xl">
-              <span aria-hidden className="mb-5 block h-[3px] w-10 bg-gold" />
-              <SceneTitle title={["Enam langkah", "sampai nilainya masuk"]} />
-            </div>
-            <PlaceholderTag className="self-start md:self-end" />
-          </div>
+          <SectionHeader title={["Enam langkah", "sampai nilainya masuk"]} action={<PlaceholderTag />} />
           <KonversiBanner className="mt-8" />
 
           {/* ≥ lg: rel + panel */}
-          <div className="mt-12 hidden gap-12 lg:grid lg:grid-cols-[280px_minmax(0,1fr)]">
-            <ol className="relative" aria-label="Tahap pengajuan">
+          {/* pembungkus tetap: GSAP membungkus elemen yang dikunci dengan .pin-spacer, jadi elemen itu harus jadi
+              satu-satunya anak di sini — kalau tidak, React gagal menyisipkan saudara (mis. banner) di dekatnya */}
+          <div className="mt-12 hidden lg:block">
+          <div ref={pin} className="relative z-0 grid grid-cols-[280px_minmax(0,1fr)] gap-12 bg-cream">
+            <ol className="relative self-start" aria-label="Tahap pengajuan">
               <span aria-hidden className="absolute bottom-5 left-[19px] top-5 w-px bg-line" />
               <motion.span
                 aria-hidden
@@ -175,7 +182,7 @@ export function ClaimStepper() {
                   animate={reduce ? { opacity: 1 } : { clipPath: "inset(0 0 0% 0)", y: 0 }}
                   exit={reduce ? { opacity: 0 } : { clipPath: "inset(100% 0 0 0)", y: -24 }}
                   transition={{ duration: reduce ? 0.01 : 0.6, ease: [0.22, 1, 0.36, 1] }}
-                  className="rounded-lg border border-line bg-white p-8 xl:p-10"
+                  className="max-h-[calc(100vh-var(--stepper-top,96px)-56px)] overflow-y-auto rounded-lg border border-line bg-white p-8 xl:p-10"
                 >
                   <div className="flex items-baseline gap-5">
                     <span className="tabular font-serif text-[4.5rem] leading-none text-gold">{pad(active + 1)}</span>
@@ -188,6 +195,7 @@ export function ClaimStepper() {
               </AnimatePresence>
               <p className="mt-4 text-[12.5px] text-text/45">Gulir untuk lanjut ke tahap berikutnya, atau pilih nomornya.</p>
             </div>
+          </div>
           </div>
 
           {/* < lg: Swiper */}

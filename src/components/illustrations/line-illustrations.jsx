@@ -795,7 +795,412 @@ export function SprintTrackIllustration({ className, mode = "bootcamp", hurdles 
   );
 }
 
+/** Titik pada lingkaran jam (jam 12 di atas). `h` dalam jam (0–12, boleh pecahan). */
+const clockPoint = (cx, cy, r, h) => {
+  const a = ((h % 12) / 12) * Math.PI * 2 - Math.PI / 2;
+  // dibulatkan agar SSR & klien menghasilkan string atribut yang sama (hidrasi)
+  return [Math.round((cx + r * Math.cos(a)) * 100) / 100, Math.round((cy + r * Math.sin(a)) * 100) / 100];
+};
+
+/**
+ * Meja loket untuk hero Layanan Akademik: jam dinding (busur emas = jam layanan), jendela loket dengan papan
+ * nama tergantung, bel layanan, stempel, dan baki surat. `[data-line]` digambar anime.js; `[data-hand="h|m"]`
+ * diputar dari luar (transform-origin di pusat jam); `[data-bell]`, `[data-stamp]`, `[data-letter]`,
+ * `[data-ink]` dianimasikan dari luar. `arc` = [jamBuka, jamTutup] dalam jam desimal (mis. [8, 15.5]).
+ */
+export function ServiceDeskIllustration({ className, arc = [8, 15.5] }) {
+  const gold = { fill: "var(--gold)" };
+  const glow = { fill: "var(--gold)", fillOpacity: 0.14 };
+  const [cx, cy, r] = [104, 92, 50];
+  const [a0, a1] = [clockPoint(cx, cy, r - 7, arc[0]), clockPoint(cx, cy, r - 7, arc[1])];
+  const large = ((arc[1] - arc[0]) % 12 + 12) % 12 > 6 || arc[1] - arc[0] >= 12 ? 1 : 0;
+  return (
+    <svg viewBox="0 0 520 380" role="img" aria-label="Ilustrasi meja loket layanan akademik: jam dinding, jendela loket, bel, stempel, dan baki surat" className={className ?? "h-auto w-full text-navy"}>
+      {/* jam dinding */}
+      <circle cx={cx} cy={cy} r={r + 14} {...glow} />
+      <circle data-line cx={cx} cy={cy} r={r} {...line} />
+      <path data-arc d={`M${a0[0]} ${a0[1]}A${r - 7} ${r - 7} 0 ${large} 1 ${a1[0]} ${a1[1]}`} fill="none" stroke="var(--gold)" strokeWidth="5" strokeLinecap="round" />
+      {Array.from({ length: 12 }, (_, i) => {
+        const [x1, y1] = clockPoint(cx, cy, r - 2, i);
+        const [x2, y2] = clockPoint(cx, cy, r - (i % 3 === 0 ? 12 : 7), i);
+        return <path key={i} data-line {...line} d={`M${x1} ${y1}L${x2} ${y2}`} opacity={i % 3 === 0 ? 1 : 0.55} />;
+      })}
+      <path data-hand="h" {...line} strokeWidth="3" d={`M${cx} ${cy}V${cy - 24}`} style={{ transformBox: "view-box", transformOrigin: `${cx}px ${cy}px` }} />
+      <path data-hand="m" {...line} strokeWidth="2" d={`M${cx} ${cy}V${cy - 36}`} style={{ transformBox: "view-box", transformOrigin: `${cx}px ${cy}px` }} />
+      <circle cx={cx} cy={cy} r="4.5" fill="var(--maroon)" />
+
+      {/* jendela loket */}
+      <path data-line {...line} d="M200 236V70a22 22 0 0 1 22-22h236a22 22 0 0 1 22 22v166" />
+      <path data-line {...line} opacity="0.55" d="M216 236V82a14 14 0 0 1 14-14h220a14 14 0 0 1 14 14v154" />
+      <rect x="216" y="68" width="248" height="168" rx="14" {...glow} />
+      {/* rak arsip di balik loket */}
+      <path data-line {...line} opacity="0.6" d="M236 120h80M236 160h80M236 200h80M236 96v104M316 96v104" />
+      {[0, 1, 2].map((row) =>
+        [0, 1, 2, 3].map((c) => (
+          <rect key={`${row}${c}`} x={244 + c * 18} y={102 + row * 40} width="10" height="16" rx="1.5" fill={c === 2 && row === 1 ? "var(--maroon)" : "currentColor"} fillOpacity={c === 2 && row === 1 ? 0.9 : 0.16} />
+        ))
+      )}
+      {/* papan nama tergantung */}
+      <path data-line {...line} d="M364 48v22M424 48v22" />
+      <rect x="350" y="70" width="88" height="30" rx="4" fill="var(--maroon)" />
+      <text x="394" y="90" textAnchor="middle" fontSize="12" fontWeight="700" letterSpacing="2.4" fill="var(--gold-soft)">LOKET</text>
+
+      {/* meja */}
+      <path data-line {...line} d="M24 252h472" strokeWidth="2.2" />
+      <path data-line {...line} d="M40 252v108M480 252v108M40 300h440" />
+      <path data-line {...line} opacity="0.5" d="M24 368h472" strokeDasharray="4 8" />
+
+      {/* lembar formulir + bekas stempel */}
+      <path data-line {...line} d="M240 252l8-36h84l-8 36" />
+      <path data-line {...line} opacity="0.5" d="M254 228h56M252 238h40" />
+      <circle data-ink cx="304" cy="240" r="9" fill="none" stroke="var(--maroon)" strokeWidth="2" opacity="0.9" />
+      {/* stempel */}
+      <g data-stamp style={{ transformBox: "fill-box", transformOrigin: "50% 100%" }}>
+        <path data-line {...line} d="M296 172a10 10 0 1 1 16 0l-2 12h-12z" />
+        <path data-line {...line} d="M290 184h28v10h-28z" />
+        <rect x="290" y="194" width="28" height="6" rx="1.5" fill="var(--maroon)" />
+      </g>
+
+      {/* bel layanan */}
+      <g data-bell style={{ transformBox: "fill-box", transformOrigin: "50% 100%" }}>
+        <path data-line {...line} d="M118 244a34 34 0 0 1 68 0z" />
+        <path data-line {...line} d="M110 252h84" strokeWidth="2.4" />
+        <path data-line {...line} d="M152 210v-6M146 204h12" />
+        <path d="M128 236a26 26 0 0 1 14-24" fill="none" stroke="var(--gold)" strokeWidth="2.4" strokeLinecap="round" />
+      </g>
+      <g data-ring opacity="0">
+        <path {...line} stroke="var(--gold)" d="M108 206l-10-8M196 206l10-8M152 188v-12" />
+      </g>
+
+      {/* baki surat masuk */}
+      <path data-line {...line} d="M372 252l-8-26h104l-8 26" />
+      <path data-line {...line} opacity="0.55" d="M368 238h96" />
+      {[0, 1, 2].map((i) => (
+        <g key={i} data-letter={i}>
+          <rect x={382 + i * 4} y={206 - i * 7} width="64" height="34" rx="3" fill="var(--paper, #fff)" stroke="currentColor" strokeWidth="1.6" />
+          <path d={`M${382 + i * 4} ${206 - i * 7}l32 18 32-18`} fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+          {i === 2 && <circle cx={438 + i * 4} cy={214 - i * 7} r="5" {...gold} />}
+        </g>
+      ))}
+    </svg>
+  );
+}
+
+/** Proyeksi isometrik denah: (x, y) di bidang lantai → koordinat layar. */
+export const isoPoint = (x, y, ox = 232, oy = 34) => [Math.round(((x - y) * 0.866 + ox) * 100) / 100, (x + y) * 0.5 + oy];
+const isoPath = (pts) => `M${pts.map(([x, y]) => isoPoint(x, y).map((n) => n.toFixed(1)).join(" ")).join("L")}Z`;
+
+/** Ruang pada denah lantai (koordinat lantai 0–400 × 0–260). */
+export const FLOOR_ROOMS = {
+  sekretariat: [0, 0, 150, 110],
+  kaprodi: [150, 0, 110, 110],
+  dosen: [260, 0, 140, 110],
+  minilab: [0, 150, 200, 110],
+};
+
+/**
+ * Denah lantai isometrik prodi untuk section "Temukan kami". Ruang ber-`[data-room]` (sekretariat, kaprodi, dosen,
+ * minilab) menyala lewat `.floorplan[data-active-room]` (lihat globals.css); `[data-pin]` = penanda loket yang
+ * berdenyut. `[data-line]` digambar anime.js. Ruang lain (kelas, tangga) netral.
+ */
+export function FloorPlanIllustration({ className, active, onRoom }) {
+  const outline = [[0, 0], [400, 0], [400, 260], [0, 260]];
+  const lift = 18;
+  const [ox0, oy0] = isoPoint(0, 0);
+  const [ox1, oy1] = isoPoint(400, 0);
+  const [ox3, oy3] = isoPoint(0, 260);
+  const pin = isoPoint(75, 55);
+  return (
+    <svg viewBox="0 0 590 400" role="img" aria-label="Denah lantai program studi: sekretariat, ruang kaprodi, ruang dosen, minilab, koridor, dan ruang kelas" data-active-room={active ?? undefined} className={className ?? "floorplan h-auto w-full text-navy"}>
+      {/* dinding belakang (tinggi) */}
+      <path data-line {...line} opacity="0.45" d={`M${ox3} ${oy3}V${oy3 - lift}L${ox0} ${oy0 - lift}L${ox1} ${oy1 - lift}V${oy1}`} />
+      <path data-line {...line} opacity="0.45" d={`M${ox0} ${oy0}V${oy0 - lift}`} />
+      {/* lantai */}
+      <path data-line {...line} strokeWidth="2" d={isoPath(outline)} />
+      {/* koridor */}
+      <path d={isoPath([[0, 110], [400, 110], [400, 150], [0, 150]])} fill="currentColor" fillOpacity="0.05" />
+      <path data-line {...line} opacity="0.4" strokeDasharray="3 7" d={`M${isoPoint(10, 130).join(" ")}L${isoPoint(390, 130).join(" ")}`} />
+      {/* ruang netral: kelas & tangga */}
+      <path data-line {...line} opacity="0.7" d={isoPath([[290, 150], [400, 150], [400, 260], [290, 260]])} />
+      <path data-line {...line} opacity="0.7" d={isoPath([[200, 150], [290, 150], [290, 260], [200, 260]])} />
+      {[0, 1, 2, 3, 4].map((i) => (
+        <path key={i} {...line} opacity="0.45" d={`M${isoPoint(212, 168 + i * 18).join(" ")}L${isoPoint(278, 168 + i * 18).join(" ")}`} />
+      ))}
+      {/* ruang aktif */}
+      {Object.entries(FLOOR_ROOMS).map(([key, [x, y, w, h]]) => {
+        const d = isoPath([[x, y], [x + w, y], [x + w, y + h], [x, y + h]]);
+        const door = isoPoint(x + w / 2, y + h);
+        const doorB = key === "minilab" ? isoPoint(x + w / 2, y) : door;
+        return (
+          <g
+            key={key}
+            data-room={key}
+            tabIndex={onRoom ? 0 : undefined}
+            role={onRoom ? "button" : undefined}
+            aria-label={onRoom ? key : undefined}
+            onPointerEnter={onRoom ? () => onRoom(key) : undefined}
+            onFocus={onRoom ? () => onRoom(key) : undefined}
+            onClick={onRoom ? () => onRoom(key) : undefined}
+            className="outline-none"
+          >
+            <path data-fill d={d} />
+            <path data-line {...line} strokeWidth="1.8" d={d} />
+            <circle cx={doorB[0]} cy={doorB[1]} r="3.2" fill="var(--gold)" />
+          </g>
+        );
+      })}
+      {/* meja-meja kecil di sekretariat & minilab */}
+      {[[30, 30], [80, 30], [30, 70]].map(([x, y], i) => (
+        <path key={`d${i}`} {...line} opacity="0.55" d={isoPath([[x, y], [x + 30, y], [x + 30, y + 16], [x, y + 16]])} />
+      ))}
+      {[[30, 180], [90, 180], [30, 220], [90, 220]].map(([x, y], i) => (
+        <path key={`m${i}`} {...line} opacity="0.55" d={isoPath([[x, y], [x + 40, y], [x + 40, y + 18], [x, y + 18]])} />
+      ))}
+      {/* pin loket */}
+      <g data-pin transform={`translate(${pin[0]} ${pin[1] - 30})`}>
+        <ellipse data-pin-pulse cx="0" cy="30" rx="16" ry="8" fill="var(--maroon)" fillOpacity="0.25" />
+        <path d="M0 30c-10-12-16-20-16-28a16 16 0 0 1 32 0c0 8-6 16-16 28z" fill="var(--maroon)" />
+        <circle cx="0" cy="1" r="6" fill="var(--gold)" />
+      </g>
+    </svg>
+  );
+}
+
+/**
+ * Kontak: sisi gambar kartu pos — gedung kampus bertingkat, gerbang, menara silo semen di kejauhan,
+ * matahari emas, burung, dan pohon. Bingkai bergerigi seperti tepi kartu pos. `data-bird` = burung (melayang GSAP).
+ */
+export function PostcardIllustration({ className }) {
+  const gold = { fill: "var(--gold)" };
+  const glow = { fill: "var(--gold)", fillOpacity: 0.16 };
+  return (
+    <svg viewBox="0 0 320 220" role="img" aria-label="Ilustrasi kartu pos kampus UISI di Gresik: gedung kuliah, gerbang, silo pabrik semen, dan matahari" className={className ?? "h-auto w-full text-navy"}>
+      <rect x="10" y="10" width="300" height="200" rx="4" {...glow} />
+      <rect data-line {...line} x="10" y="10" width="300" height="200" rx="4" strokeDasharray="2 5" opacity="0.6" />
+      {/* matahari */}
+      <circle cx="244" cy="62" r="22" {...gold} fillOpacity="0.9" />
+      <path data-line {...line} d="M244 28v-8M278 62h8M268 38l6-6M220 38l-6-6" stroke="var(--gold)" />
+      {/* silo semen di kejauhan */}
+      <path data-line {...line} opacity="0.45" d="M34 150V92h18v58M56 150V80h18v70M40 92a6 6 0 0 1 6-6h0a6 6 0 0 1 6 6M62 80a6 6 0 0 1 6-6h0a6 6 0 0 1 6 6M78 150v-36h22v36M89 114V96" />
+      {/* burung */}
+      <path data-bird data-line {...line} d="M150 46q5-5 10 0q5-5 10 0" />
+      <path data-bird data-line {...line} d="M178 34q4-4 8 0q4-4 8 0" opacity="0.7" />
+      {/* gedung kuliah */}
+      <path data-line {...line} d="M112 176V88l64-24 64 24v88" />
+      <path data-line {...line} d="M104 92l72-28 72 28" strokeWidth="2.2" />
+      {[0, 1, 2].map((r) =>
+        [0, 1, 2, 3].map((c) => (
+          <rect key={`${r}${c}`} x={128 + c * 26} y={100 + r * 22} width="14" height="12" rx="1.5" fill={r === 1 && c === 2 ? "var(--maroon)" : "currentColor"} fillOpacity={r === 1 && c === 2 ? 0.9 : 0.14} />
+        ))
+      )}
+      <rect x="164" y="150" width="24" height="26" rx="2" fill="var(--maroon)" />
+      <path data-line {...line} d="M176 150v26" stroke="var(--gold-soft)" />
+      {/* gerbang */}
+      <path data-line {...line} d="M262 176v-44h8v44M300 176v-44h-8v44M262 132h38M266 140h30" />
+      {/* pohon */}
+      <circle data-line cx="88" cy="160" r="12" {...line} />
+      <path data-line {...line} d="M88 172v8" />
+      {/* tanah */}
+      <path data-line {...line} d="M20 180h280" strokeWidth="2" />
+      <path data-line {...line} opacity="0.5" d="M30 192h90M150 192h60M232 192h56" strokeDasharray="3 6" />
+    </svg>
+  );
+}
+
+/**
+ * Mesin cetak koran (Warta SISFOR): dua rol berputar (`data-roll`), lembar keluar bergerak (`data-sheet`),
+ * tumpukan koran jadi di kanan dengan masthead maroon. Garis `data-line` digambar anime.js.
+ */
+export function PrintingPressIllustration({ className }) {
+  const gold = { fill: "var(--gold)" };
+  const glow = { fill: "var(--gold)", fillOpacity: 0.16 };
+  const roll = (cx, cy, r) => (
+    <g data-roll style={{ transformBox: "fill-box", transformOrigin: "center" }}>
+      <circle data-line {...line} cx={cx} cy={cy} r={r} strokeWidth="2" />
+      <circle cx={cx} cy={cy} r={r * 0.28} fill="var(--maroon)" />
+      <path data-line {...line} d={`M${cx - r * 0.72} ${cy}h${r * 1.44}M${cx} ${cy - r * 0.72}v${r * 1.44}`} opacity="0.55" />
+    </g>
+  );
+  return (
+    <svg viewBox="0 0 320 220" role="img" aria-label="Ilustrasi mesin cetak koran: dua rol berputar mencetak lembar Warta SISFOR, tumpukan koran siap dibaca" className={className ?? "h-auto w-full text-navy"}>
+      <ellipse cx="160" cy="196" rx="146" ry="10" {...glow} />
+      {/* rangka mesin */}
+      <path data-line {...line} d="M28 190V86q0-10 10-10h96q10 0 10 10v104" strokeWidth="2" />
+      <path data-line {...line} d="M20 190h134M44 76V58h76v18" />
+      <rect x="54" y="62" width="56" height="8" rx="2" {...gold} fillOpacity="0.85" />
+      {roll(62, 112, 20)}
+      {roll(110, 150, 20)}
+      <path data-line {...line} d="M44 168h28M40 178h40" opacity="0.5" />
+      {/* tuas */}
+      <path data-line {...line} d="M144 104l26-30" strokeWidth="2.2" />
+      <circle cx="172" cy="72" r="5" fill="var(--maroon)" />
+      {/* lembar keluar */}
+      <g data-sheet>
+        <path data-line {...line} d="M132 150l78-14 22 44-80 12z" fill="#fff" />
+        <path d="M146 152l50-9" stroke="var(--maroon)" strokeWidth="5" strokeLinecap="round" />
+        <path data-line {...line} d="M150 162l52-9M153 170l40-7M156 178l46-8" opacity="0.6" />
+      </g>
+      {/* tumpukan koran */}
+      <path data-line {...line} d="M226 190v-14h80v14M222 176h88" />
+      <path data-line {...line} d="M230 176v-12h72v12M228 164h76" opacity="0.75" />
+      <rect data-line {...line} x="232" y="96" width="70" height="68" rx="2" fill="#fff" />
+      <rect x="240" y="104" width="54" height="9" rx="1" fill="var(--maroon)" />
+      <path d="M240 118h54" stroke="var(--gold)" strokeWidth="1.6" />
+      <rect x="240" y="124" width="24" height="20" rx="1" fill="currentColor" fillOpacity="0.14" />
+      <path data-line {...line} d="M270 126h24M270 133h24M270 140h18M240 151h54M240 157h40" opacity="0.6" />
+      {/* bintang terbit */}
+      <path data-spark d="M282 70l3 7 7 3-7 3-3 7-3-7-7-3 7-3z" {...gold} style={{ transformBox: "fill-box", transformOrigin: "center" }} />
+      <circle data-spark cx="258" cy="80" r="2.5" {...gold} />
+    </svg>
+  );
+}
+
+/**
+ * Hero Beasiswa: toples kaca bertanda skala 0–100% UKT. Isi emas `[data-liquid]` digeser naik/turun dari luar
+ * (GSAP `y`), permukaannya `[data-wave]` beriak (CSS `.bs-wave`). Keping `[data-coin]` dijatuhkan dari mulut toples;
+ * tumpukan `[data-living]` di samping = "+ biaya hidup" (ditampilkan dari luar). Garis `[data-line]` digambar anime.js.
+ */
+export function TuitionJarIllustration({ className }) {
+  const gold = { fill: "var(--gold)" };
+  const wave = "M-160 0q20 -9 40 0t40 0t40 0t40 0t40 0t40 0t40 0t40 0t40 0t40 0t40 0t40 0V240H-160Z";
+  return (
+    <svg viewBox="0 0 340 380" role="img" aria-label="Ilustrasi toples tabungan bertanda persentase UKT yang terisi koin emas" className={className ?? "h-auto w-full text-navy"}>
+      <defs>
+        <clipPath id="bs-jar-clip">
+          <path d="M92 120c-14 10-22 26-22 46v148c0 22 16 36 38 36h124c22 0 38-14 38-36V166c0-20-8-36-22-46Z" />
+        </clipPath>
+      </defs>
+      {/* lantai */}
+      <path data-line {...line} d="M20 352h300" />
+      <path data-line {...line} strokeDasharray="3 8" opacity="0.4" d="M50 364h240" />
+      {/* isi */}
+      <g clipPath="url(#bs-jar-clip)">
+        <g data-liquid transform="translate(0 220)">
+          <g transform="translate(0 120)">
+            <path data-wave className="bs-wave" d={wave} fill="var(--gold)" fillOpacity="0.28" />
+            <path className="bs-wave bs-wave-b" d={wave} transform="translate(0 6)" fill="var(--gold)" fillOpacity="0.5" />
+          </g>
+        </g>
+      </g>
+      {/* toples */}
+      <path data-line {...line} strokeWidth="2" d="M92 120c-14 10-22 26-22 46v148c0 22 16 36 38 36h124c22 0 38-14 38-36V166c0-20-8-36-22-46" />
+      <path data-line {...line} strokeWidth="2" d="M100 96h140v24H100z" />
+      <path data-line {...line} d="M92 120h156" opacity="0.5" />
+      {/* tutup terbuka bersandar */}
+      <g data-lid style={{ transformBox: "fill-box", transformOrigin: "0% 100%" }}>
+        <path data-line {...line} strokeWidth="2" d="M96 92l6-22h136l6 22z" />
+        <path data-line {...line} opacity="0.5" d="M112 80h116" />
+      </g>
+      {/* kilau kaca */}
+      <path data-line {...line} opacity="0.35" d="M88 178v96M96 296c2 12 8 20 18 24" />
+      {/* skala */}
+      {[0, 25, 50, 75, 100].map((v) => {
+        const y = 340 - (v / 100) * 210;
+        return (
+          <g key={v} data-tick={v}>
+            <path {...line} opacity="0.55" d={`M254 ${y}h16`} />
+            <text x="278" y={y + 4} className="bs-tick" fill="currentColor">{v}%</text>
+          </g>
+        );
+      })}
+      {/* label di badan toples */}
+      <rect data-line x="124" y="196" width="92" height="54" rx="4" {...line} fill="var(--cream)" fillOpacity="0.85" />
+      <text x="170" y="220" textAnchor="middle" className="bs-jar-label" fill="currentColor">UKT</text>
+      <path {...line} opacity="0.4" d="M138 232h64M146 240h48" />
+      {/* koin jatuh */}
+      {[0, 1, 2].map((i) => (
+        <g key={i} data-coin opacity="0">
+          <ellipse rx="13" ry="13" fill="var(--gold)" />
+          <ellipse rx="9" ry="9" fill="none" stroke="var(--navy)" strokeOpacity="0.5" strokeWidth="1.2" />
+          <text y="4" textAnchor="middle" className="bs-coin-text" fill="var(--navy)">Rp</text>
+        </g>
+      ))}
+      {/* + biaya hidup: tumpukan koin di luar toples */}
+      <g data-living style={{ opacity: 0 }}>
+        {[0, 1, 2, 3].map((i) => (
+          <g key={i} transform={`translate(${36 + (i % 2) * 3} ${340 - i * 9})`}>
+            <ellipse rx="18" ry="6" {...gold} />
+            <ellipse rx="18" ry="6" fill="none" stroke="var(--navy)" strokeOpacity="0.45" strokeWidth="1.2" />
+          </g>
+        ))}
+        <text x="36" y="300" textAnchor="middle" className="bs-tick" fill="currentColor">+ hidup</text>
+      </g>
+    </svg>
+  );
+}
+
+/**
+ * Lemari katalog perpustakaan (halaman FAQ): enam laci (2×3), tiap laci punya tempat label dan pegangan
+ * kuningan. Grup `data-drawer="<i>"` digeser GSAP saat laci dipilih; kartu `data-peek` di dalamnya
+ * menyembul. Di atas lemari: tumpukan kartu dan satu kartu "?" melayang (`data-float`). Garis `data-line`
+ * digambar anime.js.
+ */
+export function CardCatalogIllustration({ className, labels = [] }) {
+  const gold = { fill: "var(--gold)" };
+  const cols = [70, 164];
+  const rows = [52, 106, 160];
+  return (
+    <svg viewBox="0 0 320 250" role="img" aria-label="Ilustrasi lemari katalog perpustakaan dengan enam laci kartu pertanyaan" className={className ?? "h-auto w-full text-navy"}>
+      {/* bayangan lantai */}
+      <rect x="40" y="226" width="240" height="6" rx="3" fill="currentColor" fillOpacity="0.08" />
+      {/* badan lemari */}
+      <rect x="58" y="40" width="204" height="178" rx="5" {...soft} />
+      <rect data-line {...line} x="58" y="40" width="204" height="178" rx="5" />
+      <path data-line {...line} d="M52 40h216M66 218v10M254 218v10" strokeWidth="2" />
+      {/* tumpukan kartu di atas lemari */}
+      <path data-line {...line} d="M78 40l4-12h46l4 12M84 28l3-8h40l3 8" />
+      <path data-line {...line} d="M92 24h28" opacity="0.5" />
+      {/* pensil */}
+      <path data-line {...line} d="M150 36l40-10M190 26l6-1-4 4" />
+      {/* kartu "?" melayang */}
+      <g data-float>
+        <g transform="rotate(-8 236 21)">
+          <rect x="214" y="6" width="44" height="30" rx="3" fill="#fff" />
+          <rect data-line {...line} x="214" y="6" width="44" height="30" rx="3" />
+          <path d="M214 14h44" stroke="var(--maroon)" strokeWidth="1" opacity="0.5" />
+          <text x="236" y="31" textAnchor="middle" fontFamily="var(--font-serif, serif)" fontStyle="italic" fontSize="16" fill="var(--maroon)">?</text>
+        </g>
+      </g>
+      {/* laci */}
+      {rows.flatMap((y, r) =>
+        cols.map((x, c) => {
+          const i = r * 2 + c;
+          return (
+            <g key={i} data-drawer={i} style={{ transformBox: "fill-box", transformOrigin: "50% 100%" }}>
+              {/* kartu yang menyembul saat laci ditarik */}
+              <g data-peek opacity="0">
+                <rect x={x + 18} y={y - 8} width="50" height="14" rx="2" fill="#fff" stroke="currentColor" strokeWidth="1.2" />
+                <rect x={x + 24} y={y - 13} width="50" height="14" rx="2" fill="#fff" stroke="currentColor" strokeWidth="1.2" />
+                <path d={`M${x + 30} ${y - 8}h28`} stroke="var(--maroon)" strokeWidth="1.4" strokeLinecap="round" />
+              </g>
+              <rect x={x} y={y} width="86" height="46" rx="3" fill="var(--cream)" />
+              <rect data-line {...line} x={x} y={y} width="86" height="46" rx="3" />
+              {/* tempat label */}
+              <rect x={x + 27} y={y + 9} width="32" height="14" rx="1.5" fill="#fff" stroke="var(--gold)" strokeWidth="1.2" />
+              {labels[i] && (
+                <text x={x + 43} y={y + 19} textAnchor="middle" fontSize="7" fontWeight="700" letterSpacing="0.6" fill="var(--navy)">
+                  {labels[i]}
+                </text>
+              )}
+              {/* pegangan kuningan */}
+              <path data-line {...line} d={`M${x + 33} ${y + 33}q10 8 20 0`} stroke="var(--gold)" strokeWidth="2.2" />
+              <circle cx={x + 33} cy={y + 33} r="1.8" {...gold} />
+              <circle cx={x + 53} cy={y + 33} r="1.8" {...gold} />
+            </g>
+          );
+        })
+      )}
+    </svg>
+  );
+}
+
 export const ILLUSTRATIONS = {
+  "card-catalog": CardCatalogIllustration,
+  "tuition-jar": TuitionJarIllustration,
+  "printing-press": PrintingPressIllustration,
+  postcard: PostcardIllustration,
+  "service-desk": ServiceDeskIllustration,
+  "floor-plan": FloorPlanIllustration,
   "sprint-track": SprintTrackIllustration,
   "credit-exchange": CreditExchangeIllustration,
   "industry-skyline": IndustrySkylineIllustration,

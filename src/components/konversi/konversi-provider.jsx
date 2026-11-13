@@ -1,5 +1,5 @@
 "use client";
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import { createContext, useCallback, useContext, useLayoutEffect as useEffect, useMemo, useRef, useState } from "react";
 import { SIM_KEY, LIMITS, creditsFor } from "@/lib/konversi-content";
 import { prefersReducedMotion } from "@/lib/motion";
 import { useToast } from "@/components/ui/toast";

@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useLayoutEffect as useEffect, useRef, useState } from "react";
 import { gsap } from "@/lib/scroll";
 import { prefersReducedMotion, curtainDelay } from "@/lib/motion";
 import { CURTAIN_KEY } from "@/lib/bidang-keahlian-content";
@@ -34,7 +34,7 @@ export function BidangHero() {
   }, []);
 
   return (
-    <section ref={ref} className="relative overflow-hidden pb-16 pt-10 md:pb-24 md:pt-14">
+    <section ref={ref} className="relative overflow-hidden pb-10 pt-10 md:pb-14 md:pt-14">
       <Container>
         <nav aria-label="Breadcrumb" data-hero-fade className="text-sm text-text/55">
           <ol className="flex flex-wrap items-center gap-2">
@@ -102,12 +102,13 @@ export function BidangHero() {
                   <span
                     aria-hidden={!on}
                     className={cn(
-                      "col-span-2 col-start-2 font-serif text-[15px] italic leading-snug text-text/65 transition-opacity duration-500 lg:col-span-1 lg:col-start-auto lg:text-[1.1rem]",
+                      "col-span-2 col-start-2 text-[13px] leading-snug text-text/60 transition-opacity duration-500 lg:col-span-1 lg:col-start-auto lg:text-[14px]",
                       on ? "opacity-100" : "lg:opacity-0",
                       dim && "max-lg:opacity-40"
                     )}
                   >
-                    “{f.question}”
+                    <span className="mb-1 block text-[11px] font-semibold uppercase tracking-[0.14em] text-maroon">Alat yang dipakai</span>
+                    {(f.tools ?? []).join(" · ")}
                   </span>
                   <span
                     aria-hidden

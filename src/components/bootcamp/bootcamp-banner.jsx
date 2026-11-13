@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useLayoutEffect as useEffect, useRef, useState } from "react";
 import { animate } from "animejs";
 import { BANNER_KEY } from "@/lib/bootcamp-content";
 import { prefersReducedMotion } from "@/lib/motion";

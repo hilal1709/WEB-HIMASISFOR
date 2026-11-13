@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect as useEffect, useLayoutEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { A11y } from "swiper/modules";
@@ -58,7 +58,7 @@ export function Directory() {
 
 
   return (
-    <section id="direktori" className="scroll-mt-20 py-16 md:py-24">
+    <section id="direktori" className="scroll-mt-20 py-16 md:py-20">
       <Container>
         <SectionHeader
           title={["Direktori", "dosen"]}

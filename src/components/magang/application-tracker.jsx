@@ -99,7 +99,7 @@ export function ApplicationTracker() {
   };
 
   return (
-    <section id="jejak" className="scroll-mt-20 bg-white py-20 md:py-28">
+    <section id="jejak" className="scroll-mt-20 bg-white py-20 md:py-20">
       <Container>
         <SectionHeader
           title={["Jejak", "lamaranmu"]}

@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useLayoutEffect as useEffect, useRef, useState } from "react";
 import { animate, stagger } from "animejs";
 import { DAYS, HOURS } from "@/lib/program-kelas-content";
 import { countUp, prefersReducedMotion } from "@/lib/motion";
@@ -55,7 +55,7 @@ export function WeekSchedule() {
   }, [active, totalHours]);
 
   return (
-    <section className="bg-cream-2/60 py-16 md:py-24">
+    <section className="bg-cream-2/60 py-16 md:py-20">
       <Container>
         <SectionHeader
           title={["Seminggu di", item.name]}

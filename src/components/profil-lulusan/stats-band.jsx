@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useLayoutEffect as useEffect, useRef } from "react";
 import { animate, stagger } from "animejs";
 import { prefersReducedMotion } from "@/lib/motion";
 import { Container, PlaceholderTag } from "@/components/home/shared";

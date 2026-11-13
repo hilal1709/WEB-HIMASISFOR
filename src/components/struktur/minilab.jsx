@@ -25,7 +25,7 @@ export function Minilab({ minilab, people }) {
   };
 
   return (
-    <section id="minilab" className="relative scroll-mt-24 py-20 md:py-28">
+    <section id="minilab" className="relative scroll-mt-24 py-20 md:py-20">
       <Container>
         <SectionHeader title={["Fasilitas", "prodi"]} body="Tempat sebagian besar kegiatan praktik program studi berlangsung." />
 

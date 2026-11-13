@@ -241,7 +241,7 @@ export default function Navbar() {
 
         {/* hubungi kami */}
         <a
-          href="https://s.id/DaftarSisforUISI"
+          href="https://pmb.uisi.ac.id/prosedur"
           className="bg-gradient-to-r from-[#C10F11] to-[#E31515] hover:scale-105 transition-all duration-300 px-5 py-3 text-xs rounded-lg font-medium text-white"
         >
           Hubungi Kami
@@ -326,7 +326,7 @@ export default function Navbar() {
             </div>
 
             {/* hubungi kami */}
-            <a href="https://s.id/DaftarSisforUISI" className="flex justify-center items-center py-2 bg-gradient-to-r from-[#C10F11] to-[#E31515] hover:from-[#94080a] hover:to-[#f22b2b] rounded-xl font-medium text-sm text-white cursor-pointer">
+            <a href="https://pmb.uisi.ac.id/prosedur" className="flex justify-center items-center py-2 bg-gradient-to-r from-[#C10F11] to-[#E31515] hover:from-[#94080a] hover:to-[#f22b2b] rounded-xl font-medium text-sm text-white cursor-pointer">
               Hubungi Kami
             </a>
           </div>

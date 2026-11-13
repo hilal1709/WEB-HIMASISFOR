@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useLayoutEffect as useEffect, useRef } from "react";
 import { gsap, ScrollTrigger, CINEMATIC_QUERY } from "@/lib/scroll";
 
 /**

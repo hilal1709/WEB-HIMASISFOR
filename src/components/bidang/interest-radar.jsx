@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useLayoutEffect as useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { DEFAULT_PROFILE, DIMENSIONS } from "@/lib/bidang-keahlian-content";
 import { Flip, gsap } from "@/lib/scroll";
 import { prefersReducedMotion } from "@/lib/motion";
@@ -89,7 +89,7 @@ export function InterestRadar() {
   };
 
   return (
-    <section id="cocokkan" className="relative scroll-mt-24 bg-white py-16 md:py-24">
+    <section id="cocokkan" className="relative scroll-mt-24 bg-white py-16 md:py-20">
       <Container>
         <SectionHeader
           title={["Geser, lalu lihat", "siapa yang mirip", "denganmu"]}

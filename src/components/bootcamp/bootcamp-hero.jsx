@@ -1,15 +1,13 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useLayoutEffect as useEffect, useRef } from "react";
 import { motion, useReducedMotion } from "motion/react";
-import { animate, svg, stagger } from "animejs";
+import { animate } from "animejs";
 import { gsap } from "@/lib/scroll";
 import { prefersReducedMotion, curtainDelay } from "@/lib/motion";
 import { CURTAIN_KEY, TRACKS, untilStart } from "@/lib/bootcamp-content";
-import { Container, SceneTitle } from "@/components/home/shared";
+import { Container } from "@/components/home/shared";
 import { ElvoPeek } from "@/components/home/elvo-peek";
-import { SprintTrackIllustration } from "@/components/illustrations/line-illustrations";
 import { cn } from "@/lib/utils";
-import { BootcampBanner } from "./bootcamp-banner";
 import { smoothTo, useBootcamp } from "./bootcamp-provider";
 
 const MODES = [
@@ -75,49 +73,60 @@ function Digit({ value, label }) {
   }, [value]);
   return (
     <span className="flex flex-col items-center">
-      <span className="grid h-14 w-[3.6rem] place-items-center overflow-hidden rounded-md bg-navy sm:h-16 sm:w-[4.2rem]">
-        <span ref={ref} className="tabular block font-serif text-[1.9rem] leading-none text-white sm:text-[2.2rem]">
+      <span className="grid h-[clamp(4.5rem,13vw,10rem)] w-full place-items-center overflow-hidden rounded-xl bg-navy-deep ring-1 ring-white/10">
+        <span ref={ref} className="tabular block font-serif text-[clamp(2.6rem,9vw,7.5rem)] leading-none text-white">
           {value}
         </span>
       </span>
-      <span className="kicker mt-2 text-[10px] text-text/50">{label}</span>
+      <span className="kicker mt-2 text-[10px] text-gold-soft sm:text-[11px]">{label}</span>
     </span>
   );
 }
 
-function Countdown() {
+/** Poster hitung mundur: angka hari/jam/menit/detik raksasa di pita navy selebar konten. */
+function CountdownPoster() {
   const { nextCohort, now, openCohort } = useBootcamp();
   const left = untilStart(nextCohort.start, now);
   const date = new Date(`${nextCohort.start}T00:00:00+07:00`).toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" });
+  const parts = [
+    [left ? left.d : "--", "hari"],
+    [left ? pad(left.h) : "--", "jam"],
+    [left ? pad(left.m) : "--", "menit"],
+    [left ? pad(left.s) : "--", "detik"],
+  ];
   return (
-    <div data-hero-fade className="mt-10 flex flex-col gap-5 border-t border-line pt-6 sm:flex-row sm:items-center sm:justify-between">
-      <div className="min-w-0">
-        <span className="kicker text-[11px] text-maroon">Kohort berikutnya</span>
-        <button type="button" onClick={() => openCohort(nextCohort.slug)} className="mt-1 block text-left font-serif text-[1.35rem] leading-tight text-navy">
-          <span className="u-gold">{nextCohort.title}</span>
-        </button>
-        <span className="mt-1 block text-[13.5px] text-text/60">Mulai {date} · {TRACKS[nextCohort.track]?.label}</span>
+    <div data-poster className="relative mt-5 overflow-hidden rounded-2xl bg-navy px-5 pb-7 pt-6 text-white sm:px-10 sm:pb-10 sm:pt-8">
+      <span aria-hidden className="pointer-events-none absolute -right-20 -top-20 size-72 rounded-full border border-white/10" />
+      <div className="relative flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+        <div className="min-w-0">
+          <span className="kicker text-[11px] text-gold-soft">Kohort berikutnya · {TRACKS[nextCohort.track]?.label}</span>
+          <button type="button" onClick={() => openCohort(nextCohort.slug)} className="mt-1 block text-left font-serif text-[clamp(1.4rem,2.6vw,2rem)] leading-tight">
+            <span className="u-gold">{nextCohort.title}</span>
+          </button>
+        </div>
+        <span className="text-[13.5px] text-white/60">Mulai {date}</span>
       </div>
-      <div className="flex items-start gap-2 sm:gap-2.5" aria-live="off" aria-label={left ? `${left.d} hari ${left.h} jam ${left.m} menit lagi` : "Menghitung waktu mulai"}>
-        <Digit value={left ? left.d : "--"} label="hari" />
-        <Digit value={left ? pad(left.h) : "--"} label="jam" />
-        <Digit value={left ? pad(left.m) : "--"} label="menit" />
-        <Digit value={left ? pad(left.s) : "--"} label="detik" />
+      <div
+        className="relative mt-6 grid grid-cols-4 gap-2 sm:mt-8 sm:gap-4"
+        aria-live="off"
+        aria-label={left ? `${left.d} hari ${left.h} jam ${left.m} menit lagi` : "Menghitung waktu mulai"}
+      >
+        {parts.map(([v, l]) => (
+          <Digit key={l} value={v} label={l} />
+        ))}
       </div>
     </div>
   );
 }
 
 /**
- * Hero "Belajar ngebut, pulang bawa sertifikat". Kiri: judul, intro yang mengikuti mode, sakelar Bootcamp ⇄ Course
- * (mengubah mode seluruh halaman), hitung mundur kohort. Kanan: kanvas cream berisi `SprintTrackIllustration` —
- * garis adegan aktif digambar ulang anime.js setiap mode berganti; di mode bootcamp titik pelari emas menyusuri
- * lintasan (`svg.createMotionPath`).
+ * Hero "roti lapis": baris judul pertama, lalu pita navy hitung mundur kohort berikutnya (angka raksasa), lalu baris
+ * judul kedua rata kanan — judul mengapit hitung mundur. Di bawahnya intro yang mengikuti mode + sakelar
+ * Bootcamp ⇄ Course (mengubah mode seluruh halaman). Tanpa ilustrasi garis.
  */
 export function BootcampHero() {
-  const { mode, intro, active, bootcamps, courses } = useBootcamp();
+  const { mode, intro, bootcamps, courses } = useBootcamp();
   const ref = useRef(null);
-  const art = useRef(null);
 
   useEffect(() => {
     const el = ref.current;
@@ -125,34 +134,13 @@ export function BootcampHero() {
     const delay = curtainDelay(CURTAIN_KEY);
     const ctx = gsap.context(() => {
       gsap.from("[data-hero-fade]", { y: 18, opacity: 0, duration: 0.8, stagger: 0.08, ease: "expo.out", delay });
-      gsap.from("[data-canvas]", { clipPath: "inset(12% 12% 12% 12% round 16px)", opacity: 0, duration: 1.2, ease: "expo.out", delay: delay + 0.15 });
+      gsap.fromTo("[data-poster]", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 1.1, ease: "expo.out", delay: delay + 0.2, clearProps: "transform,opacity" });
     }, el);
     return () => ctx.revert();
   }, []);
 
-  // gambar ulang adegan aktif + pelari
-  useEffect(() => {
-    const root = art.current;
-    if (!root || prefersReducedMotion()) return;
-    const scene = root.querySelector(`[data-scene="${mode}"]`);
-    const lines = scene?.querySelectorAll("[data-line]");
-    const a = lines?.length ? animate(svg.createDrawable(lines), { draw: ["0 0", "0 1"], duration: 1000, delay: stagger(28), ease: "inOutCubic" }) : null;
-    let run = null;
-    const runner = root.querySelector("[data-runner]");
-    const track = root.querySelector("[data-scene='bootcamp'] [data-line]");
-    if (mode === "bootcamp" && runner && track) {
-      runner.setAttribute("cx", 0);
-      runner.setAttribute("cy", 0);
-      run = animate(runner, { ...svg.createMotionPath(track), duration: 5200, delay: 900, loop: true, ease: "inOutSine" });
-    }
-    return () => {
-      a?.revert?.();
-      run?.revert?.();
-    };
-  }, [mode]);
-
   return (
-    <section ref={ref} className="relative overflow-hidden pb-12 pt-10 md:pb-16 md:pt-14">
+    <section ref={ref} className="relative overflow-hidden pb-10 pt-10 md:pb-14 md:pt-14">
       <Container>
         <nav aria-label="Breadcrumb" data-hero-fade className="text-sm text-text/55">
           <ol className="flex flex-wrap items-center gap-2">
@@ -164,39 +152,34 @@ export function BootcampHero() {
           </ol>
         </nav>
 
-        <div className="mt-10 grid gap-12 lg:mt-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-14">
-          <div className="relative z-10">
-            <SceneTitle as="h1" trigger="mount" title={["Belajar ngebut,", "pulang bawa sertifikat"]} className="!text-[clamp(2.5rem,5.4vw,4.75rem)] !leading-[0.98]" />
-            <div data-hero-fade className="mt-6 min-h-[5.5rem] max-w-xl">
-              <motion.p key={mode} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }} className="text-pretty text-[17px] leading-relaxed text-text/70">
-                {mode === "bootcamp" ? intro.bootcamp : intro.course}
-              </motion.p>
-            </div>
-            <div data-hero-fade className="mt-6 flex flex-wrap items-center gap-x-7 gap-y-5">
-              <ModeSwitch />
-              <button type="button" onClick={() => smoothTo("katalog")} className="text-[15px] font-semibold text-navy">
-                <span className="u-gold">{mode === "bootcamp" ? `Lihat ${bootcamps.length} kohort` : `Jelajahi ${courses.length} kursus`}</span>
-              </button>
-            </div>
-            <Countdown />
-          </div>
+        <h1 className="sr-only">Belajar ngebut, pulang bawa sertifikat — Bootcamp & Course Sistem Informasi UISI</h1>
+        {/* roti lapis: baris judul pertama — hitung mundur — baris judul kedua */}
+        <p aria-hidden data-hero-fade className="mt-8 font-serif text-[clamp(2.6rem,6.4vw,5.5rem)] leading-[0.95] tracking-[-0.015em] text-navy lg:mt-10">
+          Belajar ngebut,
+        </p>
+        <div className="relative">
+          <span aria-hidden className="pointer-events-none absolute -top-24 right-6 z-10 hidden xl:block">
+            <ElvoPeek pose="run" size={84} side="left" say={mode === "bootcamp" ? "Satu minggu satu target, jangan ngebut sendirian!" : "Rak kursus buka 24 jam."} />
+          </span>
+          <CountdownPoster />
+        </div>
+        <p aria-hidden data-hero-fade className="mt-6 text-right font-serif text-[clamp(2.6rem,6.4vw,5.5rem)] italic leading-[0.95] tracking-[-0.015em] text-maroon">
+          pulang bawa sertifikat
+        </p>
 
-          <div data-canvas className="relative rounded-2xl border border-line bg-cream-2/70 p-6 sm:p-9">
-            <span aria-hidden className="pointer-events-none absolute -right-6 -top-16 z-10 hidden xl:block">
-              <ElvoPeek pose="run" size={88} side="left" say={mode === "bootcamp" ? "Satu gawang per minggu, jangan ngebut sendirian!" : "Rak ini buka 24 jam."} />
-            </span>
-            <div ref={art}>
-              <SprintTrackIllustration mode={mode} hurdles={active.weeks} className="h-auto w-full text-navy" />
-            </div>
-            <div className="mt-4 flex items-center justify-between gap-3 text-[12.5px] text-text/55">
-              <span>{mode === "bootcamp" ? `${active.weeks} gawang = ${active.weeks} minggu ${active.title}` : "Tanpa jadwal: ambil satu buku, jeda, lanjut lagi"}</span>
-              <span aria-hidden className="h-[3px] w-10 shrink-0 bg-gold" />
-            </div>
+        <div className="mt-8 grid gap-6 border-t border-line pt-7 lg:grid-cols-[1fr_auto] lg:items-center lg:gap-14">
+          <div data-hero-fade className="min-h-[3.5rem] max-w-2xl">
+            <motion.p key={mode} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }} className="text-pretty text-[17px] leading-relaxed text-text/70">
+              {mode === "bootcamp" ? intro.bootcamp : intro.course}
+            </motion.p>
+          </div>
+          <div data-hero-fade className="flex flex-wrap items-center gap-x-7 gap-y-5">
+            <ModeSwitch />
+            <button type="button" onClick={() => smoothTo("katalog")} className="text-[15px] font-semibold text-navy">
+              <span className="u-gold">{mode === "bootcamp" ? `Lihat ${bootcamps.length} kohort` : `Jelajahi ${courses.length} kursus`}</span>
+            </button>
           </div>
         </div>
-      </Container>
-      <Container className="mt-12">
-        <BootcampBanner />
       </Container>
     </section>
   );

@@ -25,7 +25,7 @@ An information-systems program embedded in the Semen Indonesia Group industrial 
 
 - Campus: Kompleks PT. Semen Indonesia (Persero) Tbk., Jl. Veteran, Sidokumpul, Gresik, Jawa Timur 61122.
 - Sister channel: uisi.ac.id/read/sistem-informasi (institutional summary, managed by UISI IT department).
-- PMB link in use: https://s.id/DaftarSisforUISI. Socials: Instagram @sisforuisi, TikTok @sisfor_uisi, YouTube @sisforuisi.
+- PMB link in use: https://pmb.uisi.ac.id/prosedur (dulu s.id/DaftarSisforUISI). Socials: Instagram @sisforuisi, TikTok @sisfor_uisi, YouTube @sisforuisi.
 - Strategic reference: "Analisis Audit & Kebutuhan Redesign Website Sistem Informasi UISI" (Aug 2026) — target IA: Profil, Akademik, Fasilitas, Belajar Luar Prodi, Layanan, Berita, PMB.
 
 ## Capabilities and Constraints

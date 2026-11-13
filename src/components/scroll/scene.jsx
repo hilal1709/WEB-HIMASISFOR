@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useLayoutEffect as useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { gsap, ScrollTrigger, sceneTokens } from "@/lib/scroll";
 import { useSmooth } from "./smooth-scroll";

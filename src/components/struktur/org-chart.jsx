@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useLayoutEffect as useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { gsap } from "@/lib/scroll";
 import { prefersReducedMotion } from "@/lib/motion";
@@ -82,7 +82,7 @@ export function OrgChart({ people, confirmed }) {
   const n = tree.level1.length;
 
   return (
-    <section ref={ref} id="bagan" className="relative scroll-mt-24 border-y border-line bg-white py-20 md:py-28">
+    <section ref={ref} id="bagan" className="relative scroll-mt-24 border-y border-line bg-white py-20 md:py-20">
       <Container>
         <SectionHeader
           title={["Bagan", "organisasi"]}

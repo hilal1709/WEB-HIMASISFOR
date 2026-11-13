@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import { useLayoutEffect as useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { ScrollTrigger } from "@/lib/scroll";
@@ -31,7 +31,9 @@ export function Topbar() {
           ))}
         </nav>
         <div className="flex items-center gap-6">
-          <a href="#kontak" className="u-gold transition-colors hover:text-white">Kontak</a>
+          <a href="/beasiswa" className="u-gold transition-colors hover:text-white">Beasiswa</a>
+          <a href="/faq" className="u-gold transition-colors hover:text-white">FAQ</a>
+          <a href="/kontak" className="u-gold transition-colors hover:text-white">Kontak</a>
           <a href="https://uisi.ac.id" className="u-gold transition-colors hover:text-white">UISI</a>
           <span className="text-white/45" title="Versi bahasa Inggris segera hadir">ID · EN</span>
         </div>

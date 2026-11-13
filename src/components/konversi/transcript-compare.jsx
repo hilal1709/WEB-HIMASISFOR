@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useLayoutEffect as useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { gsap } from "@/lib/scroll";
 import { prefersReducedMotion } from "@/lib/motion";
@@ -94,7 +94,7 @@ export function TranscriptCompare() {
   };
 
   return (
-    <section id="contoh" className="scroll-mt-24 border-t border-line bg-white py-16 md:py-24">
+    <section id="contoh" className="scroll-mt-24 border-t border-line bg-white py-16 md:py-20">
       <Container>
         <SectionHeader
           title={["Seperti apa", "di transkrip"]}

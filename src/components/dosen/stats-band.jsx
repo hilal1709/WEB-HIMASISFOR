@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useLayoutEffect as useEffect, useRef } from "react";
 import { countUp } from "@/lib/motion";
 import { lecturerStats } from "@/lib/dosen-content";
 import { Container } from "@/components/home/shared";

@@ -59,6 +59,10 @@ export function SceneTitle({ lines, title, as = "h2", tone = "light", align = "l
  * - split    : judul kiri, paragraf + aksi kanan
  * - centered : rata tengah, tanpa garis
  * - rule     : garis tipis selebar konten di atas judul
+ * - postmark : nomor section di dalam cap pos bulat bergaris putus (halaman Kontak)
+ * - masthead : kepala rubrik koran — garis rangkap tebal/tipis, judul kiri, deskripsi kanan (halaman Warta)
+ * - ticks    : judul di atas penggaris kecil bertanda skala, titik nol emas (halaman Beasiswa)
+ * - catalog  : nomor section di tempat label laci katalog berbingkai emas (halaman FAQ)
  */
 const HeadingCtx = createContext("bar");
 export function HeadingStyle({ value, children }) {
@@ -102,6 +106,81 @@ export function SectionHeader({ title, body, tone = "light", align = "left", siz
           <SectionBody body={body} tone={tone} />
           {act}
         </div>
+      </div>
+    );
+
+  if (v === "masthead")
+    return (
+      <div className={cn("border-t-[3px] pt-[3px]", light ? "border-navy" : "border-white/60", className)}>
+        <div className={cn("grid gap-4 border-t pt-6 md:grid-cols-[1fr_minmax(0,24rem)] md:items-end md:gap-12 md:pt-8", light ? "border-navy" : "border-white/40")}>
+          <SceneTitle title={title} tone={tone} size={size} />
+          <div className="flex flex-col gap-4 md:items-end md:text-right">
+            <SectionBody body={body} tone={tone} />
+            {act}
+          </div>
+        </div>
+      </div>
+    );
+
+  if (v === "ticks")
+    return (
+      <div className={cn("flex flex-col gap-6 md:flex-row md:items-end md:justify-between", className)}>
+        <div className="max-w-2xl">
+          <SceneTitle title={title} tone={tone} size={size} />
+          <svg aria-hidden viewBox="0 0 240 12" className={cn("mt-5 h-3 w-60", light ? "text-navy/35" : "text-white/35")}>
+            <path d="M0 11.5h240" stroke="currentColor" strokeWidth="1" />
+            {Array.from({ length: 25 }, (_, i) => (
+              <path key={i} d={`M${i * 10} 12V${i % 5 === 0 ? 2 : 7}`} stroke="currentColor" strokeWidth="1" />
+            ))}
+            <path d="M0 12V0" stroke="var(--gold)" strokeWidth="3" />
+          </svg>
+          <SectionBody body={body} tone={tone} className="mt-4" />
+        </div>
+        {act}
+      </div>
+    );
+
+  if (v === "catalog")
+    return (
+      <div className={cn("flex flex-col gap-6 md:flex-row md:items-end md:justify-between", className)}>
+        <div className="flex max-w-3xl items-start gap-5 md:gap-7 [counter-increment:sec]">
+          <span
+            aria-hidden
+            className={cn(
+              "relative mt-1 flex h-12 w-[76px] shrink-0 flex-col items-center justify-center rounded-[3px] border-[1.5px] bg-white shadow-[0_8px_18px_-12px_rgb(20_33_61/0.5)] md:h-14 md:w-[86px]",
+              "after:font-serif after:text-lg after:leading-none after:tabular-nums after:content-[counter(sec,decimal-leading-zero)] md:after:text-xl",
+              light ? "border-gold text-navy" : "border-gold-soft/70 bg-transparent text-gold-soft"
+            )}
+          >
+            <span className="mb-0.5 text-[8.5px] font-bold uppercase tracking-[0.24em] opacity-60">Laci</span>
+          </span>
+          <div>
+            <SceneTitle title={title} tone={tone} size={size} />
+            <SectionBody body={body} tone={tone} className="mt-4" />
+          </div>
+        </div>
+        {act}
+      </div>
+    );
+
+  if (v === "postmark")
+    return (
+      <div className={cn("flex flex-col gap-6 md:flex-row md:items-end md:justify-between", className)}>
+        <div className="flex max-w-3xl items-start gap-5 md:gap-7 [counter-increment:sec]">
+          <span
+            aria-hidden
+            className={cn(
+              "relative mt-1 grid size-14 shrink-0 -rotate-12 place-items-center rounded-full border-2 border-dashed font-serif text-lg tabular-nums before:content-[counter(sec,decimal-leading-zero)] md:size-16 md:text-xl",
+              "after:absolute after:inset-[5px] after:rounded-full after:border after:content-['']",
+              light ? "border-maroon/55 text-maroon after:border-maroon/30" : "border-gold-soft/60 text-gold-soft after:border-gold-soft/30"
+            )}
+          />
+          <div>
+            <SceneTitle title={title} tone={tone} size={size} />
+            <SectionBody body={body} tone={tone} className="mt-4" />
+          </div>
+        </div>
+        {act}
       </div>
     );
 

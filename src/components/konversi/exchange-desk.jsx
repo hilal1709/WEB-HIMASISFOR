@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useLayoutEffect as useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { animate, stagger } from "animejs";
 import { gsap } from "@/lib/scroll";
@@ -322,7 +322,7 @@ export function ExchangeDesk() {
   }, []);
 
   return (
-    <section ref={section} id="kalkulator" className="scroll-mt-24 border-t border-line bg-cream-2 py-16 md:py-24">
+    <section ref={section} id="kalkulator" className="scroll-mt-24 border-t border-line bg-cream-2 py-16 md:py-20">
       <Container>
         <SectionHeader title={["Tukar jam kegiatan", "jadi SKS"]} body={`Atur ${program.mode === "jam" ? "durasinya" : "jumlah SKS-nya"}, lalu pilih mata kuliah yang digantikan. Angkanya langsung terhitung.`} />
 

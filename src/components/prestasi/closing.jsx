@@ -15,7 +15,7 @@ const NEXT = [
  */
 export function Closing() {
   return (
-    <section className="relative overflow-hidden py-16 md:py-24">
+    <section className="relative overflow-hidden py-16 md:py-20">
       <span aria-hidden className="pointer-events-none absolute left-1/2 top-10 size-[520px] -translate-x-1/2 rounded-full border border-gold/20" />
       <Container className="relative">
         <div className="mx-auto flex max-w-2xl flex-col items-center text-center">

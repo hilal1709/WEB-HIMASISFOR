@@ -13,10 +13,9 @@ export function Faq() {
   const [open, setOpen] = useState(0);
 
   return (
-    <section className="bg-white py-16 md:py-24">
+    <section id="faq" className="scroll-mt-24 bg-white py-16 md:py-20">
       <Container className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
         <div className="lg:sticky lg:top-28 lg:self-start">
-          <span aria-hidden className="mb-5 block h-[3px] w-10 bg-gold" />
           <SceneTitle title={["Masih", "ragu?"]} />
           <p data-aos="fade-up" className="mt-4 max-w-sm text-[16.5px] leading-relaxed text-text/65">
             Pertanyaan yang paling sering diajukan calon Sisforians tentang program kelas.

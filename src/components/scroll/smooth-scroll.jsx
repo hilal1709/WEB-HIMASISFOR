@@ -1,5 +1,5 @@
 "use client";
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import { createContext, useCallback, useContext, useLayoutEffect as useEffect, useMemo, useRef, useState } from "react";
 import { gsap, ScrollSmoother, ScrollTrigger, CINEMATIC_QUERY, sceneTokens } from "@/lib/scroll";
 
 const SmoothCtx = createContext({

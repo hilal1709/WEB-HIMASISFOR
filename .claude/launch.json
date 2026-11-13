@@ -4,8 +4,71 @@
     {
       "name": "web",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
+      "runtimeArgs": [
+        "run",
+        "dev"
+      ],
       "port": 3000
+    },
+    {
+      "name": "web-layanan",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "next",
+        "dev",
+        "--turbopack",
+        "-p",
+        "3017"
+      ],
+      "port": 3017
+    },
+    {
+      "name": "web-kontak",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "next",
+        "dev",
+        "--turbopack",
+        "-p",
+        "3021"
+      ],
+      "port": 3021
+    },
+    {
+      "name": "web-berita",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "next",
+        "dev",
+        "--turbopack",
+        "-p",
+        "3025"
+      ],
+      "port": 3025
+    },
+    {
+      "name": "web-beasiswa",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "next",
+        "dev",
+        "--turbopack",
+        "-p",
+        "3029"
+      ],
+      "port": 3029
+    },
+    {
+      "name": "web-faq",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "next",
+        "dev",
+        "--turbopack",
+        "-p",
+        "3033"
+      ],
+      "port": 3033
     }
   ]
 }

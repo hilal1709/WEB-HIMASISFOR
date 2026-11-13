@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useLayoutEffect as useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { Flip, gsap } from "@/lib/scroll";
 import { prefersReducedMotion } from "@/lib/motion";
@@ -100,7 +100,7 @@ export function Archive() {
   const active = [category !== "all", level !== "all", year !== "all", !!query].filter(Boolean).length;
 
   return (
-    <section id="arsip" className="scroll-mt-20 py-16 md:py-24">
+    <section id="arsip" className="scroll-mt-20 py-16 md:py-20">
       <Container>
         <div className="flex items-end justify-between gap-6">
           <SectionHeader

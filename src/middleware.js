@@ -26,7 +26,8 @@ export default auth((request) => {
   
   if (pathname.startsWith('/img/') || pathname.startsWith('/_next/static/')) {
     response.headers.set('Cache-Control', 'public, max-age=31536000, immutable');
-  } else if (pathname.startsWith('/api/auth')) {
+  } else if (pathname.startsWith('/api/auth') || pathname.startsWith('/api/layanan') || pathname.startsWith('/api/warta')) {
+    // auth & pengajuan layanan bersifat pribadi — jangan pernah di-cache
     response.headers.set('Cache-Control', 'no-store');
   } else if (pathname.startsWith('/api/')) {
     // Cache API responses for 1 hour

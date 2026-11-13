@@ -25,7 +25,7 @@ export function Featured() {
   if (!featured.length) return null;
 
   return (
-    <section id="sorotan" className="scroll-mt-20 overflow-hidden bg-cream-2/60 py-16 md:py-24">
+    <section id="sorotan" className="scroll-mt-20 overflow-hidden bg-cream-2/60 py-16 md:py-20">
       <Container>
         <SectionHeader
           title={["Sorotan", "hall of fame"]}

@@ -16,7 +16,7 @@ const STOPS = [
  */
 export function Closing() {
   return (
-    <section className="relative overflow-hidden bg-cream-2 py-16 md:py-24">
+    <section className="relative overflow-hidden bg-cream-2 py-16 md:py-20">
       <Container>
         <div className="flex items-end justify-between gap-6">
           <SceneTitle title={["Langkah", "berikutnya"]} />

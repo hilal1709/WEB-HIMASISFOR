@@ -5,7 +5,7 @@
  * Konten yang belum resmi ditandai <PlaceholderTag/> di UI — jangan mengarang angka.
  */
 
-export const PMB_URL = "https://s.id/DaftarSisforUISI";
+export const PMB_URL = "https://pmb.uisi.ac.id/prosedur";
 export const CONTACT_URL = "https://s.id/DaftarSisforUISI";
 export const VIDEO_URL = "https://www.youtube.com/@sisforuisi";
 
@@ -44,12 +44,15 @@ export const NAV = [
       { label: "Bootcamp & Course", href: "/bootcamp", desc: "Kohort intensif dan kursus mandiri bersertifikat" },
     ],
   },
+  { label: "Warta", href: "/berita" },
   {
     label: "Layanan",
-    href: "/profile#layanan",
+    href: "/layanan-akademik",
     items: [
-      { label: "Layanan Akademik", href: "/profile#layanan", desc: "Persuratan dan approval kaprodi" },
-      { label: "Kontak", href: "#kontak", desc: "Hubungi sekretariat prodi" },
+      { label: "Layanan Akademik", href: "/layanan-akademik", desc: "Persuratan dan approval kaprodi" },
+      { label: "Beasiswa", href: "/beasiswa", desc: "Pendanaan kuliah dan cara mendaftar" },
+      { label: "FAQ", href: "/faq", desc: "Pertanyaan yang paling sering diajukan" },
+      { label: "Kontak", href: "/kontak", desc: "Hubungi sekretariat prodi" },
     ],
   },
 ];
@@ -57,7 +60,7 @@ export const NAV = [
 export const TOPBAR = [
   { label: "UISI", href: "https://uisi.ac.id" },
   { label: "PMB", href: PMB_URL },
-  { label: "Kontak", href: "#kontak" },
+  { label: "Kontak", href: "/kontak" },
 ];
 
 export const HERO = {
@@ -221,7 +224,7 @@ export const FOOTER = {
   columns: [
     { title: "Profil", links: [["Sambutan Kaprodi", "/sambutan-kaprodi"], ["Visi & Misi", "/visi-misi"], ["Struktur Organisasi", "/struktur-organisasi"], ["Profil Lulusan", "/profil-lulusan"], ["Dosen", "/dosen"]] },
     { title: "Akademik", links: [["Kurikulum & RPS", "/curiculum"], ["Bidang Keahlian", "/bidang-keahlian"], ["Jalur Kelulusan", "/jalur-kelulusan"], ["Konversi SKS", "/konversi-sks"], ["Bootcamp & Course", "/bootcamp"], ["Prestasi", "/achievement"]] },
-    { title: "Tautan Penting", links: [["Universitas (UISI)", "https://uisi.ac.id"], ["PMB UISI", PMB_URL], ["Instagram Prodi", "https://www.instagram.com/sisforuisi/"]] },
+    { title: "Tautan Penting", links: [["Warta SISFOR", "/berita"], ["Beasiswa", "/beasiswa"], ["FAQ", "/faq"], ["Universitas (UISI)", "https://uisi.ac.id"], ["PMB UISI", PMB_URL], ["Instagram Prodi", "https://www.instagram.com/sisforuisi/"]] },
   ],
 };
 
@@ -310,14 +313,14 @@ export const MEGA_FEATURE = {
   Profil: { image: "/img/heroprofile.png", title: "Mengenal SISFOR", body: "Sejarah, visi misi, dan dosen program studi.", href: "/profile" },
   Akademik: { image: "/img/erp.jpeg", title: "Kurikulum berbasis ERP", body: "Struktur mata kuliah dan empat bidang keahlian.", href: "/curiculum" },
   "Belajar Luar Prodi": { image: "/img/award/image-1.png", title: "Magang & MBKM", body: "Belajar langsung di industri, dikonversi ke SKS.", href: "/magang" },
-  Layanan: { image: "/img/governance.jpeg", title: "Layanan akademik", body: "Persuratan, approval kaprodi, dan kontak.", href: "/profile#layanan" },
+  Layanan: { image: "/img/governance.jpeg", title: "Layanan akademik", body: "Persuratan, beasiswa, dan kontak prodi.", href: "/layanan-akademik" },
 };
 
 export const QUICK_LINKS = [
   { title: "Calon Mahasiswa", body: "Jalur masuk, biaya, dan pendaftaran PMB.", href: PMB_URL, icon: "target", lottie: "/lottie/qa-campus.json", external: true },
   { title: "Mahasiswa Aktif", body: "Kurikulum, RPS, magang, dan layanan prodi.", href: "/curiculum", icon: "book", lottie: "/lottie/qa-student.json" },
   { title: "Alumni", body: "Jejaring alumni dan profil lulusan.", href: "/profil-lulusan", icon: "account", lottie: "/lottie/qa-alumni.json" },
-  { title: "Mitra Industri", body: "Kerja sama riset, magang, dan rekrutmen.", href: "#kontak", icon: "suitcase", lottie: "/lottie/qa-industry.json" },
+  { title: "Mitra Industri", body: "Kerja sama riset, magang, dan rekrutmen.", href: "/kontak", icon: "suitcase", lottie: "/lottie/qa-industry.json" },
 ];
 
 export const ABOUT_V3 = {

@@ -12,7 +12,7 @@ const NEXT = [
 /** Penutup "indeks bernomor": kiri judul + kartu layanan akademik, kanan daftar tautan 01/02/03. */
 export function Closing() {
   return (
-    <section className="relative bg-cream-2/60 py-16 md:py-24">
+    <section className="relative bg-cream-2/60 py-16 md:py-20">
       <Container>
         <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
           <div className="relative">
@@ -20,7 +20,7 @@ export function Closing() {
             <div data-aos="fade-up" className="mt-8 rounded-lg border-l-4 border-gold bg-maroon p-6 text-white">
               <p className="font-serif text-xl">Butuh layanan akademik?</p>
               <p className="mt-2 text-sm leading-relaxed text-white/70">Persuratan dan approval kaprodi diurus lewat layanan akademik program studi.</p>
-              <ArrowLink href="/profile#layanan" tone="dark" className="group mt-5 items-center gap-2">
+              <ArrowLink href="/layanan-akademik" tone="dark" className="group mt-5 items-center gap-2">
                 <LordIcon name="chat" size={20} trigger="hover" target=".group" colors="primary:#ffffff,secondary:#e6d3a1" />
                 Layanan akademik
               </ArrowLink>

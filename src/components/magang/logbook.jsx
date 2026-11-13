@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useLayoutEffect as useEffect, useRef } from "react";
 import { gsap, ScrollTrigger } from "@/lib/scroll";
 import { prefersReducedMotion } from "@/lib/motion";
 import { Container, PlaceholderTag, SectionHeader } from "@/components/home/shared";
@@ -59,7 +59,7 @@ export function Logbook() {
   }, []);
 
   return (
-    <section id="logbook" className="scroll-mt-20 py-20 md:py-28">
+    <section id="logbook" className="scroll-mt-20 py-20 md:py-20">
       <Container>
         <SectionHeader
           title={["Dari surat pengantar", "sampai seminar"]}

@@ -1,5 +1,5 @@
 "use client";
-import { Fragment, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { Fragment, useCallback, useLayoutEffect as useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { TERMS } from "@/lib/regulasi-content";
 import { gsap } from "@/lib/scroll";
@@ -231,7 +231,7 @@ export function RuleReader() {
   const sample = chapters.some((c) => c.sample);
 
   return (
-    <section ref={sectionRef} id="pasal" className="relative scroll-mt-20 border-y border-line bg-cream-2/60 py-16 md:py-24">
+    <section ref={sectionRef} id="pasal" className="relative scroll-mt-20 border-y border-line bg-cream-2/60 py-16 md:py-20">
       <Container>
         <SectionHeader title={["Pedomannya,", "pasal demi pasal"]} body="Pilih bahasanya: kalimat resmi dari pedoman, atau penjelasan singkat versi sehari-hari." action={sample ? <PlaceholderTag /> : null} />
 

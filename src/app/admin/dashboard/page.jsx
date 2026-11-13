@@ -1,141 +1,221 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
+import { useToast } from '@/components/ui/toast'
+import { Banner } from '@/components/ui/banner'
+import { AosProvider, AosReady } from '@/components/motion/aos-provider'
+import { DashHero } from '@/components/admin-dashboard/dash-hero'
+import { StatRail } from '@/components/admin-dashboard/stat-rail'
+import { InboxTimeline } from '@/components/admin-dashboard/inbox-timeline'
+import { AgendaDesk } from '@/components/admin-dashboard/agenda-desk'
+import { QuickDesk } from '@/components/admin-dashboard/quick-desk'
+import { DetailModal, MiniList, RequestDetail } from '@/components/admin-dashboard/detail-modal'
+
+const BANNER_KEY = 'sisfor:dash:banner-hidden'
+const TOAST_KEY = 'sisfor:dash:pending-seen'
+const PENDING = ['diterima', 'diverifikasi']
+
+const safeGet = (key) => {
+  try { return window.sessionStorage.getItem(key) } catch { return null }
+}
+const safeSet = (key, value) => {
+  try { window.sessionStorage.setItem(key, value) } catch { /* sesi diblokir: abaikan */ }
+}
+
+const plural = (n, label) => `${n} ${label}`
 
 export default function DashboardPage() {
-  const [stats, setStats] = useState({
-    achievements: 0,
-    gallery: 0
-  })
+  const toast = useToast()
+  const [data, setData] = useState(null)
+  const [viewer, setViewer] = useState('')
   const [loading, setLoading] = useState(true)
+  const [failed, setFailed] = useState(false)
+  const [bannerHidden, setBannerHidden] = useState(true)
+  const [modal, setModal] = useState(null) // { kind: 'stat', key } | { kind: 'request', index }
 
   useEffect(() => {
-    fetchStats()
+    setBannerHidden(safeGet(BANNER_KEY) === '1')
+    let live = true
+    fetch('/api/dashboard', { credentials: 'include', cache: 'no-store' })
+      .then((r) => r.json())
+      .then((json) => {
+        if (!live) return
+        if (!json?.success) throw new Error(json?.error || 'gagal')
+        setData(json.data)
+        setViewer(json.data.viewer ?? '')
+      })
+      .catch(() => live && setFailed(true))
+      .finally(() => live && setLoading(false))
+    return () => { live = false }
   }, [])
 
-  const fetchStats = async () => {
-    try {
-      const [achievementsRes, galleryRes] = await Promise.all([
-        fetch('/api/achievements'),
-        fetch('/api/gallery')
-      ])
+  const counts = data?.counts
+  const pendingRequests = useMemo(
+    () => (data?.recentRequests ?? []).filter((r) => PENDING.includes(r.status)),
+    [data]
+  )
 
-      const achievementsData = await achievementsRes.json()
-      const galleryData = await galleryRes.json()
+  // Toast sekali per sesi: hanya bila jumlah pengajuan menunggu berubah sejak kunjungan terakhir.
+  useEffect(() => {
+    if (!counts || counts.requestsPending === 0) return
+    const key = String(counts.requestsPending)
+    if (safeGet(TOAST_KEY) === key) return
+    safeSet(TOAST_KEY, key)
+    toast.info(plural(counts.requestsPending, 'pengajuan baru menunggu'), {
+      description: 'Antrean dibuka dari bagian bawah ringkasan.',
+      action: {
+        label: 'Lihat antrean',
+        onClick: () => document.getElementById('antrean')?.scrollIntoView({ behavior: 'smooth', block: 'start' }),
+      },
+    })
+    // toast stabil dari provider
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [counts])
 
-      setStats({
-        achievements: achievementsData.data?.length || 0,
-        gallery: galleryData.data?.length || 0
-      })
-    } catch (error) {
-      console.error('Error fetching stats:', error)
-    } finally {
-      setLoading(false)
+  const hideBanner = useCallback(() => {
+    safeSet(BANNER_KEY, '1')
+    setBannerHidden(true)
+  }, [])
+
+  const firstName = viewer ? viewer.split(' ')[0] : ''
+  const pendingCount = counts?.requestsPending ?? 0
+  const draftCount = counts?.postsDraft ?? 0
+  const showBanner = !loading && !failed && !bannerHidden && (pendingCount > 0 || draftCount > 0)
+
+  // ----- modal -----
+  const statItems = useMemo(() => {
+    if (!data || !modal || modal.kind !== 'stat') return { items: [], hasList: false, title: '', description: '', link: null, kicker: '' }
+    switch (modal.key) {
+      case 'requests':
+        return {
+          kicker: 'Pengajuan menunggu',
+          title: plural(pendingCount, 'pengajuan'),
+          description: 'Diurutkan dari yang terbaru. Sisanya ada di antrean lengkap.',
+          hasList: true,
+          items: pendingRequests.map((r) => ({ key: r.id, title: r.name, meta: `${r.code} · ${r.nim}`, href: '/admin/layanan' })),
+          link: { href: '/admin/layanan', label: 'Buka kotak layanan' },
+        }
+      case 'posts':
+        return {
+          kicker: 'Warta',
+          title: plural(counts?.postsPublished ?? 0, 'warta terbit'),
+          description: draftCount ? `${plural(draftCount, 'draf')} menunggu untuk diterbitkan.` : 'Semua warta sudah terbit.',
+          hasList: true,
+          items: (data.recentPosts ?? [])
+            .filter((p) => p.status === 'terbit')
+            .slice(0, 4)
+            .map((p) => ({ key: p.id, title: p.title, meta: p.category, href: '/admin/warta' })),
+          link: { href: '/admin/warta', label: 'Kelola warta' },
+        }
+      case 'achievements':
+        return {
+          kicker: 'Prestasi',
+          title: plural(counts?.achievements ?? 0, 'prestasi tercatat'),
+          description: 'Mencakup peraih dari kalangan dosen dan mahasiswa.',
+          items: [],
+          link: { href: '/admin/achievements', label: 'Kelola prestasi' },
+        }
+      default:
+        return {
+          kicker: 'Galeri',
+          title: plural(counts?.gallery ?? 0, 'foto aktif'),
+          description: 'Foto yang ditampilkan di halaman prestasi.',
+          items: [],
+          link: { href: '/admin/gallery', label: 'Kelola galeri' },
+        }
     }
-  }
+  }, [modal, data, counts, pendingCount, pendingRequests, draftCount])
 
-  const cards = [
-    {
-      title: 'Total Prestasi',
-      value: stats.achievements,
-      color: 'bg-yellow-500',
-      link: '/admin/achievements'
-    },
-    {
-      title: 'Galeri Prestasi',
-      value: stats.gallery,
-      color: 'bg-purple-500',
-      link: '/admin/gallery'
-    }
-  ]
+  const requests = data?.recentRequests ?? []
+  const reqIndex = modal?.kind === 'request' ? modal.index : -1
+  const go = (step) =>
+    setModal((m) => (m?.kind === 'request' ? { kind: 'request', index: (m.index + step + requests.length) % requests.length } : m))
 
   return (
-    <div className="space-y-6 lg:space-y-8">
-      <div className="mb-6 lg:mb-8">
-        <h2 className="text-2xl lg:text-3xl font-bold text-zinc-800">Selamat Datang di CMS!</h2>
-        <p className="text-sm lg:text-base text-zinc-500 mt-2">Kelola konten website Sistem Informasi UISI</p>
-      </div>
+    <AosProvider>
+      <div className="space-y-8 lg:space-y-10">
+        <DashHero firstName={firstName} pendingCount={pendingCount} />
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
-        {cards.map((card, index) => (
-          <Link
-            key={index}
-            href={card.link}
-            className="bg-white rounded-xl shadow-md hover:shadow-lg transition p-4 lg:p-6 border border-zinc-100"
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-zinc-500 text-xs lg:text-sm font-medium">{card.title}</p>
-                <p className="text-2xl lg:text-3xl font-bold text-zinc-800 mt-2">
-                  {loading ? '...' : card.value}
-                </p>
+        {failed && (
+          <Banner variant="danger" title="Ringkasan belum bisa dimuat">
+            Muat ulang halaman. Jika tetap gagal, periksa koneksi basis data.
+          </Banner>
+        )}
+
+        {showBanner && (
+          <Banner
+            variant="brand"
+            title="Menunggu tindakanmu"
+            action={
+              <div className="flex items-center gap-4">
+                <a href="#antrean" className="text-sm font-semibold text-gold-soft underline underline-offset-4">Tinjau antrean</a>
+                <button type="button" onClick={hideBanner} className="text-xs text-white/70 hover:text-white">Sembunyikan</button>
               </div>
+            }
+          >
+            {[
+              pendingCount > 0 && plural(pendingCount, 'pengajuan layanan belum diverifikasi'),
+              draftCount > 0 && plural(draftCount, 'warta masih berupa draf'),
+            ].filter(Boolean).join(', ')}.
+          </Banner>
+        )}
+
+        <StatRail counts={counts} loading={loading} onOpen={(key) => setModal({ kind: 'stat', key })} />
+
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] lg:gap-12">
+          <section id="antrean" aria-labelledby="antrean-judul" className="scroll-mt-28 min-w-0" data-aos="fade-up">
+            <div className="mb-5 flex items-baseline justify-between gap-4 border-b border-navy/10 pb-3">
+              <h2 id="antrean-judul" className="font-serif text-2xl text-navy">Antrean pengajuan</h2>
+              <span className="text-xs text-text/55">5 terbaru</span>
             </div>
-          </Link>
-        ))}
+            <InboxTimeline rows={requests} loading={loading} onSelect={(r) => setModal({ kind: 'request', index: requests.findIndex((x) => x.id === r.id) })} />
+          </section>
+
+          <section aria-labelledby="pintasan-judul" className="min-w-0 lg:pt-1" data-aos="fade-up" data-aos-delay="120">
+            <div className="mb-5 border-b border-navy/10 pb-3">
+              <h2 id="pintasan-judul" className="font-serif text-2xl text-navy">Pintasan kerja</h2>
+            </div>
+            <QuickDesk />
+          </section>
+        </div>
+
+        <AgendaDesk events={data?.upcomingEvents} posts={data?.recentPosts} loading={loading} />
       </div>
 
-      {/* Quick Actions */}
-      <div className="bg-white rounded-xl shadow-md p-4 lg:p-6 border border-zinc-100">
-        <h3 className="text-lg lg:text-xl font-bold text-zinc-800 mb-4">Quick Actions</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-4">
-          <Link
-            href="/admin/content"
-            className="flex items-center gap-3 lg:gap-4 p-3 lg:p-4 border border-zinc-200 rounded-lg hover:bg-zinc-50 transition"
-          >
-            <div>
-              <p className="font-semibold text-zinc-800 text-sm lg:text-base">Edit Konten Utama</p>
-              <p className="text-xs lg:text-sm text-zinc-500">Kelola konten homepage</p>
-            </div>
+      <DetailModal
+        open={modal?.kind === 'stat'}
+        onOpenChange={(o) => !o && setModal(null)}
+        kicker={statItems.kicker}
+        title={statItems.title}
+        description={statItems.description}
+        footer={
+          statItems.link ? (
+            <Link href={statItems.link.href} className="rounded-md bg-maroon px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-maroon-deep">
+              {statItems.link.label}
+            </Link>
+          ) : null
+        }
+      >
+        {statItems.hasList && <MiniList items={statItems.items} empty="Belum ada item untuk ditampilkan di sini." />}
+      </DetailModal>
+
+      <DetailModal
+        open={modal?.kind === 'request' && reqIndex >= 0}
+        onOpenChange={(o) => !o && setModal(null)}
+        kicker="Pengajuan layanan"
+        title={requests[reqIndex]?.name ?? ''}
+        onPrev={requests.length > 1 ? () => go(-1) : undefined}
+        onNext={requests.length > 1 ? () => go(1) : undefined}
+        position={requests.length ? `${reqIndex + 1} / ${requests.length}` : ''}
+        footer={
+          <Link href="/admin/layanan" className="rounded-md bg-maroon px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-maroon-deep">
+            Proses di kotak layanan
           </Link>
-          <Link
-            href="/admin/profile-content"
-            className="flex items-center gap-3 lg:gap-4 p-3 lg:p-4 border border-zinc-200 rounded-lg hover:bg-zinc-50 transition"
-          >
-            <div>
-              <p className="font-semibold text-zinc-800 text-sm lg:text-base">Edit Halaman Profil</p>
-              <p className="text-xs lg:text-sm text-zinc-500">Kelola konten profil</p>
-            </div>
-          </Link>
-          <Link
-            href="/admin/curriculum"
-            className="flex items-center gap-3 lg:gap-4 p-3 lg:p-4 border border-zinc-200 rounded-lg hover:bg-zinc-50 transition"
-          >
-            <div>
-              <p className="font-semibold text-zinc-800 text-sm lg:text-base">Kelola Kurikulum</p>
-              <p className="text-xs lg:text-sm text-zinc-500">Edit data kurikulum</p>
-            </div>
-          </Link>
-          <Link
-            href="/admin/achievements"
-            className="flex items-center gap-3 lg:gap-4 p-3 lg:p-4 border border-zinc-200 rounded-lg hover:bg-zinc-50 transition"
-          >
-            <div>
-              <p className="font-semibold text-zinc-800 text-sm lg:text-base">Tambah Prestasi</p>
-              <p className="text-xs lg:text-sm text-zinc-500">Tambahkan prestasi baru</p>
-            </div>
-          </Link>
-          <Link
-            href="/admin/gallery"
-            className="flex items-center gap-3 lg:gap-4 p-3 lg:p-4 border border-zinc-200 rounded-lg hover:bg-zinc-50 transition"
-          >
-            <div>
-              <p className="font-semibold text-zinc-800 text-sm lg:text-base">Tambah Galeri</p>
-              <p className="text-xs lg:text-sm text-zinc-500">Upload foto galeri prestasi</p>
-            </div>
-          </Link>
-          <Link
-            href="/admin/media"
-            className="flex items-center gap-3 lg:gap-4 p-3 lg:p-4 border border-zinc-200 rounded-lg hover:bg-zinc-50 transition"
-          >
-            <div>
-              <p className="font-semibold text-zinc-800 text-sm lg:text-base">Upload Media</p>
-              <p className="text-xs lg:text-sm text-zinc-500">Upload gambar dan file</p>
-            </div>
-          </Link>
-        </div>
-      </div>
-    </div>
+        }
+      >
+        <RequestDetail row={requests[reqIndex]} />
+      </DetailModal>
+      <AosReady />
+    </AosProvider>
   )
 }

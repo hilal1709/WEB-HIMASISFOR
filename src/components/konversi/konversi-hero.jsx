@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useLayoutEffect as useEffect, useRef, useState } from "react";
 import { gsap } from "@/lib/scroll";
 import { prefersReducedMotion, curtainDelay } from "@/lib/motion";
 import { CURTAIN_KEY, creditsFor } from "@/lib/konversi-content";
@@ -49,7 +49,7 @@ export function KonversiHero() {
   };
 
   return (
-    <section ref={ref} className="relative overflow-hidden pb-14 pt-10 md:pb-20 md:pt-14">
+    <section ref={ref} className="relative overflow-hidden pb-10 pt-10 md:pb-14 md:pt-14">
       <Container>
         <nav aria-label="Breadcrumb" data-hero-fade className="text-sm text-text/55">
           <ol className="flex flex-wrap items-center gap-2">
@@ -61,14 +61,14 @@ export function KonversiHero() {
           </ol>
         </nav>
 
-        <div className="mt-10 lg:mt-12">
-          <div className="relative z-10 grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-end lg:gap-16">
+        <div className="mt-10 grid gap-10 lg:mt-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:gap-12">
+          <div className="relative z-10 flex flex-col gap-6">
             <div>
-            <SceneTitle as="h1" trigger="mount" title={["Pengalaman di luar kelas,", "tercatat di transkrip"]} className="!text-[clamp(2.6rem,5.6vw,5rem)] !leading-[0.98]" />
+            <SceneTitle as="h1" trigger="mount" title={["Pengalaman di luar kelas,", "tercatat di transkrip"]} className="!text-[clamp(2.5rem,4.4vw,4.1rem)] !leading-[1]" />
             </div>
-            <div>
+            <div className="flex flex-col gap-7">
             <p data-hero-fade className="max-w-xl text-pretty text-[17px] leading-relaxed text-text/70">{intro.body}</p>
-            <div data-hero-fade className="mt-7 flex flex-wrap items-center gap-x-7 gap-y-4">
+            <div data-hero-fade className="flex shrink-0 flex-wrap items-center gap-x-7 gap-y-4">
               <button
                 type="button"
                 onClick={() => smoothTo("kalkulator")}
@@ -86,7 +86,7 @@ export function KonversiHero() {
             </div>
           </div>
 
-          <div className="relative mt-12 md:mt-14" style={{ perspective: 1200 }}>
+          <div className="relative" style={{ perspective: 1200 }}>
             <span aria-hidden className="pointer-events-none absolute -bottom-16 -right-6 z-20 hidden xl:block">
               <ElvoPeek pose="think" size={88} side="left" say="Jam magangku setara berapa SKS, ya?" />
             </span>

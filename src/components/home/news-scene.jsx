@@ -1,27 +1,38 @@
 import Image from "next/image";
-import { AGENDA, FOOTER, NEWS } from "@/lib/home-content";
+import { NEWS } from "@/lib/home-content";
+import { dateParts, fmtShort, fmtTime } from "@/lib/berita-content";
 import { ArrowLink, Container, PlaceholderTag, SectionHeader } from "./shared";
 import { ElvoPeek } from "./elvo-peek";
 import { LottieIllustration } from "@/components/media/lottie-illustration";
 
 /** Berita (2/3) + Agenda dengan blok tanggal (1/3) — tata letak khas situs kampus. */
-export function NewsScene() {
-  const [lead, ...rest] = NEWS.items;
+export function NewsScene({ data }) {
+  const news = (data?.posts ?? []).filter((p) => p.type === "berita");
+  const lead0 = news.find((p) => p.featured) ?? news[0];
+  const items = lead0 ? [lead0, ...news.filter((p) => p !== lead0)].slice(0, 4).map((p) => ({ ...p, tag: p.category, date: fmtShort(p.publishedAt), body: p.excerpt, image: p.cover, href: `/berita/${p.slug}` })) : [];
+  const [lead, ...rest] = items;
+  const now = Date.now();
+  const AGENDA = (data?.events ?? [])
+    .filter((e) => new Date(e.endAt ?? e.startAt).getTime() >= now)
+    .sort((a, b) => new Date(a.startAt) - new Date(b.startAt))
+    .slice(0, 4)
+    .map((e) => ({ ...e, day: dateParts(e.startAt).day, month: dateParts(e.startAt).month.slice(0, 3), time: `${fmtTime(e.startAt)} WIB`, href: `/berita?rubrik=agenda#agenda-${e.slug}` }));
+  const sample = data ? data.sample.posts || data.sample.events : true;
   return (
     <section id="berita" className="py-16 md:py-24">
       <Container>
         <SectionHeader
           title={["Berita", "&", "agenda"]}
           body={NEWS.body}
-          action={<ArrowLink href={FOOTER.instagram} target="_blank" rel="noopener noreferrer">Kabar terbaru di Instagram</ArrowLink>}
+          action={<ArrowLink href="/berita">Buka Warta SISFOR</ArrowLink>}
         />
-        <PlaceholderTag className="mt-4" />
+        {sample && <PlaceholderTag className="mt-4" />}
 
         <div className="mt-10 grid gap-10 lg:grid-cols-[2fr_1fr] lg:gap-12">
           <div className="grid gap-6 md:grid-cols-2">
-            <a href="#" data-aos="fade-up" className="group md:col-span-2 md:grid md:grid-cols-[1.2fr_1fr] md:gap-6">
+            {lead && <a href={lead.href} data-aos="fade-up" className="group md:col-span-2 md:grid md:grid-cols-[1.2fr_1fr] md:gap-6">
               <div className="relative aspect-[16/10] overflow-hidden rounded-lg bg-cream-2">
-                <Image src={lead.image} alt="" fill sizes="(min-width:1024px) 480px, 100vw" className="scale-[1.06] object-cover transition-transform duration-700 ease-cinematic group-hover:scale-[1.12]" />
+                {lead.image && <Image src={lead.image} alt="" fill sizes="(min-width:1024px) 480px, 100vw" className="scale-[1.06] object-cover transition-transform duration-700 ease-cinematic group-hover:scale-[1.12]" />}
               </div>
               <div className="mt-4 md:mt-0 md:self-center">
                 <Meta item={lead} />
@@ -30,11 +41,11 @@ export function NewsScene() {
                 </h3>
                 <p className="mt-3 text-[15px] leading-relaxed text-text/65">{lead.body}</p>
               </div>
-            </a>
+            </a>}
             {rest.map((n, i) => (
-              <a key={n.title} href="#" data-aos="fade-up" data-aos-delay={(i + 1) * 70} className={`group ${i === 2 ? "md:hidden lg:hidden" : ""}`}>
+              <a key={n.title} href={n.href} data-aos="fade-up" data-aos-delay={(i + 1) * 70} className={`group ${i === 2 ? "md:hidden lg:hidden" : ""}`}>
                 <div className="relative aspect-[16/10] overflow-hidden rounded-lg bg-cream-2">
-                  <Image src={n.image} alt="" fill sizes="(min-width:1024px) 320px, 100vw" className="scale-[1.06] object-cover transition-transform duration-700 ease-cinematic group-hover:scale-[1.12]" />
+                  {n.image && <Image src={n.image} alt="" fill sizes="(min-width:1024px) 320px, 100vw" className="scale-[1.06] object-cover transition-transform duration-700 ease-cinematic group-hover:scale-[1.12]" />}
                 </div>
                 <Meta item={n} className="mt-4" />
                 <h3 className="mt-1.5 font-serif text-xl leading-snug text-navy transition-colors group-hover:text-maroon">{n.title}</h3>
@@ -51,7 +62,7 @@ export function NewsScene() {
                 <LottieIllustration src="/lottie/calendar.json" className="size-11 shrink-0" />
                 Agenda
               </h3>
-              <a href="#" className="u-gold text-sm font-semibold text-maroon">Kalender</a>
+              <a href="/berita?rubrik=agenda" className="u-gold text-sm font-semibold text-maroon">Kalender</a>
             </div>
             {!AGENDA.length && (
               <div className="flex flex-col items-center py-8 text-center">
@@ -61,8 +72,8 @@ export function NewsScene() {
             )}
             <ul className="mt-5 divide-y divide-line">
               {AGENDA.map((a, i) => (
-                <li key={a.title} data-aos="fade-up" data-aos-delay={i * 60}>
-                  <a href="#" className="group flex gap-4 py-4">
+                <li key={a.slug} data-aos="fade-up" data-aos-delay={i * 60}>
+                  <a href={a.href} className="group flex gap-4 py-4">
                     <span className="flex w-14 shrink-0 flex-col items-center rounded-md bg-navy py-2 transition-colors duration-300 group-hover:bg-maroon">
                       <span className="font-serif text-2xl leading-none text-gold-soft transition-colors group-hover:text-white">{a.day}</span>
                       <span className="kicker mt-1 text-[10px] text-white/70 transition-colors group-hover:text-white/90">{a.month}</span>

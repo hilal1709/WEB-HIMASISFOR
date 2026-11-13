@@ -47,7 +47,7 @@ export function RpsAnatomy() {
   );
 
   return (
-    <section id="rps" className="relative scroll-mt-24 bg-cream py-16 md:py-24">
+    <section id="rps" className="relative scroll-mt-24 bg-cream py-16 md:py-20">
       <Container>
         <SectionHeader title={["Cara membaca", "RPS"]} body="Rencana Pembelajaran Semester adalah kontrak belajar tiap mata kuliah. Empat bagian ini yang paling sering kamu butuhkan." size="sm" />
 

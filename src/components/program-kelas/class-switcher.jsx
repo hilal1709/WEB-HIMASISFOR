@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect as useEffect, useLayoutEffect, useRef, useState } from "react";
 import { animate, stagger } from "animejs";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { A11y } from "swiper/modules";
@@ -53,7 +53,7 @@ export function ClassSwitcher() {
   };
 
   return (
-    <section id="kelas" className="scroll-mt-24 py-16 md:py-24">
+    <section id="kelas" className="scroll-mt-24 py-16 md:py-20">
       <Container>
         <SectionHeader
           title={["Pilih", "ritme belajarmu"]}

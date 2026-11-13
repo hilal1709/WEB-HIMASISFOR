@@ -1,6 +1,7 @@
 import { existsSync } from "node:fs";
 import path from "node:path";
 import prisma from "@/lib/prisma";
+import { getWarta } from "@/lib/berita-server";
 import { IntroLoader } from "@/components/intro-loader";
 import { SiteHeader, Topbar } from "@/components/home/site-header";
 import { HeroScene } from "@/components/home/hero-scene";
@@ -57,7 +58,7 @@ async function getAchievements() {
 
 /** Beranda — "Kampus v3": situs kampus dengan sentuhan premium (maroon + navy + gold di atas cream). */
 export default async function Home() {
-  const achievements = await getAchievements();
+  const [achievements, warta] = await Promise.all([getAchievements(), getWarta()]);
   return (
     <div className="kampus" data-aos-wait>
       <IntroLoader />
@@ -70,7 +71,7 @@ export default async function Home() {
         <AccreditationBand />
         <ExpertiseScene />
         <AchievementScene data={achievements} />
-        <NewsScene />
+        <NewsScene data={warta} />
         <AlumniScene />
         <PartnersMarquee />
         <JoinScene />

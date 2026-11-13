@@ -1,5 +1,5 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
@@ -47,8 +47,12 @@ export function AosProvider({ children }) {
 
 /** Pasang di akhir halaman: efeknya berjalan setelah halaman itu terhidrasi → mulai AOS. */
 export function AosReady() {
-  useEffect(() => {
+  // Layout effect: berjalan sebelum paint, SESUDAH efek layout saudara-saudaranya (hero, dll.) yang
+  // menyetel kondisi awal animasi (gsap.from). Baru di titik ini halaman dibuka dari persembunyian
+  // `data-prehydrate`, jadi HTML server tak sempat tampil lalu "berkedip" saat animasi mulai.
+  useLayoutEffect(() => {
     window.__sisforHydrated = true;
+    document.documentElement.removeAttribute("data-prehydrate");
     window.dispatchEvent(new Event(READY));
   }, []);
   return null;

@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect as useEffect, useLayoutEffect, useRef, useState } from "react";
 import { animate, stagger } from "animejs";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { A11y, Keyboard } from "swiper/modules";
@@ -70,7 +70,7 @@ export function ProfileExplorer({ profiles }) {
   };
 
   return (
-    <section id="profil" className="scroll-mt-24 overflow-hidden bg-cream py-16 md:py-24">
+    <section id="profil" className="scroll-mt-24 overflow-hidden bg-cream py-16 md:py-20">
       <Container>
         <SectionHeader
           title={[`${profiles.length} profil,`, "satu fondasi"]}

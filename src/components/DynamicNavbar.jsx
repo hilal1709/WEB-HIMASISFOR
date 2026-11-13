@@ -90,7 +90,7 @@ export default function DynamicNavbar() {
         </div>
         <div>
           <a
-            href="https://pmb.uisi.ac.id/"
+            href="https://pmb.uisi.ac.id/prosedur"
             target="_blank"
             rel="noopener noreferrer"
             className="bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition"
@@ -136,7 +136,7 @@ export default function DynamicNavbar() {
             ))}
             <li>
               <a
-                href="https://pmb.uisi.ac.id/"
+                href="https://pmb.uisi.ac.id/prosedur"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="block bg-red-600 text-white px-4 py-3 rounded-lg font-semibold text-center hover:bg-red-700 transition"

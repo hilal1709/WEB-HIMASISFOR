@@ -10,7 +10,7 @@ const LEFT = [
 ];
 const RIGHT = [
   { label: "Akademik", href: "/curiculum", icon: "book" },
-  { label: "Layanan", href: "/profile#layanan", icon: "category" },
+  { label: "Layanan", href: "/layanan-akademik", icon: "category" },
   { label: "PMB", href: PMB_URL, icon: "plus-circle" },
 ];
 

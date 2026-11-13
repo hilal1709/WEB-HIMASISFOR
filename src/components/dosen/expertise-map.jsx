@@ -13,7 +13,7 @@ import { useDosen } from "./dosen-provider";
 export function ExpertiseMap() {
   const { fields, lecturers, field, setField, openProfile } = useDosen();
   return (
-    <section className="bg-cream-2/60 py-16 md:py-24">
+    <section className="bg-cream-2/60 py-16 md:py-20">
       <Container>
         <SectionHeader title={["Empat rumpun,", "satu ekosistem"]} body="Keahlian dosen saling melengkapi: dari tata kelola hingga data, semuanya bermuara pada sistem enterprise di industri." />
         <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:mt-12 lg:grid-cols-4">

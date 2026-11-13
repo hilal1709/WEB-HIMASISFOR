@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useLayoutEffect as useEffect, useRef } from "react";
 import { animate } from "animejs";
 import { motion, useReducedMotion } from "motion/react";
 import { gsap } from "@/lib/scroll";
@@ -79,7 +79,7 @@ export function ReadinessCheck() {
   const verdict = pct === 100 ? "Siap berangkat." : pct >= 60 ? "Hampir siap." : pct > 0 ? "Masih ada yang perlu disiapkan." : "Mulai dari butir yang sudah pasti.";
 
   return (
-    <section id="kesiapan" className="relative scroll-mt-20 py-16 md:py-24">
+    <section id="kesiapan" className="relative scroll-mt-20 py-16 md:py-20">
       <Container>
         <SectionHeader title={["Cek", "kesiapanku"]} body="Centang yang sudah benar-benar kamu punya. Jawabanmu hanya tersimpan di perangkat ini." />
         <JalurBanner className="mt-8" />

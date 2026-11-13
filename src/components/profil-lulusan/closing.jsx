@@ -16,7 +16,7 @@ const NEXT = [
 export function Closing() {
   return (
     <>
-      <section className="relative overflow-hidden bg-maroon py-16 text-white md:py-24">
+      <section className="relative overflow-hidden bg-maroon py-16 text-white md:py-20">
         <span aria-hidden className="pointer-events-none absolute -right-24 -top-24 size-[420px] rounded-full border border-white/10" />
         <span aria-hidden className="pointer-events-none absolute -right-8 -top-8 size-[260px] rounded-full border border-gold/25" />
         <Container className="relative">

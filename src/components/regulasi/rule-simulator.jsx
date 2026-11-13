@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useLayoutEffect as useEffect, useRef, useState } from "react";
 import { animate } from "animejs";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, A11y } from "swiper/modules";
@@ -179,7 +179,7 @@ export function RuleSimulator() {
   ];
 
   return (
-    <section id="simulasi" className="relative scroll-mt-20 py-16 md:py-24">
+    <section id="simulasi" className="relative scroll-mt-20 py-16 md:py-20">
       <Container>
         <SectionHeader title={["Coba dengan", "angkamu sendiri"]} body="Geser tuasnya. Hasilnya dihitung dari aturan yang sama dengan pasal di bawah." action={chapters[0].sample ? <PlaceholderTag /> : null} />
 

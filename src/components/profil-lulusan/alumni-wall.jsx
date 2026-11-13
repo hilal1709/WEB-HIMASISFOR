@@ -24,7 +24,7 @@ export function AlumniWall({ alumni }) {
   const fill = (r) => (r.length >= 6 ? r : Array.from({ length: Math.ceil(6 / r.length) }, () => r).flat());
 
   return (
-    <section id="alumni" className="relative overflow-hidden bg-cream-2 py-16 md:py-24">
+    <section id="alumni" className="relative overflow-hidden bg-cream-2 py-16 md:py-20">
       <Container>
         <SectionHeader
           title={["Jejak", "Sisforians", "di industri"]}

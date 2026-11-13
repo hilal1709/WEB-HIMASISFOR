@@ -25,11 +25,10 @@ export function CaseLens() {
   const f = fields[active];
 
   return (
-    <section className="relative overflow-hidden py-16 md:py-24">
+    <section className="relative overflow-hidden py-16 md:py-20">
       <Container>
         <div className="grid gap-12 lg:grid-cols-[1fr_1fr] lg:items-center lg:gap-16">
           <div>
-            <span aria-hidden className="mb-5 block h-[3px] w-10 bg-gold" />
             <SceneTitle title={["Satu masalah,", "empat", "sudut pandang"]} />
             <div className="mt-8 rounded-xl border border-line bg-cream-2/70 p-6 sm:p-7" data-aos="fade-up">
               <p className="kicker text-[11px] text-maroon">{CASE.kicker}</p>

@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useLayoutEffect as useEffect, useRef } from "react";
 import Image from "next/image";
 import { gsap } from "@/lib/scroll";
 import { prefersReducedMotion } from "@/lib/motion";
@@ -29,12 +29,11 @@ export function StoryBand() {
   }, [story.quote]);
 
   return (
-    <section ref={ref} id="kisah" className="relative scroll-mt-20 overflow-hidden bg-maroon-deep py-16 text-white md:py-24">
+    <section ref={ref} id="kisah" className="relative scroll-mt-20 overflow-hidden bg-maroon-deep py-16 text-white md:py-20">
       <span aria-hidden className="pointer-events-none absolute -left-32 top-10 size-96 rounded-full border border-white/10" />
       <Container className="relative grid gap-10 lg:grid-cols-[1fr_1.05fr] lg:items-center lg:gap-16">
         <div>
           <div className="flex items-center gap-4">
-            <span aria-hidden className="block h-[3px] w-10 bg-gold" />
             <span className="kicker text-gold-soft">{story.kicker}</span>
           </div>
           <blockquote data-quote className="mt-6 font-serif text-[clamp(1.5rem,2.8vw,2.25rem)] leading-[1.22]">

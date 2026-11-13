@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useLayoutEffect as useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { animate } from "animejs";
 import { AUDIENCES, fmtRp } from "@/lib/bootcamp-content";

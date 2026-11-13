@@ -18,11 +18,10 @@ const WAYS = ["Riset bersama", "Narasumber", "Magang", "Proyek industri"];
  */
 export function Closing() {
   return (
-    <section className="relative py-16 md:py-24">
+    <section className="relative py-16 md:py-20">
       <Container>
         <div className="grid gap-6 lg:grid-cols-[1.25fr_0.75fr] lg:gap-8">
           <div data-aos="fade-up" className="relative rounded-xl border border-line bg-cream-2 p-7 md:p-10">
-            <span aria-hidden className="block h-[3px] w-10 bg-gold" />
             <p className="mt-5 font-serif text-[clamp(1.9rem,3.6vw,2.9rem)] leading-[1.1] text-navy">
               Ingin berkolaborasi dengan <em className="italic text-maroon">dosen kami?</em>
             </p>

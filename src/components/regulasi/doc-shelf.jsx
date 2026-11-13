@@ -60,7 +60,7 @@ export function DocShelf() {
   };
 
   return (
-    <section id="unduhan" className="relative scroll-mt-20 bg-cream-2/60 py-16 md:py-24">
+    <section id="unduhan" className="relative scroll-mt-20 bg-cream-2/60 py-16 md:py-20">
       <Container>
         <SectionHeader title={["Dokumen", "resminya"]} body="Pedoman lengkap untuk dibaca utuh, disimpan, atau dilampirkan saat mengurus berkas." />
         <RegulasiBanner className="mt-8" />

@@ -1,15 +1,16 @@
 "use client";
-import { Container, SceneTitle } from "@/components/home/shared";
+import { Container } from "@/components/home/shared";
 import { ElvoPeek } from "@/components/home/elvo-peek";
 import { useToast } from "@/components/ui/toast";
 import { useRegulasi } from "./regulasi-provider";
 
 /**
- * Penutup: ajakan membawa pasal yang ditandai ke dosen wali (salin daftar → toast), lalu tiga tautan lanjutan.
+ * Penutup "Catatan untuk dosen wali": kartu bergaya kertas bergaris dengan margin merah, berisi pasal yang
+ * ditandai (atau ajakan menandai bila kosong) + tombol salin daftar → toast. Tautan lanjutan sebaris teks.
  * Tanpa CTA PMB / statistik (tidak mengulang beranda).
  */
 export function RegulasiClosing() {
-  const { marks, findPasal } = useRegulasi();
+  const { marks, findPasal, goPasal } = useRegulasi();
   const toast = useToast();
   const picked = marks.map((id) => findPasal(id)).filter(Boolean);
 
@@ -21,53 +22,64 @@ export function RegulasiClosing() {
   };
 
   const next = [
-    { href: "/curiculum", kicker: "Kurikulum & RPS", title: "Mata kuliah tiap semester" },
-    { href: "/jalur-kelulusan", kicker: "Jalur kelulusan", title: "Empat cara menyelesaikan tugas akhir" },
-    { href: "/profile#layanan", kicker: "Layanan akademik", title: "Persuratan dan persetujuan kaprodi" },
+    { href: "/curiculum", title: "Kurikulum & RPS" },
+    { href: "/jalur-kelulusan", title: "Jalur kelulusan" },
+    { href: "/layanan-akademik", title: "Layanan akademik" },
   ];
 
   return (
-    <section className="relative overflow-hidden pb-20 pt-16 md:pb-24 md:pt-20">
+    <section className="relative pb-20 pt-12 md:pb-20 md:pt-16">
       <Container>
-        <div className="relative grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
-          <div className="max-w-2xl">
-            <span aria-hidden className="mb-5 block h-[3px] w-10 bg-gold" />
-            <SceneTitle title={["Ada pasal yang", "masih membingungkan?"]} />
-            <p className="mt-4 max-w-lg text-pretty text-[16px] leading-relaxed text-text/65">
-              {picked.length
-                ? `Kamu menandai ${picked.length} pasal. Salin daftarnya dan bawa ke dosen wali saat perwalian.`
-                : "Tandai pasalnya di atas, lalu bawa daftarnya ke dosen wali saat perwalian."}
+        <div className="relative mx-auto max-w-3xl">
+          <span aria-hidden className="absolute inset-0 translate-x-2 translate-y-2 rotate-[0.6deg] rounded-sm bg-cream-2" />
+          <div
+            className="relative rounded-sm border border-line bg-white px-6 pb-8 pt-9 shadow-[0_40px_70px_-50px_rgb(20_33_61/0.45)] sm:pl-20 sm:pr-10"
+            style={{ backgroundImage: "repeating-linear-gradient(to bottom, transparent 0 31px, rgb(20 33 61 / 0.07) 31px 32px)" }}
+          >
+            <span aria-hidden className="absolute bottom-0 left-12 top-0 hidden w-px bg-maroon/40 sm:block" />
+            <p className="kicker text-[11px] text-maroon">Catatan untuk dosen wali</p>
+            <p className="mt-2 font-serif text-[clamp(1.5rem,3vw,2.1rem)] leading-tight text-navy">
+              {picked.length ? `${picked.length} pasal yang ingin kutanyakan` : "Ada pasal yang masih membingungkan?"}
             </p>
+            {picked.length ? (
+              <ol className="mt-4 space-y-0">
+                {picked.map((p) => (
+                  <li key={p.id} className="flex h-8 items-center gap-3 text-[15px]">
+                    <span className="w-10 shrink-0 tabular-nums text-text/45">{p.no}</span>
+                    <button type="button" onClick={() => goPasal(p.no)} className="truncate text-left text-navy">
+                      <span className="u-gold">{p.title}</span>
+                    </button>
+                  </li>
+                ))}
+              </ol>
+            ) : (
+              <p className="mt-4 max-w-lg text-[15.5px] leading-8 text-text/65">
+                Tandai pasalnya di pembaca di atas. Semuanya terkumpul di catatan ini, siap kamu bawa saat perwalian.
+              </p>
+            )}
             {picked.length > 0 && (
               <button
                 type="button"
                 onClick={copyList}
-                className="mt-6 inline-flex h-12 items-center gap-2 rounded-md bg-maroon px-6 text-[15px] font-semibold text-white transition-[background-color,transform] duration-300 hover:bg-maroon-deep active:scale-[0.98] animate-in fade-in-0 slide-in-from-bottom-2"
+                className="mt-6 inline-flex h-11 items-center gap-2 rounded-md bg-maroon px-5 text-[15px] font-semibold text-white transition-[background-color,transform] duration-300 hover:bg-maroon-deep active:scale-[0.98]"
               >
-                Salin daftar pasal
+                Salin catatan
               </button>
             )}
           </div>
-          <div className="pointer-events-none hidden lg:block">
-            <div className="relative"><ElvoPeek pose="thumbs-up" size={110} side="left" say="Bertanya lebih cepat daripada menebak." /></div>
+          <div className="pointer-events-none absolute -right-20 -top-16 hidden xl:block">
+            <div className="relative"><ElvoPeek pose="thumbs-up" size={92} side="left" say="Bertanya lebih cepat daripada menebak." /></div>
           </div>
         </div>
 
-        <ul className="mt-12 grid gap-px overflow-hidden rounded-xl border border-line bg-line sm:grid-cols-3">
+        <p className="mx-auto mt-10 flex max-w-3xl flex-wrap justify-center gap-x-6 gap-y-2 text-[14.5px] text-text/60">
+          <span>Baca juga:</span>
           {next.map((l) => (
-            <li key={l.href} className="bg-white">
-              <a href={l.href} className="group flex h-full items-center justify-between gap-4 p-5 transition-colors duration-300 hover:bg-cream sm:p-6">
-                <span>
-                  <span className="kicker block text-[11px] text-maroon">{l.kicker}</span>
-                  <span className="mt-1 block font-serif text-[1.15rem] leading-tight text-navy">{l.title}</span>
-                </span>
-                <svg aria-hidden viewBox="0 0 16 16" className="size-4 shrink-0 text-maroon transition-transform duration-500 ease-cinematic group-hover:translate-x-1">
-                  <path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </a>
-            </li>
+            <a key={l.href} href={l.href} className="font-semibold text-navy">
+              <span className="u-gold">{l.title}</span>
+            </a>
           ))}
-        </ul>
+        </p>
       </Container>
     </section>
   );

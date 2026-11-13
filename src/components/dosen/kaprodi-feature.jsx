@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useLayoutEffect as useEffect, useRef } from "react";
 import Image from "next/image";
 import { gsap } from "@/lib/scroll";
 import { prefersReducedMotion } from "@/lib/motion";
@@ -31,7 +31,7 @@ export function KaprodiFeature() {
 
   if (!k) return null;
   return (
-    <section ref={ref} className="relative overflow-hidden bg-maroon py-16 text-white md:py-24">
+    <section ref={ref} className="relative overflow-hidden bg-maroon py-16 text-white md:py-20">
       <span aria-hidden className="pointer-events-none absolute -right-24 -top-24 size-[420px] rounded-full border border-white/10" />
       <span aria-hidden className="pointer-events-none absolute -right-8 -top-8 size-[260px] rounded-full border border-gold/25" />
       <Container className="relative grid items-center gap-10 md:grid-cols-[320px_1fr] lg:grid-cols-[380px_1fr] lg:gap-16">

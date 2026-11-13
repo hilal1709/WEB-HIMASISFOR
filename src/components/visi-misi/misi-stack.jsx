@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useLayoutEffect as useEffect, useRef, useState } from "react";
 import { animate, svg } from "animejs";
 import { gsap, ScrollTrigger } from "@/lib/scroll";
 import { prefersReducedMotion } from "@/lib/motion";
@@ -48,11 +48,10 @@ export function MisiStack({ misi }) {
   }, [misi.length]);
 
   return (
-    <section id="misi" ref={ref} className="scroll-mt-24 bg-cream py-16 md:py-24">
+    <section id="misi" ref={ref} className="scroll-mt-24 bg-cream py-16 md:py-20">
       <Container>
         <div className="grid gap-10 lg:grid-cols-[340px_1fr] lg:gap-16">
           <aside className="lg:sticky lg:top-28 lg:self-start">
-            <span aria-hidden className="mb-5 block h-[3px] w-10 bg-gold" />
             <SceneTitle title={["Lima misi,", "satu arah"]} />
             <p data-aos="fade-up" className="mt-4 max-w-sm text-pretty text-[16px] leading-relaxed text-text/65">
               Cara kami mewujudkan visi, dari ruang kelas sampai dunia kerja.

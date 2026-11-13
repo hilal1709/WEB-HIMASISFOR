@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useLayoutEffect as useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { A11y, Pagination } from "swiper/modules";
@@ -9,6 +9,7 @@ import { gsap } from "@/lib/scroll";
 import { prefersReducedMotion } from "@/lib/motion";
 import { TRACKS } from "@/lib/bootcamp-content";
 import { Container, PlaceholderTag, SectionHeader } from "@/components/home/shared";
+import { BootcampBanner } from "./bootcamp-banner";
 import { LottieIllustration } from "@/components/media/lottie-illustration";
 import { cn } from "@/lib/utils";
 import { SentenceFilter, CourseGrid } from "./course-catalog";
@@ -183,6 +184,9 @@ export function Catalog() {
           }
           action={sample && <PlaceholderTag />}
         />
+        <div className="mt-8">
+          <BootcampBanner />
+        </div>
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={mode}

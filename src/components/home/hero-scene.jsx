@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useLayoutEffect as useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { gsap, SplitText } from "@/lib/scroll";
 import { prefersReducedMotion } from "@/lib/motion";

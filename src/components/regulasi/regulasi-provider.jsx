@@ -1,5 +1,5 @@
 "use client";
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import { createContext, useCallback, useContext, useLayoutEffect as useEffect, useMemo, useRef, useState } from "react";
 import { MARKS_KEY } from "@/lib/regulasi-content";
 import { prefersReducedMotion } from "@/lib/motion";
 import { useToast } from "@/components/ui/toast";

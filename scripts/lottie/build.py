@@ -592,6 +592,83 @@ def laptop_code(P):
     return s
 
 
+def service_bell(P):
+    """Layanan: bel loket tergambar, tombol ditekan, bel bergoyang dan gelombang bunyi memancar."""
+    s = []
+    dome = arc(130, 170, 62, 180, 360, 16)
+    wig = anim([(40, 0), (46, -9), (52, 8), (58, -5), (64, 3), (70, 0)])
+    s.append(group([path(dome + [(68, 170)], True), fill(P["base"])], "dfill", a=(130, 176), p=(130, 176), r=wig))
+    s.append(group([path(dome + [(68, 170)], True), fill(P["soft"], P["soft_op"])], "dsoft", a=(130, 176), p=(130, 176), r=wig))
+    s.append(group([path(dome), stroke(P["line"], 4), trim(0, 22)], "dome", a=(130, 176), p=(130, 176), r=wig))
+    s.append(group([path(arc(130, 170, 44, 200, 250, 6)), stroke(P["a2"], 4), trim(18, 30)], "shine", a=(130, 176), p=(130, 176), r=wig))
+    s.append(group([path([(56, 176), (204, 176)]), stroke(P["line"], 5), trim(8, 24)], "base"))
+    s.append(group([group([path([(130, 108), (130, 96)]), stroke(P["line"], 4)], "stem"), group([rect(24, 8, 130, 94, 3), fill(P["a1"])], "cap")], "knob",
+                   p=anim([(26, [0, 0]), (36, [0, 0]), (40, [0, 6]), (46, [0, 0])]), s=pop(22, 10), a=(130, 100)))
+    for k, pts in enumerate([[(60, 104), (44, 90)], [(200, 104), (216, 90)], [(130, 72), (130, 52)]]):
+        s.append(group([path(pts), stroke(P["a2"], 4), trim(44 + k * 2, 56 + k * 2)], f"ring{k}", o=anim([(44, 0), (48, 100), (84, 100), (96, 0)])))
+    return s
+
+
+def stamp(P):
+    """Layanan: lembar surat tergambar, stempel turun mengecap, tinta pop lalu tanda centang tergambar."""
+    s = []
+    s.append(group([rect(150, 120, 130, 176, 8), fill(P["base"]), stroke(P["line"], 3.5), trim(0, 20)], "sheet"))
+    for k, y in enumerate([140, 158, 176]):
+        s.append(group([path([(76, y), (150 - k * 18, y)]), stroke(P["line"], 3, 60), trim(10 + k * 3, 22 + k * 3)], f"ln{k}"))
+    s.append(group([ellipse(46, 46, 166, 200), stroke(P["a1"], 4), trim(48, 60)], "ink", s=pop(46, 8), a=(166, 200), p=(166, 200)))
+    s.append(group([path([(152, 200), (162, 210), (182, 190)]), stroke(P["a1"], 4.5), trim(58, 70)], "check"))
+    move = anim([(20, [0, -70]), (40, [0, -70]), (46, [0, 0]), (52, [0, 0]), (64, [0, -70]), (96, [0, -70]), (110, [0, -120])])
+    st_ = [
+        group([rect(52, 18, 166, 150, 4), fill(P["a1"])], "pad"),
+        group([rect(44, 22, 166, 132, 4), fill(P["line"])], "body"),
+        group([rect(10, 26, 166, 110, 4), fill(P["line"])], "neck"),
+        group([ellipse(30, 30, 166, 94), fill(P["a2"])], "grip"),
+    ]
+    s.append(group(st_, "stamp", p=move, a=(0, 0), o=anim([(16, 0), (22, 100), (100, 100), (110, 0)])))
+    return s
+
+
+def wallet(P):
+    """Beasiswa: dompet tergambar, kartu meluncur masuk dari atas, keping koin pop di saku."""
+    s = []
+    # kartu masuk (di belakang dompet)
+    s.append(group([rect(110, 70, 130, 0, 8), fill(P["a1"]), rect(22, 16, 98, -16, 3), fill(P["a2"])], "card",
+                   p=anim([(14, [0, 70]), (40, [0, 112]), (52, [0, 104])]), o=anim([(14, 0), (20, 100)])))
+    s.append(group([rect(170, 116, 130, 160, 16), fill(P["base"])], "wfill"))
+    s.append(group([rect(170, 116, 130, 160, 16), fill(P["soft"], P["soft_op"])], "wsoft"))
+    s.append(group([rect(170, 116, 130, 160, 16), stroke(P["line"], 4), trim(0, 26)], "wallet"))
+    s.append(group([path([(45, 134), (215, 134)]), stroke(P["line"], 3.5, 70), trim(10, 30)], "seam"))
+    s.append(group([rect(54, 36, 200, 160, 10), fill(P["base"]), rect(54, 36, 200, 160, 10), stroke(P["line"], 4)], "clasp", s=pop(26, 12), a=(200, 160), p=(200, 160)))
+    s.append(group([ellipse(12, 12, 188, 160), fill(P["a2"])], "dot", s=pop(34, 10), a=(188, 160), p=(188, 160)))
+    s.append(group([ellipse(30, 30, 92, 190), fill(P["a2"]), ellipse(18, 18, 92, 190), stroke(P["line"], 2.5, 60)], "coin",
+                   s=pop(44, 12), a=(92, 190), p=anim([(44, [92, 200]), (58, [92, 190]), (90, [92, 186]), (119, [92, 190])])))
+    return s
+
+
+def envelope_sent(P):
+    """Kontak: amplop tergambar, tutup amplop melipat turun, segel emas pop, lalu amplop melesat dengan garis laju."""
+    s = []
+    fly = anim([(0, [0, 0]), (62, [0, 0]), (74, [-8, 4]), (92, [26, -14]), (104, [26, -14])])
+    body = [
+        group([rect(150, 100, 130, 150, 8), fill(P["base"])], "bfill"),
+        group([rect(150, 100, 130, 150, 8), fill(P["soft"], P["soft_op"])], "bsoft"),
+        group([rect(150, 100, 130, 150, 8), stroke(P["line"], 4), trim(0, 22)], "body"),
+        group([path([(55, 200), (112, 152)]), stroke(P["line"], 3, 70), trim(14, 26)], "fl"),
+        group([path([(205, 200), (148, 152)]), stroke(P["line"], 3, 70), trim(14, 26)], "fr"),
+        # tutup: segitiga berporos di tepi atas; skala-y -100 (terbuka) → 100 (tertutup)
+        group([path([(55, 100), (130, 156), (205, 100)], True), fill(P["base"]), stroke(P["line"], 4)], "flap",
+              a=(130, 100), p=(130, 100), s=anim([(24, [100, -100]), (40, [100, -100]), (54, [100, 100])])),
+        group([ellipse(28, 28, 130, 154), fill(P["a2"])], "seal", s=pop(54, 8), a=(130, 154), p=(130, 154)),
+        group([ellipse(12, 12, 130, 154), fill(P["a1"])], "dot", s=pop(58, 8), a=(130, 154), p=(130, 154)),
+    ]
+    s.append(group(body, "env", p=fly))
+    for k, y in enumerate([126, 150, 174]):
+        s.append(group([path([(40 - k * 6, y), (8, y)]), stroke(P["a1"] if k == 1 else P["a2"], 4)], f"speed{k}",
+                       o=anim([(72, 0), (78, 100), (98, 100), (106, 0)]),
+                       p=anim([(72, [20, 0]), (92, [-6, 0])])))
+    return s
+
+
 SPECS = [
     ("medal", medal, ["light", "dark"]),
     ("erp-nodes", erp_nodes, ["light"]),
@@ -627,6 +704,13 @@ SPECS = [
     # bootcamp & course
     ("certificate", certificate, ["light", "dark"]),
     ("laptop-code", laptop_code, ["light", "dark"]),
+    # layanan akademik
+    ("service-bell", service_bell, ["light", "dark"]),
+    ("stamp", stamp, ["light", "dark"]),
+    # kontak
+    ("envelope-sent", envelope_sent, ["light", "dark"]),
+    # beasiswa
+    ("wallet", wallet, ["light", "dark"]),
 ]
 
 

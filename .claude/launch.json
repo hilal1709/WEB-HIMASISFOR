@@ -81,6 +81,78 @@
         "3037"
       ],
       "port": 3037
+    },
+    {
+      "name": "web-visi",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "next",
+        "dev",
+        "--turbopack",
+        "-p",
+        "3041"
+      ],
+      "port": 3041
+    },
+    {
+      "name": "web-struktur",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "next",
+        "dev",
+        "--turbopack",
+        "-p",
+        "3045"
+      ],
+      "port": 3045
+    },
+    {
+      "name": "web-kelas",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "next",
+        "dev",
+        "--turbopack",
+        "-p",
+        "3049"
+      ],
+      "port": 3049
+    },
+    {
+      "name": "web-dosen",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "next",
+        "dev",
+        "--turbopack",
+        "-p",
+        "3053"
+      ],
+      "port": 3053
+    },
+    {
+      "name": "web-prestasi",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "next",
+        "dev",
+        "--turbopack",
+        "-p",
+        "3057"
+      ],
+      "port": 3057
+    },
+    {
+      "name": "web-kurikulum",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "next",
+        "dev",
+        "--turbopack",
+        "-p",
+        "3061"
+      ],
+      "port": 3061
     }
   ]
 }

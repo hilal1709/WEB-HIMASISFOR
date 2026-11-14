@@ -111,7 +111,6 @@ export const HOME_DEFAULTS = {
     body: EXPERTISE.body,
     more: link("Jelajahi bidang keahlian", "/bidang-keahlian"),
     careersLabel: "Prospek karier",
-    items: EXPERTISE.items.map((e) => ({ slug: e.slug, title: e.title, body: e.body, careers: [...e.careers], image: e.image, lottie: e.lottie, crop: Boolean(e.crop) })),
     mascot: mascot("think", "Bingung pilih bidang? Arahkan kursor ke kartunya."),
   },
 

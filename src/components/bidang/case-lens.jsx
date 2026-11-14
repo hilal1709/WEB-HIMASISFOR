@@ -5,13 +5,14 @@ import { A11y, EffectCards, Keyboard } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/effect-cards";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { CASE } from "@/lib/bidang-keahlian-content";
 import { Container, PlaceholderTag, SceneTitle } from "@/components/home/shared";
 import { CompassQuadrantIllustration } from "@/components/illustrations/line-illustrations";
 import { cn } from "@/lib/utils";
 import { useBidang } from "./bidang-provider";
 
 const SURFACE = ["bg-maroon text-white", "bg-navy text-white", "bg-white text-navy border border-line", "bg-cream-2 text-navy"];
+/** Kartu ke-i berlatar gelap? (mengikuti siklus SURFACE) */
+const dark = (i) => i % SURFACE.length < 2;
 
 /**
  * "Satu masalah, empat sudut pandang" (storytelling horizonx). Kiri: kartu kasus + kompas mini yang menyalakan
@@ -19,30 +20,33 @@ const SURFACE = ["bg-maroon text-white", "bg-navy text-white", "bg-white text-na
  * berisi langkah pertama dan keluaran tiap spesialis. Bar progres emas mengikuti kartu aktif.
  */
 export function CaseLens() {
-  const { fields, openField } = useBidang();
+  const { fields, openField, caseStudy: CASE } = useBidang();
   const [active, setActive] = useState(0);
   const swiper = useRef(null);
   const f = fields[active];
+  const compass = fields.some((x) => x.quadrant && x.quadrant !== "none");
 
   return (
     <section className="relative overflow-hidden py-16 md:py-20">
       <Container>
         <div className="grid gap-12 lg:grid-cols-[1fr_1fr] lg:items-center lg:gap-16">
           <div>
-            <SceneTitle title={["Satu masalah,", "empat", "sudut pandang"]} />
+            <SceneTitle title={CASE.title} />
             <div className="mt-8 rounded-xl border border-line bg-cream-2/70 p-6 sm:p-7" data-aos="fade-up">
               <p className="kicker text-[11px] text-maroon">{CASE.kicker}</p>
-              <p className="mt-2 font-serif text-[1.45rem] leading-snug text-navy sm:text-[1.65rem]">{CASE.title}</p>
+              <p className="mt-2 font-serif text-[1.45rem] leading-snug text-navy sm:text-[1.65rem]">{CASE.headline}</p>
               <p className="mt-3 text-[15px] leading-relaxed text-text/65">{CASE.body}</p>
-              {CASE.sample && <PlaceholderTag className="mt-4" />}
+              {CASE.sampleTag && <PlaceholderTag className="mt-4" />}
             </div>
 
             <div className="mt-8 flex items-center gap-6">
-              <div className="compass w-40 shrink-0 text-ink sm:w-48" data-active-quadrant={f?.quadrant ?? "none"} aria-hidden>
-                <CompassQuadrantIllustration compact />
-              </div>
+              {compass && (
+                <div className="compass w-40 shrink-0 text-ink sm:w-48" data-active-quadrant={f?.quadrant ?? "none"} aria-hidden>
+                  <CompassQuadrantIllustration compact />
+                </div>
+              )}
               <div className="min-w-0 flex-1">
-                <p className="text-[12.5px] text-text/50">Sekarang dibahas</p>
+                <p className="text-[12.5px] text-text/50">{CASE.nowLabel}</p>
                 <p key={f?.slug} className="mt-0.5 font-serif text-[1.3rem] leading-tight text-navy animate-in fade-in-0 slide-in-from-bottom-1 duration-500">{f?.title}</p>
                 <div className="mt-4 flex items-center gap-3">
                   <span aria-hidden className="relative h-1 flex-1 overflow-hidden rounded-full bg-line">
@@ -73,28 +77,28 @@ export function CaseLens() {
                 <SwiperSlide key={x.slug} className={cn("rounded-2xl shadow-[0_30px_60px_-35px_rgb(20_33_61/0.6)]", SURFACE[i % SURFACE.length])}>
                   <article className="flex min-h-[420px] flex-col p-7 sm:p-8">
                     <div className="flex items-start justify-between gap-3">
-                      <p className={cn("kicker text-[11px]", i < 2 ? "text-gold-soft" : "text-maroon")}>{x.move.role}</p>
-                      <span className={cn("font-serif text-[2.6rem] leading-none", i < 2 ? "text-white/25" : "text-navy/15")}>0{i + 1}</span>
+                      <p className={cn("kicker text-[11px]", dark(i) ? "text-gold-soft" : "text-maroon")}>{x.move.role}</p>
+                      <span className={cn("font-serif text-[2.6rem] leading-none", dark(i) ? "text-white/25" : "text-navy/15")}>{String(i + 1).padStart(2, "0")}</span>
                     </div>
                     <h3 className="mt-3 font-serif text-[1.6rem] leading-tight">{x.title}</h3>
-                    <p className={cn("mt-6 text-[12px] font-semibold uppercase tracking-[0.14em]", i < 2 ? "text-white/50" : "text-text/45")}>Langkah pertama</p>
-                    <p className={cn("mt-2 text-[15.5px] leading-relaxed", i < 2 ? "text-white/85" : "text-text/75")}>{x.move.step}</p>
-                    <div className={cn("mt-auto border-t pt-5", i < 2 ? "border-white/15" : "border-line")}>
-                      <p className={cn("text-[12px] font-semibold uppercase tracking-[0.14em]", i < 2 ? "text-white/50" : "text-text/45")}>Keluaran</p>
+                    <p className={cn("mt-6 text-[12px] font-semibold uppercase tracking-[0.14em]", dark(i) ? "text-white/50" : "text-text/45")}>{CASE.stepLabel}</p>
+                    <p className={cn("mt-2 text-[15.5px] leading-relaxed", dark(i) ? "text-white/85" : "text-text/75")}>{x.move.step}</p>
+                    <div className={cn("mt-auto border-t pt-5", dark(i) ? "border-white/15" : "border-line")}>
+                      <p className={cn("text-[12px] font-semibold uppercase tracking-[0.14em]", dark(i) ? "text-white/50" : "text-text/45")}>{CASE.outputLabel}</p>
                       <p className="mt-1.5 font-serif text-[1.15rem] italic leading-snug">{x.move.output}</p>
                       <button
                         type="button"
                         onClick={(e) => openField(i, e.currentTarget)}
-                        className={cn("mt-4 text-[14px] font-semibold", i < 2 ? "text-gold-soft" : "text-maroon")}
+                        className={cn("mt-4 text-[14px] font-semibold", dark(i) ? "text-gold-soft" : "text-maroon")}
                       >
-                        <span className="u-gold">Pelajari bidangnya</span>
+                        <span className="u-gold">{CASE.linkLabel}</span>
                       </button>
                     </div>
                   </article>
                 </SwiperSlide>
               ))}
             </Swiper>
-            <p className="mt-6 text-center text-[13px] text-text/45">Seret kartu teratas untuk sudut pandang berikutnya.</p>
+            {CASE.dragHint && <p className="mt-6 text-center text-[13px] text-text/45">{CASE.dragHint}</p>}
           </div>
         </div>
       </Container>

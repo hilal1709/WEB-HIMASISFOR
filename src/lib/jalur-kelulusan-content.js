@@ -1,7 +1,7 @@
 /**
  * Konten halaman Jalur Kelulusan (`/jalur-kelulusan`).
  * SKS & semester mata kuliah tugas akhir dan prasyarat "Metode Penelitian" diturunkan dari kurikulum
- * (`mergeKurikulum`); tanggal sidang dari agenda beranda (`AGENDA`) — tidak ditulis ulang.
+ * (`getKurikulumData`); tanggal sidang dari agenda beranda (`AGENDA`) — tidak ditulis ulang.
  *
  * CMS `PageContent` section `jalur-kelulusan`:
  *   data.intro          → paragraf intro hero
@@ -123,7 +123,7 @@ function nextDefense() {
 /**
  * Gabungkan CMS ke fallback.
  * @param row        PageContent `jalur-kelulusan` (boleh null)
- * @param kurikulum  hasil mergeKurikulum — mata kuliah tugas akhir & prasyarat
+ * @param kurikulum  hasil getKurikulumData — mata kuliah tugas akhir & prasyarat
  */
 export function mergeJalur(row, { kurikulum } = {}) {
   const raw = parse(row?.data);

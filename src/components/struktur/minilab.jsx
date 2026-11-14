@@ -3,20 +3,23 @@ import { useRef } from "react";
 import { animate, svg } from "animejs";
 import { prefersReducedMotion } from "@/lib/motion";
 import { Container, SectionHeader } from "@/components/home/shared";
-import { KnowledgeIllustration } from "@/components/illustrations/line-illustrations";
+import { ILLUSTRATIONS } from "@/components/illustrations/line-illustrations";
 import { SpotlightCard } from "@/components/aceternity/spotlight-card";
 import { Avatar, usePersonModal } from "./person-modal";
+import { cn } from "@/lib/utils";
 
 /**
  * Minilab (satu-satunya lab prodi) + tautan ke direktori dosen.
  * - Kartu Minilab: SpotlightCard navy, ilustrasi garis tergambar ulang saat di-hover.
  * - Peta keahlian dosen ada di halaman /dosen, di sini cukup tautannya.
  */
-export function Minilab({ minilab, people }) {
+export function Minilab({ content: c, people }) {
+  const card = c.card;
+  const Illu = ILLUSTRATIONS[card.illustration] ?? ILLUSTRATIONS.knowledge;
   const art = useRef(null);
   const open = usePersonModal();
   const byKey = Object.fromEntries(people.map((p) => [p.key, p]));
-  const head = minilab.head ? byKey[minilab.head] : null;
+  const head = card.head ? byKey[card.head] : null;
   const lecturers = people.filter((p) => p.group !== "staff");
 
   const redraw = () => {
@@ -27,9 +30,9 @@ export function Minilab({ minilab, people }) {
   return (
     <section id="minilab" className="relative scroll-mt-24 py-20 md:py-20">
       <Container>
-        <SectionHeader title={["Fasilitas", "prodi"]} body="Tempat sebagian besar kegiatan praktik program studi berlangsung." />
+        <SectionHeader title={[c.titleTop, c.titleAccent]} body={c.body} />
 
-        <div className="mt-12 grid gap-4 lg:grid-cols-[1.1fr_1fr]">
+        <div className={cn("mt-12 grid gap-4", c.directory.show && "lg:grid-cols-[1.1fr_1fr]")}>
           <div data-aos="fade-up">
             <SpotlightCard
               onPointerEnter={redraw}
@@ -41,14 +44,14 @@ export function Minilab({ minilab, people }) {
                 style={{ left: "var(--mx, 50%)", top: "var(--my, 50%)" }}
               />
               <div ref={art} className="max-w-[220px] [&_svg]:text-gold-soft">
-                <KnowledgeIllustration />
+                <Illu />
               </div>
-              <p className="kicker mt-8 text-gold-soft">Laboratorium</p>
-              <h3 className="mt-2 font-serif text-[clamp(1.6rem,2.6vw,2.1rem)] leading-tight">{minilab.title}</h3>
-              <p className="mt-3 max-w-md text-[15px] leading-relaxed text-white/70">{minilab.body}</p>
-              {minilab.uses?.length > 0 && (
+              {card.kicker && <p className="kicker mt-8 text-gold-soft">{card.kicker}</p>}
+              <h3 className="mt-2 font-serif text-[clamp(1.6rem,2.6vw,2.1rem)] leading-tight">{card.title}</h3>
+              <p className="mt-3 max-w-md text-[15px] leading-relaxed text-white/70">{card.body}</p>
+              {card.uses?.length > 0 && (
                 <ul className="mt-6 flex flex-wrap gap-2">
-                  {minilab.uses.map((u, i) => (
+                  {card.uses.map((u, i) => (
                     <li
                       key={u}
                       className="rounded-md border border-white/15 px-3 py-1.5 text-[13px] text-white/80 transition-colors duration-300 hover:border-gold/60 hover:text-white"
@@ -63,7 +66,7 @@ export function Minilab({ minilab, people }) {
                 <button type="button" onClick={() => open(head.key)} className="mt-8 flex items-center gap-3 border-t border-white/10 pt-5 text-left">
                   <Avatar person={head} size={34} />
                   <span>
-                    <span className="block text-[11px] font-semibold uppercase tracking-[0.12em] text-white/45">Penanggung jawab</span>
+                    <span className="block text-[11px] font-semibold uppercase tracking-[0.12em] text-white/45">{card.headLabel}</span>
                     <span className="block text-[14px] text-white">{head.name}</span>
                   </span>
                 </button>
@@ -71,16 +74,17 @@ export function Minilab({ minilab, people }) {
             </SpotlightCard>
           </div>
 
+          {c.directory.show && (
           <a
-            href="/dosen"
+            href={c.directory.href || "/dosen"}
             data-aos="fade-up"
             data-aos-delay="100"
             className="group flex flex-col justify-between gap-8 rounded-lg border border-line bg-white p-7 transition-[border-color,box-shadow] duration-500 ease-cinematic hover:border-maroon/30 hover:shadow-[0_30px_60px_-40px_rgb(78_14_25/0.5)] sm:p-9"
           >
             <div>
-              <p className="kicker text-maroon">Butuh pembimbing?</p>
-              <h3 className="mt-2 font-serif text-[1.5rem] leading-snug text-navy">Cari dosen per topik</h3>
-              <p className="mt-2 max-w-sm text-[14.5px] leading-relaxed text-text/60">Direktori dosen memuat bidang keahlian, mata kuliah, dan profil lengkap tiap pengajar.</p>
+              {c.directory.kicker && <p className="kicker text-maroon">{c.directory.kicker}</p>}
+              <h3 className="mt-2 font-serif text-[1.5rem] leading-snug text-navy">{c.directory.title}</h3>
+              <p className="mt-2 max-w-sm text-[14.5px] leading-relaxed text-text/60">{c.directory.body}</p>
             </div>
             <div className="flex items-center justify-between gap-4">
               <div className="flex -space-x-2" aria-hidden>
@@ -97,6 +101,7 @@ export function Minilab({ minilab, people }) {
               </span>
             </div>
           </a>
+          )}
         </div>
       </Container>
     </section>

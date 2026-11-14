@@ -1,10 +1,9 @@
-import { existsSync } from "node:fs";
-import path from "node:path";
-import prisma from "@/lib/prisma";
-import { CURTAIN_KEY, STORY_SECTION, mergePrestasi, mergeStory } from "@/lib/prestasi-content";
+import { getPrestasiContent } from "@/lib/prestasi-cms/server";
+import { CURTAIN_KEY } from "@/lib/prestasi-content";
 import { SiteHeader, Topbar } from "@/components/home/site-header";
 import { SiteFooter } from "@/components/home/site-footer";
 import { AosReady } from "@/components/motion/aos-provider";
+import { PreviewBridge } from "@/components/home/preview-bridge";
 import { PrestasiProvider } from "@/components/prestasi/prestasi-provider";
 import { PrestasiHero } from "@/components/prestasi/prestasi-hero";
 import { Archive } from "@/components/prestasi/archive";
@@ -15,51 +14,33 @@ import { PageCurtain } from "@/components/motion/page-curtain";
 
 export const revalidate = 300;
 
-export const metadata = {
-  title: "Prestasi — Sistem Informasi UISI",
-  description:
-    "Prestasi dan rekognisi dosen serta mahasiswa Program Studi Sistem Informasi UISI di tingkat nasional dan internasional.",
-};
-
-/** CMS menyimpan path relatif (mis. "../img/mhs/x.png") → "/img/mhs/x.png"; file yang tidak ada → tanpa foto. */
-function normalizeSrc(src) {
-  if (!src) return null;
-  if (/^https?:\/\//.test(src)) return src;
-  const rel = "/" + src.replace(/^(\.\.?\/)+/, "").replace(/^\/+/, "");
-  return existsSync(path.join(process.cwd(), "public", rel)) ? rel : null;
+export async function generateMetadata() {
+  const { seo } = await getPrestasiContent();
+  return { title: seo.title, description: seo.description };
 }
 
-async function getData() {
-  const [rows, storyRow] = await Promise.all([
-    prisma.achievement.findMany({ orderBy: [{ tahun: "desc" }, { id: "asc" }] }).catch(() => []),
-    prisma.pageContent.findFirst({ where: { section: STORY_SECTION, isActive: true } }).catch(() => null),
-  ]);
-  return {
-    ...mergePrestasi(rows.map((r) => ({ ...r, image: normalizeSrc(r.image) }))),
-    story: mergeStory(storyRow, normalizeSrc),
-  };
-}
-
-/** Halaman Prestasi — tema beranda "Kampus v3" (maroon + navy + gold di atas cream). */
+/** Halaman Prestasi — isi dari Ruang Kurator (CMS) + tabel Achievement; tema "Kampus v3". */
 export default async function PrestasiPage() {
-  const data = await getData();
+  const c = await getPrestasiContent();
+  const curtain = c.curtain.enabled && !c.preview;
   return (
     <div className="kampus" data-aos-wait>
-      <PageCurtain storageKey={CURTAIN_KEY} title="Prestasi" accent="Sisfor" label="Memuat prestasi" />
+      {curtain && <PageCurtain storageKey={CURTAIN_KEY} title={c.curtain.title} accent={c.curtain.accent} label={c.curtain.label} />}
       <Topbar />
       <SiteHeader />
-      <PrestasiProvider data={data}>
+      <PrestasiProvider data={c}>
         <HeadingStyle value="bar">
-        <main>
-          <PrestasiHero />
-          <Archive />
-          <StoryBand />
-          <Closing />
-        </main>
+          <main>
+            <PrestasiHero />
+            <Archive />
+            {c.story.show && <StoryBand />}
+            {c.closing.show && <Closing />}
+          </main>
         </HeadingStyle>
       </PrestasiProvider>
       <SiteFooter />
       <AosReady />
+      {c.preview && <PreviewBridge source="ruang-kurator" exitHref="/api/prestasi-cms/preview?off=1" />}
     </div>
   );
 }

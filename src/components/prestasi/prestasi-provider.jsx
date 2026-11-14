@@ -1,12 +1,11 @@
 "use client";
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { Fragment, createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { AchieverModal } from "./achiever-modal";
 
 const Ctx = createContext(null);
 export const usePrestasi = () => useContext(Ctx);
 
 const HASH = "#prestasi-";
-export const PAGE = 10;
 
 function setHash(value) {
   try {
@@ -26,6 +25,7 @@ export const norm = (s) =>
  */
 export function PrestasiProvider({ data, children }) {
   const { items, achievers } = data;
+  const PAGE = data.archive?.pageSize || 10;
   const [category, setCategory] = useState("all");
   const [level, setLevel] = useState("all");
   const [year, setYear] = useState("all");
@@ -44,7 +44,7 @@ export function PrestasiProvider({ data, children }) {
   }, [items, category, level, year, query]);
 
   // filter berubah → mulai lagi dari halaman pertama
-  useEffect(() => setVisible(PAGE), [category, level, year, query]);
+  useEffect(() => setVisible(PAGE), [category, level, year, query, PAGE]);
 
   const openProfile = useCallback((slug) => {
     setOpen(slug);
@@ -73,14 +73,14 @@ export function PrestasiProvider({ data, children }) {
   }, [achievers]);
 
   const value = useMemo(
-    () => ({ ...data, category, setCategory, level, setLevel, year, setYear, query, setQuery, visible, setVisible, filtered, openProfile, reset }),
-    [data, category, level, year, query, visible, filtered, openProfile, reset]
+    () => ({ ...data, PAGE, category, setCategory, level, setLevel, year, setYear, query, setQuery, visible, setVisible, filtered, openProfile, reset }),
+    [data, PAGE, category, level, year, query, visible, filtered, openProfile, reset]
   );
 
   return (
     <Ctx.Provider value={value}>
       {children}
-      <AchieverModal achievers={achievers} slug={open} onSlug={openProfile} onClose={closeProfile} />
+      <AchieverModal achievers={achievers} levels={data.levels} categories={data.categories} copy={data.modal} slug={open} onSlug={openProfile} onClose={closeProfile} />
     </Ctx.Provider>
   );
 }
@@ -109,4 +109,17 @@ export function LevelBadge({ level, label, tone = "light", className = "" }) {
         ? tone === "light" ? "bg-maroon text-white" : "bg-white/15 text-white"
         : tone === "light" ? "border border-line bg-white text-navy" : "border border-white/25 text-white";
   return <span className={`kicker inline-flex items-center rounded px-2 py-1 text-[10px] leading-none ${cls} ${className}`}>{label}</span>;
+}
+
+/**
+ * Isi template CMS `{token}` dengan node React (mis. angka bergaya). Token tak dikenal dibiarkan.
+ * `fillNodes("{n} prestasi", { n: <strong>12</strong> })`
+ */
+export function fillNodes(tpl = "", vars = {}) {
+  return String(tpl)
+    .split(/(\{\w+\})/)
+    .map((part, i) => {
+      const k = part.match(/^\{(\w+)\}$/)?.[1];
+      return k && k in vars ? <Fragment key={i}>{vars[k]}</Fragment> : part;
+    });
 }

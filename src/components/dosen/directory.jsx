@@ -24,7 +24,7 @@ const useIso = typeof window === "undefined" ? useEffect : useLayoutEffect;
  * Ponsel: Swiper. Hasil kosong: Lottie + tombol reset.
  */
 export function Directory() {
-  const { fields, field, setField, query, setQuery, view, setView, filtered, lecturers, reset } = useDosen();
+  const { fields, field, setField, query, setQuery, view, setView, filtered, lecturers, reset, directory } = useDosen();
   const fieldName = fields.find((f) => f.key === field)?.name;
   const grid = useRef(null);
   const flipState = useRef(null);
@@ -61,8 +61,8 @@ export function Directory() {
     <section id="direktori" className="scroll-mt-20 py-16 md:py-20">
       <Container>
         <SectionHeader
-          title={["Direktori", "dosen"]}
-          body="Klik dosen untuk melihat mata kuliah yang diampu, bidang riset, dan profil lengkapnya."
+          title={[directory.titleTop, directory.titleAccent]}
+          body={directory.body}
         />
 
         {/* bilah hasil (sticky): pencarian & filter ada di hero, di sini ringkasan + reset + tampilan */}
@@ -101,7 +101,7 @@ export function Directory() {
         </div>
 
         {filtered.length === 0 ? (
-          <Empty onReset={() => withFlip(reset)} />
+          <Empty copy={directory.empty} onReset={() => withFlip(reset)} />
         ) : (
           <>
             {/* ≥ md: grid / daftar */}
@@ -164,7 +164,7 @@ function ViewToggle({ value, onChange }) {
 }
 
 function LecturerCard({ item, n, query }) {
-  const { openProfile, fields } = useDosen();
+  const { openProfile, fields, directory } = useDosen();
   const [loaded, setLoaded] = useState(!item.photo);
   return (
     <SpotlightCard
@@ -197,7 +197,7 @@ function LecturerCard({ item, n, query }) {
           <span className="grid size-full place-items-center font-serif text-5xl text-maroon">{item.initials}</span>
         )}
         <span className="tabular absolute left-3 top-3 rounded bg-navy/85 px-2 py-1 font-serif text-[15px] leading-none text-gold-soft">{pad(n)}</span>
-        {item.key === "kaprodi" && <span className="kicker absolute right-3 top-3 rounded bg-gold px-2 py-1 text-[10px] text-navy">Kaprodi</span>}
+        {item.key === "kaprodi" && directory.leadBadge && <span className="kicker absolute right-3 top-3 rounded bg-gold px-2 py-1 text-[10px] text-navy">{directory.leadBadge}</span>}
         {/* chip rumpun naik saat hover */}
         <span className="absolute inset-x-3 bottom-3 flex flex-wrap gap-1.5">
           {item.fields.map((f, i) => (
@@ -225,7 +225,7 @@ function LecturerCard({ item, n, query }) {
           ))}
         </span>
         <span className="mt-auto flex items-center justify-between pt-5 text-[13px] font-semibold text-maroon">
-          <span className="u-gold">Lihat profil</span>
+          <span className="u-gold">{directory.cardCta}</span>
           <svg aria-hidden viewBox="0 0 16 16" className="size-4 transition-transform duration-500 ease-cinematic group-hover:rotate-45">
             <path d="M5 11l6-6M6 5h5v5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
@@ -317,20 +317,20 @@ function Rows({ items, all, query }) {
   );
 }
 
-function Empty({ onReset }) {
+function Empty({ copy, onReset }) {
   return (
     <div className="mt-8 flex flex-col items-center rounded-lg border border-dashed border-line bg-white px-6 py-12 text-center" data-aos="fade-up">
       <div className="w-36">
-        <LottieIllustration src="/lottie/empty-news.json" label="Tidak ada hasil" />
+        <LottieIllustration src="/lottie/empty-news.json" label={copy.title} />
       </div>
-      <p className="mt-4 font-serif text-[1.4rem] text-navy">Belum ada dosen yang cocok</p>
-      <p className="mt-1 text-[14px] text-text/60">Coba kata kunci lain atau tampilkan semua rumpun.</p>
+      <p className="mt-4 font-serif text-[1.4rem] text-navy">{copy.title}</p>
+      <p className="mt-1 text-[14px] text-text/60">{copy.body}</p>
       <button
         type="button"
         onClick={onReset}
         className="mt-6 inline-flex h-10 items-center rounded-md bg-navy px-5 text-[14px] font-semibold text-white transition-[background-color,transform] duration-300 hover:bg-navy-deep active:scale-[0.98]"
       >
-        Tampilkan semua dosen
+        {copy.resetLabel}
       </button>
     </div>
   );

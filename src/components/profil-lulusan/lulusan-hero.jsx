@@ -4,7 +4,6 @@ import Image from "next/image";
 import { gsap } from "@/lib/scroll";
 import { prefersReducedMotion, curtainDelay } from "@/lib/motion";
 import { CURTAIN_KEY } from "@/lib/profil-lulusan-content";
-import { VIDEOS } from "@/lib/home-content";
 import { Container, SceneTitle } from "@/components/home/shared";
 import { ElvoPeek } from "@/components/home/elvo-peek";
 import { Magnetic } from "@/components/motion/magnetic";
@@ -21,16 +20,17 @@ function smoothTo(id) {
 /**
  * Hero Profil Lulusan (editorial): header majalah dua kolom, kalimat raksasa "berkarier sebagai"
  * dengan jabatan berganti (WordRotate) melintang lebar penuh, lalu kolase polaroid alumni
- * yang masuk bertahap. Elvo `proud` menyembul di atas kolase.
+ * yang masuk bertahap. Elvo menyembul di atas kolase. Semua teks dari `content` (Galeri Wisuda).
  */
-export function LulusanHero({ intro, roles, alumni }) {
+export function LulusanHero({ content: c, alumni, hasAlumni, curtain = true }) {
   const ref = useRef(null);
-  const avatars = alumni.filter((a) => a.photo).slice(0, 6);
+  const avatars = alumni.filter((a) => a.photo).slice(0, c.collage ?? 6);
+  const crumbs = c.breadcrumb ?? [];
 
   useEffect(() => {
     const el = ref.current;
     if (!el || prefersReducedMotion()) return;
-    const delay = curtainDelay(CURTAIN_KEY) * 1000;
+    const delay = curtain ? curtainDelay(CURTAIN_KEY) * 1000 : 0;
 
     const ctx = gsap.context(() => {
       gsap.from("[data-hero-fade]", { y: 18, opacity: 0, duration: 0.8, stagger: 0.08, ease: "expo.out", delay: delay / 1000 });
@@ -38,18 +38,26 @@ export function LulusanHero({ intro, roles, alumni }) {
       gsap.to("[data-parallax]", { yPercent: -8, ease: "none", scrollTrigger: { trigger: el, start: "top top", end: "bottom top", scrub: 0.8 } });
     }, el);
     return () => ctx.revert();
-  }, []);
+  }, [curtain]);
 
   return (
-    <section ref={ref} className="relative overflow-hidden pb-10 pt-10 md:pb-14 md:pt-14">
+    <section id="pl-hero" ref={ref} className="relative overflow-hidden pb-10 pt-10 md:pb-14 md:pt-14">
       <Container>
         <nav aria-label="Breadcrumb" data-hero-fade className="text-sm text-text/55">
           <ol className="flex flex-wrap items-center gap-2">
-            <li><a href="/" className="u-gold transition-colors hover:text-maroon">Beranda</a></li>
-            <li aria-hidden>/</li>
-            <li>Profil</li>
-            <li aria-hidden>/</li>
-            <li aria-current="page" className="text-navy">Profil Lulusan</li>
+            {crumbs.map((b, i) => {
+              const last = i === crumbs.length - 1;
+              return (
+                <li key={`${b.label}-${i}`} className="flex items-center gap-2">
+                  {b.href && !last ? (
+                    <a href={b.href} className="u-gold transition-colors hover:text-maroon">{b.label}</a>
+                  ) : (
+                    <span aria-current={last ? "page" : undefined} className={last ? "text-navy" : undefined}>{b.label}</span>
+                  )}
+                  {!last && <span aria-hidden>/</span>}
+                </li>
+              );
+            })}
           </ol>
         </nav>
 
@@ -57,10 +65,10 @@ export function LulusanHero({ intro, roles, alumni }) {
         <div className="mt-10 grid gap-8 lg:mt-14 lg:grid-cols-[1.1fr_0.9fr] lg:items-end lg:gap-16">
           <div>
             <span aria-hidden data-hero-fade className="mb-6 block h-[3px] w-10 bg-gold" />
-            <SceneTitle as="h1" trigger="mount" title={["Profil", "Lulusan"]} className="!text-[clamp(3rem,7vw,5.75rem)] !leading-[0.98]" />
+            <SceneTitle as="h1" trigger="mount" title={[c.titleTop, c.titleAccent]} className="!text-[clamp(3rem,7vw,5.75rem)] !leading-[0.98]" />
           </div>
           <div className="lg:border-l lg:border-line lg:pb-2 lg:pl-10">
-            <p data-hero-fade className="text-pretty text-[17px] leading-relaxed text-text/70">{intro.body}</p>
+            <p data-hero-fade className="text-pretty text-[17px] leading-relaxed text-text/70">{c.body}</p>
             <div data-hero-fade className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-4">
               <Magnetic strength={0.25}>
                 <a
@@ -71,13 +79,13 @@ export function LulusanHero({ intro, roles, alumni }) {
                   }}
                   className="group inline-flex h-12 items-center gap-2 rounded-md bg-maroon px-6 text-[15px] font-semibold text-white transition-[background-color,transform] duration-300 ease-cinematic hover:bg-maroon-deep active:scale-[0.98]"
                 >
-                  Jelajahi profil
+                  {c.ctaLabel}
                   <svg aria-hidden viewBox="0 0 16 16" className="size-4 transition-transform duration-300 group-hover:translate-y-0.5">
                     <path d="M8 3v10M4 9l4 4 4-4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </a>
               </Magnetic>
-              <AlumniVideoButton />
+              {c.video?.show && c.video.src && <AlumniVideoButton video={c.video} />}
             </div>
           </div>
         </div>
@@ -85,9 +93,9 @@ export function LulusanHero({ intro, roles, alumni }) {
         {/* kalimat raksasa melintang */}
         <div data-hero-fade className="mt-14 border-y border-line py-7 md:mt-16 md:py-9">
           <p className="font-serif text-[clamp(1.35rem,2.6vw,2rem)] leading-tight text-text/60">
-            Lulusan kami berkarier sebagai
+            {c.rolesLead}
             <span className="mt-1 block min-h-[1.15em] text-[clamp(1.6rem,5.6vw,4.5rem)] italic leading-[1.1] text-maroon">
-              <WordRotate words={roles} interval={2600} />
+              {c.roles.length > 0 && <WordRotate key={c.roles.join("|")} words={c.roles} interval={2600} />}
             </span>
           </p>
         </div>
@@ -117,7 +125,7 @@ export function LulusanHero({ intro, roles, alumni }) {
                 </li>
               ))}
             </ul>
-            <a
+            {hasAlumni && c.storyLabel && <a
               href="#alumni"
               onClick={(e) => {
                 e.preventDefault();
@@ -125,11 +133,13 @@ export function LulusanHero({ intro, roles, alumni }) {
               }}
               className="mt-8 flex justify-center text-[14.5px] font-semibold text-navy"
             >
-              <span className="u-gold">Lihat cerita mereka ↓</span>
-            </a>
-            <div className="absolute -top-32 right-[2%] hidden lg:block">
-              <div className="relative"><ElvoPeek pose="proud" size={92} side="left" say="Kakak-kakak alumni sudah di mana-mana, lho!" delay={0.4} /></div>
-            </div>
+              <span className="u-gold">{c.storyLabel} ↓</span>
+            </a>}
+            {c.mascot?.show && (
+              <div className="absolute -top-32 right-[2%] hidden lg:block">
+                <div className="relative"><ElvoPeek pose={c.mascot.pose} size={92} side="left" say={c.mascot.say} delay={0.4} /></div>
+              </div>
+            )}
           </div>
         )}
       </Container>
@@ -137,9 +147,8 @@ export function LulusanHero({ intro, roles, alumni }) {
   );
 }
 
-/** Tombol "Tonton cerita alumni" → modal video (video baru diunduh saat dibuka). */
-function AlumniVideoButton() {
-  const v = VIDEOS.alumni;
+/** Tombol video alumni → modal video (video baru diunduh saat dibuka). */
+function AlumniVideoButton({ video: v }) {
   return (
     <Modal>
       <ModalTrigger className="group inline-flex h-12 items-center gap-3 text-[15px] font-semibold text-navy">
@@ -149,14 +158,14 @@ function AlumniVideoButton() {
           </svg>
           <span aria-hidden className="absolute inset-0 animate-ping rounded-full border border-maroon/30 [animation-duration:2.4s] motion-reduce:hidden" />
         </span>
-        <span className="u-gold">Tonton cerita alumni</span>
+        <span className="u-gold">{v.label}</span>
         <span className="tabular text-xs font-normal text-text/50">{v.duration}</span>
       </ModalTrigger>
       <ModalContent className="max-w-5xl bg-maroon-deep p-0 text-white sm:p-0">
         <ModalTitle className="sr-only">{v.title}</ModalTitle>
-        <ModalDescription className="sr-only">Pemutar video</ModalDescription>
+        <ModalDescription className="sr-only">{v.label}</ModalDescription>
         {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-        <video src={v.src} poster={v.poster} controls autoPlay playsInline preload="none" className="aspect-video w-full bg-black" />
+        <video src={v.src} poster={v.poster || undefined} controls autoPlay playsInline preload="none" className="aspect-video w-full bg-black" />
       </ModalContent>
     </Modal>
   );

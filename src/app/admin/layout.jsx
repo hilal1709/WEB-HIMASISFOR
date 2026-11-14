@@ -85,8 +85,8 @@ export default function AdminLayout({ children }) {
     return null
   }
 
-  // Studio Beranda & Meja Sambutan memakai kanvas layar penuh sendiri
-  if (pathname === '/admin/home' || pathname === '/admin/sambutan') {
+  // Studio penuh memakai kanvas sendiri tanpa chrome admin.
+  if (pathname === '/admin/home' || pathname === '/admin/sambutan' || pathname === '/admin/bidang-keahlian' || pathname === '/admin/visi-misi' || pathname === '/admin/struktur' || pathname === '/admin/profil-lulusan' || pathname === '/admin/program-kelas' || pathname === '/admin/dosen' || pathname === '/admin/prestasi' || pathname === '/admin/kurikulum') {
     return children
   }
 
@@ -94,12 +94,18 @@ export default function AdminLayout({ children }) {
     { href: '/admin/dashboard', label: 'Dashboard' },
     { href: '/admin/layanan', label: 'Kotak Masuk Layanan' },
     { href: '/admin/home', label: 'Studio Beranda' },
+    { href: '/admin/bidang-keahlian', label: 'Konsol Bidang Keahlian' },
     { href: '/admin/sambutan', label: 'Meja Sambutan Kaprodi' },
+    { href: '/admin/visi-misi', label: 'Ruang Kompas Visi & Misi' },
+    { href: '/admin/struktur', label: 'Studio Bagan Struktur' },
+    { href: '/admin/profil-lulusan', label: 'Galeri Wisuda Profil Lulusan' },
+    { href: '/admin/program-kelas', label: 'Papan Jadwal Program Kelas' },
+    { href: '/admin/dosen', label: 'Ruang Dosen' },
     { href: '/admin/warta', label: 'Warta (Berita & Agenda)' },
     { href: '/admin/content', label: 'Konten Web Utama' },
     { href: '/admin/profile-content', label: 'Konten Halaman Profil' },
-    { href: '/admin/curriculum', label: 'Kelola Kurikulum' },
-    { href: '/admin/achievements', label: 'Kelola Prestasi' },
+    { href: '/admin/kurikulum', label: 'Kartografer Kurikulum' },
+    { href: '/admin/prestasi', label: 'Ruang Kurator Prestasi' },
     { href: '/admin/gallery', label: 'Kelola Galeri Prestasi' },
     { href: '/admin/media', label: 'Upload Media' },
   ]

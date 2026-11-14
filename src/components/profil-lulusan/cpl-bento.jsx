@@ -7,33 +7,31 @@ import { SpotlightCard } from "@/components/aceternity/spotlight-card";
 import { ILLUSTRATIONS } from "@/components/illustrations/line-illustrations";
 import { cn } from "@/lib/utils";
 
-const VISIBLE = 2;
-/** Tata letak bento (lg: 6 kolom). Keterampilan Khusus = tile besar. */
-const LAYOUT = {
-  sikap: "lg:col-span-2",
-  pengetahuan: "lg:col-span-2",
-  umum: "lg:col-span-2",
-  khusus: "lg:col-span-6",
-};
+/** Lebar tile biasa di lg (6 kolom): baris diisi rata menurut jumlah tile biasa. */
+const SPAN = { 1: "lg:col-span-6", 2: "lg:col-span-3", 3: "lg:col-span-2" };
+const fill = (t, n) => String(t ?? "").replace(/\{jumlah\}/gi, String(n));
 
 /**
  * Capaian Pembelajaran Lulusan — bento 4 tile (Aceternity Spotlight: cahaya mengikuti kursor).
  * Ilustrasi line-art di tiap tile digambar ulang saat hover (anime.js); butir CPL lebih dari dua
  * bisa dibuka/tutup dengan transisi tinggi (grid-rows 0fr → 1fr).
  */
-export function CplBento({ cpl }) {
+export function CplBento({ content: c, note }) {
+  const cpl = c.items;
+  const narrow = cpl.filter((x) => !x.wide).length;
+  const span = SPAN[Math.min(3, narrow)] ?? SPAN[3];
   return (
     <section id="cpl" className="scroll-mt-24 bg-white py-16 md:py-20">
       <Container>
         <SectionHeader
-          title={["Capaian", "pembelajaran", "lulusan"]}
-          body="Empat ranah kemampuan yang dirancang di kurikulum dan diukur sampai mahasiswa lulus."
-          action={<PlaceholderTag />}
+          title={[c.titleTop, c.titleAccent]}
+          body={c.body}
+          action={c.sample ? <PlaceholderTag>{note}</PlaceholderTag> : null}
         />
         <div className="mt-10 grid gap-4 md:mt-12 md:grid-cols-2 lg:grid-cols-6">
-          {cpl.map((c, i) => (
-            <div key={c.key} data-aos="fade-up" data-aos-delay={i * 80} className={cn("min-w-0", LAYOUT[c.key])}>
-              <CplTile item={c} n={i + 1} wide={c.key === "khusus"} />
+          {cpl.map((x, i) => (
+            <div key={x.key} data-aos="fade-up" data-aos-delay={i * 80} className={cn("min-w-0", x.wide ? "lg:col-span-6" : span)}>
+              <CplTile item={x} n={i + 1} wide={x.wide} labels={c} />
             </div>
           ))}
         </div>
@@ -42,7 +40,8 @@ export function CplBento({ cpl }) {
   );
 }
 
-function CplTile({ item, n, wide }) {
+function CplTile({ item, n, wide, labels }) {
+  const VISIBLE = labels.visible ?? 2;
   const art = useRef(null);
   const [open, setOpen] = useState(false);
   const Illustration = ILLUSTRATIONS[item.illustration];
@@ -78,7 +77,7 @@ function CplTile({ item, n, wide }) {
         <div className={cn(wide && "md:order-1")}>
           <div className="flex items-start justify-between gap-4">
             <div>
-              <p className="kicker text-maroon">CPL {String(n).padStart(2, "0")}</p>
+              <p className="kicker text-maroon">{[labels.kicker, String(n).padStart(2, "0")].filter(Boolean).join(" ")}</p>
               <h3 className="mt-2 font-serif text-[1.55rem] leading-tight text-navy">{item.title}</h3>
             </div>
             {!wide && (
@@ -100,7 +99,7 @@ function CplTile({ item, n, wide }) {
                 onClick={() => setOpen((v) => !v)}
                 className="group/more mt-4 inline-flex items-center gap-1.5 rounded text-[13px] font-semibold text-maroon focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-maroon/40"
               >
-                <span className="u-gold">{open ? "Tutup" : `Lihat ${rest.length} lainnya`}</span>
+                <span className="u-gold">{open ? labels.lessLabel : fill(labels.moreLabel, rest.length)}</span>
                 <svg aria-hidden viewBox="0 0 16 16" className={cn("size-3.5 transition-transform duration-500 ease-cinematic", open && "rotate-180")}>
                   <path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>

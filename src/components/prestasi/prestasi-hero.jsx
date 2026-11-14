@@ -3,14 +3,14 @@ import { useLayoutEffect as useEffect, useRef } from "react";
 import Image from "next/image";
 import { gsap } from "@/lib/scroll";
 import { prefersReducedMotion, curtainDelay } from "@/lib/motion";
-import { CURTAIN_KEY, INTRO, LEVELS } from "@/lib/prestasi-content";
+import { CURTAIN_KEY } from "@/lib/prestasi-content";
 import { Container, PlaceholderTag, SceneTitle } from "@/components/home/shared";
 import { ElvoPeek } from "@/components/home/elvo-peek";
 import { Magnetic } from "@/components/motion/magnetic";
 import { Marquee } from "@/components/motion/marquee";
 import { WordRotate } from "@/components/motion/word-rotate";
 import { cn } from "@/lib/utils";
-import { LevelBadge, usePrestasi } from "./prestasi-provider";
+import { LevelBadge, fillNodes, usePrestasi } from "./prestasi-provider";
 
 export function smoothTo(id) {
   document.getElementById(id)?.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth", block: "start" });
@@ -50,15 +50,16 @@ function FameCard({ it, onOpen }) {
  * terus bergulir dan berhenti saat di-hover. Klik kartu → modal semua capaian peraih itu.
  */
 export function PrestasiHero() {
-  const { achievers, items, featured, level, setLevel, span, sample, openProfile } = usePrestasi();
+  const { achievers, items, featured, level, setLevel, span, sample, openProfile, hero, levels, categories, story, preview } = usePrestasi();
   const ref = useRef(null);
   // satu capaian terbaik per peraih (pickFeatured), jadi tiap orang hanya muncul sekali di pita
-  const fame = featured.slice(0, 12);
+  const fame = hero.fame.show ? featured.slice(0, hero.fame.limit) : [];
+  const crumbs = hero.breadcrumb.filter((b) => b.label?.trim());
 
   useEffect(() => {
     const el = ref.current;
     if (!el || prefersReducedMotion()) return;
-    const delay = curtainDelay(CURTAIN_KEY);
+    const delay = preview ? 0 : curtainDelay(CURTAIN_KEY);
     const ctx = gsap.context(() => {
       gsap.from("[data-hero-fade]", { y: 18, opacity: 0, duration: 0.8, stagger: 0.08, ease: "expo.out", delay });
       gsap.from("[data-fame]", { x: 120, opacity: 0, duration: 1.4, ease: "expo.out", delay: delay + 0.3 });
@@ -66,37 +67,51 @@ export function PrestasiHero() {
     return () => ctx.revert();
   }, []);
 
-  const chips = [{ key: "all", label: "Semua" }, ...LEVELS];
+  const chips = [categories.find((c) => c.key === "all"), ...levels];
 
   return (
     <section ref={ref} className="relative overflow-hidden pb-10 pt-10 md:pb-14 md:pt-14">
       <Container>
         <nav aria-label="Breadcrumb" data-hero-fade className="text-sm text-text/55">
           <ol className="flex flex-wrap items-center gap-2">
-            <li><a href="/" className="u-gold transition-colors hover:text-maroon">Beranda</a></li>
-            <li aria-hidden>/</li>
-            <li>Profil</li>
-            <li aria-hidden>/</li>
-            <li aria-current="page" className="text-navy">Prestasi</li>
+            {crumbs.map((b, i) => {
+              const last = i === crumbs.length - 1;
+              return (
+                <li key={i} className="flex items-center gap-2">
+                  {i > 0 && <span aria-hidden>/</span>}
+                  {last ? (
+                    <span aria-current="page" className="text-navy">{b.label}</span>
+                  ) : b.href ? (
+                    <a href={b.href} className="u-gold transition-colors hover:text-maroon">{b.label}</a>
+                  ) : (
+                    <span>{b.label}</span>
+                  )}
+                </li>
+              );
+            })}
           </ol>
         </nav>
 
         <div className="mt-10 grid gap-8 lg:mt-12 lg:grid-cols-[1.15fr_0.85fr] lg:items-end lg:gap-14">
           <div>
-            <SceneTitle as="h1" trigger="mount" title={INTRO.title} className="!text-[clamp(2.6rem,6vw,5rem)] !leading-[1]" />
+            <SceneTitle as="h1" trigger="mount" title={[hero.titleTop, hero.titleAccent]} className="!text-[clamp(2.6rem,6vw,5rem)] !leading-[1]" />
             <p data-hero-fade className="mt-5 font-serif text-[clamp(1.15rem,2vw,1.5rem)] leading-tight text-text/60">
-              {INTRO.lead}{" "}
-              <span className="inline-block min-w-[14ch] italic text-maroon">
-                <WordRotate words={INTRO.rotate} interval={2400} />
-              </span>
+              {hero.lead}{" "}
+              {hero.rotateWords.length > 0 && (
+                <span className="inline-block min-w-[14ch] italic text-maroon">
+                  <WordRotate words={hero.rotateWords} interval={2400} />
+                </span>
+              )}
             </p>
           </div>
           <div>
             <p data-hero-fade className="text-pretty text-[16.5px] leading-relaxed text-text/70">
-              <strong className="font-serif text-[1.35rem] font-normal text-maroon">{items.length} prestasi</strong> dari{" "}
-              <strong className="font-semibold text-navy">{achievers.length} peraih</strong>
-              {span ? <> tercatat {span[0]}–{span[1]}. </> : ". "}
-              {INTRO.body}
+              {fillNodes(hero.countTemplate, {
+                n: <strong className="font-serif text-[1.35rem] font-normal text-maroon">{items.length}</strong>,
+                people: <strong className="font-semibold text-navy">{achievers.length}</strong>,
+              })}
+              {span ? <> {fillNodes(hero.spanTemplate, { from: span[0], to: span[1] })} </> : ". "}
+              {hero.body}
             </p>
             {sample && <PlaceholderTag className="mt-3" />}
             <div data-hero-fade className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-4">
@@ -109,29 +124,31 @@ export function PrestasiHero() {
                   }}
                   className="group inline-flex h-12 items-center gap-2 rounded-md bg-maroon px-6 text-[15px] font-semibold text-white transition-[background-color,transform] duration-300 ease-cinematic hover:bg-maroon-deep active:scale-[0.98]"
                 >
-                  Jelajahi arsip
+                  {hero.ctaLabel}
                   <svg aria-hidden viewBox="0 0 16 16" className="size-4 transition-transform duration-300 group-hover:translate-y-0.5">
                     <path d="M8 3v10M4 9l4 4 4-4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </a>
               </Magnetic>
-              <a
-                href="#kisah"
-                onClick={(e) => {
-                  e.preventDefault();
-                  smoothTo("kisah");
-                }}
-                className="text-[15px] font-semibold text-navy"
-              >
-                <span className="u-gold">Tonton kisah mawapres</span>
-              </a>
+              {story.show && hero.storyLinkLabel && (
+                <a
+                  href="#kisah"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    smoothTo("kisah");
+                  }}
+                  className="text-[15px] font-semibold text-navy"
+                >
+                  <span className="u-gold">{hero.storyLinkLabel}</span>
+                </a>
+              )}
             </div>
           </div>
         </div>
 
         {/* chip tingkat */}
         <div data-hero-fade role="group" aria-label="Filter tingkat prestasi" className="mt-10 flex flex-wrap items-center gap-2 border-t border-line pt-6">
-          <span className="mr-2 text-[13px] text-text/50">Tingkat:</span>
+          <span className="mr-2 text-[13px] text-text/50">{hero.chipsLabel}</span>
           {chips.map((c) => {
             const on = level === c.key;
             const n = c.key === "all" ? items.length : items.filter((i) => i.level === c.key).length;
@@ -155,9 +172,11 @@ export function PrestasiHero() {
               </button>
             );
           })}
-          <div className="relative ml-auto hidden lg:block">
-            <ElvoPeek pose="proud" size={72} side="left" say="Ini para juara kita. Giliranmu berikutnya!" delay={0.3} />
-          </div>
+          {hero.mascot.show && (
+            <div className="relative ml-auto hidden lg:block">
+              <ElvoPeek pose={hero.mascot.pose} size={72} side="left" say={hero.mascot.say} delay={0.3} />
+            </div>
+          )}
         </div>
       </Container>
 

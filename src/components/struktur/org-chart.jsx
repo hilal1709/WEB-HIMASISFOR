@@ -1,5 +1,5 @@
 "use client";
-import { useLayoutEffect as useEffect, useMemo, useRef, useState } from "react";
+import { createContext, useContext, useLayoutEffect as useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { gsap } from "@/lib/scroll";
 import { prefersReducedMotion } from "@/lib/motion";
@@ -9,25 +9,58 @@ import { Banner } from "@/components/ui/banner";
 import { usePersonModal } from "./person-modal";
 import { cn } from "@/lib/utils";
 
+const Ctx = createContext(null);
+const useChart = () => useContext(Ctx);
+
+const TONE = {
+  maroon: { bar: "bg-maroon", dot: "bg-maroon", soft: "bg-maroon/[0.04]" },
+  navy: { bar: "bg-navy", dot: "bg-navy", soft: "bg-navy/[0.04]" },
+  gold: { bar: "bg-gold", dot: "bg-gold", soft: "bg-gold/[0.08]" },
+};
+const WIDTH = { lg: "w-[300px]", md: "w-[216px]", sm: "w-[188px]" };
+
 /**
- * Bagan organisasi interaktif, dibangun dari `reportsTo`:
- *   puncak (tanpa reportsTo) → baris anak langsung (garis bus) → cucu sebagai daftar ringkas di bawah induknya.
- * - Garis konektor "tumbuh" saat bagan masuk layar (GSAP ScrollTrigger).
- * - Hover/fokus kartu: kartu & atasannya menyala, jalur konektornya maroon, cabang lain meredup.
- * - < lg: daftar bertingkat dengan garis vertikal.
- * Klik kartu → modal detail.
+ * Bagan organisasi publik. Bentuknya dari CMS (`content.layout`):
+ *   tree       → pohon vertikal penuh, kedalaman bebas, garis bus per tingkat
+ *   horizontal → pohon mengalir ke kanan
+ *   divisions  → puncak + staf, lalu kotak per divisi
+ * Tampilan kartu diatur per tingkat (`content.cards.lead|level1|deeper`).
+ * Hover/fokus menyalakan jalur koordinasi (atasan + bawahan); bagan lebar bisa diseret ke samping.
+ * < lg: daftar bertingkat.
  */
-export function OrgChart({ people, confirmed }) {
+export function OrgChart({ content: c, people }) {
   const ref = useRef(null);
   const [hover, setHover] = useState(null);
 
   const tree = useMemo(() => {
     const byKey = Object.fromEntries(people.map((p) => [p.key, p]));
-    const root = people.find((p) => !p.reportsTo || !byKey[p.reportsTo]) ?? people[0];
-    const childrenOf = (k) => people.filter((p) => p.reportsTo === k && p.key !== root.key);
-    const staff = childrenOf(root.key).filter((p) => p.group === "staff");
-    const level1 = childrenOf(root.key).filter((p) => p.group !== "staff");
-    return { byKey, root, staff, level1, childrenOf };
+    const root = people.find((p) => p.group !== "staff" && (!p.reportsTo || !byKey[p.reportsTo])) ?? people[0];
+    const isLane = (p) => p.reportsTo === root.key && p.group === "staff";
+    const kids = (k) => people.filter((p) => p.reportsTo === k && p.key !== root.key && !isLane(p));
+    const staff = people.filter(isLane);
+    const depth = {};
+    const walk = (k, d, seen) => {
+      if (seen.has(k)) return;
+      seen.add(k);
+      depth[k] = d;
+      kids(k).forEach((x) => walk(x.key, d + 1, seen));
+    };
+    walk(root.key, 0, new Set());
+    staff.forEach((p) => (depth[p.key] = 1));
+    people.forEach((p) => depth[p.key] ?? (depth[p.key] = 1));
+    // urutan baca (DFS) untuk daftar mobile & isi kotak divisi
+    const order = [];
+    const dfs = (k, seen) => {
+      if (seen.has(k)) return;
+      seen.add(k);
+      order.push(byKey[k]);
+      if (k === root.key) staff.forEach((s) => dfs(s.key, seen));
+      kids(k).forEach((x) => dfs(x.key, seen));
+    };
+    const seen = new Set();
+    dfs(root.key, seen);
+    people.forEach((p) => !seen.has(p.key) && order.push(p));
+    return { byKey, root, staff, kids, depth, order, maxDepth: Math.max(0, ...Object.values(depth)) };
   }, [people]);
 
   // jalur menyala = kartu yang di-hover + semua atasannya + semua bawahannya
@@ -49,194 +82,424 @@ export function OrgChart({ people, confirmed }) {
     return s;
   }, [hover, tree, people]);
 
-  const dim = (p) => !!hover && !lit.has(p.key);
-  const anyLit = tree.level1.some((m) => lit.has(m.key));
+  const divisions = c.divisions ?? [];
+  const divByKey = useMemo(() => Object.fromEntries(divisions.map((d) => [d.key, d])), [divisions]);
+  const layout = c.layout === "divisions" && !divisions.length ? "tree" : c.layout ?? "tree";
 
-  // urutan daftar mobile: puncak, lalu tiap anak diikuti cucunya
-  const flat = useMemo(() => {
-    const out = [{ p: tree.root, depth: 0 }, ...tree.staff.map((p) => ({ p, depth: 1 }))];
-    tree.level1.forEach((m) => {
-      out.push({ p: m, depth: 1 });
-      tree.childrenOf(m.key).forEach((c) => out.push({ p: c, depth: 2 }));
-    });
-    return out;
-  }, [tree]);
+  const ctx = {
+    tree,
+    lit,
+    hover,
+    setHover,
+    cta: c.cardCta,
+    tier: (p) => (p.key === tree.root.key ? c.cards.lead : tree.depth[p.key] <= 1 ? c.cards.level1 : c.cards.deeper),
+    division: (p) => (layout !== "divisions" ? divByKey[p.division] : null),
+  };
 
   useEffect(() => {
     const el = ref.current;
     if (!el || prefersReducedMotion()) return;
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ scrollTrigger: { trigger: "[data-tree]", start: "top 75%", once: true } });
-      tl.from("[data-tree] [data-card='0']", { y: 24, opacity: 0, duration: 0.7, ease: "expo.out" })
-        .from("[data-tree] [data-h='staff']", { scaleX: 0, duration: 0.4, ease: "power2.inOut" }, "-=0.3")
-        .from("[data-tree] [data-card='staff']", { x: -12, opacity: 0, duration: 0.5, ease: "expo.out" }, "-=0.15")
-        .from("[data-tree] [data-v='trunk']", { scaleY: 0, duration: 0.45, ease: "power2.inOut" }, "-=0.3")
-        .from("[data-tree] [data-h='bus']", { scaleX: 0, duration: 0.6, ease: "power3.inOut" })
-        .from("[data-tree] [data-v='drop']", { scaleY: 0, duration: 0.3, stagger: 0.05, ease: "power2.out" }, "-=0.2")
-        .from("[data-tree] [data-card='1']", { y: 20, opacity: 0, duration: 0.6, stagger: 0.07, ease: "expo.out" }, "-=0.15");
-      gsap.from("[data-list] > li", { x: -14, opacity: 0, duration: 0.55, stagger: 0.06, ease: "expo.out", scrollTrigger: { trigger: "[data-list]", start: "top 85%", once: true } });
+    const ctxG = gsap.context(() => {
+      const tl = gsap.timeline({ scrollTrigger: { trigger: "[data-chart]", start: "top 75%", once: true } });
+      for (let d = 0; d <= tree.maxDepth + 1; d++) {
+        const conns = el.querySelectorAll(`[data-chart] [data-conn='${d}']`);
+        const cards = el.querySelectorAll(`[data-chart] [data-card='${d}']`);
+        if (conns.length) tl.from(conns, { scale: 0, duration: 0.35, stagger: 0.02, ease: "power2.inOut" }, d ? "-=0.15" : 0);
+        if (cards.length) tl.from(cards, { y: 18, opacity: 0, duration: 0.55, stagger: 0.05, ease: "expo.out" }, "-=0.2");
+      }
+      gsap.from("[data-list] > li", { x: -14, opacity: 0, duration: 0.55, stagger: 0.05, ease: "expo.out", scrollTrigger: { trigger: "[data-list]", start: "top 85%", once: true } });
     }, el);
-    return () => ctx.revert();
-  }, []);
-
-  const n = tree.level1.length;
+    return () => ctxG.revert();
+  }, [layout, tree]);
 
   return (
-    <section ref={ref} id="bagan" className="relative scroll-mt-24 border-y border-line bg-white py-20 md:py-20">
-      <Container>
-        <SectionHeader
-          title={["Bagan", "organisasi"]}
-          body="Arahkan kursor ke salah satu kartu untuk melihat jalur koordinasinya. Klik untuk melihat bidang keahlian."
-        />
+    <Ctx.Provider value={ctx}>
+      <section ref={ref} id="bagan" className="relative scroll-mt-24 border-y border-line bg-white py-20 md:py-20">
+        <Container>
+          <SectionHeader title={[c.titleTop, c.titleAccent]} body={c.body} />
 
-        {!confirmed && (
-          <Banner variant="info" dismissible title="Struktur lengkap sedang disusun" className="mt-10">
-            Saat ini ditampilkan ketua program studi, dosen, dan staf prodi. Jabatan lain akan ditambahkan setelah ditetapkan.
-          </Banner>
-        )}
+          {c.banner.show && (c.banner.title || c.banner.body) && (
+            <Banner variant={c.banner.variant} dismissible title={c.banner.title} className="mt-10">
+              {c.banner.body}
+            </Banner>
+          )}
 
-        {/* Desktop: pohon */}
-        <div data-tree className="relative mt-14 hidden lg:block" onPointerLeave={() => setHover(null)}>
-          <div className="grid grid-cols-[1fr_320px_1fr] items-center">
-            <div />
-            <div data-card="0">
-              <PersonCard person={tree.root} variant="lead" dim={dim(tree.root)} lit={lit.has(tree.root.key)} onHover={setHover} />
-            </div>
-            {/* garis staf: tenaga kependidikan di samping Kaprodi */}
-            <div className="flex items-center">
-              {tree.staff.length > 0 && (
-                <>
-                  <Conn data-h="staff" lit={tree.staff.some((p) => lit.has(p.key))} className="h-[2px] w-10 shrink-0 origin-left xl:w-16" />
-                  <div className="flex flex-col gap-3">
-                    {tree.staff.map((p) => (
-                      <div key={p.key} data-card="staff" className="w-[230px]">
-                        <PersonCard person={p} variant="row" dim={dim(p)} lit={lit.has(p.key)} onHover={setHover} />
-                      </div>
-                    ))}
-                  </div>
-                </>
-              )}
-            </div>
+          <div data-chart className="relative mt-14 hidden lg:block" onPointerLeave={() => setHover(null)}>
+            {layout === "horizontal" ? <HorizontalTree /> : layout === "divisions" ? <DivisionBoard divisions={divisions} ungrouped={c.ungroupedLabel} /> : <VerticalTree />}
           </div>
 
-          {n > 0 && (
+          {/* < lg: daftar bertingkat */}
+          <ol data-list className="relative mt-10 space-y-3 lg:hidden">
+            <span aria-hidden className="absolute bottom-8 left-3 top-8 w-[2px] bg-navy/10" />
+            {tree.order.map((p) => {
+              const d = Math.min(tree.depth[p.key], 3);
+              return (
+                <li key={p.key} className={cn("relative", d === 1 && "pl-6", d === 2 && "pl-12", d === 3 && "pl-[4.5rem]")}>
+                  {d > 0 && <span aria-hidden className={cn("absolute left-3 top-1/2 h-[2px] bg-navy/10", d === 3 ? "w-[3.75rem]" : d === 2 ? "w-9" : "w-3")} />}
+                  <RowCard p={p} division={divByKey[p.division]} />
+                </li>
+              );
+            })}
+          </ol>
+        </Container>
+      </section>
+    </Ctx.Provider>
+  );
+}
+
+/* ───────────────────────── tata letak ───────────────────────── */
+
+/** Kontainer geser: bagan yang lebih lebar dari layar bisa diseret ke samping; tepi memudar saat terpotong. */
+function Scroller({ children }) {
+  const ref = useRef(null);
+  const [edge, setEdge] = useState({ l: false, r: false });
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const sync = () => setEdge({ l: el.scrollLeft > 4, r: el.scrollLeft + el.clientWidth < el.scrollWidth - 4 });
+    sync();
+    el.addEventListener("scroll", sync, { passive: true });
+    window.addEventListener("resize", sync);
+    return () => {
+      el.removeEventListener("scroll", sync);
+      window.removeEventListener("resize", sync);
+    };
+  }, []);
+  const grab = (e) => {
+    if (e.pointerType !== "mouse" || e.button !== 0) return;
+    const el = ref.current;
+    if (el.scrollWidth <= el.clientWidth) return;
+    const x0 = e.clientX;
+    const s0 = el.scrollLeft;
+    let moved = false;
+    const move = (ev) => {
+      if (Math.abs(ev.clientX - x0) > 4) moved = true;
+      el.scrollLeft = s0 - (ev.clientX - x0);
+    };
+    const up = () => {
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("pointerup", up);
+      // seretan tidak dianggap klik kartu
+      if (moved) el.addEventListener("click", (ev) => ev.stopPropagation(), { capture: true, once: true });
+    };
+    window.addEventListener("pointermove", move);
+    window.addEventListener("pointerup", up);
+  };
+  return (
+    <div className="relative">
+      <div ref={ref} onPointerDown={grab} className={cn("overflow-x-auto pb-4 [scrollbar-width:thin]", (edge.l || edge.r) && "cursor-grab active:cursor-grabbing")}>
+        <div className="mx-auto w-max min-w-full">{children}</div>
+      </div>
+      <span aria-hidden className={cn("pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-white to-transparent transition-opacity duration-300", edge.l ? "opacity-100" : "opacity-0")} />
+      <span aria-hidden className={cn("pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-white to-transparent transition-opacity duration-300", edge.r ? "opacity-100" : "opacity-0")} />
+      {edge.r && <p className="mt-1 text-right text-[12px] text-text/45">Seret ke samping untuk melihat seluruh bagan →</p>}
+    </div>
+  );
+}
+
+/** Baris puncak: kartu puncak di tengah, staf di jalur samping kanan. */
+function RootRow() {
+  const { tree, lit } = useChart();
+  return (
+    <div className="grid grid-cols-[1fr_auto_1fr] items-center">
+      <div />
+      <div data-card="0">
+        <TreeCard p={tree.root} />
+      </div>
+      <div className="flex items-center">
+        {tree.staff.length > 0 && (
+          <>
+            <Conn data-conn="1" lit={tree.staff.some((p) => lit.has(p.key))} className="h-[2px] w-10 shrink-0 origin-left xl:w-14" />
+            <div className="flex flex-col gap-3">
+              {tree.staff.map((p) => (
+                <div key={p.key} data-card="1">
+                  <TreeCard p={p} />
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function VerticalTree() {
+  const { tree, lit } = useChart();
+  const kids = tree.kids(tree.root.key);
+  const seen = new Set([tree.root.key]);
+  kids.forEach((k) => seen.add(k.key));
+  return (
+    <Scroller>
+      <RootRow />
+      {kids.length > 0 && (
+        <div className="flex flex-col items-center">
+          <Conn data-conn="1" vertical lit={kids.some((k) => lit.has(k.key))} className="h-8 origin-top" />
+          <ul className="flex justify-center">
+            {kids.map((k, i) => (
+              <VBranch key={k.key} p={k} index={i} count={kids.length} depth={1} seen={seen} />
+            ))}
+          </ul>
+        </div>
+      )}
+    </Scroller>
+  );
+}
+
+/** Satu cabang pohon vertikal (rekursif): bus horizontal, tetes, kartu, lalu anak-anaknya. */
+function VBranch({ p, index, count, depth, seen }) {
+  const { tree, lit } = useChart();
+  const kids = tree.kids(p.key).filter((k) => !seen.has(k.key));
+  kids.forEach((k) => seen.add(k.key));
+  const on = lit.has(p.key);
+  return (
+    <li className="relative flex flex-col items-center px-2.5">
+      {count > 1 && (
+        <Conn
+          data-conn={depth}
+          lit={on}
+          className={cn("absolute top-0 h-[2px]", index === 0 ? "left-1/2 right-0 origin-left" : index === count - 1 ? "left-0 right-1/2 origin-right" : "inset-x-0 origin-center")}
+        />
+      )}
+      <Conn data-conn={depth} vertical lit={on} className="h-7 origin-top" />
+      <div data-card={depth}>
+        <TreeCard p={p} />
+      </div>
+      {kids.length > 0 && (
+        <>
+          <Conn data-conn={depth + 1} vertical lit={on && kids.some((k) => lit.has(k.key))} className="h-7 origin-top" />
+          <ul className="flex">
+            {kids.map((k, i) => (
+              <VBranch key={k.key} p={k} index={i} count={kids.length} depth={depth + 1} seen={seen} />
+            ))}
+          </ul>
+        </>
+      )}
+    </li>
+  );
+}
+
+function HorizontalTree() {
+  const { tree, lit } = useChart();
+  const kids = tree.kids(tree.root.key);
+  const seen = new Set([tree.root.key]);
+  kids.forEach((k) => seen.add(k.key));
+  return (
+    <Scroller>
+      <div className="flex items-center">
+        <div className="flex shrink-0 flex-col items-center">
+          <div data-card="0">
+            <TreeCard p={tree.root} />
+          </div>
+          {tree.staff.length > 0 && (
             <>
-              <div className="flex justify-center">
-                <Conn data-v="trunk" vertical lit={anyLit} className="h-14 origin-top" />
-              </div>
-              <div className="grid gap-5" style={{ gridTemplateColumns: `repeat(${n}, minmax(0, 1fr))` }}>
-                {tree.level1.map((m, i) => {
-                  const kids = tree.childrenOf(m.key);
-                  return (
-                    <div key={m.key} className="relative flex flex-col items-center">
-                      {n > 1 && (
-                        <Conn
-                          data-h="bus"
-                          lit={lit.has(m.key)}
-                          className={cn(
-                            "absolute top-0 h-[2px]",
-                            i === 0 ? "left-1/2 -right-2.5 origin-left" : i === n - 1 ? "-left-2.5 right-1/2 origin-right" : "-inset-x-2.5 origin-center"
-                          )}
-                        />
-                      )}
-                      <Conn data-v="drop" vertical lit={lit.has(m.key)} className="h-9 origin-top" />
-                      <div data-card="1" className="flex w-full flex-1 flex-col">
-                        <PersonCard person={m} variant="member" dim={dim(m)} lit={lit.has(m.key)} onHover={setHover} />
-                        {kids.length > 0 && (
-                          <ul className="mt-3 space-y-2 border-l-2 border-navy/10 pl-3">
-                            {kids.map((c) => (
-                              <li key={c.key}>
-                                <PersonCard person={c} variant="row" dim={dim(c)} lit={lit.has(c.key)} onHover={setHover} />
-                              </li>
-                            ))}
-                          </ul>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
+              <Conn data-conn="1" vertical lit={tree.staff.some((p) => lit.has(p.key))} className="h-6 origin-top" />
+              <div className="flex flex-col gap-2">
+                {tree.staff.map((p) => (
+                  <div key={p.key} data-card="1">
+                    <TreeCard p={p} />
+                  </div>
+                ))}
               </div>
             </>
           )}
         </div>
-
-        {/* < lg: daftar bertingkat */}
-        <ol data-list className="relative mt-10 space-y-3 lg:hidden">
-          <span aria-hidden className="absolute bottom-8 left-3 top-8 w-[2px] bg-navy/10" />
-          {flat.map(({ p, depth }) => (
-            <li key={p.key} className={cn("relative", depth === 1 && "pl-6", depth === 2 && "pl-12")}>
-              {depth > 0 && <span aria-hidden className={cn("absolute left-3 top-1/2 h-[2px] bg-navy/10", depth === 2 ? "w-9" : "w-3")} />}
-              <PersonCard person={p} variant="row" dim={false} lit={false} onHover={() => {}} />
-            </li>
-          ))}
-        </ol>
-      </Container>
-    </section>
+        {kids.length > 0 && (
+          <>
+            <Conn data-conn="1" lit={kids.some((k) => lit.has(k.key))} className="h-[2px] w-8 shrink-0 origin-left" />
+            <ul className="flex flex-col">
+              {kids.map((k, i) => (
+                <HBranch key={k.key} p={k} index={i} count={kids.length} depth={1} seen={seen} />
+              ))}
+            </ul>
+          </>
+        )}
+      </div>
+    </Scroller>
   );
 }
+
+/** Cabang pohon horizontal (rekursif): bus vertikal di kiri, kartu, lalu anak di kanan. */
+function HBranch({ p, index, count, depth, seen }) {
+  const { tree, lit } = useChart();
+  const kids = tree.kids(p.key).filter((k) => !seen.has(k.key));
+  kids.forEach((k) => seen.add(k.key));
+  const on = lit.has(p.key);
+  return (
+    <li className="relative flex items-center py-1.5">
+      {count > 1 && (
+        <Conn
+          data-conn={depth}
+          vertical
+          lit={on}
+          className={cn("absolute left-0", index === 0 ? "bottom-0 top-1/2 origin-top" : index === count - 1 ? "bottom-1/2 top-0 origin-bottom" : "inset-y-0 origin-center")}
+        />
+      )}
+      <Conn data-conn={depth} lit={on} className="h-[2px] w-6 shrink-0 origin-left" />
+      <div data-card={depth} className="shrink-0">
+        <TreeCard p={p} />
+      </div>
+      {kids.length > 0 && (
+        <>
+          <Conn data-conn={depth + 1} lit={on && kids.some((k) => lit.has(k.key))} className="h-[2px] w-6 shrink-0 origin-left" />
+          <ul className="flex flex-col">
+            {kids.map((k, i) => (
+              <HBranch key={k.key} p={k} index={i} count={kids.length} depth={depth + 1} seen={seen} />
+            ))}
+          </ul>
+        </>
+      )}
+    </li>
+  );
+}
+
+/** Papan divisi: puncak + staf, lalu kotak per divisi. Orang tanpa divisi masuk kotak `ungrouped`. */
+function DivisionBoard({ divisions, ungrouped }) {
+  const { tree, lit } = useChart();
+  const rest = tree.order.filter((p) => p.key !== tree.root.key && !tree.staff.includes(p));
+  const keys = new Set(divisions.map((d) => d.key));
+  const boxes = [
+    ...divisions.map((d) => ({ ...d, members: rest.filter((p) => p.division === d.key) })),
+    { key: "__none", name: ungrouped, body: "", tone: "navy", members: rest.filter((p) => !keys.has(p.division)) },
+  ].filter((b) => b.members.length);
+  return (
+    <div>
+      <RootRow />
+      {boxes.length > 0 && (
+        <>
+          <div className="flex justify-center">
+            <Conn data-conn="1" vertical lit={rest.some((p) => lit.has(p.key))} className="h-10 origin-top" />
+          </div>
+          <div className={cn("grid gap-5", boxes.length === 1 ? "grid-cols-1" : boxes.length === 2 ? "grid-cols-2" : "grid-cols-3")}>
+            {boxes.map((b) => {
+              const tone = TONE[b.tone] ?? TONE.maroon;
+              const anyLit = b.members.some((p) => lit.has(p.key));
+              return (
+                <section
+                  key={b.key}
+                  data-card="1"
+                  className={cn("relative overflow-hidden rounded-lg border p-5 transition-[border-color,box-shadow] duration-500", tone.soft, anyLit ? "border-maroon/30 shadow-[0_24px_50px_-36px_rgb(20_33_61/0.55)]" : "border-line")}
+                >
+                  <span aria-hidden className={cn("absolute inset-x-0 top-0 h-1", tone.bar)} />
+                  <header className="flex items-baseline justify-between gap-3">
+                    <h3 className="font-serif text-[1.25rem] leading-tight text-navy">{b.name}</h3>
+                    <span className="shrink-0 text-[12px] tabular-nums text-text/45">{b.members.length} orang</span>
+                  </header>
+                  {b.body && <p className="mt-1.5 text-[13.5px] leading-relaxed text-text/60">{b.body}</p>}
+                  <ul className="mt-4 flex flex-wrap justify-center gap-3">
+                    {b.members.map((p) => (
+                      <li key={p.key}>
+                        <TreeCard p={p} />
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              );
+            })}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+/* ───────────────────────── kartu ───────────────────────── */
 
 function Conn({ vertical, lit, className, ...props }) {
   return <span aria-hidden className={cn("block transition-colors duration-500", vertical && "w-[2px]", lit ? "bg-maroon" : "bg-navy/15", className)} {...props} />;
 }
 
-function PersonCard({ person: p, variant, dim, lit, onHover }) {
+/** Kartu bagan; bentuk mengikuti pengaturan tingkatnya (foto potret/bulat/tanpa, ukuran, isi). */
+function TreeCard({ p }) {
+  const { tier, lit, hover, setHover, cta, division } = useChart();
   const open = usePersonModal();
-  const lead = variant === "lead";
-  const row = variant === "row";
-  const member = variant === "member";
+  const t = tier(p);
+  const on = lit.has(p.key);
+  const dim = !!hover && !on;
+  const div = division(p);
+  const portrait = t.photo === "portrait";
+  const round = t.photo === "round";
+  const stacked = portrait || t.photo === "none" || t.size === "lg";
+  const avatar = t.size === "lg" ? "size-24 text-2xl" : t.size === "md" ? "size-14 text-lg" : "size-11 text-base";
 
   return (
     <button
       type="button"
       onClick={() => open(p.key)}
-      onPointerEnter={() => onHover(p.key)}
-      onFocus={() => onHover(p.key)}
-      onBlur={() => onHover(null)}
-      aria-label={`${p.name}, ${p.role}. Lihat detail`}
+      onPointerEnter={() => setHover(p.key)}
+      onFocus={() => setHover(p.key)}
+      onBlur={() => setHover(null)}
+      aria-label={`${p.name}, ${p.role}`}
       className={cn(
-        "group relative flex w-full items-center gap-4 overflow-hidden rounded-lg border bg-white text-left outline-none",
-        "transition-[opacity,filter,transform,border-color,box-shadow] duration-500 ease-cinematic",
+        "group relative flex overflow-hidden rounded-lg border bg-white text-left outline-none",
+        "transition-[opacity,transform,border-color,box-shadow] duration-500 ease-cinematic",
         "hover:-translate-y-1 hover:shadow-[0_26px_50px_-34px_rgb(20_33_61/0.6)] focus-visible:ring-2 focus-visible:ring-maroon/50 active:scale-[0.985]",
-        lead ? "flex-col p-6 text-center" : row ? "p-3" : "h-full flex-col items-start justify-start p-4",
-        lit ? "border-maroon/35" : "border-line",
+        WIDTH[t.size] ?? WIDTH.md,
+        stacked ? "flex-col" : "items-center gap-3",
+        portrait ? "p-3.5" : t.size === "lg" ? "items-center p-6 text-center" : "p-3.5",
+        on ? "border-maroon/35" : "border-line",
         dim && "opacity-50"
       )}
     >
-      <span aria-hidden className={cn("absolute inset-x-0 top-0 block h-[3px] origin-left bg-gold transition-transform duration-700 ease-cinematic group-hover:scale-x-100", lit ? "scale-x-100" : "scale-x-0")} />
-      {lead && <span aria-hidden className="absolute inset-0 bg-cream/60" />}
+      <span aria-hidden className={cn("absolute inset-x-0 top-0 block h-[3px] origin-left bg-gold transition-transform duration-700 ease-cinematic group-hover:scale-x-100", on ? "scale-x-100" : "scale-x-0")} />
+      {t.size === "lg" && round && <span aria-hidden className="absolute inset-0 bg-cream/60" />}
 
-      <span
-        className={cn(
-          "relative z-10 grid shrink-0 place-items-center overflow-hidden bg-cream-2 font-serif text-maroon",
-          lead ? "size-24 rounded-full ring-4 ring-white" : member ? "aspect-[4/3] w-full rounded-md text-3xl" : "size-14 rounded-full text-lg"
-        )}
-      >
-        {p.photo ? (
-          <Image
-            src={p.photo}
-            alt=""
-            fill
-            sizes={member ? "240px" : "96px"}
-            className="object-cover object-top transition-transform duration-700 ease-cinematic group-hover:scale-[1.06]"
-          />
-        ) : (
-          initials(p.name)
-        )}
-      </span>
+      {t.photo !== "none" && (
+        <span
+          className={cn(
+            "relative z-10 grid shrink-0 place-items-center overflow-hidden bg-cream-2 font-serif text-maroon",
+            portrait ? "mb-3 aspect-[4/3] w-full rounded-md text-3xl" : cn("rounded-full", avatar, t.size === "lg" && "mb-3 ring-4 ring-white")
+          )}
+        >
+          {p.photo ? (
+            <Image src={p.photo} alt="" fill sizes={portrait ? "300px" : "96px"} className="object-cover object-top transition-transform duration-700 ease-cinematic group-hover:scale-[1.06]" />
+          ) : (
+            initials(p.name)
+          )}
+        </span>
+      )}
 
-      <span className={cn("relative z-10 min-w-0", lead && "mt-1")}>
-        <span className={cn("kicker block text-[11px] text-maroon", lead && "text-[12px]")}>{p.role}</span>
-        <span className={cn("mt-1.5 block font-serif leading-snug text-navy", lead ? "text-[1.45rem]" : "text-[1.05rem]")}>{p.name}</span>
-        {lead && p.credentials && <span className="mt-1 block text-[13px] text-text/50">{p.credentials}</span>}
-        {member && p.expertise?.[0] && <span className="mt-1 block truncate text-[12.5px] text-text/55">{p.expertise[0]}</span>}
-        {!row && (
-          <span className={cn("mt-3 inline-flex items-center gap-1.5 text-[12.5px] font-semibold text-navy/60 transition-colors group-hover:text-maroon", lead && "justify-center")}>
-            Lihat profil
+      <span className="relative z-10 min-w-0">
+        <span className={cn("kicker block text-[11px] text-maroon", t.size === "lg" && "text-[12px]")}>{p.role}</span>
+        <span className={cn("mt-1 block font-serif leading-snug text-navy", t.size === "lg" ? "text-[1.45rem]" : t.size === "md" ? "text-[1.05rem]" : "text-[15px]")}>{p.name}</span>
+        {t.credentials && p.credentials && <span className="mt-1 block text-[12.5px] text-text/50">{p.credentials}</span>}
+        {t.expertise && p.expertise?.[0] && <span className="mt-1 block truncate text-[12.5px] text-text/55">{p.expertise[0]}</span>}
+        {div && (
+          <span className={cn("mt-2 inline-flex items-center gap-1.5 text-[11.5px] text-text/55", t.size === "lg" && "justify-center")}>
+            <span className={cn("size-1.5 rounded-full", (TONE[div.tone] ?? TONE.maroon).dot)} />
+            {div.name}
+          </span>
+        )}
+        {t.cta && cta && (
+          <span className={cn("mt-3 flex items-center gap-1.5 text-[12.5px] font-semibold text-navy/60 transition-colors group-hover:text-maroon", t.size === "lg" && "justify-center")}>
+            {cta}
             <svg aria-hidden viewBox="0 0 16 16" className="size-3.5 transition-transform duration-500 ease-cinematic group-hover:translate-x-1">
               <path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </span>
         )}
+      </span>
+    </button>
+  );
+}
+
+/** Kartu ringkas untuk daftar mobile. */
+function RowCard({ p, division }) {
+  const open = usePersonModal();
+  return (
+    <button
+      type="button"
+      onClick={() => open(p.key)}
+      aria-label={`${p.name}, ${p.role}`}
+      className="group relative flex w-full items-center gap-4 overflow-hidden rounded-lg border border-line bg-white p-3 text-left outline-none transition-[transform,border-color] duration-500 ease-cinematic focus-visible:ring-2 focus-visible:ring-maroon/50 active:scale-[0.985]"
+    >
+      <span className="relative grid size-14 shrink-0 place-items-center overflow-hidden rounded-full bg-cream-2 font-serif text-lg text-maroon">
+        {p.photo ? <Image src={p.photo} alt="" fill sizes="56px" className="object-cover object-top" /> : initials(p.name)}
+      </span>
+      <span className="min-w-0">
+        <span className="kicker block text-[11px] text-maroon">{p.role}</span>
+        <span className="mt-1 block font-serif text-[1.05rem] leading-snug text-navy">{p.name}</span>
+        {division && <span className="mt-0.5 block text-[12px] text-text/50">{division.name}</span>}
       </span>
     </button>
   );

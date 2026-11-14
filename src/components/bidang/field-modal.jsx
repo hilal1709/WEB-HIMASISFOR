@@ -19,7 +19,7 @@ const EASE = [0.22, 1, 0.36, 1];
  * Isi: pertanyaan inti, yang dipelajari, alat kerja, mata kuliah (→ laci RPS kurikulum), dosen (→ profil),
  * prospek karier (→ profil lulusan). Aksi: tandai ke rak (toast + Batalkan). ‹ › + panah keyboard.
  */
-export function FieldModal({ fields, index, origin, onIndex, onClose }) {
+export function FieldModal({ fields, labels, index, origin, onIndex, onClose }) {
   const last = useRef(null);
   if (index != null) last.current = index;
   const shown = index ?? last.current;
@@ -60,7 +60,7 @@ export function FieldModal({ fields, index, origin, onIndex, onClose }) {
                 >
                   <X className="size-4" />
                 </Dialog.Close>
-                <Body key={f.slug} f={f} n={shown + 1} />
+                <Body key={f.slug} f={f} n={shown + 1} L={labels} />
                 <div className="flex items-center justify-between gap-3 border-t border-line px-5 py-3 sm:px-7">
                   <div className="flex gap-1.5" aria-hidden>
                     {fields.map((_, i) => (
@@ -81,7 +81,7 @@ export function FieldModal({ fields, index, origin, onIndex, onClose }) {
   );
 }
 
-function Body({ f, n }) {
+function Body({ f, n, L }) {
   const { shortlist, toggleShortlist } = useBidang();
   const saved = shortlist.includes(f.slug);
 
@@ -91,7 +91,7 @@ function Body({ f, n }) {
       {/* panel kiri */}
       <div className="relative flex flex-col bg-navy text-white" data-lottie-hover>
         <div className="relative h-36 overflow-hidden md:h-48">
-          <Image src={f.image} alt="" fill sizes="300px" className={cn("object-cover", f.crop && "scale-[1.12]")} />
+          {f.image && <Image src={f.image} alt="" fill sizes="300px" className={cn("object-cover", f.crop && "scale-[1.12]")} />}
           <span className="absolute inset-0 bg-navy/45" />
         </div>
         {f.lottie && (
@@ -101,11 +101,11 @@ function Body({ f, n }) {
         )}
         <div className="flex flex-1 flex-col gap-5 px-5 pb-6 pt-12 md:px-6">
           <div>
-            <p className="kicker text-[11px] text-gold-soft">Prospek karier</p>
+            <p className="kicker text-[11px] text-gold-soft">{L.careersLabel}</p>
             <ul className="mt-2 space-y-1.5">
               {f.careers.map((c) => (
                 <li key={c}>
-                  <a href={`/profil-lulusan#pl-${f.profileKey}`} className="group flex items-center justify-between gap-3 border-b border-white/10 pb-1.5 text-[14.5px] text-white/90 transition-colors hover:text-gold-soft">
+                  <a href={f.profileKey ? `/profil-lulusan#pl-${f.profileKey}` : "/profil-lulusan"} className="group flex items-center justify-between gap-3 border-b border-white/10 pb-1.5 text-[14.5px] text-white/90 transition-colors hover:text-gold-soft">
                     {c}
                     <svg aria-hidden viewBox="0 0 16 16" className="size-3.5 opacity-40 transition-[opacity,transform] duration-300 group-hover:translate-x-0.5 group-hover:opacity-100">
                       <path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
@@ -117,7 +117,7 @@ function Body({ f, n }) {
           </div>
           {f.people.length > 0 && (
             <div>
-              <p className="kicker text-[11px] text-gold-soft">Dosen pengampu</p>
+              <p className="kicker text-[11px] text-gold-soft">{L.peopleLabel}</p>
               <ul className="mt-3 flex flex-wrap gap-2">
                 {f.people.map((p) => (
                   <li key={p.slug}>
@@ -134,12 +134,12 @@ function Body({ f, n }) {
 
       {/* isi kanan */}
       <div className="min-h-0 overflow-y-auto p-6 sm:p-8 md:max-h-[calc(92vh-60px)]">
-        <p className="kicker text-maroon">Bidang {pad(n)}</p>
+        <p className="kicker text-maroon">{L.kicker} {pad(n)}</p>
         <Dialog.Title className="mt-2 pr-10 font-serif text-[1.85rem] leading-tight text-navy sm:text-[2.1rem]">{f.title}</Dialog.Title>
         <Dialog.Description className="mt-2 font-serif text-[1.15rem] italic leading-snug text-maroon">“{f.question}”</Dialog.Description>
         <p className="mt-4 text-pretty text-[15px] leading-relaxed text-text/70">{f.summary}</p>
 
-        <Block title="Yang kamu pelajari">
+        {f.learn.length > 0 && <Block title={L.learnLabel}>
           <ol className="space-y-2.5">
             {f.learn.map((l, i) => (
               <li key={l} className="flex gap-3 text-[14.5px] text-navy animate-in fade-in-0 slide-in-from-bottom-1 fill-mode-both" style={{ animationDelay: `${120 + i * 70}ms` }}>
@@ -148,18 +148,18 @@ function Body({ f, n }) {
               </li>
             ))}
           </ol>
-        </Block>
+        </Block>}
 
-        <Block title="Alat & kerangka kerja">
+        {f.tools.length > 0 && <Block title={L.toolsLabel}>
           <ul className="flex flex-wrap gap-2">
             {f.tools.map((t) => (
               <li key={t} className="rounded-md border border-line bg-cream/60 px-2.5 py-1 text-[13px] font-medium text-navy">{t}</li>
             ))}
           </ul>
-        </Block>
+        </Block>}
 
         {f.courseLinks.length > 0 && (
-          <Block title="Mata kuliah kunci">
+          <Block title={L.coursesLabel}>
             <ul className="divide-y divide-line border-y border-line">
               {f.courseLinks.map((c) => (
                 <li key={c.slug}>
@@ -188,7 +188,7 @@ function Body({ f, n }) {
             )}
           >
             <LordIcon key={saved ? "on" : "off"} name={saved ? "check" : "plus-circle"} size={22} trigger={saved ? "once" : "hover"} target="button" colors="primary:#ffffff,secondary:#c9a227" />
-            {saved ? "Ada di rakmu" : "Tandai bidang ini"}
+            {saved ? L.markedLabel : L.markLabel}
           </button>
           {f.sample && <PlaceholderTag />}
         </div>

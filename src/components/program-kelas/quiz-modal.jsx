@@ -8,6 +8,7 @@ import { useToast } from "@/components/ui/toast";
 import { LottieIllustration } from "@/components/media/lottie-illustration";
 import { prefersReducedMotion } from "@/lib/motion";
 import { cn } from "@/lib/utils";
+import { fill, scoreOf } from "@/lib/program-kelas-cms/schema";
 import { useKelas } from "./kelas-provider";
 
 /**
@@ -16,7 +17,9 @@ import { useKelas } from "./kelas-provider";
  * "Lihat kelas ini" memilih tab kelas tsb, menggulir ke switcher, dan memunculkan toast.
  */
 export function QuizModal({ open, onOpenChange }) {
-  const { quiz, classes, reasons, setActive } = useKelas();
+  const { c, classes, setActive } = useKelas();
+  const t = c.quiz;
+  const quiz = t.questions;
   const toast = useToast();
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState([]);
@@ -62,8 +65,7 @@ export function QuizModal({ open, onOpenChange }) {
 
   // skor → indeks kelas terbaik
   const best = (() => {
-    const totals = classes.map(() => 0);
-    answers.forEach((oi, qi) => quiz[qi].options[oi].score.forEach((v, ci) => (totals[ci] += v)));
+    const totals = classes.map((k) => answers.reduce((n, oi, qi) => n + scoreOf(quiz[qi]?.options[oi], k.key), 0));
     return totals.indexOf(Math.max(...totals));
   })();
   const rec = classes[best];
@@ -72,7 +74,7 @@ export function QuizModal({ open, onOpenChange }) {
     setActive(best);
     onOpenChange(false);
     jump.current = true;
-    toast.success(`Rekomendasi: ${rec.name}`, { description: "Kelasnya sudah kami pilihkan di bawah." });
+    toast.success(fill(t.toastTitle, { kelas: rec.name }), { description: t.toastBody || undefined });
     setTimeout(reset, 400);
   };
 
@@ -101,10 +103,10 @@ export function QuizModal({ open, onOpenChange }) {
         {/* progres emas */}
         <div className="px-6 pt-8 sm:px-8">
           <div className="flex items-center justify-between text-[12px] font-semibold uppercase tracking-[0.14em] text-text/45">
-            <span>{done ? "Hasil" : computing ? "Mencocokkan" : `Pertanyaan ${step + 1} / ${quiz.length}`}</span>
+            <span>{done ? t.resultLabel : computing ? t.computingLabel : fill(t.counter, { n: step + 1, total: quiz.length })}</span>
             {!done && !computing && step > 0 && (
               <button type="button" onClick={back} className="inline-flex items-center gap-1 normal-case tracking-normal text-navy/70 transition-colors hover:text-maroon">
-                <ChevronLeft aria-hidden className="size-3.5" /> Kembali
+                <ChevronLeft aria-hidden className="size-3.5" /> {t.back}
               </button>
             )}
           </div>
@@ -114,15 +116,15 @@ export function QuizModal({ open, onOpenChange }) {
         </div>
 
         <div className="min-h-[300px] px-6 pb-7 pt-6 sm:px-8">
-          {!done && !computing && (
+          {!done && !computing && q && (
             <div key={step} className={cn("animate-in fade-in-0 duration-300", dir > 0 ? "slide-in-from-right-4" : "slide-in-from-left-4")}>
               <ModalTitle className="text-[1.5rem] leading-snug">{q.q}</ModalTitle>
-              <ModalDescription className="sr-only">Pilih satu jawaban</ModalDescription>
+              <ModalDescription className="sr-only">{t.counter && fill(t.counter, { n: step + 1, total: quiz.length })}</ModalDescription>
               <ul className="mt-5 grid gap-2.5">
                 {q.options.map((o, oi) => {
                   const chosen = answers[step] === oi;
                   return (
-                    <li key={o.label}>
+                    <li key={`${o.label}-${oi}`}>
                       <button
                         type="button"
                         onClick={() => pick(oi)}
@@ -158,29 +160,29 @@ export function QuizModal({ open, onOpenChange }) {
 
           {computing && (
             <div className="flex min-h-[260px] flex-col items-center justify-center gap-5 text-center animate-in fade-in-0">
-              <ModalTitle className="sr-only">Mencocokkan jawaban</ModalTitle>
-              <ModalDescription className="sr-only">Sedang menghitung rekomendasi kelas</ModalDescription>
+              <ModalTitle className="sr-only">{t.computingLabel}</ModalTitle>
+              <ModalDescription className="sr-only">{t.computing}</ModalDescription>
               <DotsLoader />
-              <p className="font-serif text-[1.25rem] text-navy">Mencocokkan jadwal & tujuanmu…</p>
+              <p className="font-serif text-[1.25rem] text-navy">{t.computing}</p>
             </div>
           )}
 
           {done && rec && (
             <div className="grid items-center gap-6 animate-in fade-in-0 zoom-in-95 duration-500 sm:grid-cols-[150px_1fr]">
               <div className="mx-auto w-32 rounded-lg bg-cream p-3 sm:w-full">
-                <LottieIllustration src={rec.lottie} label={`Ilustrasi ${rec.name}`} />
+                <LottieIllustration src={rec.lottie} label={rec.name} />
               </div>
               <div>
-                <p className="kicker text-maroon">Paling cocok untukmu</p>
+                <p className="kicker text-maroon">{t.resultKicker}</p>
                 <ModalTitle className="mt-2 text-[1.75rem] leading-tight">{rec.name}</ModalTitle>
-                <ModalDescription className="mt-2 text-[15px] leading-relaxed">{reasons[rec.key]}</ModalDescription>
+                <ModalDescription className="mt-2 text-[15px] leading-relaxed">{rec.reason}</ModalDescription>
                 <p className="mt-3 text-[13.5px] text-text/55">{rec.schedule}</p>
                 <div className="mt-6 flex flex-wrap items-center gap-3">
                   <Button variant="maroon" size="lg" onClick={go}>
-                    Lihat kelas ini
+                    {t.goCta}
                   </Button>
                   <Button variant="outline-navy" size="lg" onClick={reset}>
-                    Ulangi
+                    {t.retry}
                   </Button>
                 </div>
               </div>

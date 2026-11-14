@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
 import { CURTAIN_KEY, mergeMagang } from "@/lib/magang-content";
-import { mergeKurikulum } from "@/lib/kurikulum-content";
+import { getKurikulumData } from "@/lib/kurikulum-cms/server";
 import { SiteHeader, Topbar } from "@/components/home/site-header";
 import { SiteFooter } from "@/components/home/site-footer";
 import { AosReady } from "@/components/motion/aos-provider";
@@ -26,9 +26,9 @@ async function getData() {
   try {
     const rows = await prisma.pageContent.findMany({ where: { section: { in: ["magang", "curriculum"] }, isActive: true } });
     const row = (s) => rows.find((r) => r.section === s) ?? null;
-    return mergeMagang(row("magang"), { kurikulum: mergeKurikulum(row("curriculum")) });
+    return mergeMagang(row("magang"), { kurikulum: await getKurikulumData() });
   } catch {
-    return mergeMagang(null, { kurikulum: mergeKurikulum(null) });
+    return mergeMagang(null, { kurikulum: await getKurikulumData() });
   }
 }
 

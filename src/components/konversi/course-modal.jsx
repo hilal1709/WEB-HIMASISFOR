@@ -2,7 +2,6 @@
 import { useEffect, useRef } from "react";
 import { Modal, ModalContent, ModalDescription, ModalTitle } from "@/components/ui/modal";
 import { Button } from "@/components/ui/button";
-import { PlaceholderTag } from "@/components/home/shared";
 import { RumpunDot } from "@/components/kurikulum/rumpun-dot";
 import { RUMPUN_BY_KEY } from "@/lib/kurikulum-content";
 import { cn } from "@/lib/utils";
@@ -85,7 +84,6 @@ export function CourseModal({ slug, onSlug, onClose }) {
             ) : (
               <p className="mt-3 rounded-md bg-cream px-4 py-3 text-[14px] text-text/60">Ringkasan capaian belum diunggah. Tanyakan ke dosen pengampu saat menyusun Learning Agreement.</p>
             )}
-            {c.rpsSample && <PlaceholderTag className="mt-3" />}
             <div className="mt-6 flex flex-wrap items-center gap-3">
               <Button variant={on ? "outline-navy" : "maroon"} size="lg" disabled={!fits} onClick={() => toggleCourse(c.slug)} className={cn(!fits && "cursor-not-allowed")}>
                 {on ? "Keluarkan dari kantong" : fits ? "Masukkan ke kantong" : `Butuh ${c.sks} SKS, sisa ${Math.max(left, 0)}`}

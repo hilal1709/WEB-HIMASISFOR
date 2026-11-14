@@ -292,10 +292,10 @@ export function PillLink({ href, children, variant = "maroon", size = "md", clas
 }
 
 /** Label "Contoh konten" untuk data yang belum resmi (PRODUCT.md). */
-export function PlaceholderTag({ tone = "light", className }) {
+export function PlaceholderTag({ tone = "light", className, children }) {
   return (
     <span className={cn("inline-flex items-center rounded px-2 py-0.5 text-[11px] font-medium", tone === "light" ? "bg-cream-2 text-text/55" : "bg-white/10 text-white/60", className)}>
-      Contoh konten · menunggu data CMS
+      {children || "Contoh konten · menunggu data CMS"}
     </span>
   );
 }

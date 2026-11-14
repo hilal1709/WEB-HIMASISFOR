@@ -3,6 +3,10 @@
  * yang dipakai Meja Sambutan. Server selalu menjalankan `cleanSambutan` sebelum menyimpan.
  */
 
+import { b, clean, deepMerge, e, l, n, o, path, s, url, viewBox } from "@/lib/cms/shape";
+
+export { clean, deepMerge };
+
 export const ROW = "sambutan";
 export const DRAFT_ROW = "sambutan-draft";
 export const LEGACY_ROW = "sambutan-kaprodi";
@@ -19,17 +23,6 @@ export const CHAPTERS = [
   { key: "profile", label: "Profil", hint: "Isi modal profil lengkap" },
   { key: "seo", label: "Meta", hint: "Judul & deskripsi mesin pencari" },
 ];
-
-/* ───────── bentuk ───────── */
-const s = (max = 300) => ({ t: "s", max });
-const url = { t: "url" };
-const b = { t: "b" };
-const n = (min, max) => ({ t: "n", min, max });
-const e = (opts) => ({ t: "e", opts });
-const l = (item, max = 20) => ({ t: "l", item, max });
-const o = (fields) => ({ t: "o", fields });
-const path = { t: "path" };
-const viewBox = { t: "vb" };
 
 export const SHAPE = o({
   person: o({ name: s(120), credentials: s(160), role: s(160), photo: url, photoAlt: s(200) }),
@@ -70,62 +63,7 @@ export const SHAPE = o({
   seo: o({ title: s(90), description: s(200) }),
 });
 
-const SAFE_URL = /^(\/(?!\/)|#|https?:\/\/|mailto:|tel:)/i;
-const PATH_RE = /^[MmLlHhVvCcSsQqTtAaZz0-9.,\s-]+$/;
-const VB_RE = /^-?\d+(\.\d+)?(\s+-?\d+(\.\d+)?){3}$/;
-
-/** Bersihkan nilai sesuai bentuk; kunci tak dikenal dibuang, nilai buruk → undefined (pakai default). */
-export function clean(spec, v) {
-  switch (spec.t) {
-    case "s":
-      return typeof v === "string" ? v.replace(/\r\n/g, "\n").slice(0, spec.max) : undefined;
-    case "url":
-      if (typeof v !== "string") return undefined;
-      return v === "" || SAFE_URL.test(v.trim()) ? v.trim().slice(0, 500) : undefined;
-    case "b":
-      return typeof v === "boolean" ? v : undefined;
-    case "n": {
-      const x = Number(v);
-      return Number.isFinite(x) ? Math.min(spec.max, Math.max(spec.min, Math.round(x))) : undefined;
-    }
-    case "e":
-      return spec.opts.includes(v) ? v : undefined;
-    case "path":
-      return typeof v === "string" && v.length <= 8000 && PATH_RE.test(v) ? v.trim() : undefined;
-    case "vb":
-      return typeof v === "string" && VB_RE.test(v.trim()) ? v.trim() : undefined;
-    case "l":
-      if (!Array.isArray(v)) return undefined;
-      return v
-        .slice(0, spec.max)
-        .map((x) => clean(spec.item, x))
-        .filter((x) => x !== undefined);
-    case "o": {
-      if (!v || typeof v !== "object" || Array.isArray(v)) return undefined;
-      const out = {};
-      for (const [k, f] of Object.entries(spec.fields)) {
-        if (!(k in v)) continue;
-        const c = clean(f, v[k]);
-        if (c !== undefined) out[k] = c;
-      }
-      return out;
-    }
-    default:
-      return undefined;
-  }
-}
-
 export const cleanSambutan = (v) => clean(SHAPE, v) ?? null;
-
-const isObj = (v) => v && typeof v === "object" && !Array.isArray(v);
-
-/** Gabung dalam: objek per kunci, array & primitif menimpa utuh. */
-export function deepMerge(base, over) {
-  if (!isObj(base) || !isObj(over)) return over === undefined ? base : over;
-  const out = { ...base };
-  for (const [k, v] of Object.entries(over)) out[k] = isObj(v) && isObj(base[k]) ? deepMerge(base[k], v) : v;
-  return out;
-}
 
 /** Bab mana yang berbeda antara dua versi (untuk badge & modal terbit). */
 export function changedChapters(a, b) {

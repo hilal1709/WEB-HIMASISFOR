@@ -1,6 +1,7 @@
 "use client";
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
-import { DEFAULT_PROFILE, SHORTLIST_KEY, matchScore } from "@/lib/bidang-keahlian-content";
+import { SHORTLIST_KEY, matchScore } from "@/lib/bidang-keahlian-content";
+import { fill } from "@/lib/bidang-cms/schema";
 import { useToast } from "@/components/ui/toast";
 import { FieldModal } from "./field-modal";
 
@@ -15,25 +16,40 @@ export function setHash(value) {
   } catch {}
 }
 
+/** Gaya garis bidang ke-i di radar & legenda (palet maroon/navy; emas khusus "Kamu"). */
+const STROKES = [
+  { stroke: "var(--maroon)" },
+  { stroke: "var(--navy)" },
+  { stroke: "var(--navy)", dash: "5 5" },
+  { stroke: "var(--maroon)", dash: "5 5" },
+  { stroke: "var(--maroon)", dash: "1.5 4" },
+  { stroke: "var(--navy)", dash: "1.5 4" },
+];
+export const strokeOf = (i) => STROKES[i % STROKES.length];
+
 /**
  * State bersama halaman Bidang Keahlian:
- * - `focus`     : bidang yang disorot (kompas hero, mosaik, studi kasus) — index atau null
+ * - `focus`     : bidang yang disorot — index atau null
  * - modal detail bidang (`openField(i, originEl?)` → modal "tumbuh" dari kartu asalnya)
- * - `profile`   : lima nilai slider penakar minat → `scores` kecocokan per bidang
- * - `shortlist` : slug bidang yang ditandai (localStorage), dengan toast + "Batalkan"
+ * - `profile`   : nilai slider penakar minat (satu per dimensi CMS) → `scores` kecocokan per bidang
+ * - `shortlist` : slug bidang yang ditandai (localStorage), dengan toast + "Batalkan" (teks dari CMS)
  * Deep link: `#bidang-<slug>` membuka modal.
  */
 export function BidangProvider({ data, children }) {
-  const { fields } = data;
+  const { fields, dimensions, toasts } = data;
+  const defaultProfile = useMemo(() => dimensions.map((d) => d.default ?? 5), [dimensions]);
   const toast = useToast();
   const [focus, setFocus] = useState(null);
   const [detail, setDetail] = useState(null);
   const [origin, setOrigin] = useState(null);
-  const [profile, setProfile] = useState(DEFAULT_PROFILE);
+  const [profile, setProfile] = useState(defaultProfile);
   const [shortlist, setShortlist] = useState([]);
   const loaded = useRef(false);
   const listRef = useRef(shortlist);
   listRef.current = shortlist;
+
+  // dimensi berubah (pratinjau CMS) → profil pengguna kembali ke nilai awal
+  useEffect(() => setProfile(defaultProfile), [defaultProfile]);
 
   useEffect(() => {
     try {
@@ -90,23 +106,26 @@ export function BidangProvider({ data, children }) {
       setShortlist(has ? list.filter((s) => s !== slug) : [...list, slug]);
       if (quiet || !f) return;
       const undo = () => setShortlist(list);
-      if (has) toast.info(`${f.title} dilepas dari rak`, { action: { label: "Batalkan", onClick: undo } });
-      else toast.success(`${f.title} masuk rak pilihanmu`, { description: "Rangkumannya menunggu di akhir halaman.", action: { label: "Batalkan", onClick: undo } });
+      const vars = { title: f.title, short: f.short };
+      const action = { label: toasts.undo, onClick: undo };
+      if (has) toast.info(fill(toasts.removed, vars), { action });
+      else toast.success(fill(toasts.added, vars), { description: toasts.addedDesc || undefined, action });
     },
-    [fields, toast]
+    [fields, toast, toasts]
   );
 
   const scores = useMemo(() => fields.map((f) => matchScore(profile, f.profile)), [fields, profile]);
 
   const value = useMemo(
-    () => ({ ...data, focus, setFocus, openField, profile, setProfile, scores, shortlist, setShortlist, toggleShortlist }),
-    [data, focus, openField, profile, scores, shortlist, toggleShortlist]
+    // `shortlist` = slug tersimpan (state); isi CMS bagian rak tersedia sebagai `rack`
+    () => ({ ...data, rack: data.shortlist, defaultProfile, focus, setFocus, openField, profile, setProfile, scores, shortlist, setShortlist, toggleShortlist }),
+    [data, defaultProfile, focus, openField, profile, scores, shortlist, toggleShortlist]
   );
 
   return (
     <Ctx.Provider value={value}>
       {children}
-      <FieldModal fields={fields} index={detail} origin={origin} onIndex={(i) => openField(i)} onClose={closeField} />
+      <FieldModal fields={fields} labels={data.modal} index={detail} origin={origin} onIndex={(i) => openField(i)} onClose={closeField} />
     </Ctx.Provider>
   );
 }

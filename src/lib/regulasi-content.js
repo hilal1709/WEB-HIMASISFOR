@@ -1,6 +1,6 @@
 /**
  * Konten halaman Regulasi Akademik (`/regulasi-akademik`).
- * Total SKS & lama studi normal diturunkan dari kurikulum (`mergeKurikulum`) — tidak ditulis ulang.
+ * Total SKS & lama studi normal diturunkan dari kurikulum (`getKurikulumData`) — tidak ditulis ulang.
  * Tahapan tugas akhir TIDAK dibahas di sini (sudah ada di `/jalur-kelulusan`); pasal kelulusan hanya menaut ke sana.
  *
  * CMS `PageContent` section `regulasi-akademik`:
@@ -354,7 +354,7 @@ const byKey = (list, key) => (Array.isArray(list) ? list.find((x) => x?.key === 
 /**
  * Gabungkan CMS ke fallback.
  * @param row        PageContent `regulasi-akademik` (boleh null)
- * @param kurikulum  hasil mergeKurikulum — total SKS & jumlah semester
+ * @param kurikulum  hasil getKurikulumData — total SKS & jumlah semester
  */
 export function mergeRegulasi(row, { kurikulum } = {}) {
   const raw = parse(row?.data) ?? {};

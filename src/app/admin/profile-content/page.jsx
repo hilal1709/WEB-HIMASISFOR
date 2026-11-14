@@ -76,8 +76,7 @@ export default function ProfileContentManagement() {
   const tabs = [
     { id: "hero-profile", label: "Hero Section" },
     { id: "video-profile", label: "Video Profile" },
-    { id: "visi", label: "Visi" },
-    { id: "misi", label: "Misi" },
+    { id: "visi-misi", label: "Visi & Misi" },
     { id: "profil-dosen", label: "Profil Dosen" },
     { id: "akreditasi", label: "Akreditasi" },
     { id: "profil-alumni", label: "Profil Alumni" },
@@ -155,26 +154,31 @@ export default function ProfileContentManagement() {
                 saving={saving}
               />
             )}
-            {activeTab === "visi" && (
-              <VisiEditor
-                data={contents.visi}
-                onSave={(data) => handleSave("visi", data)}
-                saving={saving}
-              />
-            )}
-            {activeTab === "misi" && (
-              <MisiEditor
-                data={contents.misi}
-                onSave={(data) => handleSave("misi", data)}
-                saving={saving}
-              />
+            {activeTab === "visi-misi" && (
+              <div className="flex flex-col items-start gap-4 rounded-lg border border-gray-200 bg-cream p-6 sm:flex-row sm:items-center">
+                <div className="flex-1">
+                  <p className="font-serif text-xl text-navy">Visi & Misi kini punya ruangnya sendiri</p>
+                  <p className="mt-1 text-sm text-gray-600">
+                    Teks visi, misi, penjelasan, tonggak, hingga meta halaman dikelola di Ruang Kompas — dengan draf, pratinjau, dan riwayat terbit.
+                  </p>
+                </div>
+                <a href="/admin/visi-misi" className="inline-flex h-10 items-center rounded-md bg-maroon px-4 text-sm font-semibold text-white hover:bg-maroon-deep">
+                  Buka Ruang Kompas →
+                </a>
+              </div>
             )}
             {activeTab === "profil-dosen" && (
-              <ProfilDosenEditor
-                data={contents["profil-dosen"]}
-                onSave={(data) => handleSave("profil-dosen", data)}
-                saving={saving}
-              />
+              <div className="flex flex-col items-start gap-4 rounded-lg border border-gray-200 bg-cream p-6 sm:flex-row sm:items-center">
+                <div className="flex-1">
+                  <p className="font-serif text-xl text-navy">Profil dosen pindah ke Ruang Dosen</p>
+                  <p className="mt-1 text-sm text-gray-600">
+                    Identitas, rumpun, mata kuliah, riset, tautan akademik, dan seluruh teks halaman /dosen dikelola di sana. Isian lama di tab ini sudah ikut terbawa.
+                  </p>
+                </div>
+                <a href="/admin/dosen" className="inline-flex h-10 items-center rounded-md bg-maroon px-4 text-sm font-semibold text-white hover:bg-maroon-deep">
+                  Buka Ruang Dosen →
+                </a>
+              </div>
             )}
             {activeTab === "akreditasi" && (
               <AkreditasiEditor
@@ -184,25 +188,43 @@ export default function ProfileContentManagement() {
               />
             )}
             {activeTab === "profil-alumni" && (
-              <ProfilAlumniEditor
-                data={contents["profil-alumni"]}
-                onSave={(data) => handleSave("profil-alumni", data)}
-                saving={saving}
-              />
+              <div className="flex flex-col items-start gap-4 rounded-lg border border-gray-200 bg-cream p-6 sm:flex-row sm:items-center">
+                <div className="flex-1">
+                  <p className="font-serif text-xl text-navy">Profil Lulusan kini dikelola di Galeri Wisuda</p>
+                  <p className="mt-1 text-sm text-gray-600">
+                    Intro, profil lulusan, capaian pembelajaran, angka, dinding alumni, hingga penutup halaman diatur di satu tempat — dengan draf, pratinjau, dan riwayat terbit.
+                  </p>
+                </div>
+                <a href="/admin/profil-lulusan" className="inline-flex h-10 items-center rounded-md bg-maroon px-4 text-sm font-semibold text-white hover:bg-maroon-deep">
+                  Buka Galeri Wisuda →
+                </a>
+              </div>
             )}
             {activeTab === "kisah-mawapres" && (
-              <KisahMawapresEditor
-                data={contents["kisah-mawapres"]}
-                onSave={(data) => handleSave("kisah-mawapres", data)}
-                saving={saving}
-              />
+              <div className="flex flex-col items-start gap-4 rounded-lg border border-gray-200 bg-cream p-6 sm:flex-row sm:items-center">
+                <div className="flex-1">
+                  <p className="font-serif text-xl text-navy">Kisah Mawapres kini dikelola di Ruang Kurator</p>
+                  <p className="mt-1 text-sm text-gray-600">
+                    Kutipan, video, dan pemeran kisah ada di bab Kisah halaman Prestasi, bersama draf, pratinjau, dan riwayat terbit. Isi lama sudah ikut terbawa.
+                  </p>
+                </div>
+                <a href="/admin/prestasi" className="inline-flex h-10 items-center rounded-md bg-maroon px-4 text-sm font-semibold text-white hover:bg-maroon-deep">
+                  Buka Ruang Kurator →
+                </a>
+              </div>
             )}
             {activeTab === "infinite-alumni" && (
-              <InfiniteAlumniEditor
-                data={contents["infinite-alumni"]}
-                onSave={(data) => handleSave("infinite-alumni", data)}
-                saving={saving}
-              />
+              <div className="flex flex-col items-start gap-4 rounded-lg border border-gray-200 bg-cream p-6 sm:flex-row sm:items-center">
+                <div className="flex-1">
+                  <p className="font-serif text-xl text-navy">Profil Lulusan kini dikelola di Galeri Wisuda</p>
+                  <p className="mt-1 text-sm text-gray-600">
+                    Intro, profil lulusan, capaian pembelajaran, angka, dinding alumni, hingga penutup halaman diatur di satu tempat — dengan draf, pratinjau, dan riwayat terbit.
+                  </p>
+                </div>
+                <a href="/admin/profil-lulusan" className="inline-flex h-10 items-center rounded-md bg-maroon px-4 text-sm font-semibold text-white hover:bg-maroon-deep">
+                  Buka Galeri Wisuda →
+                </a>
+              </div>
             )}
           </div>
         </div>
@@ -350,205 +372,6 @@ function VideoProfileEditor({ data, onSave, saving }) {
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
           placeholder="/img/video.png"
         />
-      </div>
-
-      <button
-        type="submit"
-        disabled={saving}
-        className="w-full bg-red-600 text-white py-3 px-6 rounded-lg hover:bg-red-700 transition-colors disabled:bg-gray-400"
-      >
-        {saving ? "Menyimpan..." : "Simpan Perubahan"}
-      </button>
-    </form>
-  );
-}
-
-// Visi Editor
-function VisiEditor({ data, onSave, saving }) {
-  const [formData, setFormData] = useState({
-    title: data?.title || "",
-    subtitle: data?.subtitle || "",
-    content: data?.content || "",
-  });
-
-  useEffect(() => {
-    if (data) {
-      setFormData({
-        title: data.title || "",
-        subtitle: data.subtitle || "",
-        content: data.content || "",
-      });
-    }
-  }, [data]);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSave(formData);
-  };
-
-  return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Judul
-        </label>
-        <input
-          type="text"
-          value={formData.title}
-          onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-          placeholder="Visi"
-        />
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Sub Judul
-        </label>
-        <input
-          type="text"
-          value={formData.subtitle}
-          onChange={(e) => setFormData({ ...formData, subtitle: e.target.value })}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-          placeholder="Program Studi Sistem Informasi UISI"
-        />
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Isi Visi
-        </label>
-        <textarea
-          value={formData.content}
-          onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-          rows={6}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-          placeholder="Menjadi Departemen Sistem Informasi yang unggul..."
-        />
-      </div>
-
-      <button
-        type="submit"
-        disabled={saving}
-        className="w-full bg-red-600 text-white py-3 px-6 rounded-lg hover:bg-red-700 transition-colors disabled:bg-gray-400"
-      >
-        {saving ? "Menyimpan..." : "Simpan Perubahan"}
-      </button>
-    </form>
-  );
-}
-
-// Misi Editor
-function MisiEditor({ data, onSave, saving }) {
-  const defaultData = {
-    items: ["", "", "", "", ""]
-  };
-
-  const [formData, setFormData] = useState({
-    title: data?.title || "",
-    subtitle: data?.subtitle || "",
-    data: data?.data && typeof data.data === 'object' ? data.data : defaultData,
-  });
-
-  useEffect(() => {
-    if (data) {
-      setFormData({
-        title: data.title || "",
-        subtitle: data.subtitle || "",
-        data: data.data && typeof data.data === 'object' ? data.data : defaultData,
-      });
-    }
-  }, [data]);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSave(formData);
-  };
-
-  const updateItem = (index, value) => {
-    const newItems = [...formData.data.items];
-    newItems[index] = value;
-    setFormData({
-      ...formData,
-      data: { ...formData.data, items: newItems }
-    });
-  };
-
-  const addItem = () => {
-    setFormData({
-      ...formData,
-      data: { ...formData.data, items: [...formData.data.items, ""] }
-    });
-  };
-
-  const removeItem = (index) => {
-    const newItems = formData.data.items.filter((_, i) => i !== index);
-    setFormData({
-      ...formData,
-      data: { ...formData.data, items: newItems }
-    });
-  };
-
-  return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Judul
-        </label>
-        <input
-          type="text"
-          value={formData.title}
-          onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-          placeholder="Misi"
-        />
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Sub Judul
-        </label>
-        <input
-          type="text"
-          value={formData.subtitle}
-          onChange={(e) => setFormData({ ...formData, subtitle: e.target.value })}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-          placeholder="Program Studi Sistem Informasi UISI"
-        />
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Daftar Misi
-        </label>
-        {formData.data.items.map((item, index) => (
-          <div key={index} className="flex gap-2 mb-3">
-            <div className="flex-shrink-0 w-8 h-10 flex items-center justify-center bg-gray-100 rounded">
-              {index + 1}
-            </div>
-            <textarea
-              value={item}
-              onChange={(e) => updateItem(index, e.target.value)}
-              rows={2}
-              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-              placeholder={`Misi ${index + 1}`}
-            />
-            <button
-              type="button"
-              onClick={() => removeItem(index)}
-              className="flex-shrink-0 px-3 py-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200"
-            >
-              Hapus
-            </button>
-          </div>
-        ))}
-        <button
-          type="button"
-          onClick={addItem}
-          className="mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-        >
-          + Tambah Misi
-        </button>
       </div>
 
       <button
@@ -1025,92 +848,6 @@ function InfiniteAlumniEditor({ data, onSave, saving }) {
         disabled={saving}
         className="w-full bg-red-600 text-white py-3 px-6 rounded-lg hover:bg-red-700 transition-colors disabled:bg-gray-400"
       >
-        {saving ? "Menyimpan..." : "Simpan Perubahan"}
-      </button>
-    </form>
-  );
-}
-
-// Kisah Mawapres Editor — band "Kisah sukses" di halaman Prestasi (/achievement)
-function KisahMawapresEditor({ data, onSave, saving }) {
-  const toForm = (d) => ({
-    title: d?.title || "",
-    content: d?.content || "",
-    subtitle: d?.subtitle || "",
-    image: d?.image || "",
-    data: { people: Array.isArray(d?.data?.people) && d.data.people.length ? d.data.people : [{ name: "", role: "", photo: "" }] },
-  });
-  const [formData, setFormData] = useState(toForm(data));
-  useEffect(() => {
-    if (data) setFormData(toForm(data));
-  }, [data]);
-
-  const people = formData.data.people;
-  const setPeople = (next) => setFormData({ ...formData, data: { people: next } });
-  const updatePerson = (i, field, value) => setPeople(people.map((p, k) => (k === i ? { ...p, [field]: value } : p)));
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSave({ ...formData, data: { people: people.filter((p) => p.name.trim()) } });
-  };
-
-  const input = "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent";
-
-  return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <p className="text-sm text-gray-600">
-        Tampil di halaman <b>Prestasi</b> (band maroon &ldquo;Kisah sukses&rdquo;). Kosongkan kolom untuk memakai teks bawaan.
-      </p>
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Judul kecil</label>
-        <input type="text" value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} className={input} placeholder="Kisah sukses" />
-      </div>
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Kutipan / cerita singkat</label>
-        <textarea rows={3} value={formData.content} onChange={(e) => setFormData({ ...formData, content: e.target.value })} className={input} placeholder="Cerita singkat mahasiswa berprestasi…" />
-      </div>
-      <div className="grid gap-4 md:grid-cols-2">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">URL video (.mp4)</label>
-          <input type="text" value={formData.subtitle} onChange={(e) => setFormData({ ...formData, subtitle: e.target.value })} className={input} placeholder="/video/mawapres.mp4" />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Poster video</label>
-          <input type="text" value={formData.image} onChange={(e) => setFormData({ ...formData, image: e.target.value })} className={input} placeholder="/video/mawapres.jpg" />
-        </div>
-      </div>
-
-      <div>
-        <div className="flex items-center justify-between mb-3">
-          <label className="block text-sm font-medium text-gray-700">Mahasiswa di video</label>
-          <button type="button" onClick={() => setPeople([...people, { name: "", role: "", photo: "" }])} className="text-sm font-medium text-red-600 hover:text-red-700">
-            + Tambah mahasiswa
-          </button>
-        </div>
-        <div className="space-y-3">
-          {people.map((p, i) => (
-            <div key={i} className="grid gap-3 rounded-lg border border-gray-200 p-4 md:grid-cols-[1fr_1.4fr_1fr_auto] md:items-end">
-              <div>
-                <label className="block text-xs text-gray-500 mb-1">Nama</label>
-                <input type="text" value={p.name} onChange={(e) => updatePerson(i, "name", e.target.value)} className={input} placeholder="Felix Atmaja" />
-              </div>
-              <div>
-                <label className="block text-xs text-gray-500 mb-1">Keterangan</label>
-                <input type="text" value={p.role} onChange={(e) => updatePerson(i, "role", e.target.value)} className={input} placeholder="Mahasiswa Berprestasi 2023" />
-              </div>
-              <div>
-                <label className="block text-xs text-gray-500 mb-1">Foto</label>
-                <input type="text" value={p.photo} onChange={(e) => updatePerson(i, "photo", e.target.value)} className={input} placeholder="/img/mhs/felix.png" />
-              </div>
-              <button type="button" onClick={() => setPeople(people.filter((_, k) => k !== i))} disabled={people.length === 1} className="h-10 px-3 text-sm text-gray-500 hover:text-red-600 disabled:opacity-40">
-                Hapus
-              </button>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <button type="submit" disabled={saving} className="w-full bg-red-600 text-white py-3 px-6 rounded-lg hover:bg-red-700 transition-colors disabled:bg-gray-400">
         {saving ? "Menyimpan..." : "Simpan Perubahan"}
       </button>
     </form>

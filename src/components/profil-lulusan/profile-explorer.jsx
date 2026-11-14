@@ -21,7 +21,8 @@ const useIso = typeof window === "undefined" ? useEffect : useLayoutEffect;
  * panel kanan: Lottie di permukaan navy, ringkasan, kompetensi muncul berurutan (anime.js).
  * Ponsel: kartu Swiper.
  */
-export function ProfileExplorer({ profiles }) {
+export function ProfileExplorer({ content: c, note }) {
+  const profiles = c.items;
   const [active, setActive] = useState(0);
   const [auto, setAuto] = useState(true);
   const [paused, setPaused] = useState(false);
@@ -29,11 +30,16 @@ export function ProfileExplorer({ profiles }) {
   const tabs = useRef([]);
   const panel = useRef(null);
   const openProfile = useProfileModal();
-  const item = profiles[active];
+  const item = profiles[Math.min(active, profiles.length - 1)];
 
   useEffect(() => {
-    if (prefersReducedMotion()) setAuto(false);
-  }, []);
+    setAuto(c.autoplay !== false && !prefersReducedMotion());
+  }, [c.autoplay]);
+
+  // jumlah profil berubah (pratinjau CMS) → indeks tetap di rentang
+  useEffect(() => {
+    if (active >= profiles.length) setActive(0);
+  }, [profiles.length, active]);
 
   // indikator emas mengikuti tab aktif
   useIso(() => {
@@ -73,9 +79,9 @@ export function ProfileExplorer({ profiles }) {
     <section id="profil" className="scroll-mt-24 overflow-hidden bg-cream py-16 md:py-20">
       <Container>
         <SectionHeader
-          title={[`${profiles.length} profil,`, "satu fondasi"]}
-          body="Setiap lulusan menguasai proses bisnis dan teknologi, lalu menajamkannya di salah satu jalur karier berikut."
-          action={profiles.some((p) => p.sample) ? <PlaceholderTag /> : null}
+          title={[c.titleTop, c.titleAccent]}
+          body={c.body}
+          action={profiles.some((p) => p.sample) ? <PlaceholderTag>{note}</PlaceholderTag> : null}
         />
 
         {/* ≥ lg */}
@@ -143,16 +149,18 @@ export function ProfileExplorer({ profiles }) {
                 <p data-in className="kicker text-maroon">{item.short}</p>
                 <h3 data-in className="mt-3 font-serif text-[clamp(1.6rem,2.3vw,2rem)] leading-tight text-navy">{item.title}</h3>
                 <p data-in className="mt-4 text-pretty text-[15.5px] leading-relaxed text-text/70">{item.summary}</p>
-                <ul className="mt-6 flex flex-wrap gap-1.5">
+                <ul key={item.key} className="mt-6 flex flex-wrap gap-1.5">
                   {item.competencies.map((c) => (
                     <li key={c} data-in className="rounded-md border border-line bg-cream/60 px-2.5 py-1 text-[13px] text-navy transition-colors duration-300 hover:border-gold hover:bg-white">{c}</li>
                   ))}
                 </ul>
                 <div data-in className="mt-auto flex flex-wrap items-end justify-between gap-4 pt-8">
-                  <p className="text-[13px] text-text/55">
-                    Contoh jabatan: <span className="text-navy">{item.roles.slice(0, 2).join(", ")}</span>
-                  </p>
-                  <DetailButton onClick={() => openProfile(active)} label={item.title} />
+                  {item.roles.length > 0 ? (
+                    <p className="text-[13px] text-text/55">
+                      {c.rolesLabel}: <span className="text-navy">{item.roles.slice(0, 2).join(", ")}</span>
+                    </p>
+                  ) : <span />}
+                  <DetailButton onClick={() => openProfile(active)} title={item.title} label={c.detailLabel} />
                 </div>
               </div>
             </article>
@@ -174,7 +182,7 @@ export function ProfileExplorer({ profiles }) {
                     <h3 className="mt-2 font-serif text-[1.35rem] leading-snug text-navy">{p.title}</h3>
                     <p className="mt-2 text-[14.5px] leading-relaxed text-text/70">{p.summary}</p>
                     <div className="mt-auto pt-5">
-                      <DetailButton onClick={() => openProfile(i)} label={p.title} />
+                      <DetailButton onClick={() => openProfile(i)} title={p.title} label={c.detailLabel} />
                     </div>
                   </div>
                 </article>
@@ -192,15 +200,15 @@ export function ProfileExplorer({ profiles }) {
   );
 }
 
-function DetailButton({ onClick, label }) {
+function DetailButton({ onClick, title, label }) {
   return (
     <button
       type="button"
       onClick={onClick}
-      aria-label={`Lihat detail profil ${label}`}
+      aria-label={`${label}: ${title}`}
       className="group/btn inline-flex h-10 items-center gap-2 rounded-md bg-maroon px-4 text-sm font-semibold text-white transition-[background-color,transform] duration-300 ease-cinematic hover:bg-maroon-deep active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-maroon/40 focus-visible:ring-offset-2"
     >
-      Lihat detail
+      {label}
       <svg aria-hidden viewBox="0 0 16 16" className="size-4 transition-transform duration-500 ease-cinematic group-hover/btn:translate-x-1">
         <path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
       </svg>

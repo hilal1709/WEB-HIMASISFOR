@@ -1,29 +1,25 @@
 "use client";
 import { useLayoutEffect as useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import { DEFAULT_PROFILE, DIMENSIONS } from "@/lib/bidang-keahlian-content";
+import { fill } from "@/lib/bidang-cms/schema";
 import { Flip, gsap } from "@/lib/scroll";
 import { prefersReducedMotion } from "@/lib/motion";
 import { Container, PlaceholderTag, SectionHeader } from "@/components/home/shared";
 import { LottieIllustration } from "@/components/media/lottie-illustration";
 import { useToast } from "@/components/ui/toast";
 import { cn } from "@/lib/utils";
-import { useBidang } from "./bidang-provider";
+import { strokeOf, useBidang } from "./bidang-provider";
 
 const SIZE = 380;
 const C = SIZE / 2;
 const R = 136;
 const MAX = 10;
-const angleOf = (i) => ((-90 + (i * 360) / DIMENSIONS.length) * Math.PI) / 180;
-const pt = (i, v) => [C + Math.cos(angleOf(i)) * (R * v) / MAX, C + Math.sin(angleOf(i)) * (R * v) / MAX];
-const poly = (vals) => vals.map((v, i) => pt(i, v).map((n) => n.toFixed(1)).join(",")).join(" ");
-
-/** Gaya garis tiap bidang (dalam palet: maroon/navy, padat/putus-putus). "Kamu" = emas. */
-const STROKE = {
-  enterprise: { stroke: "var(--maroon)", dash: undefined },
-  audit: { stroke: "var(--navy)", dash: undefined },
-  data: { stroke: "var(--navy)", dash: "5 5" },
-  msi: { stroke: "var(--maroon)", dash: "5 5" },
-};
+/** Geometri radar untuk N dimensi (dari CMS). */
+function geometry(count) {
+  const angleOf = (i) => ((-90 + (i * 360) / count) * Math.PI) / 180;
+  const pt = (i, v) => [C + Math.cos(angleOf(i)) * (R * v) / MAX, C + Math.sin(angleOf(i)) * (R * v) / MAX];
+  const poly = (vals) => vals.map((v, i) => pt(i, v).map((n) => n.toFixed(1)).join(",")).join(" ");
+  return { angleOf, pt, poly };
+}
 
 /**
  * "Cocokkan dirimu" (pola 21st.dev radar chart + mixer). Lima slider (atau tarik titik emas langsung di radar)
@@ -32,7 +28,8 @@ const STROKE = {
  * "Simpan ke rak" menandai bidang teratas (toast). Profil bidang = contoh.
  */
 export function InterestRadar() {
-  const { fields, profile, setProfile, scores, openField, shortlist, toggleShortlist } = useBidang();
+  const { fields, dimensions: DIMENSIONS, radar, toasts, defaultProfile, profile, setProfile, scores, openField, shortlist, toggleShortlist } = useBidang();
+  const { angleOf, pt, poly } = useMemo(() => geometry(DIMENSIONS.length), [DIMENSIONS.length]);
   const toast = useToast();
   const [shown, setShown] = useState(profile);
   const [hover, setHover] = useState(null);
@@ -45,7 +42,7 @@ export function InterestRadar() {
   // poligon "Kamu" menyusul nilai slider
   useEffect(() => {
     const target = profile;
-    if (prefersReducedMotion() || dragging != null) {
+    if (prefersReducedMotion() || dragging != null || tween.current.v.length !== target.length) {
       tween.current.v = [...target];
       setShown([...target]);
       return;
@@ -84,18 +81,14 @@ export function InterestRadar() {
 
   const saveTop = () => {
     const f = fields[top];
-    if (shortlist.includes(f.slug)) toast.info(`${f.title} sudah ada di rakmu`, { description: `Kecocokanmu saat ini ${scores[top]}%.` });
+    if (shortlist.includes(f.slug)) toast.info(fill(toasts.already, { title: f.title }), { description: toasts.alreadyDesc ? fill(toasts.alreadyDesc, { score: scores[top] }) : undefined });
     else toggleShortlist(f.slug);
   };
 
   return (
     <section id="cocokkan" className="relative scroll-mt-24 bg-white py-16 md:py-20">
       <Container>
-        <SectionHeader
-          title={["Geser, lalu lihat", "siapa yang mirip", "denganmu"]}
-          body="Seberapa kamu menikmati lima hal berikut? Poligon emas adalah kamu. Tarik titiknya langsung di radar bila lebih suka."
-          action={<PlaceholderTag />}
-        />
+        <SectionHeader title={radar.title} body={radar.body} action={radar.sampleTag ? <PlaceholderTag /> : null} />
 
         <div className="mt-10 grid gap-10 md:mt-14 lg:grid-cols-[0.85fr_1.15fr] lg:gap-14">
           {/* slider */}
@@ -114,7 +107,7 @@ export function InterestRadar() {
                     <span
                       aria-hidden
                       className="absolute left-0 top-1/2 h-1.5 -translate-y-1/2 rounded-full bg-maroon transition-[width] duration-200"
-                      style={{ width: `calc(${profile[i] / MAX} * (100% - 22px) + 11px)` }}
+                      style={{ width: `calc(${(profile[i] ?? 0) / MAX} * (100% - 22px) + 11px)` }}
                     />
                     <input
                       id={`dim-${d.key}`}
@@ -122,21 +115,21 @@ export function InterestRadar() {
                       min={0}
                       max={MAX}
                       step={1}
-                      value={profile[i]}
+                      value={profile[i] ?? 0}
                       onChange={(e) => setDim(i, Number(e.target.value))}
                       aria-valuetext={`${profile[i]} dari ${MAX}`}
                       className="bk-range absolute inset-0"
                     />
                   </div>
                   <div aria-hidden className="mt-1 flex justify-between text-[11.5px] text-text/40">
-                    <span>Kurang</span>
-                    <span>Sangat</span>
+                    <span>{radar.lowLabel}</span>
+                    <span>{radar.highLabel}</span>
                   </div>
                 </li>
               ))}
             </ul>
-            <button type="button" onClick={() => setProfile(DEFAULT_PROFILE)} className="mt-6 text-[14px] font-semibold text-navy">
-              <span className="u-gold">Kembalikan ke awal</span>
+            <button type="button" onClick={() => setProfile(defaultProfile)} className="mt-6 text-[14px] font-semibold text-navy">
+              <span className="u-gold">{radar.resetLabel}</span>
             </button>
           </div>
 
@@ -169,7 +162,7 @@ export function InterestRadar() {
                   );
                 })}
                 {fields.map((f, i) => {
-                  const s = STROKE[f.slug] ?? STROKE.audit;
+                  const s = strokeOf(i);
                   const dim = hover != null && hover !== i;
                   const on = hover === i;
                   return (
@@ -203,7 +196,7 @@ export function InterestRadar() {
               <ol ref={list} className="space-y-2" onMouseLeave={() => setHover(null)}>
                 {order.map((i, rank) => {
                   const f = fields[i];
-                  const s = STROKE[f.slug] ?? STROKE.audit;
+                  const s = strokeOf(i);
                   return (
                     <li key={f.slug} data-rank data-flip-id={f.slug}>
                       <button
@@ -236,7 +229,7 @@ export function InterestRadar() {
               <div className="mt-5 flex items-center gap-4 rounded-xl bg-navy p-4 text-white" data-lottie-hover aria-live="polite">
                 {fields[top].lottie && <LottieIllustration src={fields[top].lottie} className="size-14 shrink-0" />}
                 <div className="min-w-0 flex-1">
-                  <p className="text-[12px] text-white/55">Paling dekat denganmu</p>
+                  <p className="text-[12px] text-white/55">{radar.topLabel}</p>
                   <p key={fields[top].slug} className="font-serif text-[1.15rem] leading-tight animate-in fade-in-0 slide-in-from-bottom-1 duration-500">{fields[top].title}</p>
                 </div>
               </div>
@@ -245,7 +238,7 @@ export function InterestRadar() {
                 onClick={saveTop}
                 className="mt-3 inline-flex h-11 w-full items-center justify-center gap-2 rounded-md bg-maroon text-[14.5px] font-semibold text-white transition-[background-color,transform] duration-300 hover:bg-maroon-deep active:scale-[0.98]"
               >
-                {shortlist.includes(fields[top].slug) ? "Sudah di rakmu" : "Simpan ke rak pilihan"}
+                {shortlist.includes(fields[top].slug) ? radar.savedLabel : radar.saveLabel}
               </button>
             </div>
           </div>

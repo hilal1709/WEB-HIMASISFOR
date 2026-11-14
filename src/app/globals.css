@@ -477,6 +477,9 @@ html.has-cursor, html.has-cursor a, html.has-cursor button { cursor: none; }
 .grad-fork [data-branch][data-on] { opacity: 1; }
 .grad-fork [data-branch][data-on] [data-node] { animation: cur-pulse 1.8s ease-in-out infinite; }
 
+/* Kurikulum — Body of Knowledge: blok lain meredup saat diagram disorot */
+.bok[data-focus] .bok-block:not([data-on]) { opacity: 0.42; }
+
 /* Kurikulum — peta studi: jalur rumpun lain meredup saat satu rumpun dipilih */
 .study-map [data-lane] { transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1); }
 .study-map[data-focus] [data-lane]:not([data-on]) { opacity: 0.14; }
@@ -966,8 +969,240 @@ html[data-prehydrate] [data-aos-wait] { opacity: 0; animation: prehydrate-safety
 /* ==========================================================================
    MEJA SAMBUTAN (/admin/sambutan) — meja cream bertitik, kertas surat di atasnya
    ========================================================================== */
+/* Ruang Kompas (CMS Visi & Misi): kertas krem bergaris kontur tipis seperti peta */
+.kompas-room {
+  background-color: var(--cream);
+  background-image:
+    repeating-radial-gradient(circle at 85% -10%, transparent 0 46px, rgb(20 33 61 / 0.045) 46px 47px),
+    radial-gradient(rgb(20 33 61 / 0.05) 1px, transparent 1.2px);
+  background-size: auto, 26px 26px;
+}
+.kompas-sky {
+  background-color: var(--navy-deep);
+  background-image: radial-gradient(rgb(255 255 255 / 0.07) 1px, transparent 1.3px);
+  background-size: 34px 34px;
+}
+
+/* Galeri Wisuda (CMS Profil Lulusan): malam wisuda — navy pekat, kisi halus, sorot emas di atas */
+.galeri-room {
+  background-color: #08111f;
+  background-image:
+    radial-gradient(ellipse 60% 40% at 50% -10%, rgb(201 162 39 / 0.14), transparent 70%),
+    linear-gradient(rgb(255 255 255 / 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 0.03) 1px, transparent 1px);
+  background-size: auto, 44px 44px, 44px 44px;
+  color: #fff;
+}
+
 .meja-desk {
   background-color: var(--cream-2);
   background-image: radial-gradient(rgb(20 33 61 / 0.09) 1px, transparent 1.2px);
   background-size: 22px 22px;
 }
+
+/* Papan Jadwal (CMS Program Kelas) — papan tulis magnetik bergaris jadwal */
+.papan-room {
+  background-color: #f6f1e4;
+  background-image:
+    linear-gradient(180deg, rgb(255 255 255 / 0.7), transparent 220px),
+    repeating-linear-gradient(180deg, transparent 0 33px, rgb(20 33 61 / 0.055) 33px 34px),
+    repeating-linear-gradient(90deg, transparent 0 167px, rgb(110 20 35 / 0.045) 167px 168px);
+  color: var(--navy);
+}
+.papan-sheet {
+  background: #fffdf7;
+  border: 1px solid rgb(20 33 61 / 0.08);
+  box-shadow:
+    0 1px 0 rgb(20 33 61 / 0.04),
+    0 18px 32px -26px rgb(20 33 61 / 0.45);
+}
+.papan-sheet-navy {
+  background: var(--navy);
+  border-color: transparent;
+  color: #fff;
+}
+.papan-blink {
+  animation: papan-blink 1.2s ease-out;
+}
+@keyframes papan-blink {
+  0%,
+  40% {
+    box-shadow: 0 0 0 3px rgb(201 162 39 / 0.65);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgb(201 162 39 / 0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .papan-blink {
+    animation: none;
+  }
+}
+
+/* ── Ruang Dosen (CMS /admin/dosen) ───────────────────────────── */
+.ruang-bg {
+  background-image: radial-gradient(rgb(20 33 61 / 0.05) 1px, transparent 1px);
+  background-size: 18px 18px;
+}
+/* struk termal: tepi bawah bergerigi sobekan */
+.receipt > div {
+  -webkit-mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / 12px 100%;
+  mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / 12px 100%;
+}
+/* strip berperforasi: lubang kecil di tepi atas & bawah */
+.perforated::before,
+.perforated::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  height: 4px;
+  background: radial-gradient(circle, var(--cream, #f7f2e8) 1.4px, transparent 1.6px) 0 50% / 9px 4px repeat-x;
+  pointer-events: none;
+}
+.perforated::before { top: -1px; }
+.perforated::after { bottom: -1px; }
+/* map manila: serat halus */
+.manila {
+  background-image: repeating-linear-gradient(115deg, rgb(120 90 30 / 0.035) 0 2px, transparent 2px 7px);
+}
+
+/* ===== Ruang Kurator (CMS Prestasi): galeri museum malam ===== */
+.kurator {
+  --k-bg: #0c0e12;
+  --k-panel: #13161c;
+  --k-panel-2: #191d25;
+  --k-raise: #20252f;
+  --k-line: rgb(255 255 255 / 0.075);
+  --k-line-2: rgb(255 255 255 / 0.14);
+  --k-ink: #eceae4;
+  --k-mute: rgb(236 234 228 / 0.56);
+  --k-faint: rgb(236 234 228 / 0.34);
+  --k-gold: #d6b04a;
+  --k-gold-ink: #1b1505;
+  --k-maroon: #9b2335;
+  --k-ok: #6fcf97;
+  background: var(--k-bg);
+  color: var(--k-ink);
+  color-scheme: dark;
+}
+/* garis grid halus + sorot emas di atas */
+.kurator-grid {
+  background-image:
+    radial-gradient(900px 380px at 50% -120px, rgb(214 176 74 / 0.11), transparent 70%),
+    linear-gradient(var(--k-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--k-line) 1px, transparent 1px);
+  background-size: auto, 56px 56px, 56px 56px;
+  background-position: center top, -1px -1px, -1px -1px;
+}
+/* di layer components supaya utilitas Tailwind (h-10, pl-9, w-auto) tetap bisa menimpa */
+@layer components {
+.k-field {
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid var(--k-line-2);
+  background: rgb(0 0 0 / 0.25);
+  color: var(--k-ink);
+  padding: 0.55rem 0.8rem;
+  font-size: 14px;
+  line-height: 1.5;
+  outline: none;
+  transition: border-color 0.25s, box-shadow 0.25s, background-color 0.25s;
+}
+.k-field::placeholder { color: var(--k-faint); }
+.k-field:hover { border-color: rgb(255 255 255 / 0.22); }
+.k-field:focus { border-color: rgb(214 176 74 / 0.7); box-shadow: 0 0 0 3px rgb(214 176 74 / 0.16); background: rgb(0 0 0 / 0.35); }
+.k-field[aria-invalid="true"] { border-color: rgb(155 35 53 / 0.85); }
+/* plakat kuningan: kilau lewat saat hover */
+.k-plaque { position: relative; isolation: isolate; }
+.k-plaque::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(105deg, transparent 35%, rgb(214 176 74 / 0.16) 50%, transparent 65%);
+  background-size: 250% 100%;
+  background-position: 120% 0;
+  pointer-events: none;
+  transition: background-position 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: -1;
+}
+.k-plaque:hover::after { background-position: -20% 0; }
+}
+.kurator ::-webkit-scrollbar { width: 10px; height: 10px; }
+.kurator ::-webkit-scrollbar-thumb { background: rgb(255 255 255 / 0.1); border-radius: 99px; border: 3px solid transparent; background-clip: content-box; }
+@media (prefers-reduced-motion: reduce) {
+  .k-plaque::after { transition: none; }
+}
+
+/* ───────── Kartografer Kurikulum (CMS /admin/kurikulum) ───────── */
+.kartografer .kf-blueprint {
+  background-image:
+    linear-gradient(rgb(20 33 61 / 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(20 33 61 / 0.05) 1px, transparent 1px),
+    linear-gradient(rgb(20 33 61 / 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(20 33 61 / 0.025) 1px, transparent 1px);
+  background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px;
+  mask-image: radial-gradient(ellipse at 50% 0%, black 30%, transparent 85%);
+}
+/* sobekan karcis: lubang setengah lingkaran di tepi strip warna */
+.kf-perf::after {
+  content: "";
+  position: absolute;
+  inset: 4px -3px 4px auto;
+  width: 6px;
+  background: radial-gradient(circle at 100% 50%, var(--paper) 2.5px, transparent 3px) 0 0 / 6px 9px repeat-y;
+}
+.karcis-stub::after {
+  content: "";
+  position: absolute;
+  inset: 6px -3px 6px auto;
+  width: 6px;
+  background: radial-gradient(circle, white 2.5px, transparent 3px) 0 0 / 6px 10px repeat-y;
+}
+.kf-pulse { animation: kf-pulse 1.1s ease-in-out infinite; }
+.signal-on { box-shadow: 0 0 8px currentColor; }
+@keyframes kf-pulse { 50% { opacity: 0.35; transform: scale(0.8); } }
+.publish-stamp { animation: kf-stamp 0.55s cubic-bezier(0.22, 1, 0.36, 1) both; }
+@keyframes kf-stamp { from { opacity: 0; transform: rotate(-14deg) scale(2.2); } 60% { opacity: 1; transform: rotate(-14deg) scale(0.92); } to { transform: rotate(-14deg) scale(1); } }
+.kf-ticket button[draggable="true"]:active { cursor: grabbing; }
+@media (prefers-reduced-motion: reduce) {
+  .kf-pulse, .publish-stamp { animation: none; }
+}
+
+/* ───────── Konsol Bidang (CMS /admin/bidang-keahlian) — konsol mixer gelap ───────── */
+.konsol {
+  --k-bg: #0b1222;
+  --k-panel: #111a2f;
+  --k-panel-2: #16213b;
+  --k-line: rgb(255 255 255 / 0.07);
+  --k-line-2: rgb(255 255 255 / 0.14);
+  --k-ink: #f3ece0;
+  --k-mute: rgb(243 236 224 / 0.62);
+  --k-faint: rgb(243 236 224 / 0.38);
+  --k-gold: #d9b23a;
+  --k-maroon: #a3253a;
+  --k-led-ok: #3ddc97;
+  --k-led-warn: #f5c542;
+  --k-led-bad: #ff5d6c;
+  background: var(--k-bg);
+  color: var(--k-ink);
+  background-image: radial-gradient(1200px 500px at 70% -10%, rgb(110 20 35 / 0.22), transparent 60%), radial-gradient(900px 400px at 0% 110%, rgb(201 162 39 / 0.08), transparent 60%);
+}
+.konsol ::selection { background: rgb(217 178 58 / 0.35); }
+.konsol .k-scroll { scrollbar-width: thin; scrollbar-color: rgb(255 255 255 / 0.16) transparent; }
+.konsol .spotlight-card::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; opacity: 0; transition: opacity .35s;
+  background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 0%), rgb(217 178 58 / 0.14), transparent 65%);
+}
+.konsol .spotlight-card:hover::before { opacity: 1; }
+.konsol .spotlight-card:hover { border-color: rgb(217 178 58 / 0.35); }
+.konsol .k-led { box-shadow: 0 0 0 2px rgb(0 0 0 / 0.35), 0 0 10px currentColor; background: currentColor; }
+.konsol .k-groove { background: repeating-linear-gradient(to bottom, rgb(255 255 255 / 0.10) 0 1px, transparent 1px 10%); }
+.konsol .k-signal path { stroke-dasharray: 6 10; animation: k-signal 1.6s linear infinite; }
+@keyframes k-signal { to { stroke-dashoffset: -32; } }
+.konsol input[type="range"].k-range { appearance: none; background: transparent; height: 18px; }
+.konsol input[type="range"].k-range::-webkit-slider-runnable-track { height: 4px; border-radius: 9px; background: rgb(255 255 255 / 0.12); }
+.konsol input[type="range"].k-range::-webkit-slider-thumb { appearance: none; margin-top: -6px; width: 16px; height: 16px; border-radius: 4px; background: var(--k-gold); border: 2px solid var(--k-bg); }
+.konsol input[type="range"].k-range::-moz-range-track { height: 4px; border-radius: 9px; background: rgb(255 255 255 / 0.12); }
+.konsol input[type="range"].k-range::-moz-range-thumb { width: 14px; height: 14px; border-radius: 4px; background: var(--k-gold); border: 2px solid var(--k-bg); }
+@media (prefers-reduced-motion: reduce) { .konsol .k-signal path { animation: none; } }

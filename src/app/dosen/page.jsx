@@ -1,8 +1,9 @@
-import prisma from "@/lib/prisma";
-import { CURTAIN_KEY, mergeDosen } from "@/lib/dosen-content";
+import { getDosenContent } from "@/lib/dosen-cms/server";
+import { CURTAIN_KEY } from "@/lib/dosen-content";
 import { SiteHeader, Topbar } from "@/components/home/site-header";
 import { SiteFooter } from "@/components/home/site-footer";
 import { AosReady } from "@/components/motion/aos-provider";
+import { PreviewBridge } from "@/components/home/preview-bridge";
 import { DosenProvider } from "@/components/dosen/dosen-provider";
 import { DosenHero } from "@/components/dosen/dosen-hero";
 import { Directory } from "@/components/dosen/directory";
@@ -13,41 +14,33 @@ import { PageCurtain } from "@/components/motion/page-curtain";
 
 export const revalidate = 300;
 
-export const metadata = {
-  title: "Dosen — Sistem Informasi UISI",
-  description:
-    "Profil dosen Program Studi Sistem Informasi UISI: bidang keahlian, jenjang pendidikan, sertifikasi, mata kuliah, dan topik riset.",
-};
-
-async function getData() {
-  try {
-    const rows = await prisma.pageContent.findMany({ where: { section: { in: ["profil-dosen", "dosen"] }, isActive: true } });
-    return mergeDosen(rows);
-  } catch {
-    return mergeDosen([]);
-  }
+export async function generateMetadata() {
+  const { seo } = await getDosenContent();
+  return { title: seo.title, description: seo.description };
 }
 
-/** Halaman Dosen — tema beranda "Kampus v3" (maroon + navy + gold di atas cream). */
+/** Halaman Dosen — seluruh isi dari Katalog Dosen (CMS); tema "Kampus v3". */
 export default async function DosenPage() {
-  const data = await getData();
+  const c = await getDosenContent();
+  const curtain = c.curtain.enabled && !c.preview;
   return (
     <div className="kampus" data-aos-wait>
-      <PageCurtain storageKey={CURTAIN_KEY} title="Dosen" accent="Sisfor" label="Memuat profil dosen" />
+      {curtain && <PageCurtain storageKey={CURTAIN_KEY} title={c.curtain.title} accent={c.curtain.accent} label={c.curtain.label} />}
       <Topbar />
       <SiteHeader />
-      <DosenProvider data={data}>
+      <DosenProvider data={c}>
         <HeadingStyle value="edge">
-        <main>
-          <DosenHero />
-          <Directory />
-          <ExpertiseMap />
-          <Closing />
-        </main>
+          <main>
+            <DosenHero />
+            <Directory />
+            {c.map.show && c.fields.length > 0 && <ExpertiseMap />}
+            {c.closing.show && <Closing />}
+          </main>
         </HeadingStyle>
       </DosenProvider>
       <SiteFooter />
       <AosReady />
+      {c.preview && <PreviewBridge source="katalog-dosen" exitHref="/api/dosen-cms/preview?off=1" />}
     </div>
   );
 }

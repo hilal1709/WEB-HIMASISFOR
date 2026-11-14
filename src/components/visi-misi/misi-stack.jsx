@@ -1,5 +1,5 @@
 "use client";
-import { useLayoutEffect as useEffect, useRef, useState } from "react";
+import { useLayoutEffect as useEffect, useMemo, useRef, useState } from "react";
 import { animate, svg } from "animejs";
 import { gsap, ScrollTrigger } from "@/lib/scroll";
 import { prefersReducedMotion } from "@/lib/motion";
@@ -16,7 +16,8 @@ const pad = (n) => String(n).padStart(2, "0");
  * lg: kolom kiri sticky (nomor aktif ber-roll + rail progress), kartu menumpuk; kartu di bawah
  * mengecil & meredup saat kartu baru mendarat (GSAP scrub). Ponsel / reduced-motion: daftar biasa.
  */
-export function MisiStack({ misi }) {
+export function MisiStack({ content: c }) {
+  const misi = useMemo(() => c.items.map((m, i) => ({ ...m, n: i + 1 })), [c.items]);
   const ref = useRef(null);
   const [active, setActive] = useState(0);
   const openMisi = useMisiModal();
@@ -47,15 +48,18 @@ export function MisiStack({ misi }) {
     return () => mm.revert();
   }, [misi.length]);
 
+
   return (
     <section id="misi" ref={ref} className="scroll-mt-24 bg-cream py-16 md:py-20">
       <Container>
         <div className="grid gap-10 lg:grid-cols-[340px_1fr] lg:gap-16">
           <aside className="lg:sticky lg:top-28 lg:self-start">
-            <SceneTitle title={["Lima misi,", "satu arah"]} />
-            <p data-aos="fade-up" className="mt-4 max-w-sm text-pretty text-[16px] leading-relaxed text-text/65">
-              Cara kami mewujudkan visi, dari ruang kelas sampai dunia kerja.
-            </p>
+            <SceneTitle title={[c.titleTop, c.titleAccent]} />
+            {c.intro && (
+              <p data-aos="fade-up" className="mt-4 max-w-sm text-pretty text-[16px] leading-relaxed text-text/65">
+                {c.intro}
+              </p>
+            )}
 
             <div className="mt-10 hidden items-end gap-5 lg:flex" aria-hidden>
               <div className="h-[4.5rem] overflow-hidden">
@@ -101,7 +105,7 @@ export function MisiStack({ misi }) {
             {misi.map((m, i) => (
               <li key={m.n} id={`misi-${m.n}`} data-card className="lg:sticky" style={{ top: `calc(7rem + ${i * 18}px)` }}>
                 <div data-aos="fade-up">
-                  <MisiCard item={m} onOpen={() => openMisi(i)} />
+                  <MisiCard item={m} moreLabel={c.moreLabel} onOpen={() => openMisi(i)} />
                 </div>
               </li>
             ))}
@@ -112,7 +116,7 @@ export function MisiStack({ misi }) {
   );
 }
 
-function MisiCard({ item, onOpen }) {
+function MisiCard({ item, moreLabel, onOpen }) {
   const art = useRef(null);
   const Illustration = ILLUSTRATIONS[item.illustration];
 
@@ -149,7 +153,7 @@ function MisiCard({ item, onOpen }) {
               className="group/btn inline-flex items-center gap-2 text-sm font-semibold text-maroon focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-maroon/40 rounded"
               aria-label={`Selengkapnya tentang misi ${item.n}: ${item.key}`}
             >
-              <span className="u-gold">Selengkapnya</span>
+              <span className="u-gold">{moreLabel}</span>
               <svg aria-hidden viewBox="0 0 16 16" className="size-4 transition-transform duration-500 ease-cinematic group-hover/btn:translate-x-1">
                 <path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
@@ -157,7 +161,7 @@ function MisiCard({ item, onOpen }) {
           </div>
         </div>
         <div ref={art} className="hidden items-center border-l border-line bg-cream/60 p-6 sm:flex">
-          {Illustration && <Illustration />}
+          {Illustration && <Illustration className="h-auto w-full" />}
         </div>
       </div>
     </article>

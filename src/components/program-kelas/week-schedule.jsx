@@ -1,7 +1,7 @@
 "use client";
 import { useLayoutEffect as useEffect, useRef, useState } from "react";
 import { animate, stagger } from "animejs";
-import { DAYS, HOURS } from "@/lib/program-kelas-content";
+import { fill } from "@/lib/program-kelas-cms/schema";
 import { countUp, prefersReducedMotion } from "@/lib/motion";
 import { Container, PlaceholderTag, SectionHeader } from "@/components/home/shared";
 import { cn } from "@/lib/utils";
@@ -10,12 +10,12 @@ import { useKelas } from "./kelas-provider";
 const ROW = 38; // px per jam
 const fmt = (h) => `${String(Math.floor(h)).padStart(2, "0")}.${h % 1 ? String(Math.round((h % 1) * 60)).padStart(2, "0") : "00"}`;
 
-const KIND = {
-  class: { box: "bg-maroon text-white", label: "Tatap muka" },
-  online: { box: "border border-dashed border-navy/40 bg-white text-navy", label: "Daring sinkron" },
-  industry: { box: "bg-gold/25 text-navy border-l-[3px] border-gold", label: "Blok industri" },
+const BOX = {
+  kampus: "bg-maroon text-white",
+  daring: "border border-dashed border-navy/40 bg-white text-navy",
+  industri: "bg-gold/25 text-navy border-l-[3px] border-gold",
 };
-const kindOf = (b) => (b.industry ? "industry" : b.online ? "online" : "class");
+const kindOf = (b) => (BOX[b.kind] ? b.kind : "kampus");
 
 /**
  * "Seminggu di kelas X": kalender mingguan (Sen–Min × jam) untuk kelas aktif.
@@ -24,7 +24,11 @@ const kindOf = (b) => (b.industry ? "industry" : b.online ? "online" : "class");
  * Ponsel: daftar per hari.
  */
 export function WeekSchedule() {
-  const { classes, active, setActive } = useKelas();
+  const { c, classes, active, setActive } = useKelas();
+  const t = c.schedule;
+  const DAYS = t.days;
+  const HOURS = { start: t.start, end: t.end };
+  const KIND = Object.fromEntries(Object.keys(BOX).map((k) => [k, { box: BOX[k], label: t.kinds[k] }]));
   const item = classes[active];
   const grid = useRef(null);
   const total = useRef(null);
@@ -36,7 +40,7 @@ export function WeekSchedule() {
     const d = new Date();
     const h = d.getHours() + d.getMinutes() / 60;
     if (h >= HOURS.start && h <= HOURS.end) setNow({ day: (d.getDay() + 6) % 7, h });
-  }, []);
+  }, [HOURS.start, HOURS.end]);
 
   useEffect(() => {
     countUp(total.current, totalHours, { duration: 900, format: (v) => String(v) });
@@ -55,26 +59,26 @@ export function WeekSchedule() {
   }, [active, totalHours]);
 
   return (
-    <section className="bg-cream-2/60 py-16 md:py-20">
+    <section id="jadwal" className="scroll-mt-24 bg-cream-2/60 py-16 md:py-20">
       <Container>
         <SectionHeader
-          title={["Seminggu di", item.name]}
-          body="Gambaran jadwal tatap muka dalam satu minggu perkuliahan. Ganti kelas untuk membandingkan ritmenya."
+          title={t.title.map((x) => fill(x, { kelas: item.name }))}
+          body={t.body}
           action={
             <div className="flex items-end gap-3">
               <p className="font-serif text-[2.75rem] leading-none text-maroon">
                 <span ref={total}>{totalHours}</span>
               </p>
-              <p className="pb-1 text-[13px] leading-tight text-text/55">jam kuliah<br />per minggu</p>
+              <p className="whitespace-pre-line pb-1 text-[13px] leading-tight text-text/55">{t.totalLabel}</p>
             </div>
           }
         />
 
         <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
-          <div className="flex flex-wrap gap-2" role="group" aria-label="Ganti kelas">
-            {classes.map((c, i) => (
+          <div className="flex flex-wrap gap-2" role="group" aria-label={t.switchLabel}>
+            {classes.map((k, i) => (
               <button
-                key={c.key}
+                key={k.key}
                 type="button"
                 onClick={() => setActive(i)}
                 aria-pressed={i === active}
@@ -83,7 +87,7 @@ export function WeekSchedule() {
                   i === active ? "border-navy bg-navy text-white" : "border-line bg-white text-navy/70 hover:border-navy/30 hover:text-navy"
                 )}
               >
-                {c.short}
+                {k.short}
               </button>
             ))}
           </div>
@@ -102,7 +106,7 @@ export function WeekSchedule() {
           <div className="grid grid-cols-[56px_repeat(7,1fr)] border-b border-line">
             <span />
             {DAYS.map((d, i) => (
-              <span key={d} className={cn("py-3 text-center text-[12px] font-semibold uppercase tracking-[0.14em]", i >= 5 ? "text-maroon" : "text-text/50", now?.day === i && "text-navy")}>
+              <span key={`${d}-${i}`} className={cn("py-3 text-center text-[12px] font-semibold uppercase tracking-[0.14em]", i >= 5 ? "text-maroon" : "text-text/50", now?.day === i && "text-navy")}>
                 {d}
                 {now?.day === i && <span aria-hidden className="mx-auto mt-1 block size-1 rounded-full bg-gold" />}
               </span>
@@ -123,7 +127,7 @@ export function WeekSchedule() {
             </div>
             <span />
             {DAYS.map((d, di) => (
-              <div key={d} className={cn("relative border-l border-line/70", di >= 5 && "bg-cream/50")}>
+              <div key={`${d}-${di}`} className={cn("relative border-l border-line/70", di >= 5 && "bg-cream/50")}>
                 {item.week
                   .filter((b) => b.day === di)
                   .map((b) => {
@@ -165,7 +169,7 @@ export function WeekSchedule() {
           {DAYS.map((d, di) => {
             const blocks = item.week.filter((b) => b.day === di);
             return (
-              <li key={d} className="grid grid-cols-[52px_1fr] gap-3 px-4 py-3 animate-in fade-in-0 slide-in-from-bottom-1 fill-mode-both" style={{ animationDelay: `${di * 40}ms` }}>
+              <li key={`${d}-${di}`} className="grid grid-cols-[52px_1fr] gap-3 px-4 py-3 animate-in fade-in-0 slide-in-from-bottom-1 fill-mode-both" style={{ animationDelay: `${di * 40}ms` }}>
                 <span className={cn("pt-1 text-[12px] font-semibold uppercase tracking-[0.14em]", di >= 5 ? "text-maroon" : "text-text/50")}>{d}</span>
                 {blocks.length ? (
                   <ul className="space-y-1.5">
@@ -177,13 +181,13 @@ export function WeekSchedule() {
                     ))}
                   </ul>
                 ) : (
-                  <span className="py-1 text-[13px] text-text/40">Libur kuliah</span>
+                  <span className="py-1 text-[13px] text-text/40">{t.emptyDay}</span>
                 )}
               </li>
             );
           })}
         </ol>
-        {item.sample && <PlaceholderTag className="mt-4" />}
+        {item.sample && <PlaceholderTag className="mt-4">{c.seo.sampleNote}</PlaceholderTag>}
       </Container>
     </section>
   );

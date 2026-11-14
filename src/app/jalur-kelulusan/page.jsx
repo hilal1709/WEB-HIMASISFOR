@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
 import { CURTAIN_KEY, mergeJalur } from "@/lib/jalur-kelulusan-content";
-import { mergeKurikulum } from "@/lib/kurikulum-content";
+import { getKurikulumData } from "@/lib/kurikulum-cms/server";
 import { SiteHeader, Topbar } from "@/components/home/site-header";
 import { SiteFooter } from "@/components/home/site-footer";
 import { AosReady } from "@/components/motion/aos-provider";
@@ -25,9 +25,9 @@ async function getData() {
   try {
     const rows = await prisma.pageContent.findMany({ where: { section: { in: ["jalur-kelulusan", "curriculum"] }, isActive: true } });
     const row = (s) => rows.find((r) => r.section === s) ?? null;
-    return mergeJalur(row("jalur-kelulusan"), { kurikulum: mergeKurikulum(row("curriculum")) });
+    return mergeJalur(row("jalur-kelulusan"), { kurikulum: await getKurikulumData() });
   } catch {
-    return mergeJalur(null, { kurikulum: mergeKurikulum(null) });
+    return mergeJalur(null, { kurikulum: await getKurikulumData() });
   }
 }
 

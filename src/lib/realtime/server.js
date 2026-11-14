@@ -4,7 +4,7 @@ import Pusher from "pusher";
 /**
  * Pusher sisi server. Kanal:
  *   site            — publik; event `refresh` { paths } → halaman terbuka memuat ulang data.
- *   private-admin   — admin; event `layanan:new`, `home:draft`, `home:published`.
+ *   private-admin   — admin; event `layanan:new`, `home:*`, `sambutan:*`, `visimisi:draft|published`.
  *   presence-studio — siapa yang sedang membuka Studio Beranda.
  * Tanpa kredensial (mis. dev lokal tanpa .env) semua siaran menjadi no-op.
  */

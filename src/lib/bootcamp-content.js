@@ -3,7 +3,7 @@
  * Dua mode dalam satu halaman:
  *   - Bootcamp : kohort intensif berjadwal (mulai bersama, ada mentor, proyek akhir)
  *   - Course   : kursus mandiri, mulai kapan saja, ritme sendiri
- * Mentor dosen diturunkan dari `mergeDosen` (per rumpun) — tidak ditulis ulang. Perkiraan SKS kohort dihitung dengan
+ * Mentor dosen diturunkan dari `getDosenData` (per rumpun) — tidak ditulis ulang. Perkiraan SKS kohort dihitung dengan
  * `creditsFor` dari konversi SKS; aturan konversinya tidak dijelaskan ulang, hanya ditautkan ke `/konversi-sks`.
  *
  * CMS `PageContent` section `bootcamp` (Admin › Konten › Bootcamp & Course, `BootcampEditor`):
@@ -243,7 +243,7 @@ export function untilStart(start, now) {
 /**
  * Gabungkan CMS ke fallback.
  * @param row    PageContent `bootcamp` (boleh null)
- * @param dosen  hasil mergeDosen — mentor dosen per rumpun
+ * @param dosen  hasil getDosenData — mentor dosen per rumpun
  */
 export function mergeBootcamp(row, { dosen } = {}) {
   const raw = parse(row?.data) ?? {};

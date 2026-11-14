@@ -8,7 +8,8 @@ import { Container, PlaceholderTag } from "@/components/home/shared";
  * Pita navy berisi angka sorotan lulusan. Saat terlihat: angka berhitung naik (anime.js),
  * garis emas di atas tiap angka memanjang bergantian.
  */
-export function StatsBand({ stats }) {
+export function StatsBand({ content: c, note }) {
+  const stats = c.items;
   const ref = useRef(null);
 
   useEffect(() => {
@@ -45,14 +46,14 @@ export function StatsBand({ stats }) {
       io.disconnect();
       anims.forEach((a) => a.pause?.());
     };
-  }, []);
+  }, [JSON.stringify(stats)]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <section ref={ref} aria-label="Angka lulusan" className="border-y border-gold/30 bg-cream-2 py-12 md:py-14">
+    <section id="pl-stats" ref={ref} aria-label={c.label} className="border-y border-gold/30 bg-cream-2 py-12 md:py-14">
       <Container>
         <dl className="grid grid-cols-2 gap-x-6 gap-y-10 lg:grid-cols-4">
-          {stats.map((s) => (
-            <div key={s.label} className="group flex flex-col">
+          {stats.map((s, i) => (
+            <div key={`${s.label}-${i}`} className="group flex flex-col">
               <span data-bar aria-hidden className="block h-[3px] w-10 origin-left bg-gold transition-[width] duration-500 ease-cinematic group-hover:w-16" />
               <dt className="order-last mt-2 text-sm text-text/60">{s.label}</dt>
               <dd className="mt-4 font-serif text-[clamp(2.4rem,4.4vw,3.5rem)] leading-none tabular-nums text-maroon">
@@ -62,7 +63,7 @@ export function StatsBand({ stats }) {
             </div>
           ))}
         </dl>
-        <PlaceholderTag className="mt-8" />
+        {c.sample && <PlaceholderTag className="mt-8">{note}</PlaceholderTag>}
       </Container>
     </section>
   );

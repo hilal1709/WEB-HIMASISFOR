@@ -3,7 +3,7 @@ import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Modal, ModalContent, ModalDescription, ModalTitle } from "@/components/ui/modal";
 import { LottieIllustration } from "@/components/media/lottie-illustration";
-import { LEVELS } from "@/lib/prestasi-content";
+import { fill } from "@/lib/prestasi-cms/schema";
 import { cn } from "@/lib/utils";
 import { LevelBadge } from "./prestasi-provider";
 
@@ -11,7 +11,7 @@ import { LevelBadge } from "./prestasi-provider";
  * Modal peraih prestasi: panel navy (foto, nama, ringkasan per tingkat, medali Lottie) +
  * linimasa semua prestasi orang tersebut. ‹ › dan panah keyboard berpindah peraih.
  */
-export function AchieverModal({ achievers, slug, onSlug, onClose }) {
+export function AchieverModal({ achievers, levels, categories, copy, slug, onSlug, onClose }) {
   const index = achievers.findIndex((a) => a.slug === slug);
   const item = achievers[index];
   const go = (d) => onSlug(achievers[(index + d + achievers.length) % achievers.length].slug);
@@ -36,13 +36,13 @@ export function AchieverModal({ achievers, slug, onSlug, onClose }) {
                 ) : (
                   <span className="grid size-full place-items-center font-serif text-5xl text-gold-soft">{item.initials}</span>
                 )}
-                <span className="kicker absolute left-2 top-2 rounded bg-navy/85 px-2 py-1 text-[10px] text-gold-soft">{item.category === "dosen" ? "Dosen" : "Mahasiswa"}</span>
+                <span className="kicker absolute left-2 top-2 rounded bg-navy/85 px-2 py-1 text-[10px] text-gold-soft">{categories.find((c) => c.key === item.category)?.label}</span>
               </div>
               <span aria-hidden className="mx-auto mt-5 block h-[3px] w-10 bg-gold md:mx-0" />
               <p className="mt-3 text-center text-[13px] leading-relaxed text-white/65 md:text-left">{item.name}</p>
 
               <dl className="relative mt-5 grid grid-cols-3 gap-2 border-t border-white/10 pt-4">
-                {LEVELS.map((l) => (
+                {levels.map((l) => (
                   <div key={l.key}>
                     <dd className="tabular font-serif text-[1.6rem] leading-none text-gold">{item.items.filter((i) => i.level === l.key).length}</dd>
                     <dt className="mt-1 text-[11px] text-white/55">{l.label}</dt>
@@ -50,17 +50,18 @@ export function AchieverModal({ achievers, slug, onSlug, onClose }) {
                 ))}
               </dl>
               <div className="pointer-events-none absolute -bottom-3 -right-3 hidden w-24 opacity-90 md:block">
-                <LottieIllustration src="/lottie/medal-dark.json" loop={false} />
+                {copy.lottie && <LottieIllustration src={copy.lottie} loop={false} />}
               </div>
             </div>
 
             {/* linimasa */}
             <div className="flex max-h-[72vh] flex-col overflow-y-auto p-6 sm:p-8">
               <p className="kicker text-maroon">
-                {item.items.length} prestasi{Number.isFinite(item.since) ? ` · sejak ${item.since}` : ""}
+                {fill(copy.countLabel, { n: item.items.length })}
+                {Number.isFinite(item.since) && copy.sinceLabel ? ` · ${fill(copy.sinceLabel, { year: item.since })}` : ""}
               </p>
               <ModalTitle className="mt-3 text-[1.7rem] leading-snug">{item.short}</ModalTitle>
-              <ModalDescription className="mt-1 text-[14px]">Prestasi dan rekognisi yang tercatat di Program Studi Sistem Informasi UISI.</ModalDescription>
+              <ModalDescription className="mt-1 text-[14px]">{copy.description}</ModalDescription>
 
               <ol className="relative mt-6 space-y-5 border-l border-line pl-6">
                 {item.items.map((a, i) => (
@@ -85,8 +86,8 @@ export function AchieverModal({ achievers, slug, onSlug, onClose }) {
             {index + 1} / {achievers.length}
           </span>
           <div className="flex items-center gap-2">
-            <NavBtn label="Peraih sebelumnya" onClick={() => go(-1)} icon={ChevronLeft} />
-            <NavBtn label="Peraih berikutnya" onClick={() => go(1)} icon={ChevronRight} />
+            <NavBtn label={copy.prevLabel} onClick={() => go(-1)} icon={ChevronLeft} />
+            <NavBtn label={copy.nextLabel} onClick={() => go(1)} icon={ChevronRight} />
           </div>
         </div>
       </ModalContent>

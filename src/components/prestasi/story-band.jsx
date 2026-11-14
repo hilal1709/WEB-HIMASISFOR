@@ -3,7 +3,7 @@ import { useLayoutEffect as useEffect, useRef } from "react";
 import Image from "next/image";
 import { gsap } from "@/lib/scroll";
 import { prefersReducedMotion } from "@/lib/motion";
-import { Container, PlaceholderTag } from "@/components/home/shared";
+import { Container } from "@/components/home/shared";
 import { VideoCard } from "@/components/home/video-player";
 import { LottieIllustration } from "@/components/media/lottie-illustration";
 import { ElvoPeek } from "@/components/home/elvo-peek";
@@ -16,7 +16,8 @@ import { usePrestasi } from "./prestasi-provider";
 export function StoryBand() {
   const { story } = usePrestasi();
   const ref = useRef(null);
-  const words = story.quote.split(/\s+/);
+  const words = story.quote.split(/\s+/).filter(Boolean);
+  const accent = story.accentWords ?? 0;
   const people = story.people;
 
   useEffect(() => {
@@ -39,7 +40,7 @@ export function StoryBand() {
           <blockquote data-quote className="mt-6 font-serif text-[clamp(1.5rem,2.8vw,2.25rem)] leading-[1.22]">
             <span aria-hidden className="mr-1 text-gold">“</span>
             {words.map((w, i) => (
-              <span key={i} data-word className={i >= words.length - 4 ? "italic text-gold-soft" : undefined}>
+              <span key={i} data-word className={accent && i >= words.length - accent ? "italic text-gold-soft" : undefined}>
                 {w}{" "}
               </span>
             ))}
@@ -47,7 +48,7 @@ export function StoryBand() {
           </blockquote>
 
           <div className="mt-8 flex items-center gap-5">
-            <LottieIllustration src="/lottie/trophy-dark.json" className="hidden w-16 shrink-0 sm:block" label="Ilustrasi piala" />
+            {story.lottie && <LottieIllustration src={story.lottie} className="hidden w-16 shrink-0 sm:block" label="Ilustrasi piala" />}
             <ul className={people.length > 1 ? "grid flex-1 gap-4 sm:grid-cols-2" : "flex-1"}>
               {people.map((p, i) => (
                 <li key={p.name + i} data-aos="fade-up" data-aos-delay={i * 90} className="group flex items-center gap-3">
@@ -66,13 +67,14 @@ export function StoryBand() {
               ))}
             </ul>
           </div>
-          {story.sample && <PlaceholderTag tone="dark" className="mt-5" />}
         </div>
         <div data-aos="fade-up" className="relative">
-          <VideoCard video={story.video} label={story.kicker} />
-          <div className="absolute -top-14 right-8 hidden lg:block">
-            <div className="relative"><ElvoPeek pose="laugh" size={84} say="Kakak tingkat keren banget!" tone="dark" delay={0.4} /></div>
-          </div>
+          {story.video?.src && <VideoCard video={story.video} label={story.kicker} />}
+          {story.mascot?.show && (
+            <div className="absolute -top-14 right-8 hidden lg:block">
+              <div className="relative"><ElvoPeek pose={story.mascot.pose} size={84} say={story.mascot.say} tone="dark" delay={0.4} /></div>
+            </div>
+          )}
         </div>
       </Container>
     </section>

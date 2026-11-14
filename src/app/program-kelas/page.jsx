@@ -1,10 +1,12 @@
-import prisma from "@/lib/prisma";
-import { CURTAIN_KEY, mergeProgramKelas } from "@/lib/program-kelas-content";
+import { getProgramKelasContent } from "@/lib/program-kelas-cms/server";
+import { CURTAIN_KEY } from "@/lib/program-kelas-content";
 import { SiteHeader, Topbar } from "@/components/home/site-header";
 import { SiteFooter } from "@/components/home/site-footer";
 import { AosReady } from "@/components/motion/aos-provider";
+import { PreviewBridge } from "@/components/home/preview-bridge";
 import { KelasProvider } from "@/components/program-kelas/kelas-provider";
 import { KelasHero } from "@/components/program-kelas/kelas-hero";
+import { PmbBanner } from "@/components/program-kelas/pmb-banner";
 import { ClassSwitcher } from "@/components/program-kelas/class-switcher";
 import { WeekSchedule } from "@/components/program-kelas/week-schedule";
 import { CompareTable } from "@/components/program-kelas/compare-table";
@@ -15,43 +17,37 @@ import { PageCurtain } from "@/components/motion/page-curtain";
 
 export const revalidate = 300;
 
-export const metadata = {
-  title: "Program Kelas — Sistem Informasi UISI",
-  description:
-    "Pilihan program kelas Sistem Informasi UISI: Kelas Reguler, Kelas Karyawan, dan Kelas Kemitraan Industri, lengkap dengan jadwal, biaya, dan perbandingannya.",
-};
-
-async function getData() {
-  try {
-    const rows = await prisma.pageContent.findMany({ where: { section: "program-kelas", isActive: true } });
-    return mergeProgramKelas(rows);
-  } catch {
-    return mergeProgramKelas([]);
-  }
+export async function generateMetadata() {
+  const { seo } = await getProgramKelasContent();
+  return { title: seo.title, description: seo.description };
 }
 
-/** Program Kelas — tema beranda "Kampus v3" (maroon + navy + gold di atas cream). */
+/** Program Kelas — seluruh isi dari Papan Jadwal (CMS); tema "Kampus v3". */
 export default async function ProgramKelasPage() {
-  const data = await getData();
+  const c = await getProgramKelasContent();
+  const curtain = c.curtain.enabled && !c.preview;
+  const hasClasses = c.classes.items.length > 0;
   return (
     <div className="kampus" data-aos-wait>
-      <PageCurtain storageKey={CURTAIN_KEY} title="Program" accent="Kelas" label="Memuat program kelas" />
+      {curtain && <PageCurtain storageKey={CURTAIN_KEY} title={c.curtain.title} accent={c.curtain.accent} label={c.curtain.label} />}
       <Topbar />
       <SiteHeader />
-      <KelasProvider data={data}>
+      <KelasProvider data={c}>
         <HeadingStyle value="split">
-        <main>
-          <KelasHero />
-          <ClassSwitcher />
-          <WeekSchedule />
-          <CompareTable />
-          <Faq />
-          <Closing />
-        </main>
+          <main>
+            <KelasHero />
+            {c.banner.show && (c.banner.title || c.banner.body) && <PmbBanner content={c.banner} />}
+            {hasClasses && <ClassSwitcher />}
+            {hasClasses && <WeekSchedule />}
+            {hasClasses && c.compare.rows.length > 0 && <CompareTable />}
+            {c.faq.items.length > 0 && <Faq />}
+            <Closing />
+          </main>
         </HeadingStyle>
       </KelasProvider>
       <SiteFooter />
       <AosReady />
+      {c.preview && <PreviewBridge source="papan-jadwal" exitHref="/api/program-kelas-cms/preview?off=1" />}
     </div>
   );
 }

@@ -18,6 +18,7 @@ import { SiteFooter } from "@/components/home/site-footer";
 import { AosReady } from "@/components/motion/aos-provider";
 import { PreviewBridge } from "@/components/home/preview-bridge";
 import { getHomeContent } from "@/lib/home-cms/server";
+import { getBidangCards } from "@/lib/bidang-cms/server";
 
 // Dinamis: isi diambil dari Studio Beranda setiap permintaan; perubahan terbit disiarkan via Pusher.
 export const dynamic = "force-dynamic";
@@ -64,7 +65,7 @@ const SCENES = {
   quicklinks: (c) => <QuickLinks content={c.quicklinks} />,
   about: (c, d) => <AboutScene content={c.about} total={d.achievements?.total} />,
   accreditation: (c) => <AccreditationBand content={c.accreditation} />,
-  expertise: (c) => <ExpertiseScene content={c.expertise} />,
+  expertise: (c, d) => <ExpertiseScene content={c.expertise} items={d.bidang} />,
   achievements: (c, d) => <AchievementScene content={c.achievements} data={d.achievements} />,
   news: (c, d) => <NewsScene content={c.news} data={d.warta} />,
   alumni: (c) => <AlumniScene content={c.alumni} />,
@@ -74,8 +75,8 @@ const SCENES = {
 
 /** Beranda — seluruh isi, urutan, dan visibilitas section dikelola di Studio Beranda (/admin/home). */
 export default async function Home() {
-  const [achievements, warta, c] = await Promise.all([getAchievements(), getWarta(), getHomeContent()]);
-  const data = { achievements, warta };
+  const [achievements, warta, c, bidang] = await Promise.all([getAchievements(), getWarta(), getHomeContent(), getBidangCards().catch(() => [])]);
+  const data = { achievements, warta, bidang };
   return (
     <div className="kampus" data-aos-wait>
       {/* pratinjau Studio: intro dimatikan, tetapi tetap memberi sinyal "siap" agar animasi hero berjalan */}

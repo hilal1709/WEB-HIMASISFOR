@@ -1,8 +1,9 @@
-import prisma from "@/lib/prisma";
-import { CURTAIN_KEY, mergeStruktur } from "@/lib/struktur-content";
+import { getStrukturContent } from "@/lib/struktur-cms/server";
+import { CURTAIN_KEY } from "@/lib/struktur-content";
 import { SiteHeader, Topbar } from "@/components/home/site-header";
 import { SiteFooter } from "@/components/home/site-footer";
 import { AosReady } from "@/components/motion/aos-provider";
+import { PreviewBridge } from "@/components/home/preview-bridge";
 import { StrukturHero } from "@/components/struktur/struktur-hero";
 import { PersonModalProvider } from "@/components/struktur/person-modal";
 import { OrgChart } from "@/components/struktur/org-chart";
@@ -13,41 +14,33 @@ import { PageCurtain } from "@/components/motion/page-curtain";
 
 export const revalidate = 300;
 
-export const metadata = {
-  title: "Struktur Organisasi — Sistem Informasi UISI",
-  description:
-    "Pimpinan, dosen, dan minilab Program Studi Sistem Informasi Universitas Internasional Semen Indonesia.",
-};
-
-async function getData() {
-  try {
-    const row = await prisma.pageContent.findFirst({ where: { section: "struktur-organisasi", isActive: true } });
-    return mergeStruktur(row);
-  } catch {
-    return mergeStruktur(null);
-  }
+export async function generateMetadata() {
+  const { seo } = await getStrukturContent();
+  return { title: seo.title, description: seo.description };
 }
 
-/** Struktur Organisasi — tema beranda "Kampus v3" (maroon + navy + gold di atas cream). */
+/** Struktur Organisasi — seluruh isi dari Studio Bagan (CMS); tema "Kampus v3". */
 export default async function StrukturOrganisasiPage() {
-  const data = await getData();
+  const c = await getStrukturContent();
+  const curtain = c.curtain.enabled && !c.preview;
   return (
     <div className="kampus" data-aos-wait>
-      <PageCurtain storageKey={CURTAIN_KEY} title="Struktur" accent="Organisasi" label="Memuat struktur organisasi" />
+      {curtain && <PageCurtain storageKey={CURTAIN_KEY} kicker={c.curtain.kicker} title={c.curtain.title} accent={c.curtain.accent} label={c.curtain.label} />}
       <Topbar />
       <SiteHeader />
-      <PersonModalProvider people={data.people}>
+      <PersonModalProvider people={c.people} labels={c.modal}>
         <HeadingStyle value="rule">
-        <main>
-          <StrukturHero intro={data.intro} people={data.people} />
-          <OrgChart people={data.people} confirmed={data.confirmed} />
-          <Minilab minilab={data.minilab} people={data.people} />
-          <Closing />
-        </main>
+          <main>
+            {c.people.length > 0 && <StrukturHero content={c.hero} people={c.people} curtain={curtain} />}
+            {c.people.length > 0 && <OrgChart content={c.chart} people={c.people} />}
+            <Minilab content={c.minilab} people={c.people} />
+            <Closing content={c.closing} />
+          </main>
         </HeadingStyle>
       </PersonModalProvider>
       <SiteFooter />
       <AosReady />
+      {c.preview && <PreviewBridge source="studio-bagan" exitHref="/api/struktur-cms/preview?off=1" />}
     </div>
   );
 }

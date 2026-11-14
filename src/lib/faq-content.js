@@ -68,7 +68,7 @@ export const CARDS = [
 
   // Kampus & Prodi
   { slug: "lokasi-kuliah", drawer: "kampus", personas: ["camaba", "ortu", "mitra"], q: "Di mana perkuliahan berlangsung?", a: "Di kampus UISI, kompleks PT Semen Indonesia, Gresik. Rute dan peta ada di halaman Kontak.", source: { href: "/kontak#lokasi", label: "Kontak" } },
-  { slug: "pengelola-prodi", drawer: "kampus", personas: ["mahasiswa", "ortu", "mitra"], q: "Siapa saja pengelola prodi?", a: "Kaprodi, sekretaris, dan koordinator tiap bidang tercantum di bagan struktur organisasi.", source: { href: "/struktur-organisasi", label: "Struktur Organisasi" } },
+  { slug: "pengelola-prodi", drawer: "kampus", personas: ["mahasiswa", "ortu", "mitra"], q: "Siapa saja pengelola prodi?", a: "Ketua program studi, para dosen, dan staf prodi beserta garis koordinasinya tercantum di bagan struktur organisasi.", source: { href: "/struktur-organisasi", label: "Struktur Organisasi" } },
   { slug: "kabar-prodi", drawer: "kampus", personas: ["camaba", "mahasiswa", "ortu"], q: "Di mana mengikuti agenda terbaru prodi?", a: "Pengumuman resmi dan liputan kegiatan dimuat di Warta. Kabar harian lebih dulu muncul di media sosial prodi.", source: { href: "/berita", label: "Warta" } },
 ].map((c) => ({ ...c, sample: true }));
 

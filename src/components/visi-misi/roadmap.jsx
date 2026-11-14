@@ -3,18 +3,18 @@ import { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { A11y, Keyboard, Mousewheel } from "swiper/modules";
 import "swiper/css";
-import { Container, PlaceholderTag, SectionHeader } from "@/components/home/shared";
+import { Container, SectionHeader } from "@/components/home/shared";
 import { cn } from "@/lib/utils";
 
 /**
  * Menuju 2030 — timeline horizontal (Swiper). Garis "beam" emas terisi mengikuti progres slide
  * (pola 21st.dev "Timeline with scroll beam"); 2030 sebagai slide tujuan (navy).
  */
-export function Roadmap({ milestones }) {
+export function Roadmap({ content: c }) {
+  const milestones = c.items;
   const [swiper, setSwiper] = useState(null);
   const [progress, setProgress] = useState(0);
   const [edge, setEdge] = useState({ start: true, end: false });
-  const hasSample = milestones.some((m) => m.sample);
 
   const sync = (s) => {
     setProgress(Math.max(0, Math.min(1, s.progress)));
@@ -22,19 +22,18 @@ export function Roadmap({ milestones }) {
   };
 
   return (
-    <section className="overflow-hidden bg-white py-16 md:py-20">
+    <section id="vm-roadmap" className="scroll-mt-24 overflow-hidden bg-white py-16 md:py-20">
       <Container>
         <SectionHeader
-          title={["Perjalanan", "menuju 2030"]}
-          body="Tonggak yang sudah kami lewati dan yang sedang kami kejar."
+          title={[c.titleTop, c.titleAccent]}
+          body={c.body || undefined}
           action={
             <div className="flex gap-2">
-              <Arrow label="Sebelumnya" disabled={edge.start} onClick={() => swiper?.slidePrev()} flip />
-              <Arrow label="Berikutnya" disabled={edge.end} onClick={() => swiper?.slideNext()} />
+              <Arrow label={c.prevLabel} disabled={edge.start} onClick={() => swiper?.slidePrev()} flip />
+              <Arrow label={c.nextLabel} disabled={edge.end} onClick={() => swiper?.slideNext()} />
             </div>
           }
         />
-        {hasSample && <PlaceholderTag className="mt-5" />}
 
         <div className="relative mt-10 min-w-0 md:mt-14">
           {/* beam */}
@@ -57,8 +56,8 @@ export function Roadmap({ milestones }) {
             className="!overflow-visible"
           >
             {milestones.map((m, i) => (
-              <SwiperSlide key={m.year} className="!h-auto">
-                <Milestone item={m} index={i} />
+              <SwiperSlide key={`${m.year}-${i}`} className="!h-auto">
+                <Milestone item={m} index={i} sampleLabel={c.sampleLabel} />
               </SwiperSlide>
             ))}
           </Swiper>
@@ -68,7 +67,7 @@ export function Roadmap({ milestones }) {
   );
 }
 
-function Milestone({ item, index }) {
+function Milestone({ item, index, sampleLabel }) {
   return (
     <div data-aos="fade-up" data-aos-delay={index * 70} className="group flex h-full flex-col">
       <span
@@ -89,7 +88,7 @@ function Milestone({ item, index }) {
         <p className={cn("font-serif text-[2.5rem] leading-none tabular-nums", item.goal ? "text-gold-soft" : "text-navy")}>{item.year}</p>
         <h3 className={cn("mt-4 text-[17px] font-semibold", item.goal ? "text-white" : "text-navy")}>{item.title}</h3>
         <p className={cn("mt-2 text-[14.5px] leading-relaxed", item.goal ? "text-white/70" : "text-text/65")}>{item.body}</p>
-        {item.sample && <span className="mt-auto pt-4 text-[11px] text-text/40">Contoh</span>}
+        {item.sample && sampleLabel && <span className={cn("mt-auto pt-4 text-[11px]", item.goal ? "text-white/45" : "text-text/40")}>{sampleLabel}</span>}
       </article>
     </div>
   );

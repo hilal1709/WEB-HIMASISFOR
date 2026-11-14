@@ -3,36 +3,39 @@ import { ArrowLink, Container, SceneTitle } from "@/components/home/shared";
 import { ElvoPeek } from "@/components/home/elvo-peek";
 import { LordIcon } from "@/components/media/lord-icon";
 
-const NEXT = [
-  { href: "/sambutan-kaprodi", kicker: "Profil", title: "Sambutan Kaprodi", body: "Kenali pimpinan prodi lewat pesannya." },
-  { href: "/visi-misi", kicker: "Profil", title: "Visi & Misi", body: "Arah yang dijalankan oleh tim ini." },
-  { href: "/profil-lulusan", kicker: "Profil", title: "Profil Lulusan", body: "Kompetensi dan peran lulusan." },
-];
 
 /** Penutup "indeks bernomor": kiri judul + kartu layanan akademik, kanan daftar tautan 01/02/03. */
-export function Closing() {
+export function Closing({ content: c }) {
+  const svc = c.service;
+  if (!c.next.length && !svc.show) return null;
   return (
-    <section className="relative bg-cream-2/60 py-16 md:py-20">
+    <section id="struktur-closing" className="relative bg-cream-2/60 py-16 md:py-20">
       <Container>
         <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
           <div className="relative">
-            <SceneTitle title={["Jelajahi", "lebih jauh"]} />
-            <div data-aos="fade-up" className="mt-8 rounded-lg border-l-4 border-gold bg-maroon p-6 text-white">
-              <p className="font-serif text-xl">Butuh layanan akademik?</p>
-              <p className="mt-2 text-sm leading-relaxed text-white/70">Persuratan dan approval kaprodi diurus lewat layanan akademik program studi.</p>
-              <ArrowLink href="/layanan-akademik" tone="dark" className="group mt-5 items-center gap-2">
-                <LordIcon name="chat" size={20} trigger="hover" target=".group" colors="primary:#ffffff,secondary:#e6d3a1" />
-                Layanan akademik
-              </ArrowLink>
-            </div>
-            <div className="absolute -bottom-6 right-0 hidden xl:block">
-              <div className="relative"><ElvoPeek pose="wave" size={80} say="Kenalan juga dengan visi dan lulusan kita!" delay={0.2} /></div>
-            </div>
+            <SceneTitle title={[c.titleTop, c.titleAccent]} />
+            {svc.show && (
+              <div data-aos="fade-up" className="mt-8 rounded-lg border-l-4 border-gold bg-maroon p-6 text-white">
+                <p className="font-serif text-xl">{svc.title}</p>
+                {svc.body && <p className="mt-2 text-sm leading-relaxed text-white/70">{svc.body}</p>}
+                {svc.href && svc.label && (
+                  <ArrowLink href={svc.href} tone="dark" className="group mt-5 items-center gap-2">
+                    <LordIcon name="chat" size={20} trigger="hover" target=".group" colors="primary:#ffffff,secondary:#e6d3a1" />
+                    {svc.label}
+                  </ArrowLink>
+                )}
+              </div>
+            )}
+            {c.mascot.show && c.mascot.say && (
+              <div className="absolute -bottom-6 right-0 hidden xl:block">
+                <div className="relative"><ElvoPeek pose={c.mascot.pose} size={80} say={c.mascot.say} delay={0.2} /></div>
+              </div>
+            )}
           </div>
 
           <ol className="border-t border-navy/15">
-            {NEXT.map((n, i) => (
-              <li key={n.href} data-aos="fade-up" data-aos-delay={i * 80} className="border-b border-navy/15">
+            {c.next.map((n, i) => (
+              <li key={n.href + i} data-aos="fade-up" data-aos-delay={i * 80} className="border-b border-navy/15">
                 <a href={n.href} className="group flex items-center gap-5 py-6 md:gap-8 md:py-8">
                   <span className="font-serif text-[clamp(2rem,4vw,3.25rem)] leading-none tabular-nums text-gold transition-colors duration-500 group-hover:text-maroon">
                     {String(i + 1).padStart(2, "0")}

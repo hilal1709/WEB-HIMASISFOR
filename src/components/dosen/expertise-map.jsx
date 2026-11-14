@@ -11,11 +11,11 @@ import { useDosen } from "./dosen-provider";
  * saat hover), deskripsi, avatar dosen terkait (avatar klik → profil). Klik rumpun → filter direktori + gulir.
  */
 export function ExpertiseMap() {
-  const { fields, lecturers, field, setField, openProfile } = useDosen();
+  const { fields, lecturers, field, setField, openProfile, map } = useDosen();
   return (
     <section className="bg-cream-2/60 py-16 md:py-20">
       <Container>
-        <SectionHeader title={["Empat rumpun,", "satu ekosistem"]} body="Keahlian dosen saling melengkapi: dari tata kelola hingga data, semuanya bermuara pada sistem enterprise di industri." />
+        <SectionHeader title={[map.titleTop, map.titleAccent]} body={map.body} />
         <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:mt-12 lg:grid-cols-4">
           {fields.map((f, i) => {
             const people = lecturers.filter((l) => l.fields.includes(f.key));
@@ -61,7 +61,7 @@ export function ExpertiseMap() {
                       }}
                       className="group/btn inline-flex items-center gap-1.5 text-[13px] font-semibold text-maroon"
                     >
-                      <span className="u-gold">{people.length} dosen</span>
+                      <span className="u-gold">{people.length} {map.ctaLabel}</span>
                       <svg aria-hidden viewBox="0 0 16 16" className="size-3.5 transition-transform duration-300 group-hover/btn:translate-x-0.5">
                         <path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>

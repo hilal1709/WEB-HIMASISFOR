@@ -6,7 +6,7 @@ import { TextRoll } from "@/components/motion/text-roll";
 /** Pintasan ke modul CMS. Ikon Lordicon hanya di sini (tombol), tidak sebagai dekorasi. */
 export const DESK_LINKS = [
   { href: "/admin/content", icon: "document", title: "Konten Web Utama", note: "Hero, tentang, dan mitra di beranda" },
-  { href: "/admin/curriculum", icon: "book", title: "Kurikulum & RPS", note: "Semester, mata kuliah, dan lembar RPS" },
+  { href: "/admin/kurikulum", icon: "book", title: "Kurikulum & RPS", note: "Semester, mata kuliah, dan lembar RPS" },
   { href: "/admin/achievements", icon: "target", title: "Prestasi & Galeri", note: "Peraih prestasi dan foto kegiatan" },
   { href: "/admin/media", icon: "plus-circle", title: "Upload Media", note: "Gambar dan berkas untuk seluruh halaman" },
 ];

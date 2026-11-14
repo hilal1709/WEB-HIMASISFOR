@@ -4,8 +4,8 @@ import { BANNER_KEY } from "@/lib/bidang-keahlian-content";
 import { Banner } from "@/components/ui/banner";
 import { PillLink } from "@/components/home/shared";
 
-/** Catatan kapan bidang dipilih (brand), tampil di rak pilihan saat memutuskan. Ditutup → tidak muncul lagi selama sesi. */
-export function BidangBanner({ className }) {
+/** Catatan di rak pilihan (isi & varian dari Konsol). Ditutup → tidak muncul lagi selama sesi. */
+export function BidangBanner({ banner, className }) {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
@@ -16,7 +16,7 @@ export function BidangBanner({ className }) {
     setShow(!hidden);
   }, []);
 
-  if (!show) return null;
+  if (!show || !banner?.show) return null;
   return (
     <div className={className}>
       <div
@@ -29,16 +29,18 @@ export function BidangBanner({ className }) {
         }}
       >
         <Banner
-          variant="brand"
+          variant={banner.variant}
           dismissible
-          title="Fokus bidang dikunci di semester 7"
+          title={banner.title}
           action={
-            <PillLink href="/curiculum#pilihan" variant="gold" size="sm" className="hidden sm:inline-flex">
-              Slot pilihan
-            </PillLink>
+            banner.linkLabel && banner.href ? (
+              <PillLink href={banner.href} variant="gold" size="sm" className="hidden sm:inline-flex">
+                {banner.linkLabel}
+              </PillLink>
+            ) : null
           }
         >
-          Enam semester pertama membekali dasar keempat bidang. Mata kuliah pilihan di semester 7 dan 8 yang menentukan ke mana kamu mendalam.
+          {banner.body}
         </Banner>
       </div>
     </div>

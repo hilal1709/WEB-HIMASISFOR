@@ -9,27 +9,33 @@ import { useKelas } from "./kelas-provider";
  * tanda plus berputar menjadi minus, nomor serif menyala emas saat terbuka.
  */
 export function Faq() {
-  const { faq, openQuiz } = useKelas();
+  const { c, openQuiz } = useKelas();
+  const t = c.faq;
+  const hasQuiz = c.quiz.questions.length > 0;
   const [open, setOpen] = useState(0);
 
   return (
     <section id="faq" className="scroll-mt-24 bg-white py-16 md:py-20">
       <Container className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
         <div className="lg:sticky lg:top-28 lg:self-start">
-          <SceneTitle title={["Masih", "ragu?"]} />
-          <p data-aos="fade-up" className="mt-4 max-w-sm text-[16.5px] leading-relaxed text-text/65">
-            Pertanyaan yang paling sering diajukan calon Sisforians tentang program kelas.
-          </p>
-          <button type="button" onClick={openQuiz} data-aos="fade-up" className="u-gold mt-6 text-[15px] font-semibold text-maroon">
-            Coba kuis pemilih kelas
-          </button>
+          <SceneTitle title={t.title} />
+          {t.body && (
+            <p data-aos="fade-up" className="mt-4 max-w-sm text-[16.5px] leading-relaxed text-text/65">
+              {t.body}
+            </p>
+          )}
+          {hasQuiz && t.quizCta && (
+            <button type="button" onClick={openQuiz} data-aos="fade-up" className="u-gold mt-6 text-[15px] font-semibold text-maroon">
+              {t.quizCta}
+            </button>
+          )}
         </div>
 
         <ul className="divide-y divide-line border-y border-line">
-          {faq.map((f, i) => {
+          {t.items.map((f, i) => {
             const on = open === i;
             return (
-              <li key={f.q} data-aos="fade-up" data-aos-delay={i * 50}>
+              <li key={`${f.q}-${i}`} data-aos="fade-up" data-aos-delay={i * 50}>
                 <h3>
                   <button
                     type="button"

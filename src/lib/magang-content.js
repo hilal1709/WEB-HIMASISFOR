@@ -1,6 +1,6 @@
 /**
  * Konten halaman Magang (`/magang`).
- * SKS & semester Kerja Praktik diturunkan dari kurikulum (`mergeKurikulum`); tanggal Info Session dari
+ * SKS & semester Kerja Praktik diturunkan dari kurikulum (`getKurikulumData`); tanggal Info Session dari
  * agenda beranda (`AGENDA`) — tidak ditulis ulang. Konversi SKS & Bootcamp punya halaman sendiri (hanya ditautkan).
  *
  * CMS `PageContent` section `magang` (Admin › Konten › Magang):
@@ -197,7 +197,7 @@ function infoSession() {
 /**
  * Gabungkan CMS ke fallback.
  * @param row        PageContent `magang` (boleh null)
- * @param kurikulum  hasil mergeKurikulum — SKS & semester Kerja Praktik
+ * @param kurikulum  hasil getKurikulumData — SKS & semester Kerja Praktik
  */
 export function mergeMagang(row, { kurikulum } = {}) {
   const raw = parse(row?.data);

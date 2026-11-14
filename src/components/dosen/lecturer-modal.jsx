@@ -6,14 +6,14 @@ import { Modal, ModalContent, ModalDescription, ModalTitle } from "@/components/
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LordIcon } from "@/components/media/lord-icon";
 import { PlaceholderTag } from "@/components/home/shared";
-import { CERTS } from "@/lib/dosen-content";
+import { certMap } from "@/lib/dosen-content";
 import { cn } from "@/lib/utils";
 
 /** Profil akademik dosen; URL diisi dari CMS (`data.lecturers[].links`). */
 const LINKS = [
-  { key: "scholar", label: "Google Scholar", icon: "book" },
-  { key: "scopus", label: "Scopus", icon: "document" },
-  { key: "sinta", label: "SINTA", icon: "globe" },
+  { key: "scholar", icon: "book" },
+  { key: "scopus", icon: "document" },
+  { key: "sinta", icon: "globe" },
 ];
 
 /**
@@ -21,7 +21,9 @@ const LINKS = [
  * + tab Profil · Mengajar · Riset. ‹ › dan panah keyboard berpindah dosen.
  * Tautan Google Scholar / Scopus / SINTA membuka tab baru; bila belum diisi tampil "menyusul".
  */
-export function LecturerModal({ lecturers, fields, slug, onSlug, onClose }) {
+export function LecturerModal({ lecturers, fields, labels: copy, certs, sampleLabel, slug, onSlug, onClose }) {
+  const L = copy.labels;
+  const CERTS = certMap(certs);
   const [tab, setTab] = useState("profil");
   const index = lecturers.findIndex((l) => l.slug === slug);
   const item = lecturers[index];
@@ -64,11 +66,11 @@ export function LecturerModal({ lecturers, fields, slug, onSlug, onClose }) {
               {/* identitas: NUPTK & email */}
               <dl className="relative mt-5 space-y-3 border-t border-white/10 pt-4 text-[13px]">
                 <div>
-                  <dt className="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/45">NUPTK</dt>
-                  <dd className={cn("tabular mt-0.5 font-medium tracking-wide", item.nuptk ? "text-white" : "text-white/40")}>{item.nuptk ?? "menyusul"}</dd>
+                  <dt className="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/45">{L.nuptk}</dt>
+                  <dd className={cn("tabular mt-0.5 font-medium tracking-wide", item.nuptk ? "text-white" : "text-white/40")}>{item.nuptk ?? L.pending}</dd>
                 </div>
                 <div>
-                  <dt className="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/45">Email</dt>
+                  <dt className="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/45">{L.email}</dt>
                   <dd className="mt-0.5">
                     {item.email ? (
                       <a href={`mailto:${item.email}`} className="mail-lnk group inline-flex max-w-full items-center gap-2 font-medium text-white">
@@ -76,14 +78,14 @@ export function LecturerModal({ lecturers, fields, slug, onSlug, onClose }) {
                         <span className="u-gold truncate">{item.email}</span>
                       </a>
                     ) : (
-                      <span className="text-white/40">menyusul</span>
+                      <span className="text-white/40">{L.pending}</span>
                     )}
                   </dd>
                 </div>
               </dl>
 
               <ul className="relative mt-5 space-y-1.5">
-                {LINKS.map((l) => {
+                {LINKS.map(({ key, icon }) => ({ key, icon, label: copy.links[key] })).filter((l) => l.label).map((l) => {
                   const href = item.links?.[l.key];
                   const cls = "flex w-full items-center gap-3 rounded-md border px-3 py-2 text-[13.5px] transition-[border-color,background-color,color] duration-300";
                   return (
@@ -104,7 +106,7 @@ export function LecturerModal({ lecturers, fields, slug, onSlug, onClose }) {
                         <span className={cn(cls, "cursor-not-allowed border-dashed border-white/10 text-white/40")} title="Menunggu data CMS">
                           <span className="grid size-5 place-items-center text-[11px]">—</span>
                           <span className="flex-1">{l.label}</span>
-                          <span className="text-[11px]">menyusul</span>
+                          <span className="text-[11px]">{L.pending}</span>
                         </span>
                       )}
                     </li>
@@ -117,14 +119,14 @@ export function LecturerModal({ lecturers, fields, slug, onSlug, onClose }) {
             <div className="flex max-h-[72vh] flex-col overflow-y-auto p-6 sm:p-8">
               <p className="kicker text-maroon">{item.role}</p>
               <ModalTitle className="mt-3 text-[1.7rem] leading-snug">{item.name}</ModalTitle>
-              <ModalDescription className="mt-1 text-[14px]">{item.fields.map(fieldName).join(" · ") || "Dosen Sistem Informasi"}</ModalDescription>
+              <ModalDescription className="mt-1 text-[14px]">{item.fields.map(fieldName).join(" · ") || L.fallback}</ModalDescription>
 
               <Tabs value={tab} onValueChange={setTab} className="mt-6">
                 <TabsList className="rounded-md bg-cream p-1">
                   {[
-                    ["profil", "Profil"],
-                    ["mengajar", "Mengajar"],
-                    ["riset", "Riset"],
+                    ["profil", L.tabProfile],
+                    ["mengajar", L.tabTeach],
+                    ["riset", L.tabResearch],
                   ].map(([v, l]) => (
                     <TabsTrigger
                       key={v}
@@ -140,7 +142,7 @@ export function LecturerModal({ lecturers, fields, slug, onSlug, onClose }) {
                   {item.quote && (
                     <blockquote className="mt-6 border-l-2 border-gold pl-4 font-serif text-[1.15rem] italic leading-snug text-navy">“{item.quote}”</blockquote>
                   )}
-                  <Block title="Bidang keahlian">
+                  {item.expertise.length > 0 && (<Block title={L.expertise}>
                     <ul className="flex flex-wrap gap-1.5">
                       {item.expertise.map((x, i) => (
                         <li
@@ -152,9 +154,9 @@ export function LecturerModal({ lecturers, fields, slug, onSlug, onClose }) {
                         </li>
                       ))}
                     </ul>
-                  </Block>
+                  </Block>)}
                   {item.education.length > 0 && (
-                    <Block title="Jenjang pendidikan">
+                    <Block title={L.education}>
                       <ol className="relative space-y-3 border-l border-line pl-5">
                         {item.education.map((e, i) => (
                           <li key={e.label} className="relative animate-in fade-in-0 slide-in-from-left-1 fill-mode-both" style={{ animationDelay: `${120 + i * 70}ms` }}>
@@ -167,7 +169,7 @@ export function LecturerModal({ lecturers, fields, slug, onSlug, onClose }) {
                     </Block>
                   )}
                   {item.certs.length > 0 && (
-                    <Block title="Sertifikasi">
+                    <Block title={L.certs}>
                       <ul className="grid gap-2 sm:grid-cols-2">
                         {item.certs.map((c) => (
                           <li key={c} className="group flex items-center gap-3 rounded-md border border-line px-3 py-2 transition-colors duration-300 hover:border-gold">
@@ -181,13 +183,13 @@ export function LecturerModal({ lecturers, fields, slug, onSlug, onClose }) {
                 </TabsContent>
 
                 <TabsContent value="mengajar" className="animate-in fade-in-0 slide-in-from-bottom-1 duration-300">
-                  <Block title="Mata kuliah yang diampu" tag={item.sample.courses}>
+                  <Block title={L.courses} tag={item.sample.courses && sampleLabel}>
                     <List items={item.courses} />
                   </Block>
                 </TabsContent>
 
                 <TabsContent value="riset" className="animate-in fade-in-0 slide-in-from-bottom-1 duration-300">
-                  <Block title="Topik riset" tag={item.sample.research}>
+                  <Block title={L.research} tag={item.sample.research && sampleLabel}>
                     <List items={item.research} />
                   </Block>
                 </TabsContent>
@@ -204,8 +206,8 @@ export function LecturerModal({ lecturers, fields, slug, onSlug, onClose }) {
             ))}
           </div>
           <div className="flex gap-2">
-            <NavBtn label="Dosen sebelumnya" onClick={() => go(-1)} icon={ChevronLeft} />
-            <NavBtn label="Dosen berikutnya" onClick={() => go(1)} icon={ChevronRight} />
+            <NavBtn label={L.prev} onClick={() => go(-1)} icon={ChevronLeft} />
+            <NavBtn label={L.next} onClick={() => go(1)} icon={ChevronRight} />
           </div>
         </div>
       </ModalContent>
@@ -218,7 +220,7 @@ function Block({ title, tag, children }) {
     <div className="mt-6">
       <div className="mb-2.5 flex flex-wrap items-center gap-2">
         <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-text/45">{title}</p>
-        {tag && <PlaceholderTag />}
+        {tag && <PlaceholderTag>{tag}</PlaceholderTag>}
       </div>
       {children}
     </div>

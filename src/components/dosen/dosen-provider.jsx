@@ -25,7 +25,7 @@ const norm = (s) =>
  * Deep link: `#dosen-<slug>` membuka modal profil.
  */
 export function DosenProvider({ data, children }) {
-  const { lecturers, fields } = data;
+  const { lecturers, fields, modal, certs } = data;
   const [field, setField] = useState("all");
   const [query, setQuery] = useState("");
   const [view, setView] = useState("grid");
@@ -74,7 +74,7 @@ export function DosenProvider({ data, children }) {
   return (
     <Ctx.Provider value={value}>
       {children}
-      <LecturerModal lecturers={lecturers} fields={fields} slug={open} onSlug={openProfile} onClose={closeProfile} />
+      <LecturerModal lecturers={lecturers} fields={fields} labels={modal} certs={certs} sampleLabel={data.directory.sampleLabel} slug={open} onSlug={openProfile} onClose={closeProfile} />
     </Ctx.Provider>
   );
 }

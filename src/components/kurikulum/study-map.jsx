@@ -3,7 +3,7 @@ import { useLayoutEffect as useEffect, useMemo, useRef, useState } from "react";
 import { animate } from "animejs";
 import { gsap, ScrollTrigger } from "@/lib/scroll";
 import { prefersReducedMotion } from "@/lib/motion";
-import { RUMPUN } from "@/lib/kurikulum-content";
+import { fill } from "@/lib/kurikulum-content";
 import { Container, SectionHeader } from "@/components/home/shared";
 import { cn } from "@/lib/utils";
 import { useKurikulum } from "./kurikulum-provider";
@@ -12,33 +12,28 @@ import { smoothTo } from "./kurikulum-hero";
 
 const GAP = 250; // jarak antar stasiun (px)
 const PAD = 120;
-const LANE_Y = [132, 178, 224, 270];
-const H = 330;
-/** Warna titik stasiun per rumpun (data = putih bergaris navy agar beda dari fondasi). */
-const DOT = {
-  fondasi: { fill: "var(--navy)", text: "white", stroke: 0 },
-  enterprise: { fill: "var(--maroon)", text: "white", stroke: 0 },
-  "tata-kelola": { fill: "var(--gold)", text: "var(--navy)", stroke: 0 },
-  data: { fill: "white", text: "var(--navy)", stroke: 2 },
-};
+const LANE_TOP = 132;
+const LANE_STEP = 46;
+/** Titik stasiun per rumpun: gaya "ring" = putih bergaris warna rumpun agar beda dari titik penuh. */
+const dot = (r) => (r.style === "ring" ? { fill: "white", text: r.css, stroke: 2, line: r.css } : { fill: r.css, text: r.ink, stroke: 0, line: "var(--navy)" });
 
 /** Hitung isi tiap stasiun: jumlah mata kuliah per rumpun. */
-function useStations(semesters) {
+function useStations(semesters, rumpun) {
   return useMemo(
     () =>
       semesters.map((s, i) => {
-        const counts = Object.fromEntries(RUMPUN.map((r) => [r.key, 0]));
-        s.items.forEach((c) => !c.slot && counts[c.rumpun]++);
+        const counts = Object.fromEntries(rumpun.map((r) => [r.key, 0]));
+        s.items.forEach((c) => !c.slot && c.rumpun in counts && counts[c.rumpun]++);
         return { ...s, i, x: PAD + i * GAP, counts, core: s.items.filter((c) => !c.slot), slots: s.items.filter((c) => c.slot) };
       }),
-    [semesters]
+    [semesters, rumpun]
   );
 }
 
-function RumpunChips({ focus, setFocus, className }) {
+function RumpunChips({ rumpun, label, focus, setFocus, className }) {
   return (
-    <ul className={cn("flex flex-wrap gap-2", className)} aria-label="Sorot rumpun mata kuliah">
-      {RUMPUN.map((r) => {
+    <ul className={cn("flex flex-wrap gap-2", className)} aria-label={label}>
+      {rumpun.map((r) => {
         const on = focus === r.key;
         return (
           <li key={r.key}>
@@ -53,7 +48,7 @@ function RumpunChips({ focus, setFocus, className }) {
               )}
             >
               <svg aria-hidden viewBox="0 0 28 6" className="h-1.5 w-7">
-                <line x1="1" y1="3" x2="27" y2="3" stroke={on && r.color === "var(--navy)" ? "white" : r.color} strokeWidth="4" strokeLinecap="round" strokeDasharray={r.dash ?? undefined} />
+                <line x1="1" y1="3" x2="27" y2="3" stroke={on && r.color === "navy" ? "white" : r.css} strokeWidth="4" strokeLinecap="round" strokeDasharray={r.dash ?? undefined} />
               </svg>
               {r.name}
             </button>
@@ -71,9 +66,13 @@ function RumpunChips({ focus, setFocus, className }) {
  * dan panel bawah menampilkan isinya. Ponsel / reduced-motion: daftar stasiun vertikal.
  */
 export function StudyMap() {
-  const { semesters, focus: globalFocus, setFocus: setGlobalFocus, setSemester } = useKurikulum();
-  const stations = useStations(semesters);
-  const W = PAD * 2 + (stations.length - 1) * GAP;
+  const { semesters, focus: globalFocus, setFocus: setGlobalFocus, setSemester, rumpun, copy } = useKurikulum();
+  const t = copy.peta;
+  const stations = useStations(semesters, rumpun);
+  const W = PAD * 2 + Math.max(stations.length - 1, 0) * GAP;
+  const LANE_Y = rumpun.map((_, i) => LANE_TOP + i * LANE_STEP);
+  const laneEnd = LANE_Y[LANE_Y.length - 1] ?? LANE_TOP;
+  const H = laneEnd + 60;
   const section = useRef(null);
   const viewport = useRef(null);
   const track = useRef(null);
@@ -130,23 +129,20 @@ export function StudyMap() {
     smoothTo("semester");
   };
 
-  const cur = stations[near];
+  const cur = stations[Math.min(near, stations.length - 1)];
+  if (!cur) return null;
 
   return (
     <section id="peta" ref={section} className="relative scroll-mt-24 border-y border-line bg-white py-14 md:py-20 lg:flex lg:min-h-[calc(100vh-72px)] lg:flex-col lg:justify-center lg:py-10">
       <Container>
-        <SectionHeader
-          title={["Peta studi", "delapan stasiun"]}
-          body="Setiap stasiun adalah satu semester. Ikuti jalur warna untuk melihat kapan tiap rumpun ilmu muncul dan menguat."
-          size="sm"
-        />
-        <RumpunChips focus={globalFocus} setFocus={setFocus} className="mt-7" />
+        <SectionHeader title={t.title} body={t.body} size="sm" />
+        <RumpunChips rumpun={rumpun} label={t.chipsAria} focus={globalFocus} setFocus={setFocus} className="mt-7" />
       </Container>
 
       {/* ≥ lg: peta horizontal */}
       <div className="mt-8 hidden lg:block" onMouseLeave={() => setHoverFocus(null)}>
         <div ref={viewport} className="overflow-x-auto" style={{ scrollbarWidth: "thin" }}>
-          <div ref={track} className="relative" style={{ width: W, height: H }}>
+          <div ref={track} className="relative" style={{ width: W, height: H + 50 }}>
             <svg viewBox={`0 0 ${W} ${H}`} width={W} height={H} className={cn("study-map absolute inset-0")} data-focus={focus ? "" : undefined} aria-hidden>
               {/* rel kereta */}
               <line x1={PAD - 40} y1="64" x2={W - PAD + 40} y2="64" stroke="var(--line)" strokeWidth="2" />
@@ -154,7 +150,7 @@ export function StudyMap() {
                 <line key={s.i} x1={s.x} y1="58" x2={s.x} y2="70" stroke="var(--line)" strokeWidth="2" />
               ))}
               {/* jalur rumpun */}
-              {RUMPUN.map((r, li) => (
+              {rumpun.map((r, li) => (
                 <g key={r.key} data-lane={r.key} data-on={focus === r.key ? "" : undefined}>
                   {stations.slice(0, -1).map((s, i) => {
                     const both = s.counts[r.key] > 0 && stations[i + 1].counts[r.key] > 0;
@@ -165,7 +161,7 @@ export function StudyMap() {
                         y1={LANE_Y[li]}
                         x2={stations[i + 1].x}
                         y2={LANE_Y[li]}
-                        stroke={r.color}
+                        stroke={r.css}
                         strokeOpacity={both ? 1 : 0.35}
                         strokeWidth={both ? 6 : 2}
                         strokeLinecap="round"
@@ -178,12 +174,12 @@ export function StudyMap() {
               {/* stasiun */}
               {stations.map((s) => (
                 <g key={s.i} data-station={s.i}>
-                  <rect x={s.x - 19} y={LANE_Y[0] - 24} width="38" height={LANE_Y[3] - LANE_Y[0] + 48} rx="19" fill="white" stroke={near === s.i ? "var(--navy)" : "var(--line)"} strokeWidth="2" style={{ transition: "stroke .4s" }} />
-                  {RUMPUN.map((r, li) =>
+                  <rect x={s.x - 19} y={LANE_TOP - 24} width="38" height={laneEnd - LANE_TOP + 48} rx="19" fill="white" stroke={near === s.i ? "var(--navy)" : "var(--line)"} strokeWidth="2" style={{ transition: "stroke .4s" }} />
+                  {rumpun.map((r, li) =>
                     s.counts[r.key] > 0 ? (
                       <g key={r.key} data-lane={r.key} data-on={focus === r.key ? "" : undefined}>
-                        <circle data-ring={li === 0 ? "" : undefined} cx={s.x} cy={LANE_Y[li]} r="11" fill={DOT[r.key].fill} stroke="var(--navy)" strokeWidth={DOT[r.key].stroke} style={{ transformBox: "fill-box", transformOrigin: "center" }} />
-                        <text x={s.x} y={LANE_Y[li] + 4} textAnchor="middle" fontSize="11" fontWeight="700" fill={DOT[r.key].text}>
+                        <circle data-ring={li === 0 ? "" : undefined} cx={s.x} cy={LANE_Y[li]} r="11" fill={dot(r).fill} stroke={dot(r).line} strokeWidth={dot(r).stroke} style={{ transformBox: "fill-box", transformOrigin: "center" }} />
+                        <text x={s.x} y={LANE_Y[li] + 4} textAnchor="middle" fontSize="11" fontWeight="700" fill={dot(r).text}>
                           {s.counts[r.key]}
                         </text>
                       </g>
@@ -201,14 +197,14 @@ export function StudyMap() {
                 onClick={() => go(s.semester)}
                 onMouseEnter={() => setNear(s.i)}
                 onFocus={() => setNear(s.i)}
-                aria-label={`Semester ${s.semester}, ${s.sks} SKS, ${s.core.length} mata kuliah. Buka di buku semester.`}
-                className="group absolute top-[300px] -translate-x-1/2 text-center outline-none"
-                style={{ left: s.x }}
+                aria-label={fill(t.stationAria, { n: s.semester, sks: s.sks, count: s.core.length })}
+                className="group absolute -translate-x-1/2 text-center outline-none"
+                style={{ left: s.x, top: laneEnd + 30 }}
               >
                 <span className={cn("block font-serif text-[1.35rem] leading-none transition-colors duration-300", near === s.i ? "text-maroon" : "text-navy group-hover:text-maroon")}>
-                  Semester {s.semester}
+                  {fill(t.station, { n: s.semester })}
                 </span>
-                <span className="mt-1 block text-[12.5px] tabular-nums text-text/50">{s.sks} SKS</span>
+                <span className="mt-1 block text-[12.5px] tabular-nums text-text/50">{fill(t.sks, { n: s.sks })}</span>
                 <span aria-hidden className="mx-auto mt-1 block h-[2px] w-0 bg-gold transition-[width] duration-300 group-hover:w-10 group-focus-visible:w-10" />
               </button>
             ))}
@@ -231,7 +227,8 @@ export function StudyMap() {
           <div className="flex flex-wrap items-start justify-between gap-6 rounded-xl border border-line bg-cream/60 p-5" aria-live="polite">
             <div className="min-w-0 flex-1">
               <p className="kicker text-maroon">
-                Stasiun {cur.semester} · {cur.core.length} mata kuliah{cur.slots.length ? ` + ${cur.slots.length} slot pilihan` : ""}
+                {fill(t.panel, { n: cur.semester, count: cur.core.length })}
+                {cur.slots.length ? fill(t.panelSlots, { n: cur.slots.length }) : ""}
               </p>
               <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-1.5 text-[14px] text-navy">
                 {cur.core.map((c) => (
@@ -243,7 +240,7 @@ export function StudyMap() {
               </ul>
             </div>
             <button type="button" onClick={() => go(cur.semester)} className="shrink-0 text-[14.5px] font-semibold text-maroon">
-              <span className="u-gold">Buka semester {cur.semester}</span>
+              <span className="u-gold">{fill(t.open, { n: cur.semester })}</span>
             </button>
           </div>
         </Container>
@@ -257,11 +254,11 @@ export function StudyMap() {
               <span aria-hidden className="absolute -left-[33px] top-1 grid size-4 place-items-center rounded-full border-2 border-navy bg-white" />
               <button type="button" onClick={() => go(s.semester)} className="group w-full text-left">
                 <span className="flex items-baseline justify-between gap-3">
-                  <span className="font-serif text-[1.3rem] text-navy group-hover:text-maroon">Semester {s.semester}</span>
-                  <span className="text-[13px] tabular-nums text-text/50">{s.sks} SKS</span>
+                  <span className="font-serif text-[1.3rem] text-navy group-hover:text-maroon">{fill(t.station, { n: s.semester })}</span>
+                  <span className="text-[13px] tabular-nums text-text/50">{fill(t.sks, { n: s.sks })}</span>
                 </span>
                 <span className="mt-2 flex flex-wrap gap-1.5">
-                  {RUMPUN.filter((r) => s.counts[r.key]).map((r) => (
+                  {rumpun.filter((r) => s.counts[r.key]).map((r) => (
                     <span key={r.key} className={cn("inline-flex items-center gap-1.5 rounded-full border border-line bg-white px-2.5 py-1 text-[12px] text-text/70 transition-opacity", focus && focus !== r.key && "opacity-30")}>
                       <RumpunDot rumpun={r.key} />
                       {r.short} · {s.counts[r.key]}

@@ -3,18 +3,19 @@ import { useLayoutEffect as useEffect, useRef } from "react";
 import { animate } from "animejs";
 import { gsap } from "@/lib/scroll";
 import { prefersReducedMotion } from "@/lib/motion";
-import { RUMPUN, RUMPUN_BY_KEY } from "@/lib/kurikulum-content";
+import { fill } from "@/lib/kurikulum-content";
 import { Container, SceneTitle } from "@/components/home/shared";
 import { cn } from "@/lib/utils";
 import { useKurikulum } from "./kurikulum-provider";
 import { RumpunDot } from "./rumpun-dot";
 
 export function RpsStatus({ course, tone = "light" }) {
-  if (!course.rps) return <span className={cn("text-[12px]", tone === "light" ? "text-text/40" : "text-white/45")}>RPS menyusul</span>;
+  const t = useKurikulum().copy.semester;
+  if (!course.rps) return <span className={cn("text-[12px]", tone === "light" ? "text-text/40" : "text-white/45")}>{t.rpsNone}</span>;
   return (
     <span className={cn("inline-flex items-center gap-1.5 text-[12px] font-medium", tone === "light" ? "text-navy" : "text-gold-soft")}>
       <span aria-hidden className="size-1.5 rounded-full bg-gold" />
-      {course.rps.pdf ? "RPS + PDF" : course.rpsSample ? "Ringkasan contoh" : "Ringkasan RPS"}
+      {course.rps.pdf ? t.rpsPdf : t.rpsReady}
     </span>
   );
 }
@@ -25,9 +26,10 @@ export function RpsStatus({ course, tone = "light" }) {
  * Rumpun yang disorot (dari peta) meredupkan baris lain. Klik baris → laci RPS. ←/→ berpindah semester.
  */
 export function SemesterLedger() {
-  const { semesters, semester, setSemester, focus, setFocus, openRps, maxSks, totals } = useKurikulum();
+  const { semesters, semester, setSemester, focus, setFocus, openRps, maxSks, totals, rumpun, rumpunByKey, copy } = useKurikulum();
+  const t = copy.semester;
   const idx = Math.max(0, semesters.findIndex((s) => s.semester === semester));
-  const cur = semesters[idx];
+  const cur = semesters[idx] ?? { semester: 1, items: [], sks: 0 };
   const list = useRef(null);
   const digit = useRef(null);
   const first = useRef(true);
@@ -67,7 +69,7 @@ export function SemesterLedger() {
         >
           {/* kolom angka */}
           <div className="lg:sticky lg:top-28 lg:self-start">
-            <SceneTitle title={["Buku", "semester"]} size="sm" />
+            <SceneTitle title={t.title} size="sm" />
             <div className="mt-6 flex items-end gap-5">
               <div className="overflow-hidden">
                 <span ref={digit} className="block font-serif text-[clamp(7rem,16vw,12.5rem)] leading-[0.82] tabular-nums text-navy" aria-hidden>
@@ -75,13 +77,13 @@ export function SemesterLedger() {
                 </span>
               </div>
               <div className="pb-3 text-[14px] text-text/60">
-                <p className="sr-only" aria-live="polite">Semester {cur.semester}</p>
-                <p><span className="font-semibold tabular-nums text-navy">{cur.sks}</span> SKS</p>
-                <p className="mt-0.5">{cur.items.filter((c) => !c.slot).length} mata kuliah</p>
+                <p className="sr-only" aria-live="polite">{fill(copy.peta.station, { n: cur.semester })}</p>
+                <p><span className="font-semibold tabular-nums text-navy">{cur.sks}</span> {copy.laci.sks}</p>
+                <p className="mt-0.5">{fill(t.courseCount, { n: cur.items.filter((c) => !c.slot).length })}</p>
               </div>
             </div>
 
-            <div role="tablist" aria-label="Pilih semester" className="mt-6 flex gap-1.5">
+            <div role="tablist" aria-label={t.tabsAria} className="mt-6 flex gap-1.5">
               {semesters.map((s) => {
                 const on = s.semester === semester;
                 return (
@@ -103,23 +105,23 @@ export function SemesterLedger() {
               })}
             </div>
             <div className="mt-3 flex items-center justify-between text-[12.5px] text-text/45">
-              <button type="button" onClick={() => move(-1)} disabled={idx === 0} className="disabled:opacity-30 hover:text-navy">‹ Sebelumnya</button>
-              <span>← → untuk berpindah</span>
-              <button type="button" onClick={() => move(1)} disabled={idx === semesters.length - 1} className="disabled:opacity-30 hover:text-navy">Berikutnya ›</button>
+              <button type="button" onClick={() => move(-1)} disabled={idx === 0} className="disabled:opacity-30 hover:text-navy">{t.prev}</button>
+              <span>{t.hint}</span>
+              <button type="button" onClick={() => move(1)} disabled={idx === semesters.length - 1} className="disabled:opacity-30 hover:text-navy">{t.next}</button>
             </div>
 
             <div className="mt-8">
               <div className="flex items-baseline justify-between text-[13px]">
-                <span className="text-text/60">Kumulatif sampai semester ini</span>
-                <span className="tabular-nums text-navy"><span className="font-semibold">{cumulative}</span> / {totals.sks} SKS</span>
+                <span className="text-text/60">{t.cumulative}</span>
+                <span className="tabular-nums text-navy"><span className="font-semibold">{cumulative}</span> / {totals.sks} {copy.laci.sks}</span>
               </div>
               <div className="mt-2 h-2 overflow-hidden rounded-full bg-white">
                 <div className="h-full rounded-full bg-gold transition-[width] duration-700 ease-cinematic" style={{ width: `${(cumulative / Math.max(totals.sks, 1)) * 100}%` }} />
               </div>
             </div>
 
-            <ul className="mt-8 flex flex-wrap gap-x-4 gap-y-2" aria-label="Sorot rumpun">
-              {RUMPUN.map((r) => (
+            <ul className="mt-8 flex flex-wrap gap-x-4 gap-y-2" aria-label={t.rumpunAria}>
+              {rumpun.map((r) => (
                 <li key={r.key}>
                   <button type="button" aria-pressed={focus === r.key} onClick={() => setFocus(focus === r.key ? null : r.key)} className={cn("inline-flex items-center gap-1.5 text-[13px] transition-colors", focus === r.key ? "font-semibold text-navy" : "text-text/55 hover:text-navy")}>
                     <RumpunDot rumpun={r.key} />
@@ -131,18 +133,18 @@ export function SemesterLedger() {
           </div>
 
           {/* daftar mata kuliah */}
-          <ol ref={list} className="cur-rows space-y-2.5" data-focus={focus ? "" : undefined} aria-label={`Mata kuliah semester ${cur.semester}`}>
+          <ol ref={list} className="cur-rows space-y-2.5" data-focus={focus ? "" : undefined} aria-label={fill(t.listAria, { n: cur.semester })}>
             {cur.items.map((c, i, all) =>
               c.slot ? (
                 <li key={c.slug} data-row className="cur-row" data-on={focus ? undefined : ""}>
                   <a href="#pilihan" className="group flex items-center gap-4 rounded-xl border-2 border-dashed border-navy/20 px-5 py-4 transition-colors hover:border-gold">
                     <span className="w-7 font-serif text-lg text-text/30">·</span>
                     <span className="min-w-0 flex-1">
-                      <span className="block text-[15.5px] font-semibold text-navy">{c.nama.replace(/^elective/i, "Pilihan")}</span>
-                      <span className="block text-[13px] text-text/55">Diambil dari salah satu bidang mata kuliah pilihan</span>
+                      <span className="block text-[15.5px] font-semibold text-navy">{c.nama.replace(/^elective/i, t.slotPrefix)}</span>
+                      <span className="block text-[13px] text-text/55">{t.slotNote}</span>
                     </span>
-                    {c.sks ? <span className="text-[13px] tabular-nums text-text/50">{c.sks} SKS</span> : null}
-                    <span className="text-[13px] font-semibold text-maroon"><span className="u-gold">Lihat bidang</span></span>
+                    {c.sks ? <span className="text-[13px] tabular-nums text-text/50">{fill(copy.peta.sks, { n: c.sks })}</span> : null}
+                    <span className="text-[13px] font-semibold text-maroon"><span className="u-gold">{t.slotLink}</span></span>
                   </a>
                 </li>
               ) : (
@@ -159,7 +161,7 @@ export function SemesterLedger() {
                         {c.kode && <span className="tabular-nums">{c.kode}</span>}
                         <span className="inline-flex items-center gap-1.5">
                           <RumpunDot rumpun={c.rumpun} />
-                          {RUMPUN_BY_KEY[c.rumpun].short}
+                          {rumpunByKey[c.rumpun]?.short}
                         </span>
                         <RpsStatus course={c} />
                       </span>
@@ -169,7 +171,7 @@ export function SemesterLedger() {
                     </span>
                     <span className="col-start-3 row-start-1 text-right sm:col-start-auto sm:row-start-auto">
                       <span className="font-serif text-xl tabular-nums text-navy">{c.sks ?? "–"}</span>
-                      <span className="ml-1 text-[12px] text-text/45">SKS</span>
+                      <span className="ml-1 text-[12px] text-text/45">{copy.laci.sks}</span>
                     </span>
                   </button>
                 </li>

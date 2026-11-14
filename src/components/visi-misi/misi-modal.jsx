@@ -1,19 +1,19 @@
 "use client";
-import { createContext, useCallback, useContext, useState } from "react";
+import { createContext, useCallback, useContext, useMemo, useState } from "react";
 import { Modal, ModalContent, ModalDescription, ModalTitle } from "@/components/ui/modal";
 import { ILLUSTRATIONS } from "@/components/illustrations/line-illustrations";
 import { LordIcon } from "@/components/media/lord-icon";
-import { PlaceholderTag } from "@/components/home/shared";
 import { cn } from "@/lib/utils";
 
 const Ctx = createContext(() => {});
 export const useMisiModal = () => useContext(Ctx);
 
 /** Modal detail misi; dibuka lewat useMisiModal()(index). Tombol ‹ › dan panah keyboard berpindah misi. */
-export function MisiModalProvider({ misi, children }) {
+export function MisiModalProvider({ misi: content, children }) {
+  const misi = useMemo(() => content.items.map((m, i) => ({ ...m, n: i + 1 })), [content.items]);
   const [index, setIndex] = useState(null);
   const open = useCallback((i) => setIndex(i), []);
-  const item = index != null ? misi[index] : null;
+  const item = index != null ? misi[index] ?? null : null;
   const go = (d) => setIndex((i) => (i + d + misi.length) % misi.length);
   const Illustration = item ? ILLUSTRATIONS[item.illustration] : null;
 
@@ -43,9 +43,11 @@ export function MisiModalProvider({ misi, children }) {
                     ))}
                   </ul>
                 )}
-                <PlaceholderTag className="mt-5" />
+                {item.sample && content.sampleNote && (
+                  <span className="mt-5 inline-flex items-center rounded bg-cream-2 px-2 py-0.5 text-[11px] font-medium text-text/55">{content.sampleNote}</span>
+                )}
               </div>
-              <div className="hidden items-center bg-cream p-6 sm:flex">{Illustration && <Illustration />}</div>
+              <div className="hidden items-center bg-cream p-6 sm:flex">{Illustration && <Illustration className="h-auto w-full" />}</div>
             </div>
           )}
           <div className="flex items-center justify-between border-t border-line px-6 py-3 sm:px-8">

@@ -10,10 +10,11 @@ import { ElvoPeek } from "./elvo-peek";
 import { LottieIllustration } from "@/components/media/lottie-illustration";
 
 /**
- * Bidang keahlian — kartu foto dengan bar keterangan maroon. Hover: foto zoom, bar memanjang
+ * Bidang keahlian — kartu foto dengan bar keterangan maroon. Item bidang (judul, ringkasan, foto, Lottie,
+ * karier) dari Konsol Bidang (`getBidangCards`), satu sumber dengan /bidang-keahlian; teks section dari Studio Beranda. Hover: foto zoom, bar memanjang
  * memperlihatkan prospek karier. Ponsel: Swiper.
  */
-export function ExpertiseScene({ content: EXPERTISE = HOME_DEFAULTS.expertise }) {
+export function ExpertiseScene({ content: EXPERTISE = HOME_DEFAULTS.expertise, items = [] }) {
   return (
     <section id="bidang" className="relative bg-cream-2 py-16 md:py-24">
       <Container className="relative">
@@ -22,7 +23,7 @@ export function ExpertiseScene({ content: EXPERTISE = HOME_DEFAULTS.expertise })
         </div>
         <SectionHeader title={EXPERTISE.title} body={EXPERTISE.body} action={EXPERTISE.more?.label ? <ArrowLink href={EXPERTISE.more.href}>{EXPERTISE.more.label}</ArrowLink> : null} />
         <ul className="mt-10 hidden gap-5 md:mt-12 md:grid md:grid-cols-2 lg:grid-cols-4">
-          {EXPERTISE.items.map((item, i) => (
+          {items.map((item, i) => (
             <li key={item.slug + i} data-aos="fade-up" data-aos-delay={i * 80}>
               <Card item={item} index={i} careersLabel={EXPERTISE.careersLabel} />
             </li>
@@ -31,7 +32,7 @@ export function ExpertiseScene({ content: EXPERTISE = HOME_DEFAULTS.expertise })
       </Container>
       <div className="mt-8 md:hidden">
         <Swiper modules={[A11y, Keyboard]} keyboard spaceBetween={14} slidesPerView={1.15} slidesOffsetBefore={20} slidesOffsetAfter={20}>
-          {EXPERTISE.items.map((item, i) => (
+          {items.map((item, i) => (
             <SwiperSlide key={item.slug + i}>
               <Card item={item} index={i} careersLabel={EXPERTISE.careersLabel} open />
             </SwiperSlide>
@@ -45,7 +46,7 @@ export function ExpertiseScene({ content: EXPERTISE = HOME_DEFAULTS.expertise })
 function Card({ item, index, open, careersLabel }) {
   return (
     <a href={`/bidang-keahlian#bidang-${item.slug}`} className="group relative block aspect-[3/4] overflow-hidden rounded-lg bg-maroon-deep text-white">
-      <Image src={item.image} alt="" fill sizes="(min-width:1024px) 300px, (min-width:768px) 45vw, 85vw" className={cn("object-cover transition-transform duration-1000 ease-cinematic group-hover:scale-[1.07]", item.crop && "scale-[1.12]")} />
+      {item.image && <Image src={item.image} alt="" fill sizes="(min-width:1024px) 300px, (min-width:768px) 45vw, 85vw" className={cn("object-cover transition-transform duration-1000 ease-cinematic group-hover:scale-[1.07]", item.crop && "scale-[1.12]")} />}
       <span className="absolute left-4 top-4 grid size-9 place-items-center rounded-full bg-gold font-serif text-sm text-navy">{String(index + 1).padStart(2, "0")}</span>
       <div className="absolute inset-x-0 bottom-0 bg-maroon/[0.94] p-5">
         <div className="flex items-center gap-3">

@@ -74,6 +74,11 @@ export function KurikulumProvider({ data, children }) {
     return data.courses.filter((x) => (c.semester ? x.semester === c.semester : x.track === c.track));
   }, [open, bySlug, data.courses]);
 
+  // data baru (pratinjau CMS / terbit langsung) → semester aktif tetap valid
+  useEffect(() => {
+    if (!data.semesters.some((s) => s.semester === semester) && data.semesters[0]) setSemester(data.semesters[0].semester);
+  }, [data.semesters, semester]);
+
   const value = useMemo(
     () => ({ ...data, bySlug, semester, setSemester, focus, setFocus, openRps, openSearch: () => setSearchOpen(true) }),
     [data, bySlug, semester, focus, openRps]
@@ -82,8 +87,8 @@ export function KurikulumProvider({ data, children }) {
   return (
     <Ctx.Provider value={value}>
       {children}
-      <RpsDrawer course={open ? bySlug[open] : null} siblings={siblings} onOpen={openRps} onClose={closeRps} />
-      <CourseSearch open={searchOpen} onOpenChange={setSearchOpen} courses={data.courses} onPick={openRps} />
+      <RpsDrawer course={open ? bySlug[open] : null} siblings={siblings} onOpen={openRps} onClose={closeRps} copy={data.copy.laci} rumpunByKey={data.rumpunByKey} />
+      <CourseSearch open={searchOpen} onOpenChange={setSearchOpen} courses={data.courses} onPick={openRps} copy={data.copy.cari} />
     </Ctx.Provider>
   );
 }

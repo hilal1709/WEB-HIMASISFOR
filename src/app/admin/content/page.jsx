@@ -10,7 +10,7 @@ import { BOOTCAMPS, TIERS as BOOTCAMP_TIERS, AUDIENCES as BOOTCAMP_AUDIENCES, TR
 
 export default function ContentManagement() {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState("bidang-keahlian");
+  const [activeTab, setActiveTab] = useState("career");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState({ type: "", text: "" });
@@ -81,7 +81,6 @@ export default function ContentManagement() {
   };
 
   const tabs = [
-    { id: "bidang-keahlian", label: "Bidang Keahlian" },
     { id: "career", label: "Prospek Karir" },
     { id: "jumbotron-promo", label: "Jumbotron Promo" },
     { id: "magang", label: "Magang" },
@@ -149,13 +148,6 @@ export default function ContentManagement() {
 
           {/* Tab Content */}
           <div className="p-4 lg:p-6">
-            {activeTab === "bidang-keahlian" && (
-              <BidangKeahlianEditor
-                data={contents["bidang-keahlian"]}
-                onSave={(data) => handleSave("bidang-keahlian", data)}
-                saving={saving}
-              />
-            )}
             {activeTab === "career" && (
               <CareerEditor
                 data={contents.career}
@@ -207,208 +199,6 @@ export default function ContentManagement() {
         </div>
       </div>
     </div>
-  );
-}
-
-// Hero Section Editor
-function BidangKeahlianEditor({ data, onSave, saving }) {
-  const defaultItems = [
-    {
-      title: 'IT Audit / Governance',
-      subtitle: 'Apa itu IT / Audit & Governance ?',
-      cardId: 'audit',
-      description: 'Belajar mengenai bagaimana meningkatkan kemampuan organisasi untuk mencapai tujuan dan sasaran keseluruhannya, dan bagaimana mengevaluasi implementasi tata kelola TI',
-      background: 'bg-[url(/img/governance.jpeg)]'
-    },
-    {
-      title: 'Enterprise System',
-      subtitle: 'Apa itu Enterprise System ?',
-      cardId: 'erp',
-      description: 'Belajar mengenai sistem informasi lintas fungsi yang menyediakan integrasi proses bisnis utama dan membantu dalam perencanaan sumber daya organisasi.',
-      background: 'bg-[url(/img/erp.jpeg)]'
-    },
-    {
-      title: 'Data Science',
-      subtitle: 'Apa itu Data Science ?',
-      cardId: 'data',
-      description: 'Belajar mengenai bagaimana menerapkan prinsip dan teknik penanganan data untuk memberikan informasi yang berarti dan mendukung pengambilan keputusan dalam suatu organisasi.',
-      background: 'bg-[url(/img/data.jpeg)]'
-    }
-  ];
-
-  const [formData, setFormData] = useState({
-    title: data?.title || "",
-    subtitle: data?.subtitle || "",
-    data: Array.isArray(data?.data) ? data.data : defaultItems,
-  });
-
-  useEffect(() => {
-    if (data) {
-      setFormData({
-        title: data.title || "",
-        subtitle: data.subtitle || "",
-        data: Array.isArray(data.data) ? data.data : defaultItems,
-      });
-    }
-  }, [data]);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSave(formData);
-  };
-
-  const updateBidangItem = (index, field, value) => {
-    const newData = [...formData.data];
-    newData[index] = { ...newData[index], [field]: value };
-    setFormData({ ...formData, data: newData });
-  };
-
-  const addBidangItem = () => {
-    const newItem = {
-      title: '',
-      subtitle: '',
-      cardId: `item-${formData.data.length + 1}`,
-      description: '',
-      background: 'bg-[url(/img/governance.jpeg)]'
-    };
-    setFormData({ ...formData, data: [...formData.data, newItem] });
-  };
-
-  const removeBidangItem = (index) => {
-    if (formData.data.length > 1) {
-      const newData = formData.data.filter((_, i) => i !== index);
-      setFormData({ ...formData, data: newData });
-    }
-  };
-
-  return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Judul (gunakan HTML untuk styling)
-        </label>
-        <input
-          type="text"
-          value={formData.title}
-          onChange={(e) =>
-            setFormData({ ...formData, title: e.target.value })
-          }
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-          placeholder='Bidang Keahlian <br /><span class="text-red-600">Sistem Informasi UISI</span>'
-        />
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Subtitle
-        </label>
-        <textarea
-          value={formData.subtitle}
-          onChange={(e) =>
-            setFormData({ ...formData, subtitle: e.target.value })
-          }
-          rows={3}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-          placeholder="Deskripsi bidang keahlian"
-        />
-      </div>
-
-      {/* Bidang Keahlian Items */}
-      <div className="border-t pt-6">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-semibold">Daftar Bidang Keahlian</h3>
-          <button
-            type="button"
-            onClick={addBidangItem}
-            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
-          >
-            + Tambah Bidang Keahlian
-          </button>
-        </div>
-        
-        {formData.data.map((item, index) => (
-          <div key={index} className="mb-6 p-4 border border-gray-200 rounded-lg bg-gray-50">
-            <div className="flex justify-between items-center mb-3">
-              <h4 className="font-medium">Bidang Keahlian {index + 1}</h4>
-              {formData.data.length > 1 && (
-                <button
-                  type="button"
-                  onClick={() => removeBidangItem(index)}
-                  className="px-3 py-1 bg-red-500 text-white text-xs rounded hover:bg-red-600"
-                >
-                  Hapus
-                </button>
-              )}
-            </div>
-            
-            <div className="space-y-3">
-              <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">Judul</label>
-                <input
-                  type="text"
-                  value={item.title || ''}
-                  onChange={(e) => updateBidangItem(index, "title", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg"
-                  placeholder="IT Audit / Governance"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">Subtitle</label>
-                <input
-                  type="text"
-                  value={item.subtitle || ''}
-                  onChange={(e) => updateBidangItem(index, "subtitle", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg"
-                  placeholder="Apa itu IT / Audit & Governance ?"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">Card ID</label>
-                <input
-                  type="text"
-                  value={item.cardId || ''}
-                  onChange={(e) => updateBidangItem(index, "cardId", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg"
-                  placeholder="audit"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">Deskripsi</label>
-                <textarea
-                  value={item.description || ''}
-                  onChange={(e) => updateBidangItem(index, "description", e.target.value)}
-                  rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg"
-                  placeholder="Deskripsi bidang keahlian..."
-                />
-              </div>
-              
-              <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">Background CSS Class</label>
-                <input
-                  type="text"
-                  value={item.background || ''}
-                  onChange={(e) => updateBidangItem(index, "background", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg"
-                  placeholder="bg-[url(/img/governance.jpeg)]"
-                />
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <button
-        type="submit"
-        disabled={saving}
-        className="w-full bg-red-600 text-white py-3 px-6 rounded-lg hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors font-medium"
-      >
-        {saving ? "Menyimpan..." : "Simpan Perubahan"}
-      </button>
-    </form>
   );
 }
 

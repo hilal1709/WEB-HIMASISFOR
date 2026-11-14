@@ -4,7 +4,6 @@ import Image from "next/image";
 import { gsap } from "@/lib/scroll";
 import { prefersReducedMotion, curtainDelay } from "@/lib/motion";
 import { CURTAIN_KEY } from "@/lib/dosen-content";
-import { VIDEOS } from "@/lib/home-content";
 import { Container, SceneTitle } from "@/components/home/shared";
 import { ElvoPeek } from "@/components/home/elvo-peek";
 import { WordRotate } from "@/components/motion/word-rotate";
@@ -21,7 +20,7 @@ export function smoothTo(id) {
  * pencarian besar yang langsung mengisi `query` direktori, chip rumpun (filter `field`), dan saran topik.
  */
 export function DosenHero() {
-  const { intro, lecturers, fields, field, setField, query, setQuery } = useDosen();
+  const { hero, lecturers, fields, field, setField, query, setQuery } = useDosen();
   const ref = useRef(null);
   const [draft, setDraft] = useState(query);
   useEffect(() => setDraft(query), [query]);
@@ -33,6 +32,7 @@ export function DosenHero() {
   const allTopics = [...new Set(lecturers.flatMap((l) => l.expertise))];
   const topicCount = allTopics.length;
   const topics = allTopics.filter((t) => t.length <= 22).slice(0, 8);
+  const words = hero.rotateWords.length ? hero.rotateWords : topics;
 
   useEffect(() => {
     const el = ref.current;
@@ -68,22 +68,30 @@ export function DosenHero() {
       <Container>
         <nav aria-label="Breadcrumb" data-hero-fade className="text-sm text-text/55">
           <ol className="flex flex-wrap items-center gap-2">
-            <li><a href="/" className="u-gold transition-colors hover:text-maroon">Beranda</a></li>
-            <li aria-hidden>/</li>
-            <li>Profil</li>
-            <li aria-hidden>/</li>
-            <li aria-current="page" className="text-navy">Dosen</li>
+            {hero.breadcrumb.map((b, i, all) => {
+              const last = i === all.length - 1;
+              return (
+                <li key={`${b.label}-${i}`} className="flex items-center gap-2" aria-current={last ? "page" : undefined}>
+                  {i > 0 && <span aria-hidden>/</span>}
+                  {b.href && !last ? (
+                    <a href={b.href} className="u-gold transition-colors hover:text-maroon">{b.label}</a>
+                  ) : (
+                    <span className={last ? "text-navy" : undefined}>{b.label}</span>
+                  )}
+                </li>
+              );
+            })}
           </ol>
         </nav>
 
         {/* baris judul: kiri judul, kanan potret + video */}
         <div className="mt-10 flex flex-col gap-8 lg:mt-12 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-3xl">
-            <SceneTitle as="h1" trigger="mount" title={["Belajar dari", "yang mengerjakannya"]} className="!text-[clamp(2.5rem,5.6vw,4.5rem)] !leading-[1.02]" />
+            <SceneTitle as="h1" trigger="mount" title={[hero.titleTop, hero.titleAccent]} className="!text-[clamp(2.5rem,5.6vw,4.5rem)] !leading-[1.02]" />
             <p data-hero-fade className="mt-4 font-serif text-[clamp(1.15rem,2vw,1.45rem)] leading-tight text-text/60">
-              Ahli di{" "}
+              {hero.rotatePrefix}{" "}
               <span className="inline-block min-w-[12ch] italic text-maroon">
-                <WordRotate words={topics} interval={2400} />
+                <WordRotate words={words} interval={2400} />
               </span>
             </p>
           </div>
@@ -112,19 +120,21 @@ export function DosenHero() {
                 ))}
               </span>
               <span className="text-left text-[13px] leading-snug text-text/60">
-                <span className="block font-semibold text-navy">{lecturers.length} dosen tetap</span>
-                <span className="u-gold">{topicCount} topik keahlian</span>
+                <span className="block font-semibold text-navy">{lecturers.length} {hero.countLabel}</span>
+                <span className="u-gold">{topicCount} {hero.topicLabel}</span>
               </span>
             </button>
-            <VideoLink />
+            {hero.video.show && hero.video.src && <VideoLink v={hero.video} />}
           </div>
         </div>
 
         {/* panel pencarian */}
         <div data-search className="relative mt-10 rounded-2xl border border-line bg-white p-4 shadow-[0_30px_60px_-44px_rgb(20_33_61/0.5)] sm:p-6 md:mt-12">
-          <div className="absolute -top-16 right-6 hidden lg:block">
-            <div className="relative"><ElvoPeek pose="wave" size={80} side="left" say="Ketik topiknya, aku carikan dosennya!" delay={0.3} /></div>
-          </div>
+          {hero.mascot.show && (
+            <div className="absolute -top-16 right-6 hidden lg:block">
+              <div className="relative"><ElvoPeek pose={hero.mascot.pose} size={80} side="left" say={hero.mascot.say} delay={0.3} /></div>
+            </div>
+          )}
           <form
             role="search"
             onSubmit={(e) => {
@@ -143,17 +153,17 @@ export function DosenHero() {
               type="search"
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
-              placeholder="Cari nama dosen, topik, atau mata kuliah…"
+              placeholder={hero.search.placeholder}
               className="h-12 min-w-0 flex-1 bg-transparent text-[16px] text-navy outline-none placeholder:text-text/40 md:h-14 md:text-[17px]"
             />
             <button type="submit" className="h-11 shrink-0 rounded-lg bg-maroon px-5 text-[15px] font-semibold text-white transition-colors duration-300 hover:bg-maroon-deep md:h-12 md:px-7">
-              Cari
+              {hero.search.submitLabel}
             </button>
           </form>
 
           <div className="mt-4 flex flex-col gap-4 md:flex-row md:items-start md:justify-between md:gap-8">
             <div role="group" aria-label="Filter rumpun keahlian" className="flex flex-wrap gap-2">
-              {[{ key: "all", name: "Semua rumpun" }, ...fields].map((f) => {
+              {[{ key: "all", name: hero.search.allLabel }, ...fields].map((f) => {
                 const on = field === f.key;
                 const n = f.key === "all" ? lecturers.length : lecturers.filter((l) => l.fields.includes(f.key)).length;
                 return (
@@ -178,7 +188,7 @@ export function DosenHero() {
               })}
             </div>
             <p className="shrink-0 text-[13px] text-text/50">
-              Coba:{" "}
+              {hero.search.tryLabel}{" "}
               {topics.slice(0, 3).map((t, i) => (
                 <span key={t}>
                   {i > 0 && ", "}
@@ -191,15 +201,14 @@ export function DosenHero() {
           </div>
         </div>
 
-        <p data-hero-fade className="mt-6 max-w-2xl text-pretty text-[15.5px] leading-relaxed text-text/65">{intro.body}</p>
+        <p data-hero-fade className="mt-6 max-w-2xl text-pretty text-[15.5px] leading-relaxed text-text/65">{hero.intro}</p>
       </Container>
     </section>
   );
 }
 
 /** Tombol "▶ Video profil dosen" untuk permukaan terang. */
-function VideoLink() {
-  const v = VIDEOS.dosen;
+function VideoLink({ v }) {
   return (
     <Modal>
       <ModalTrigger className="group inline-flex h-12 items-center gap-3 text-[15px] font-semibold text-navy">
@@ -209,7 +218,7 @@ function VideoLink() {
           </svg>
           <span aria-hidden className="absolute inset-0 rounded-full ring-2 ring-maroon/30 transition-[transform,opacity] duration-700 group-hover:scale-125 group-hover:opacity-0" />
         </span>
-        <span className="u-gold">Video profil dosen</span>
+        <span className="u-gold">{v.label}</span>
         <span className="tabular text-xs font-normal text-text/45">{v.duration}</span>
       </ModalTrigger>
       <ModalContent className="max-w-5xl bg-maroon-deep p-0 text-white sm:p-0">

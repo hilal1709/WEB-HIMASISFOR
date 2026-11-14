@@ -12,12 +12,11 @@ import { Skeleton } from "@/components/ui/loader";
 import { cn } from "@/lib/utils";
 import { useBidang } from "./bidang-provider";
 
-/** Tata letak mosaik ≥ lg (4 kolom × 2 baris). Enterprise = tile besar (keunggulan khas prodi). */
+/** Ukuran tile ≥ lg (grid 4 kolom, baris otomatis 302px, `dense` menambal celah) — dipilih per bidang di Konsol. */
 const SPAN = {
-  enterprise: "lg:col-span-2 lg:row-span-2",
-  audit: "lg:col-span-2",
-  data: "lg:col-span-1",
-  msi: "lg:col-span-1",
+  besar: "lg:col-span-2 lg:row-span-2",
+  lebar: "lg:col-span-2",
+  kecil: "lg:col-span-1",
 };
 const SURFACE = { maroon: "bg-maroon/[0.95]", navy: "bg-navy/[0.95]", gold: "bg-navy/[0.95]" };
 const FROM = [{ yPercent: -100 }, { xPercent: 100 }, { yPercent: 100 }, { xPercent: -100 }];
@@ -37,18 +36,15 @@ function sideOf(e, el) {
  * Klik → modal yang tumbuh dari tile. Ponsel: Swiper dengan pertanyaan selalu terlihat.
  */
 export function FieldMosaic() {
-  const { fields } = useBidang();
+  const { fields, mosaic } = useBidang();
   return (
     <section id="bidang" className="relative scroll-mt-24 bg-cream-2/60 py-16 md:py-20">
       <Container>
-        <SectionHeader
-          title={["Pilih pertanyaan", "yang ingin", "kamu jawab"]}
-          body="Buka satu tile untuk rangkumannya: yang dipelajari, alat kerja, mata kuliah, dan dosen pengampunya."
-        />
-        <ul className="bk-mosaic mt-10 hidden gap-4 md:mt-12 lg:grid lg:h-[620px] lg:grid-cols-4 lg:grid-rows-2">
+        <SectionHeader title={mosaic.title} body={mosaic.body} />
+        <ul className="bk-mosaic mt-10 hidden auto-rows-[302px] grid-flow-row-dense gap-4 md:mt-12 lg:grid lg:grid-cols-4">
           {fields.map((f, i) => (
-            <li key={f.slug} data-aos="fade-up" data-aos-delay={i * 70} className={cn("bk-tile min-h-0", SPAN[f.slug])}>
-              <Tile field={f} index={i} big={f.slug === "enterprise"} />
+            <li key={f.slug} data-aos="fade-up" data-aos-delay={i * 70} className={cn("bk-tile min-h-0", SPAN[f.tile] ?? SPAN.kecil)}>
+              <Tile field={f} index={i} big={f.tile === "besar"} openLabel={mosaic.openLabel} />
             </li>
           ))}
         </ul>
@@ -57,7 +53,7 @@ export function FieldMosaic() {
         <Swiper modules={[A11y, Keyboard]} keyboard spaceBetween={14} slidesPerView={1.12} slidesOffsetBefore={20} slidesOffsetAfter={20} breakpoints={{ 640: { slidesPerView: 1.8 } }}>
           {fields.map((f, i) => (
             <SwiperSlide key={f.slug}>
-              <Tile field={f} index={i} touch />
+              <Tile field={f} index={i} touch openLabel={mosaic.openLabel} />
             </SwiperSlide>
           ))}
         </Swiper>
@@ -66,7 +62,9 @@ export function FieldMosaic() {
   );
 }
 
-function Tile({ field: f, index, big = false, touch = false }) {
+const pad = (n) => String(n).padStart(2, "0");
+
+function Tile({ field: f, index, big = false, touch = false, openLabel }) {
   const { openField, setFocus } = useBidang();
   const btn = useRef(null);
   const layer = useRef(null);
@@ -99,26 +97,26 @@ function Tile({ field: f, index, big = false, touch = false }) {
       onFocus={() => setFocus(index)}
       onBlur={() => setFocus(null)}
       onClick={(e) => openField(index, e.currentTarget)}
-      aria-label={`${f.title}: ${f.question} Buka rangkuman`}
+      aria-label={`${f.title}: ${f.question} ${openLabel}`}
       className={cn(
         "group relative block w-full overflow-hidden rounded-xl bg-navy text-left text-white outline-none focus-visible:ring-4 focus-visible:ring-gold/50",
         touch ? "aspect-[4/5]" : "h-full"
       )}
     >
-      {!loaded && <Skeleton className="absolute inset-0 rounded-none bg-navy-deep/60" />}
-      <Image
+      {!loaded && f.image && <Skeleton className="absolute inset-0 rounded-none bg-navy-deep/60" />}
+      {f.image && <Image
         src={f.image}
         alt=""
         fill
         onLoad={() => setLoaded(true)}
         sizes={big ? "(min-width:1024px) 600px, 90vw" : "(min-width:1024px) 600px, 90vw"}
         className={cn("object-cover transition-transform duration-1000 ease-cinematic group-hover:scale-[1.05]", f.crop && "scale-[1.12]")}
-      />
+      />}
 
       {/* bar dasar */}
       <div className={cn("absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 bg-navy-deep/80 p-5 transition-opacity duration-300 sm:p-6", !touch && "group-hover:opacity-0")}>
         <div className="min-w-0">
-          <span className="tabular text-[11px] tracking-[0.18em] text-gold-soft">0{index + 1}</span>
+          <span className="tabular text-[11px] tracking-[0.18em] text-gold-soft">{pad(index + 1)}</span>
           <h3 className={cn("mt-1 font-serif leading-tight", big ? "text-[clamp(1.6rem,2.4vw,2.2rem)]" : "text-[1.4rem]")}>{f.title}</h3>
           {(touch || big) && <p className="mt-2 max-w-md text-[14px] italic leading-snug text-white/75">“{f.question}”</p>}
         </div>
@@ -133,13 +131,13 @@ function Tile({ field: f, index, big = false, touch = false }) {
       {!touch && (
         <div ref={layer} className={cn("invisible absolute inset-0 flex flex-col justify-between p-6 opacity-0 sm:p-7", SURFACE[f.accent])}>
           <div className="flex items-start justify-between gap-4">
-            <span data-rise className="tabular text-[11px] tracking-[0.18em] text-gold-soft">0{index + 1} · {f.short}</span>
+            <span data-rise className="tabular text-[11px] tracking-[0.18em] text-gold-soft">{pad(index + 1)} · {f.short}</span>
             {f.lottie && <LottieIllustration data-rise src={f.lottie} replayOnHover className={cn("shrink-0", big ? "size-24" : "size-16")} />}
           </div>
           <div>
             <p data-rise className={cn("font-serif italic leading-[1.12] text-white", big ? "text-[clamp(2rem,3.2vw,3rem)]" : "text-[1.55rem]")}>“{f.question}”</p>
             <p data-rise className="mt-4 inline-flex items-center gap-2 text-[14px] font-semibold text-gold-soft">
-              <span className="u-gold">Buka rangkuman</span>
+              <span className="u-gold">{openLabel}</span>
               <svg aria-hidden viewBox="0 0 16 16" className="size-4">
                 <path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
               </svg>

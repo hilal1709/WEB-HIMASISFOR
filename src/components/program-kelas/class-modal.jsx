@@ -1,7 +1,7 @@
 "use client";
 import { useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { PMB_URL } from "@/lib/home-content";
+import { fill } from "@/lib/program-kelas-cms/schema";
 import { Modal, ModalContent, ModalDescription, ModalTitle } from "@/components/ui/modal";
 import { LottieIllustration } from "@/components/media/lottie-illustration";
 import { PillLink, PlaceholderTag } from "@/components/home/shared";
@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 const pad = (n) => String(n).padStart(2, "0");
 
 /** Modal detail satu kelas: panel navy + Lottie, isi lengkap, ‹ › dan panah keyboard berpindah kelas. */
-export function ClassModal({ classes, index, onIndex, onClose }) {
+export function ClassModal({ classes, t, links, note, index, onIndex, onClose }) {
   // simpan kelas terakhir agar isi tidak hilang selama animasi tutup
   const last = useRef(null);
   if (index != null) last.current = index;
@@ -36,19 +36,19 @@ export function ClassModal({ classes, index, onIndex, onClose }) {
               <div>
                 <span aria-hidden className="font-serif text-[3rem] leading-none text-gold/90">{pad(item.n)}</span>
                 <dl className="mt-4 space-y-3 text-[13px]">
-                  <Fact label="Biaya" value={`${item.fee}`} note={item.feeNote} />
-                  <Fact label="Kuota" value={`${item.seats} kursi`} />
-                  <Fact label="Lokasi" value={item.location} />
+                  <Fact label={t.feeLabel} value={`${item.fee}`} note={item.feeNote} />
+                  <Fact label={t.modalSeatsLabel} value={fill(t.modalSeats, { kursi: item.seats })} />
+                  <Fact label={t.modalLocationLabel} value={item.location} />
                 </dl>
               </div>
             </div>
             <div className="max-h-[72vh] overflow-y-auto p-6 sm:p-8">
-              <p className="kicker text-maroon">Program kelas · {item.mode}</p>
+              <p className="kicker text-maroon">{fill(t.modalKicker, { mode: item.mode })}</p>
               <ModalTitle className="mt-3 text-[1.65rem] leading-snug">{item.name}</ModalTitle>
               <ModalDescription className="mt-2 text-[15px]">{item.tagline}</ModalDescription>
               <p className="mt-4 inline-flex rounded-md bg-cream px-3 py-1.5 text-[13.5px] font-medium text-navy">{item.schedule}</p>
 
-              <Block title="Cocok untuk">
+              <Block title={t.forWhoLabel}>
                 <ul className="space-y-2">
                   {item.forWho.map((c, i) => (
                     <li
@@ -63,14 +63,14 @@ export function ClassModal({ classes, index, onIndex, onClose }) {
                 </ul>
               </Block>
               <div className="grid gap-x-8 sm:grid-cols-2">
-                <Block title="Keunggulan">
+                <Block title={t.highlightsLabel}>
                   <ul className="space-y-1.5 text-[14px] text-text/75">
                     {item.highlights.map((h) => (
                       <li key={h}>{h}</li>
                     ))}
                   </ul>
                 </Block>
-                <Block title="Persyaratan">
+                <Block title={t.requirementsLabel}>
                   <ol className="space-y-1.5 text-[14px] text-text/75">
                     {item.requirements.map((r, i) => (
                       <li key={r} className="flex gap-2">
@@ -82,10 +82,10 @@ export function ClassModal({ classes, index, onIndex, onClose }) {
                 </Block>
               </div>
               <div className="mt-7 flex flex-wrap items-center gap-4">
-                <PillLink href={PMB_URL} size="sm" target="_blank" rel="noopener noreferrer">
-                  Daftar {item.short}
+                <PillLink href={links.pmb} size="sm" target="_blank" rel="noopener noreferrer">
+                  {fill(t.registerCta, { kelas: item.short })}
                 </PillLink>
-                {item.sample && <PlaceholderTag />}
+                {item.sample && <PlaceholderTag>{note}</PlaceholderTag>}
               </div>
             </div>
           </div>
@@ -98,8 +98,8 @@ export function ClassModal({ classes, index, onIndex, onClose }) {
             ))}
           </div>
           <div className="flex gap-2">
-            <NavBtn label="Kelas sebelumnya" onClick={() => go(-1)} icon={ChevronLeft} />
-            <NavBtn label="Kelas berikutnya" onClick={() => go(1)} icon={ChevronRight} />
+            <NavBtn label={classes[((shown ?? 0) - 1 + classes.length) % classes.length]?.name} onClick={() => go(-1)} icon={ChevronLeft} />
+            <NavBtn label={classes[((shown ?? 0) + 1) % classes.length]?.name} onClick={() => go(1)} icon={ChevronRight} />
           </div>
         </div>
       </ModalContent>

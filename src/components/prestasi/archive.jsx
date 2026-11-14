@@ -3,13 +3,13 @@ import { useLayoutEffect as useEffect, useLayoutEffect, useMemo, useRef, useStat
 import Image from "next/image";
 import { Flip, gsap } from "@/lib/scroll";
 import { prefersReducedMotion } from "@/lib/motion";
-import { CATEGORIES, LEVELS } from "@/lib/prestasi-content";
 import { Container, SectionHeader } from "@/components/home/shared";
 import { LottieIllustration } from "@/components/media/lottie-illustration";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/toast";
 import { cn } from "@/lib/utils";
-import { Highlight, LevelBadge, PAGE, usePrestasi } from "./prestasi-provider";
+import { Highlight, LevelBadge, fillNodes, usePrestasi } from "./prestasi-provider";
+import { fill } from "@/lib/prestasi-cms/schema";
 
 const useIso = typeof window === "undefined" ? useEffect : useLayoutEffect;
 
@@ -20,7 +20,7 @@ const useIso = typeof window === "undefined" ? useEffect : useLayoutEffect;
  * pratinjau mengikuti kursor (gsap.quickTo). Filter beranimasi GSAP Flip. "Tampilkan lebih banyak" bertahap.
  */
 export function Archive() {
-  const { category, setCategory, level, setLevel, year, setYear, years, query, setQuery, filtered, items, visible, setVisible, reset } = usePrestasi();
+  const { category, setCategory, level, setLevel, year, setYear, years, query, setQuery, filtered, items, visible, setVisible, reset, PAGE, archive: a, levels, categories } = usePrestasi();
   const toast = useToast();
   const list = useRef(null);
   const flipState = useRef(null);
@@ -92,7 +92,7 @@ export function Archive() {
         const next = visible + PAGE;
         withFlip(() => setVisible(next));
         setMore(false);
-        if (next >= filtered.length) toast.info("Semua prestasi sudah ditampilkan", { description: `${filtered.length} prestasi sesuai filter Anda.` });
+        if (next >= filtered.length) toast.info(a.doneToast, { description: fill(a.doneDetail, { n: filtered.length }) });
       }, 280)
     );
   };
@@ -103,20 +103,17 @@ export function Archive() {
     <section id="arsip" className="scroll-mt-20 py-16 md:py-20">
       <Container>
         <div className="flex items-end justify-between gap-6">
-          <SectionHeader
-            title={["Arsip", "prestasi"]}
-            body="Saring menurut peraih, tingkat, atau tahun. Klik baris mana pun untuk melihat semua capaian orang tersebut."
-          />
-          <LottieIllustration src="/lottie/medal.json" className="hidden w-24 shrink-0 md:block" replayOnHover label="Ilustrasi medali" />
+          <SectionHeader title={[a.titleTop, a.titleAccent]} body={a.body} />
+          {a.lottie && <LottieIllustration src={a.lottie} className="hidden w-24 shrink-0 md:block" replayOnHover label="Ilustrasi arsip prestasi" />}
         </div>
 
         {/* toolbar */}
         <div className="sticky top-16 z-30 -mx-5 mt-10 border-y border-line bg-cream/95 px-5 py-3 backdrop-blur-md md:top-20 md:mx-0 md:mt-12 md:rounded-lg md:border md:px-3">
           <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
             <div className="flex flex-wrap items-center gap-2">
-              <Segmented tabs={CATEGORIES} value={category} onChange={(k) => withFlip(() => setCategory(k))} />
+              <Segmented tabs={categories} value={category} onChange={(k) => withFlip(() => setCategory(k))} />
               <div role="group" aria-label="Tingkat" className="flex gap-1.5">
-                {LEVELS.filter((l) => items.some((i) => i.level === l.key)).map((l) => {
+                {levels.filter((l) => items.some((i) => i.level === l.key)).map((l) => {
                   const on = level === l.key;
                   return (
                     <button
@@ -144,7 +141,7 @@ export function Archive() {
                   onChange={(e) => withFlip(() => setYear(e.target.value))}
                   className="h-10 appearance-none rounded-md border border-line bg-white pl-3 pr-8 text-[13.5px] font-semibold text-navy transition-[border-color,box-shadow] duration-300 focus:border-navy/40 focus:shadow-[0_0_0_3px_rgb(201_162_39/0.25)] focus:outline-none"
                 >
-                  <option value="all">Semua tahun</option>
+                  <option value="all">{a.yearAllLabel}</option>
                   {years.map((y) => (
                     <option key={y} value={y}>
                       {y}
@@ -165,7 +162,7 @@ export function Archive() {
                   type="search"
                   value={draft}
                   onChange={(e) => setDraft(e.target.value)}
-                  placeholder="Cari nama atau kompetisi…"
+                  placeholder={a.searchPlaceholder}
                   className="h-10 w-full rounded-md border border-line bg-white pl-9 pr-3 text-[14px] text-navy transition-[border-color,box-shadow] duration-300 placeholder:text-text/40 focus:border-navy/40 focus:shadow-[0_0_0_3px_rgb(201_162_39/0.25)] focus:outline-none"
                 />
               </label>
@@ -174,25 +171,23 @@ export function Archive() {
         </div>
 
         <div aria-live="polite" className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 text-[13.5px] text-text/55">
-          <span>
-            Menampilkan <span className="tabular font-semibold text-navy">{shown.length}</span> dari {filtered.length} prestasi
-          </span>
+          <span>{fillNodes(a.countLabel, { shown: <span className="tabular font-semibold text-navy">{shown.length}</span>, total: filtered.length })}</span>
           {active > 0 && (
             <button type="button" onClick={() => withFlip(reset)} className="font-semibold text-maroon">
-              <span className="u-gold">Hapus {active} filter</span>
+              <span className="u-gold">{fill(a.clearLabel, { n: active })}</span>
             </button>
           )}
         </div>
 
         {filtered.length === 0 ? (
-          <Empty onReset={() => withFlip(reset)} />
+          <Empty copy={a.empty} onReset={() => withFlip(reset)} />
         ) : (
           <div ref={list} className="mt-6">
             <Rows groups={groups} query={query} />
             {visible < filtered.length && (
               <div className="mt-10 flex justify-center">
                 <Button variant="outline-navy" size="lg" loading={more} onClick={loadMore} className="min-w-56">
-                  Tampilkan {Math.min(PAGE, filtered.length - visible)} lagi
+                  {fill(a.moreLabel, { n: Math.min(PAGE, filtered.length - visible) })}
                 </Button>
               </div>
             )}
@@ -204,7 +199,7 @@ export function Archive() {
 }
 
 function Rows({ groups, query }) {
-  const { openProfile } = usePrestasi();
+  const { openProfile, categories, archive } = usePrestasi();
   const box = useRef(null);
   const preview = useRef(null);
   const [hover, setHover] = useState(null);
@@ -234,7 +229,7 @@ function Rows({ groups, query }) {
           <div className="relative pt-6 lg:pt-7">
             <div className="lg:sticky lg:top-44">
               <p className={cn("tabular font-serif leading-none text-navy", /^\d+$/.test(g.key) ? "text-[clamp(2rem,4vw,3.25rem)]" : "text-[clamp(1.6rem,2.6vw,2.25rem)] italic text-maroon")}>{g.key}</p>
-              <p className="mt-1 text-[12.5px] text-text/50">{g.items.length} prestasi</p>
+              <p className="mt-1 text-[12.5px] text-text/50">{fill(archive.groupLabel || "{n}", { n: g.items.length })}</p>
             </div>
             <span aria-hidden className="absolute bottom-0 right-0 top-7 hidden w-px bg-line lg:block">
               <span data-progress className="absolute inset-0 origin-top bg-gold" />
@@ -269,7 +264,7 @@ function Rows({ groups, query }) {
                     </span>
                     <span className="mt-1.5 block text-[13.5px] text-text/60">
                       <Highlight text={it.short} query={query} />
-                      <span className="text-text/35"> · {it.category === "dosen" ? "Dosen" : "Mahasiswa"}</span>
+                      <span className="text-text/35"> · {categories.find((c) => c.key === it.category)?.label}</span>
                     </span>
                   </span>
                   <span className="mt-1 grid size-10 place-items-center rounded-full border border-line text-navy transition-[background-color,border-color,color,transform] duration-500 ease-cinematic group-hover:rotate-45 group-hover:border-maroon group-hover:bg-maroon group-hover:text-white md:mt-0">
@@ -333,7 +328,7 @@ function Segmented({ tabs, value, onChange }) {
   };
 
   return (
-    <div role="tablist" aria-label="Peraih" onKeyDown={onKey} className="relative inline-flex rounded-md border border-line bg-white p-1">
+    <div role="tablist" aria-label="Kategori peraih" onKeyDown={onKey} className="relative inline-flex rounded-md border border-line bg-white p-1">
       <span aria-hidden className="absolute bottom-1 top-1 left-0 rounded bg-navy transition-[transform,width] duration-500 ease-cinematic" style={{ width: pill.w, transform: `translateX(${pill.x}px)` }} />
       {tabs.map((t, i) => (
         <button
@@ -352,20 +347,20 @@ function Segmented({ tabs, value, onChange }) {
   );
 }
 
-function Empty({ onReset }) {
+function Empty({ copy, onReset }) {
   return (
     <div className="mt-8 flex flex-col items-center rounded-lg border border-dashed border-line bg-white px-6 py-12 text-center">
       <div className="w-36">
-        <LottieIllustration src="/lottie/empty-news.json" label="Tidak ada hasil" />
+        {copy.lottie && <LottieIllustration src={copy.lottie} label="Tidak ada hasil" />}
       </div>
-      <p className="mt-4 font-serif text-[1.4rem] text-navy">Belum ada prestasi yang cocok</p>
-      <p className="mt-1 text-[14px] text-text/60">Coba kata kunci lain, atau tampilkan semua tingkat dan tahun.</p>
+      <p className="mt-4 font-serif text-[1.4rem] text-navy">{copy.title}</p>
+      <p className="mt-1 text-[14px] text-text/60">{copy.body}</p>
       <button
         type="button"
         onClick={onReset}
         className="mt-6 inline-flex h-10 items-center rounded-md bg-navy px-5 text-[14px] font-semibold text-white transition-[background-color,transform] duration-300 hover:bg-navy-deep active:scale-[0.98]"
       >
-        Tampilkan semua prestasi
+        {copy.resetLabel}
       </button>
     </div>
   );

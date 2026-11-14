@@ -16,7 +16,8 @@ const initials = (name) => name.split(/[ ,.]+/).filter(Boolean).slice(0, 2).map(
  * Foto grayscale → berwarna saat hover, kartu terangkat; klik kartu → modal cerita alumni.
  * Foto memuat dengan Skeleton.
  */
-export function AlumniWall({ alumni }) {
+export function AlumniWall({ content: c, note }) {
+  const alumni = c.items;
   const [current, setCurrent] = useState(null);
   const half = Math.ceil(alumni.length / 2);
   const rows = [alumni.slice(0, half), alumni.slice(half)].filter((r) => r.length);
@@ -27,9 +28,9 @@ export function AlumniWall({ alumni }) {
     <section id="alumni" className="relative overflow-hidden bg-cream-2 py-16 md:py-20">
       <Container>
         <SectionHeader
-          title={["Jejak", "Sisforians", "di industri"]}
-          body="Dari ruang kelas Sisfor ke manufaktur, konsultan, perbankan, dan instansi pemerintah. Pilih kartu untuk membaca ceritanya."
-          action={<LottieIllustration src="/lottie/grad-cap.json" className="hidden w-28 md:block" />}
+          title={[c.titleTop, c.titleAccent]}
+          body={c.body}
+          action={c.lottie ? <LottieIllustration src={c.lottie} className="hidden w-28 md:block" /> : null}
         />
       </Container>
 
@@ -44,10 +45,12 @@ export function AlumniWall({ alumni }) {
       </div>
 
       <Container className="relative">
-        <PlaceholderTag className="mt-8" />
-        <div className="absolute -top-6 right-8 hidden xl:block">
-          <div className="relative"><ElvoPeek pose="laugh" size={82} say="Suatu hari fotomu ada di sini juga!" delay={0.6} /></div>
-        </div>
+        {alumni.some((a) => a.sample) && <PlaceholderTag className="mt-8">{note}</PlaceholderTag>}
+        {c.mascot?.show && (
+          <div className="absolute -top-6 right-8 hidden xl:block">
+            <div className="relative"><ElvoPeek pose={c.mascot.pose} size={82} say={c.mascot.say} delay={0.6} /></div>
+          </div>
+        )}
       </Container>
 
       <Modal open={!!current} onOpenChange={(o) => !o && setCurrent(null)}>
@@ -62,13 +65,15 @@ export function AlumniWall({ alumni }) {
                 )}
               </div>
               <div className="p-6 sm:p-7">
-                <p className="kicker text-maroon">Alumni Sistem Informasi</p>
+                <p className="kicker text-maroon">{c.kicker}</p>
                 <ModalTitle className="mt-2 text-[1.45rem]">{current.name}</ModalTitle>
                 <ModalDescription className="mt-1">{current.role}</ModalDescription>
-                <blockquote className="relative mt-6 border-l-[3px] border-gold pl-4 font-serif text-[1.2rem] leading-snug text-navy">
-                  {current.quote ?? "Belajar proses bisnis dan teknologi sekaligus membuat saya cepat beradaptasi di dunia kerja."}
-                </blockquote>
-                <PlaceholderTag className="mt-5" />
+                {(current.quote || c.fallbackQuote) && (
+                  <blockquote className="relative mt-6 border-l-[3px] border-gold pl-4 font-serif text-[1.2rem] leading-snug text-navy">
+                    {current.quote || c.fallbackQuote}
+                  </blockquote>
+                )}
+                {(current.sample || !current.quote) && <PlaceholderTag className="mt-5">{note}</PlaceholderTag>}
               </div>
             </div>
           )}

@@ -14,7 +14,10 @@ export const usePersonModal = () => useContext(Ctx);
  * - ‹ › dan panah keyboard berpindah orang.
  * - Kartu "Melapor ke" / "Membawahi" bisa diklik untuk menelusuri bagan.
  */
-export function PersonModalProvider({ people, children }) {
+const LABELS = { duties: "Tugas & tanggung jawab", expertise: "Bidang keahlian", services: "Layanan", reportsTo: "Melapor ke", manages: "Membawahi" };
+
+export function PersonModalProvider({ people, labels, children }) {
+  const t = { ...LABELS, ...labels };
   const [key, setKey] = useState(null);
   const byKey = useMemo(() => Object.fromEntries(people.map((p) => [p.key, p])), [people]);
   const index = people.findIndex((p) => p.key === key);
@@ -63,7 +66,7 @@ export function PersonModalProvider({ people, children }) {
                 <ModalDescription className="sr-only">Detail tugas dan bidang keahlian {item.name}</ModalDescription>
 
                 {item.duties?.length > 0 && (
-                <Block title="Tugas & tanggung jawab">
+                <Block title={t.duties}>
                   <ol className="space-y-2.5">
                     {item.duties.map((d, i) => (
                       <li
@@ -79,18 +82,20 @@ export function PersonModalProvider({ people, children }) {
                 </Block>
                 )}
 
-                <Block title={item.group === "staff" ? "Layanan" : "Bidang keahlian"}>
+                {item.expertise?.length > 0 && (
+                <Block title={item.group === "staff" ? t.services : t.expertise}>
                   <ul className="flex flex-wrap gap-1.5">
                     {item.expertise.map((x) => (
                       <li key={x} className="rounded-md bg-cream px-2.5 py-1 text-[13px] text-navy">{x}</li>
                     ))}
                   </ul>
                 </Block>
+                )}
 
                 {(boss || team.length > 0) && (
                   <div className="mt-6 grid gap-3 sm:grid-cols-2">
-                    {boss && <Relation label="Melapor ke" people={[boss]} onOpen={open} />}
-                    {team.length > 0 && <Relation label="Membawahi" people={team} onOpen={open} />}
+                    {boss && <Relation label={t.reportsTo} people={[boss]} onOpen={open} />}
+                    {team.length > 0 && <Relation label={t.manages} people={team} onOpen={open} />}
                   </div>
                 )}
 

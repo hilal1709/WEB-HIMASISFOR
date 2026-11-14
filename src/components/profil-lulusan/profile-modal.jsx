@@ -17,9 +17,11 @@ const HASH = "#pl-";
  * - ‹ › dan panah keyboard berpindah profil.
  * - URL mendapat hash `#pl-<key>` (deep link) — membuka halaman dengan hash itu langsung membuka modal.
  */
-export function ProfileModalProvider({ profiles, children }) {
+export function ProfileModalProvider({ content, note, children }) {
+  const profiles = content.items;
+  const m = content.modal ?? {};
   const [index, setIndex] = useState(null);
-  const item = index != null ? profiles[index] : null;
+  const item = index != null ? profiles[index] ?? null : null;
 
   const setHash = (key) => {
     try {
@@ -79,11 +81,11 @@ export function ProfileModalProvider({ profiles, children }) {
                 <span aria-hidden className="absolute bottom-4 left-5 font-serif text-[3.25rem] leading-none text-gold/90 md:bottom-6">{pad(item.n)}</span>
               </div>
               <div className="max-h-[70vh] overflow-y-auto p-6 sm:p-8">
-                <p className="kicker text-maroon">Profil lulusan · {item.short}</p>
+                <p className="kicker text-maroon">{[m.kicker, item.short].filter(Boolean).join(" · ")}</p>
                 <ModalTitle className="mt-3 text-[1.65rem] leading-snug">{item.title}</ModalTitle>
                 <ModalDescription className="mt-3 text-[15px]">{item.summary}</ModalDescription>
 
-                <Block title="Kompetensi utama">
+                {item.competencies.length > 0 && <Block title={m.competenciesLabel}>
                   <ul className="grid gap-2 sm:grid-cols-2">
                     {item.competencies.map((c, i) => (
                       <li
@@ -96,25 +98,25 @@ export function ProfileModalProvider({ profiles, children }) {
                       </li>
                     ))}
                   </ul>
-                </Block>
+                </Block>}
 
                 <div className="grid gap-x-8 sm:grid-cols-2">
-                  <Block title="Contoh jabatan">
+                  {item.roles.length > 0 && <Block title={m.rolesLabel}>
                     <ul className="flex flex-wrap gap-1.5">
                       {item.roles.map((r) => (
                         <li key={r} className="rounded-md bg-cream px-2.5 py-1 text-[13px] text-navy">{r}</li>
                       ))}
                     </ul>
-                  </Block>
-                  <Block title="Mata kuliah pendukung">
+                  </Block>}
+                  {item.courses.length > 0 && <Block title={m.coursesLabel}>
                     <ul className="space-y-1 text-[14px] text-text/70">
                       {item.courses.map((c) => (
                         <li key={c}>{c}</li>
                       ))}
                     </ul>
-                  </Block>
+                  </Block>}
                 </div>
-                <PlaceholderTag className="mt-6" />
+                {item.sample && <PlaceholderTag className="mt-6">{note}</PlaceholderTag>}
               </div>
             </div>
           )}

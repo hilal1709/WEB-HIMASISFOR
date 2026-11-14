@@ -21,15 +21,18 @@ export function setHash(value) {
  * Deep link: `#kelas-<key>` memilih tab, `#kelas-<key>-detail` membuka modal detail.
  */
 export function KelasProvider({ data, children }) {
-  const { classes } = data;
-  const [active, setActiveRaw] = useState(0);
+  const classes = data.classes.items;
+  const [activeRaw, setActiveIdx] = useState(0);
+  // jumlah kelas bisa berubah saat pratinjau CMS diperbarui
+  const active = Math.min(activeRaw, Math.max(0, classes.length - 1));
+  const setActiveRaw = setActiveIdx;
   const [detail, setDetail] = useState(null);
   const [quizOpen, setQuizOpen] = useState(false);
 
   const setActive = useCallback(
     (i, { hash = true } = {}) => {
       setActiveRaw(i);
-      if (hash) setHash(`kelas-${classes[i].key}`);
+      if (hash && classes[i]) setHash(`kelas-${classes[i].key}`);
     },
     [classes]
   );
@@ -44,7 +47,7 @@ export function KelasProvider({ data, children }) {
 
   const closeDetail = useCallback(() => {
     setDetail(null);
-    setHash(`kelas-${classes[active].key}`);
+    if (classes[active]) setHash(`kelas-${classes[active].key}`);
   }, [classes, active]);
 
   useEffect(() => {
@@ -65,15 +68,15 @@ export function KelasProvider({ data, children }) {
   }, [classes]);
 
   const value = useMemo(
-    () => ({ ...data, active, setActive, openDetail, openQuiz: () => setQuizOpen(true) }),
-    [data, active, setActive, openDetail]
+    () => ({ c: data, classes, active, setActive, openDetail, openQuiz: () => setQuizOpen(true) }),
+    [data, classes, active, setActive, openDetail]
   );
 
   return (
     <Ctx.Provider value={value}>
       {children}
-      <ClassModal classes={classes} index={detail} onIndex={openDetail} onClose={closeDetail} />
-      <QuizModal open={quizOpen} onOpenChange={setQuizOpen} />
+      <ClassModal classes={classes} t={data.classes} links={data.links} note={data.seo.sampleNote} index={detail != null && classes[detail] ? detail : null} onIndex={openDetail} onClose={closeDetail} />
+      {data.quiz.questions.length > 0 && <QuizModal open={quizOpen} onOpenChange={setQuizOpen} />}
     </Ctx.Provider>
   );
 }

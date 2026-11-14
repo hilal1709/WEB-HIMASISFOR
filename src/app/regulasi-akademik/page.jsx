@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
 import { CURTAIN_KEY, mergeRegulasi } from "@/lib/regulasi-content";
-import { mergeKurikulum } from "@/lib/kurikulum-content";
+import { getKurikulumData } from "@/lib/kurikulum-cms/server";
 import { SiteHeader, Topbar } from "@/components/home/site-header";
 import { SiteFooter } from "@/components/home/site-footer";
 import { AosReady } from "@/components/motion/aos-provider";
@@ -26,9 +26,9 @@ async function getData() {
   try {
     const rows = await prisma.pageContent.findMany({ where: { section: { in: ["regulasi-akademik", "curriculum"] }, isActive: true } });
     const row = (s) => rows.find((r) => r.section === s) ?? null;
-    return mergeRegulasi(row("regulasi-akademik"), { kurikulum: mergeKurikulum(row("curriculum")) });
+    return mergeRegulasi(row("regulasi-akademik"), { kurikulum: await getKurikulumData() });
   } catch {
-    return mergeRegulasi(null, { kurikulum: mergeKurikulum(null) });
+    return mergeRegulasi(null, { kurikulum: await getKurikulumData() });
   }
 }
 

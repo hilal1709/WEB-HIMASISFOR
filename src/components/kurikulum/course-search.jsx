@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Modal, ModalContent, ModalDescription, ModalTitle } from "@/components/ui/modal";
 import { LottieIllustration } from "@/components/media/lottie-illustration";
 import { cn } from "@/lib/utils";
+import { fill } from "@/lib/kurikulum-content";
 
 const norm = (s) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
 
@@ -19,13 +20,13 @@ function Mark({ text, q }) {
   );
 }
 
-const SUGGEST = ["data", "audit", "ERP", "pemrograman"];
+
 
 /**
  * Palet pencarian mata kuliah (Ctrl/⌘+K atau "/"): ketik → hasil per semester dengan teks cocok disorot,
  * ↑/↓ memilih, Enter membuka laci RPS. Kosong → ilustrasi + saran kata kunci.
  */
-export function CourseSearch({ open, onOpenChange, courses, onPick }) {
+export function CourseSearch({ open, onOpenChange, courses, onPick, copy: t }) {
   const [q, setQ] = useState("");
   const [dq, setDq] = useState("");
   const [sel, setSel] = useState(0);
@@ -52,12 +53,12 @@ export function CourseSearch({ open, onOpenChange, courses, onPick }) {
   const groups = useMemo(() => {
     const m = new Map();
     results.forEach((c, i) => {
-      const k = c.semester ? `Semester ${c.semester}` : "Mata kuliah pilihan";
+      const k = c.semester ? fill(t.semesterGroup, { n: c.semester }) : t.electiveGroup;
       if (!m.has(k)) m.set(k, []);
       m.get(k).push({ c, i });
     });
     return [...m.entries()];
-  }, [results]);
+  }, [results, t.semesterGroup, t.electiveGroup]);
 
   useEffect(() => {
     listRef.current?.querySelector(`[data-i="${sel}"]`)?.scrollIntoView({ block: "nearest" });
@@ -71,8 +72,8 @@ export function CourseSearch({ open, onOpenChange, courses, onPick }) {
   return (
     <Modal open={open} onOpenChange={onOpenChange}>
       <ModalContent className="top-[14%] max-w-xl translate-y-0 p-0" hideClose>
-        <ModalTitle className="sr-only">Cari mata kuliah</ModalTitle>
-        <ModalDescription className="sr-only">Ketik nama mata kuliah, lalu tekan Enter untuk membuka RPS-nya.</ModalDescription>
+        <ModalTitle className="sr-only">{t.title}</ModalTitle>
+        <ModalDescription className="sr-only">{t.description}</ModalDescription>
         <div className="flex items-center gap-3 border-b border-line px-5 pt-2">
           <svg aria-hidden viewBox="0 0 20 20" className="size-5 shrink-0 text-text/40">
             <circle cx="9" cy="9" r="6" fill="none" stroke="currentColor" strokeWidth="1.6" />
@@ -87,7 +88,7 @@ export function CourseSearch({ open, onOpenChange, courses, onPick }) {
               if (e.key === "ArrowUp") (e.preventDefault(), setSel((s) => Math.max(0, s - 1)));
               if (e.key === "Enter" && results[sel]) pick(results[sel]);
             }}
-            placeholder="Cari nama atau kode mata kuliah…"
+            placeholder={t.placeholder}
             role="combobox"
             aria-expanded="true"
             aria-controls="cur-search-list"
@@ -98,7 +99,7 @@ export function CourseSearch({ open, onOpenChange, courses, onPick }) {
         </div>
 
         <div ref={listRef} id="cur-search-list" role="listbox" className="max-h-[56vh] overflow-y-auto p-2">
-          {!dq && <p className="px-3 pb-1 pt-2 text-[12px] text-text/45">Mata kuliah yang sudah punya ringkasan RPS</p>}
+          {!dq && <p className="px-3 pb-1 pt-2 text-[12px] text-text/45">{t.readyLabel}</p>}
           {groups.map(([label, items]) => (
             <div key={label} className="pb-1">
               <p className="kicker px-3 pb-1 pt-3 text-[10.5px] text-maroon">{label}</p>
@@ -117,18 +118,18 @@ export function CourseSearch({ open, onOpenChange, courses, onPick }) {
                     <span aria-hidden className={cn("h-6 w-[3px] shrink-0 rounded-full transition-colors", sel === i ? "bg-gold" : "bg-transparent")} />
                     <span className="truncate text-[15px] text-navy"><Mark text={c.nama} q={dq} /></span>
                   </span>
-                  <span className="shrink-0 text-[12.5px] tabular-nums text-text/45">{c.sks ? `${c.sks} SKS` : ""}{c.rps ? " · RPS" : ""}</span>
+                  <span className="shrink-0 text-[12.5px] tabular-nums text-text/45">{c.sks ? `${c.sks} SKS` : ""}{c.rps ? ` · ${t.rpsTag}` : ""}</span>
                 </button>
               ))}
             </div>
           ))}
           {dq && results.length === 0 && (
             <div className="flex flex-col items-center px-6 py-8 text-center">
-              <div className="w-24"><LottieIllustration src="/lottie/empty-news.json" /></div>
-              <p className="mt-3 font-serif text-lg text-navy">Tidak ada yang cocok dengan “{dq}”</p>
+              {t.emptyLottie && <div className="w-24"><LottieIllustration src={t.emptyLottie} /></div>}
+              <p className="mt-3 font-serif text-lg text-navy">{fill(t.emptyTitle, { q: dq })}</p>
               <p className="mt-3 flex flex-wrap justify-center gap-2 text-[13px] text-text/55">
-                Coba:
-                {SUGGEST.map((s) => (
+                {t.tryLabel}
+                {t.suggestions.map((s) => (
                   <button key={s} type="button" onClick={() => setQ(s)} className="rounded-full border border-line px-2.5 py-0.5 text-navy hover:border-gold">{s}</button>
                 ))}
               </p>
@@ -136,9 +137,9 @@ export function CourseSearch({ open, onOpenChange, courses, onPick }) {
           )}
         </div>
         <div className="flex items-center gap-4 border-t border-line bg-cream/50 px-5 py-2.5 text-[12px] text-text/50">
-          <span>↑ ↓ pilih</span>
-          <span>Enter buka RPS</span>
-          <span className="ml-auto">{courses.length} mata kuliah</span>
+          <span>{t.hintNav}</span>
+          <span>{t.hintOpen}</span>
+          <span className="ml-auto">{fill(t.count, { n: courses.length })}</span>
         </div>
       </ModalContent>
     </Modal>

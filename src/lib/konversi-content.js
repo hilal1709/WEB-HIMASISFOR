@@ -1,6 +1,6 @@
 /**
  * Konten halaman Konversi SKS (`/konversi-sks`).
- * Nama & SKS mata kuliah diturunkan dari kurikulum (`mergeKurikulum`) — tidak ditulis ulang. Aturan batas SKS per
+ * Nama & SKS mata kuliah diturunkan dari kurikulum (`getKurikulumData`) — tidak ditulis ulang. Aturan batas SKS per
  * semester ditautkan ke Regulasi (`/regulasi-akademik#pasal-1-3`), logbook ke Magang (`/magang#logbook`).
  *
  * CMS `PageContent` section `konversi-sks` (Admin › Konten › Konversi SKS):
@@ -104,7 +104,7 @@ function noticeFromHome() {
 /**
  * Gabungkan CMS ke fallback.
  * @param row        PageContent `konversi-sks` (boleh null)
- * @param kurikulum  hasil mergeKurikulum — kandidat mata kuliah konversi
+ * @param kurikulum  hasil getKurikulumData — kandidat mata kuliah konversi
  */
 export function mergeKonversi(row, { kurikulum } = {}) {
   const raw = parse(row?.data);
@@ -127,7 +127,7 @@ export function mergeKonversi(row, { kurikulum } = {}) {
   const all = kurikulum?.courses ?? [];
   const courses = all
     .filter((c) => c.sks && !NOT_CONVERTIBLE.test(c.nama) && (c.track || (c.semester ?? 0) >= 5))
-    .map((c) => ({ slug: c.slug, nama: c.nama, sks: c.sks, semester: c.semester, track: c.track ?? null, rumpun: c.rumpun, cpmk: (c.rps?.cpmk ?? []).slice(0, 3), rpsSample: c.rpsSample }));
+    .map((c) => ({ slug: c.slug, nama: c.nama, sks: c.sks, semester: c.semester, track: c.track ?? null, rumpun: c.rumpun, cpmk: (c.rps?.cpmk ?? []).slice(0, 3).map((x) => (typeof x === "string" ? x : x.teks)) }));
 
   const bySlugName = (nama) => courses.find((c) => c.nama.toLowerCase() === nama.toLowerCase());
   const cases = CASES.map((k) => ({

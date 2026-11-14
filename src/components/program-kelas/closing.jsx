@@ -1,16 +1,9 @@
 "use client";
-import { CONTACT_URL, PMB_URL } from "@/lib/home-content";
 import { Container, PillLink, SceneTitle } from "@/components/home/shared";
 import { ElvoPeek } from "@/components/home/elvo-peek";
 import { LottieIllustration } from "@/components/media/lottie-illustration";
 import { cn } from "@/lib/utils";
 import { useKelas } from "./kelas-provider";
-
-const NEXT = [
-  { href: "/curiculum", title: "Kurikulum", body: "Daftar mata kuliah per semester." },
-  { href: "/profil-lulusan", title: "Profil Lulusan", body: "Ke mana lulusan Sisfor berkarier." },
-  { href: "/visi-misi", title: "Visi & Misi", body: "Arah yang sama untuk ketiga kelas." },
-];
 
 /**
  * Penutup "tiket": kartu ala boarding pass di tengah. Badan tiket maroon (judul, chip kelas, PMB),
@@ -18,28 +11,34 @@ const NEXT = [
  * Tautan lanjutan sebaris teks di bawahnya.
  */
 export function Closing() {
-  const { classes, active, setActive } = useKelas();
+  const { c, classes, active, setActive } = useKelas();
+  const t = c.closing;
+  const links = c.links;
   return (
-    <section className="relative bg-cream py-16 md:py-20">
+    <section id="penutup" className="relative scroll-mt-24 bg-cream py-16 md:py-20">
       <Container className="relative">
-        <div className="absolute -top-12 right-10 z-10 hidden xl:block">
-          <div className="relative"><ElvoPeek pose="run" size={76} side="left" say="Ayo, kursinya terbatas!" delay={0.2} /></div>
-        </div>
+        {t.mascot.show && (
+          <div className="absolute -top-12 right-10 z-10 hidden xl:block">
+            <div className="relative"><ElvoPeek pose={t.mascot.pose} size={76} side="left" say={t.mascot.say || undefined} delay={0.2} /></div>
+          </div>
+        )}
         <div data-aos="fade-up" className="relative mx-auto flex max-w-5xl flex-col overflow-hidden rounded-xl shadow-[0_40px_80px_-50px_rgb(78_14_25/0.6)] md:flex-row">
           {/* badan tiket */}
           <div className="relative flex-1 bg-maroon p-7 text-white md:p-10">
             <div className="flex items-start justify-between gap-6">
               <div>
-                <p className="kicker text-gold-soft">PMB 2027 sudah dibuka · Sistem Informasi</p>
-                <SceneTitle title={["Siap mulai", "kelasmu?"]} tone="dark" className="mt-3 !text-[clamp(2rem,4.2vw,3.25rem)]" />
+                {t.kicker && <p className="kicker text-gold-soft">{t.kicker}</p>}
+                <SceneTitle title={t.title} tone="dark" className="mt-3 !text-[clamp(2rem,4.2vw,3.25rem)]" />
               </div>
-              <div className="hidden w-20 shrink-0 md:block" aria-hidden>
-                <LottieIllustration src="/lottie/rocket-pmb-dark.json" />
-              </div>
+              {t.lottie && (
+                <div className="hidden w-20 shrink-0 md:block" aria-hidden>
+                  <LottieIllustration src={t.lottie} />
+                </div>
+              )}
             </div>
             <ul className="mt-7 flex flex-wrap gap-2">
-              {classes.map((c, i) => (
-                <li key={c.key}>
+              {classes.map((k, i) => (
+                <li key={k.key}>
                   <a
                     href="#kelas"
                     onClick={() => setActive(i, { hash: false })}
@@ -48,16 +47,16 @@ export function Closing() {
                       i === active ? "border-gold bg-white/10 text-gold-soft" : "border-white/25 text-white/85"
                     )}
                   >
-                    {c.name}
+                    {k.name}
                   </a>
                 </li>
               ))}
             </ul>
             <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3">
-              <PillLink href={PMB_URL} variant="white" target="_blank" rel="noopener noreferrer">
-                Daftar PMB 2027
+              <PillLink href={links.pmb} variant="white" target="_blank" rel="noopener noreferrer">
+                {t.cta}
               </PillLink>
-              <p className="text-sm text-white/60">Kuota Kelas Karyawan & Kemitraan terbatas. Pilih kelasnya saat mengisi formulir.</p>
+              {t.note && <p className="text-sm text-white/60">{t.note}</p>}
             </div>
           </div>
 
@@ -70,16 +69,16 @@ export function Closing() {
           {/* sobekan */}
           <div className="relative flex flex-col justify-between gap-6 bg-white p-7 md:w-[300px] md:p-8">
             <div>
-              <p className="kicker text-maroon">Masih ragu?</p>
-              <p className="mt-2 font-serif text-[1.35rem] leading-snug text-navy">Tanyakan langsung ke sekretariat prodi soal jadwal, kuota, atau beasiswa.</p>
+              <p className="kicker text-maroon">{t.stubKicker}</p>
+              <p className="mt-2 font-serif text-[1.35rem] leading-snug text-navy">{t.stubBody}</p>
             </div>
             <a
-              href={CONTACT_URL}
+              href={links.contact}
               target="_blank"
               rel="noopener noreferrer"
               className="group inline-flex h-12 items-center justify-center gap-2 rounded-md border border-navy/25 px-5 text-[15px] font-semibold text-navy transition-[border-color,background-color] duration-300 hover:border-gold hover:bg-gold/10"
             >
-              Hubungi prodi
+              {t.stubCta}
               <svg aria-hidden viewBox="0 0 16 16" className="size-4 transition-transform duration-300 group-hover:translate-x-0.5">
                 <path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
@@ -88,9 +87,10 @@ export function Closing() {
         </div>
 
         {/* tautan lanjutan sebaris */}
-        <ul className="mx-auto mt-12 grid max-w-5xl gap-6 sm:grid-cols-3">
-          {NEXT.map((n, i) => (
-            <li key={n.href} data-aos="fade-up" data-aos-delay={i * 70}>
+        {t.links.length > 0 && (
+        <ul className={cn("mx-auto mt-12 grid max-w-5xl gap-6", t.links.length >= 3 ? "sm:grid-cols-3" : "sm:grid-cols-2", t.links.length === 4 && "lg:grid-cols-4")}>
+          {t.links.map((n, i) => (
+            <li key={`${n.href}-${i}`} data-aos="fade-up" data-aos-delay={i * 70}>
               <a href={n.href} className="group block">
                 <span className="inline-flex items-center gap-2 font-serif text-[1.25rem] text-navy">
                   <span className="u-gold">{n.title}</span>
@@ -103,6 +103,7 @@ export function Closing() {
             </li>
           ))}
         </ul>
+        )}
       </Container>
     </section>
   );

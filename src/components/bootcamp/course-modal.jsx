@@ -1,5 +1,5 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { LEVELS, TRACKS } from "@/lib/bootcamp-content";
 import { Modal, ModalContent, ModalTitle, ModalDescription } from "@/components/ui/modal";
@@ -8,10 +8,13 @@ import { PlaceholderTag } from "@/components/home/shared";
 import { cn } from "@/lib/utils";
 import { CoverArt } from "./cover-art";
 import { useBootcamp } from "./bootcamp-provider";
+import { CourseRegistrationForm } from "./course-registration-form";
+import { FlexibleRegistrationForm } from "@/components/registration/flexible-registration-form";
 
 /** Modal kursus: sampul, daftar pelajaran (pelajaran pertama gratis dicoba), Tambah ke rencana, ‹ › dalam hasil filter. */
 export function CourseModal({ slug, onSlug, onClose }) {
-  const { filtered, courses, bySlug, inPlan, togglePlan } = useBootcamp();
+  const { filtered, courses, bySlug, inPlan, togglePlan, contact } = useBootcamp();
+  const [registering, setRegistering] = useState(false);
   const c = slug ? bySlug(slug) : null;
   const list = filtered.some((x) => x.slug === slug) ? filtered : courses;
   const idx = list.findIndex((x) => x.slug === slug);
@@ -20,13 +23,19 @@ export function CourseModal({ slug, onSlug, onClose }) {
   useEffect(() => {
     if (c) history.replaceState(null, "", `#course-${c.slug}`);
   }, [c]);
+  useEffect(() => setRegistering(false), [c?.slug]);
 
   const step = (d) => list.length > 1 && onSlug(list[(idx + d + list.length) % list.length].slug);
+  const registration = c?.registration ?? { mode: c?.href ? "link" : "", href: c?.href ?? "" };
+  const openRegistration = () => {
+    if (registration.mode === "link" && registration.href) window.open(registration.href, "_blank", "noopener,noreferrer");
+    else if (registration.mode === "form") setRegistering(true);
+  };
 
   return (
     <Modal open={!!c} onOpenChange={(o) => !o && onClose()}>
       <ModalContent
-        className="max-w-xl p-0"
+        className="max-h-[calc(100dvh-2rem)] max-w-xl overflow-y-auto overscroll-contain p-0"
         onKeyDown={(e) => {
           if (e.key === "ArrowRight") step(1);
           if (e.key === "ArrowLeft") step(-1);
@@ -40,6 +49,10 @@ export function CourseModal({ slug, onSlug, onClose }) {
               </motion.div>
             </div>
             <div className="px-7 pb-2 pt-6">
+              {registering ? (
+                c.registration?.fields?.length ? <FlexibleRegistrationForm title={c.title} targetSlug={c.slug} targetType="course" fields={c.registration.fields} endpoint="/api/course-registrations" onBack={() => setRegistering(false)} /> : <CourseRegistrationForm course={c} whatsapp={contact?.whatsapp} onBack={() => setRegistering(false)} />
+              ) : (
+                <>
               <span className="kicker text-[10.5px] text-maroon">{TRACKS[c.topic]?.label} · {LEVELS.find((l) => l.key === c.level)?.label}</span>
               <ModalTitle className="mt-1.5 text-[1.6rem]">{c.title}</ModalTitle>
               <ModalDescription className="mt-1">
@@ -56,8 +69,10 @@ export function CourseModal({ slug, onSlug, onClose }) {
                 ))}
               </ol>
               {c.sample && <PlaceholderTag className="mt-4" />}
+                </>
+              )}
             </div>
-            <div className="flex items-center justify-between gap-3 px-7 py-5">
+            {!registering && <div className="flex flex-wrap items-center justify-between gap-3 px-7 py-5">
               <div className="flex gap-2">
                 {[-1, 1].map((d) => (
                   <button key={d} type="button" onClick={() => step(d)} aria-label={d < 0 ? "Kursus sebelumnya" : "Kursus berikutnya"} className="grid size-9 place-items-center rounded-full border border-line text-navy transition-colors hover:border-navy">
@@ -67,19 +82,24 @@ export function CourseModal({ slug, onSlug, onClose }) {
                   </button>
                 ))}
               </div>
-              <button
-                type="button"
-                onClick={() => togglePlan(c.slug)}
-                aria-pressed={on}
-                className={cn(
-                  "group inline-flex h-11 items-center gap-2 rounded-md px-5 text-[14.5px] font-semibold transition-[background-color,color,transform] duration-300 active:scale-[0.98]",
-                  on ? "bg-navy text-white" : "bg-maroon text-white hover:bg-maroon-deep"
-                )}
-              >
-                <LordIcon key={on ? "on" : "off"} name={on ? "check" : "plus-circle"} size={20} trigger={on ? "once" : "hover"} target=".group" colors="primary:#ffffff,secondary:#c9a227" />
-                {on ? "Sudah di rencana" : "Tambah ke rencana"}
-              </button>
-            </div>
+              <div className="flex flex-wrap justify-end gap-2">
+                <button type="button" onClick={openRegistration} disabled={!registration.mode || (registration.mode === "link" && !registration.href)} className={cn("inline-flex h-11 items-center rounded-md px-4 text-[14px] font-semibold transition-colors", registration.mode ? "bg-gold text-navy hover:bg-gold-soft" : "cursor-not-allowed bg-line/60 text-text/45")}>
+                  {registration.mode === "link" ? "Daftar course" : registration.mode === "form" ? "Isi form pendaftaran" : "Segera dibuka"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => togglePlan(c.slug)}
+                  aria-pressed={on}
+                  className={cn(
+                    "group inline-flex h-11 items-center gap-2 rounded-md px-5 text-[14.5px] font-semibold transition-[background-color,color,transform] duration-300 active:scale-[0.98]",
+                    on ? "bg-navy text-white" : "bg-maroon text-white hover:bg-maroon-deep"
+                  )}
+                >
+                  <LordIcon key={on ? "on" : "off"} name={on ? "check" : "plus-circle"} size={20} trigger={on ? "once" : "hover"} target=".group" colors="primary:#ffffff,secondary:#c9a227" />
+                  {on ? "Sudah di rencana" : "Tambah ke rencana"}
+                </button>
+              </div>
+            </div>}
           </>
         )}
       </ModalContent>

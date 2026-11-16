@@ -3,7 +3,7 @@
  * dan memigrasi baris lama `curriculum`; halaman publik membaca isi CMS, bukan berkas ini.
  */
 
-/** Empat rumpun mata kuliah = empat jalur di peta studi. */
+/** Rumpun mata kuliah bawaan; daftar ini dapat diubah dari CMS. */
 export const RUMPUN = [
   { key: "fondasi", name: "Fondasi & Umum", short: "Fondasi", color: "navy", style: "solid" },
   { key: "enterprise", name: "Bisnis & Enterprise", short: "Enterprise", color: "maroon", style: "solid" },

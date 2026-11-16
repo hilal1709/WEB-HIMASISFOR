@@ -6,7 +6,7 @@
  *   data.intro            → paragraf intro hero
  *   data.notice           → { title, body } banner (kosong → diturunkan dari jendela pendaftaran terdekat)
  *   data.items[]          → ditimpa per `slug` (field apa pun dari SCHOLARSHIPS; `href` = tautan resmi).
- *                           Mengisi `rules` atau `href` menghapus tanda contoh pada beasiswa itu.
+ *                           `registration.mode` dapat berupa `link` atau `form`; `href` tetap didukung sebagai mode link lama.
  *                           Item dengan slug baru ikut tampil (wajib `name`, `coverage`).
  * Semua beasiswa di bawah adalah CONTOH (`sample`) → tampil dengan PlaceholderTag. Kuota & nominal tidak dikarang.
  *
@@ -247,6 +247,10 @@ function normalize(s) {
     keep: Array.isArray(s.keep) ? s.keep.filter((k) => str(k?.clause)) : [],
     docs: list(s.docs) ?? [],
     href: str(s.href),
+    registration: {
+      mode: s.registration?.mode === "form" ? "form" : s.registration?.mode === "link" || str(s.href) ? "link" : "",
+      href: str(s.registration?.href) || str(s.href),
+    },
     monogram: (str(s.mono) || initials(name) || "B").slice(0, 3),
   };
 }

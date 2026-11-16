@@ -209,7 +209,7 @@ function Studio() {
   };
 
   const openPicker = (kind, path) => setPicker({ kind, path });
-  const props = { value, update, rumpun, rumpunByKey, usage, openPicker, board };
+  const props = { value, update, replace: k.replace, rumpun, rumpunByKey, usage, openPicker, board };
   const Chapter = {
     pembuka: PembukaChapter,
     rumpun: RumpunChapter,

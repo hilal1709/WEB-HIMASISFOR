@@ -216,10 +216,10 @@
     "semantic_hash": "b1d5dd9ac21c8cf0b9736825e51289b4"
   },
   "src/app/admin/content/page.jsx": {
-    "mtime": 1794653762.8905187,
-    "seen": 1794654190.2081604,
-    "ast_hash": "d09a2039d29d3d88e7115ec30fafa51c",
-    "semantic_hash": "d09a2039d29d3d88e7115ec30fafa51c"
+    "mtime": 1794801537.3690343,
+    "seen": 1794801750.4786162,
+    "ast_hash": "15fe73b407b73adb851882fc36c99b9c",
+    "semantic_hash": ""
   },
   "src/app/admin/curriculum/page.jsx": {
     "mtime": 1794630287.3373885,
@@ -252,10 +252,10 @@
     "semantic_hash": "b4edb1e7c2123e83a8ce4d2d2c85d6a0"
   },
   "src/app/admin/layout.jsx": {
-    "mtime": 1794651000.3563685,
-    "seen": 1794651734.9177139,
-    "ast_hash": "1dda5e93030a20a9ac6b9231e30a3888",
-    "semantic_hash": "1dda5e93030a20a9ac6b9231e30a3888"
+    "mtime": 1794802273.6445944,
+    "seen": 1794802514.2167456,
+    "ast_hash": "ea44060d58d9e04ec233297d35325744",
+    "semantic_hash": ""
   },
   "src/app/admin/login/page.jsx": {
     "mtime": 1794539603.405936,
@@ -888,9 +888,9 @@
     "semantic_hash": ""
   },
   "CURRICULUM_CMS.md": {
-    "mtime": 1794631871.5307686,
-    "seen": 1794631930.7948828,
-    "ast_hash": "47b5549616ce4a4dd26124425bbd3b22",
+    "mtime": 1794799700.356083,
+    "seen": 1794799863.284213,
+    "ast_hash": "3cddcd6fd847e8b37bb0b05099e8fd50",
     "semantic_hash": ""
   },
   "DATABASE_SETUP.md": {
@@ -3618,10 +3618,10 @@
     "semantic_hash": "ef888dc0c783be230b4abb766023da0f"
   },
   "src/app/bootcamp/page.jsx": {
-    "mtime": 1794584851.1549919,
-    "seen": 1794651734.9179757,
-    "ast_hash": "ba8ddeb91fc3e66eb06fc687bea250a7",
-    "semantic_hash": "ba8ddeb91fc3e66eb06fc687bea250a7"
+    "mtime": 1794800481.1510887,
+    "seen": 1794800609.9408028,
+    "ast_hash": "3f447e788559ce6e8462fb7030ad55ec",
+    "semantic_hash": ""
   },
   "src/components/bootcamp/bootcamp-banner.jsx": {
     "mtime": 1794517474.774159,
@@ -3660,22 +3660,22 @@
     "semantic_hash": "d385487c255cbf9aa3f4f8530209a137"
   },
   "src/components/bootcamp/cohort-modal.jsx": {
-    "mtime": 1794484783.8397264,
-    "seen": 1794651734.9183214,
-    "ast_hash": "8ae885ee20a73411c0ab57ee0ad44e3f",
-    "semantic_hash": "8ae885ee20a73411c0ab57ee0ad44e3f"
+    "mtime": 1794802707.016983,
+    "seen": 1794803144.006557,
+    "ast_hash": "716bcad1ad4a8b0af03c52825b092050",
+    "semantic_hash": ""
   },
   "src/components/bootcamp/course-catalog.jsx": {
-    "mtime": 1794481596.4758399,
-    "seen": 1794651734.9183276,
-    "ast_hash": "9bf26db589550201938d34a47f11a981",
-    "semantic_hash": "9bf26db589550201938d34a47f11a981"
+    "mtime": 1794800104.972485,
+    "seen": 1794800174.3529978,
+    "ast_hash": "a514ce147e441f05ccc9cdea9055ab20",
+    "semantic_hash": ""
   },
   "src/components/bootcamp/course-modal.jsx": {
-    "mtime": 1794484764.7728992,
-    "seen": 1794651734.918334,
-    "ast_hash": "e05dd64c22dd1257c8e2100d1349ea2a",
-    "semantic_hash": "e05dd64c22dd1257c8e2100d1349ea2a"
+    "mtime": 1794803220.6114688,
+    "seen": 1794803479.2334027,
+    "ast_hash": "65d29cf815b96a37e5d2f70034d9a027",
+    "semantic_hash": ""
   },
   "src/components/bootcamp/cover-art.jsx": {
     "mtime": 1794481562.4491954,
@@ -3714,10 +3714,10 @@
     "semantic_hash": "d0e8c40eb2867db28d596711c89dd7d8"
   },
   "src/lib/bootcamp-content.js": {
-    "mtime": 1794584939.0333374,
-    "seen": 1794651734.9197352,
-    "ast_hash": "6e1a8c17de052e21d97339fc9acd57f4",
-    "semantic_hash": "6e1a8c17de052e21d97339fc9acd57f4"
+    "mtime": 1794802314.5883212,
+    "seen": 1794802514.4246566,
+    "ast_hash": "b838c830e83ec607779636072b0814dc",
+    "semantic_hash": ""
   },
   "prisma/migrations/20261112090000_add_service_request/migration.sql": {
     "mtime": 1794499505.149573,
@@ -4200,10 +4200,10 @@
     "semantic_hash": "8e4882129fb9984eaa018b6b04ab5310"
   },
   "src/components/beasiswa/scholarship-modal.jsx": {
-    "mtime": 1794517474.754666,
-    "seen": 1794651734.9181738,
-    "ast_hash": "ddb58bb14336c11784ac8e723041fd47",
-    "semantic_hash": "ddb58bb14336c11784ac8e723041fd47"
+    "mtime": 1794802699.8904872,
+    "seen": 1794803143.9893923,
+    "ast_hash": "65c43526390134d945601ef6559b6c98",
+    "semantic_hash": ""
   },
   "src/components/beasiswa/wallet-closing.jsx": {
     "mtime": 1794515237.9318526,
@@ -4218,10 +4218,10 @@
     "semantic_hash": "123f7b4dadac8fdd3d96952bb0b2ad57"
   },
   "src/lib/beasiswa-content.js": {
-    "mtime": 1794515190.0803716,
-    "seen": 1794651734.919695,
-    "ast_hash": "f6c661812b34310d89cd37f23be72a11",
-    "semantic_hash": "f6c661812b34310d89cd37f23be72a11"
+    "mtime": 1794801531.6465907,
+    "seen": 1794801750.6932616,
+    "ast_hash": "433a05ae8cfdd4cc7fc265b2238b5420",
+    "semantic_hash": ""
   },
   "src/app/faq/loading.js": {
     "mtime": 1794516352.1746478,
@@ -5406,10 +5406,10 @@
     "semantic_hash": "85d5be63dfee393c876d3d3914b8b84a"
   },
   "src/components/kurikulum-studio/chapters.jsx": {
-    "mtime": 1794631159.800051,
-    "seen": 1794651734.9186869,
-    "ast_hash": "82b20b92095c73a4cff76ac1d74c842c",
-    "semantic_hash": "82b20b92095c73a4cff76ac1d74c842c"
+    "mtime": 1794799850.1708488,
+    "seen": 1794799862.4995508,
+    "ast_hash": "98be76eb5972ab0536197556b2fdee87",
+    "semantic_hash": ""
   },
   "src/components/kurikulum-studio/fields.jsx": {
     "mtime": 1794630765.7026489,
@@ -5436,10 +5436,10 @@
     "semantic_hash": "feaee67f0d8b49cca441f3dc1520829e"
   },
   "src/components/kurikulum-studio/kartografer.jsx": {
-    "mtime": 1794631438.8792682,
-    "seen": 1794651734.9187036,
-    "ast_hash": "48b7417a693962dfe41dd0cb1dcda9c4",
-    "semantic_hash": "48b7417a693962dfe41dd0cb1dcda9c4"
+    "mtime": 1794799700.1855254,
+    "seen": 1794799862.5012257,
+    "ast_hash": "54384a8004b763da52a567bdab9b6274",
+    "semantic_hash": ""
   },
   "src/components/kurikulum-studio/lembar-rps.jsx": {
     "mtime": 1794631499.2405975,
@@ -5484,16 +5484,16 @@
     "semantic_hash": "7dcaaed8178cedcc7c19f2449110b537"
   },
   "src/lib/kurikulum-cms/schema.js": {
-    "mtime": 1794630106.5427942,
-    "seen": 1794651734.9198322,
-    "ast_hash": "1c2a36f236d7259b496304025f484905",
-    "semantic_hash": "1c2a36f236d7259b496304025f484905"
+    "mtime": 1794799699.675741,
+    "seen": 1794799862.968568,
+    "ast_hash": "ed14cb501efe60b2f81e766e4d939c1b",
+    "semantic_hash": ""
   },
   "src/lib/kurikulum-cms/seed.js": {
-    "mtime": 1794630024.9350245,
-    "seen": 1794651734.9198368,
-    "ast_hash": "3565cd597aafda150bebf99d2fa68bca",
-    "semantic_hash": "3565cd597aafda150bebf99d2fa68bca"
+    "mtime": 1794799700.2844236,
+    "seen": 1794799862.9685755,
+    "ast_hash": "b56912a2856ebae5c54893961a41fd3f",
+    "semantic_hash": ""
   },
   "src/lib/kurikulum-cms/server.js": {
     "mtime": 1794630193.4419937,
@@ -5626,5 +5626,95 @@
     "seen": 1794651734.9197261,
     "ast_hash": "b2df4037ee2eabfff6df4c6b1294c41d",
     "semantic_hash": "b2df4037ee2eabfff6df4c6b1294c41d"
+  },
+  "prisma/migrations/20261116110000_add_course_registration/migration.sql": {
+    "mtime": 1794802737.7638056,
+    "seen": 1794803143.8924675,
+    "ast_hash": "2fe0bf3f8c3e31c0785f46a35969c85e",
+    "semantic_hash": ""
+  },
+  "src/app/admin/course-registrations/page.jsx": {
+    "mtime": 1794803013.2558112,
+    "seen": 1794803143.9266775,
+    "ast_hash": "8295205fcdc392a6c1c8cd7c74a7c0ea",
+    "semantic_hash": ""
+  },
+  "src/app/api/course-registrations/[id]/route.js": {
+    "mtime": 1794800466.260386,
+    "seen": 1794800609.9202363,
+    "ast_hash": "622bee21ff053679bf070bb53e3007ef",
+    "semantic_hash": ""
+  },
+  "src/app/api/course-registrations/route.js": {
+    "mtime": 1794802738.236868,
+    "seen": 1794803143.93893,
+    "ast_hash": "8f72e384c55516f18149e06731a608cf",
+    "semantic_hash": ""
+  },
+  "src/components/bootcamp/course-registration-form.jsx": {
+    "mtime": 1794801105.91304,
+    "seen": 1794801750.5623932,
+    "ast_hash": "d6ae32fde732123ecc574fb5973067b3",
+    "semantic_hash": ""
+  },
+  "prisma/migrations/20261116113000_add_scholarship_application/migration.sql": {
+    "mtime": 1794802671.5454462,
+    "seen": 1794803143.892477,
+    "ast_hash": "3d4d8e8fee2a28e715b823acfb83ca4e",
+    "semantic_hash": ""
+  },
+  "src/app/admin/scholarship-applications/page.jsx": {
+    "mtime": 1794803013.313799,
+    "seen": 1794803143.934263,
+    "ast_hash": "32ec91462510b864787bd42d6277b383",
+    "semantic_hash": ""
+  },
+  "src/app/api/scholarship-applications/[id]/route.js": {
+    "mtime": 1794801557.3491998,
+    "seen": 1794801750.5038922,
+    "ast_hash": "96e58dcab54b640860e157276b6360b8",
+    "semantic_hash": ""
+  },
+  "src/app/api/scholarship-applications/route.js": {
+    "mtime": 1794802692.0588758,
+    "seen": 1794803143.9549596,
+    "ast_hash": "dea2a6fbc5b2810f8fab091e59a3dc83",
+    "semantic_hash": ""
+  },
+  "src/components/beasiswa/scholarship-application-form.jsx": {
+    "mtime": 1794801575.114163,
+    "seen": 1794801750.5469975,
+    "ast_hash": "93963bd713d3000bf21dc9e7f01956be",
+    "semantic_hash": ""
+  },
+  "src/app/admin/registration-forms/page.jsx": {
+    "mtime": 1794802273.5993,
+    "seen": 1794802514.2196097,
+    "ast_hash": "3d9c8cb8040fa5967031bca3642d329f",
+    "semantic_hash": ""
+  },
+  "src/components/admin/registration-form-builder.jsx": {
+    "mtime": 1794802991.7298305,
+    "seen": 1794803143.9861486,
+    "ast_hash": "00d782634de4af20c0d39515c72e061e",
+    "semantic_hash": ""
+  },
+  "src/app/api/registration-documents/[id]/route.js": {
+    "mtime": 1794802991.6262405,
+    "seen": 1794803143.95243,
+    "ast_hash": "81f037e6b34bf1953a8377b68f88d2e3",
+    "semantic_hash": ""
+  },
+  "src/components/registration/flexible-registration-form.jsx": {
+    "mtime": 1794803019.2688673,
+    "seen": 1794803144.0940497,
+    "ast_hash": "3e0958c508cc146bf9a877b6e96436c5",
+    "semantic_hash": ""
+  },
+  "src/lib/private-storage.js": {
+    "mtime": 1794803019.2044537,
+    "seen": 1794803144.1536956,
+    "ast_hash": "639e38edde9eb30f393a8d30723f46e8",
+    "semantic_hash": ""
   }
 }

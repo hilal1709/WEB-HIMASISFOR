@@ -1,6 +1,7 @@
 import { getDosenData } from "@/lib/dosen-cms/server";
 import prisma from "@/lib/prisma";
 import { CURTAIN_KEY, mergeBootcamp } from "@/lib/bootcamp-content";
+import { mergeKontak } from "@/lib/kontak-content";
 import { SiteHeader, Topbar } from "@/components/home/site-header";
 import { SiteFooter } from "@/components/home/site-footer";
 import { AosReady } from "@/components/motion/aos-provider";
@@ -26,10 +27,11 @@ export const metadata = {
 
 async function getData() {
   try {
-    const rows = await prisma.pageContent.findMany({ where: { section: { in: ["bootcamp"] }, isActive: true } });
-    return mergeBootcamp(rows.find((r) => r.section === "bootcamp") ?? null, { dosen: await getDosenData() });
+    const rows = await prisma.pageContent.findMany({ where: { section: { in: ["bootcamp", "kontak", "layanan-akademik"] }, isActive: true } });
+    const bootcamp = mergeBootcamp(rows.find((r) => r.section === "bootcamp") ?? null, { dosen: await getDosenData() });
+    return { ...bootcamp, contact: mergeKontak(rows.find((r) => r.section === "kontak") ?? null, rows.find((r) => r.section === "layanan-akademik") ?? null).channels };
   } catch {
-    return mergeBootcamp(null, { dosen: await getDosenData() });
+    return { ...mergeBootcamp(null, { dosen: await getDosenData() }), contact: { whatsapp: "", email: "" } };
   }
 }
 

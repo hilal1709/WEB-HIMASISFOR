@@ -10,7 +10,7 @@
  *   data.intro          → paragraf hero
  *   data.notice         → { title, body } banner pendaftaran
  *   data.bootcamps[]    → ditimpa per `slug` { title, lead, start YYYY-MM-DD, weeks, hours, seats, seatsLeft, href }
- *   data.courses[]      → mengganti SEMUA kursus contoh { title, topic, level, hours, perWeek, lessons[{t, min}], href }
+ *   data.courses[]        → mengganti SEMUA kursus contoh { title, topic, level, hours, perWeek, lessons[{t, min}], registration: { mode: "link" | "form", href } }
  *   data.tiers[]        → ditimpa per `key` { prices { mahasiswa, alumni, umum } }
  * Semua kohort, kursus, harga, dan mentor praktisi adalah CONTOH (`sample`) → tampil dengan PlaceholderTag.
  */
@@ -265,6 +265,11 @@ export function mergeBootcamp(row, { dosen } = {}) {
       seats,
       seatsLeft: Math.min(seats, num(o.seatsLeft, 0, 500) ?? b.seatsLeft),
       href: str(o.href) || b.href,
+      registration: {
+        mode: o.registration?.mode === "form" ? "form" : o.registration?.mode === "link" || str(o.href) ? "link" : "",
+        href: str(o.registration?.href) || str(o.href),
+        fields: Array.isArray(o.registration?.fields) ? o.registration.fields : [],
+      },
       plan: b.plan.slice(0, weeks),
       sks: creditsFor({ mode: "jam", weeks, hours }, RATE),
       sample: !touched,
@@ -282,9 +287,14 @@ export function mergeBootcamp(row, { dosen } = {}) {
         perWeek: num(c.perWeek, 1, 40) ?? 3,
         lessons: (Array.isArray(c.lessons) ? c.lessons : []).filter((l) => str(l?.t)).map((l) => ({ t: str(l.t), min: num(l.min, 1, 600) ?? 15 })),
         href: str(c.href),
+        registration: {
+          mode: c.registration?.mode === "form" ? "form" : c.registration?.mode === "link" || str(c.href) ? "link" : "",
+          href: str(c.registration?.href) || str(c.href),
+          fields: Array.isArray(c.registration?.fields) ? c.registration.fields : [],
+        },
         sample: false,
       }))
-    : COURSES.map((c) => ({ ...c, href: "", sample: true }));
+    : COURSES.map((c) => ({ ...c, href: "", registration: { mode: "", href: "", fields: [] }, sample: true }));
 
   const tierOver = Array.isArray(raw.tiers) ? raw.tiers : [];
   const tiers = TIERS.map((t) => {

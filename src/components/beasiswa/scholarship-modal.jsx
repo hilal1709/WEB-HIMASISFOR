@@ -1,5 +1,5 @@
 "use client";
-import { useLayoutEffect as useEffect, useRef } from "react";
+import { useLayoutEffect as useEffect, useRef, useState } from "react";
 import { animate } from "animejs";
 import { DialogTitle, DialogDescription } from "@radix-ui/react-dialog";
 import { prefersReducedMotion } from "@/lib/motion";
@@ -10,6 +10,8 @@ import { PlaceholderTag } from "@/components/home/shared";
 import { useToast } from "@/components/ui/toast";
 import { cn } from "@/lib/utils";
 import { useBeasiswa } from "./beasiswa-provider";
+import { ScholarshipApplicationForm } from "./scholarship-application-form";
+import { FlexibleRegistrationForm } from "@/components/registration/flexible-registration-form";
 
 /** Segel lilin maroon: saat modal dibuka, dua belahannya "retak" menjauh lalu memudar (anime.js). */
 function WaxSeal({ initials, play }) {
@@ -52,6 +54,7 @@ function WaxSeal({ initials, play }) {
 export function ScholarshipModal({ slug, onSlug, onClose }) {
   const { items, results, passport, wallet, toggleSave } = useBeasiswa();
   const toast = useToast();
+  const [registering, setRegistering] = useState(false);
   const idx = items.findIndex((s) => s.slug === slug);
   const s = idx >= 0 ? items[idx] : null;
   const saved = s ? wallet.includes(s.slug) : false;
@@ -70,15 +73,18 @@ export function ScholarshipModal({ slug, onSlug, onClose }) {
 
   const go = (d) => onSlug(items[(idx + d + items.length) % items.length].slug);
   const register = () => {
-    if (s.href) window.open(s.href, "_blank", "noopener,noreferrer");
+    if (s.registration?.mode === "link" && s.registration.href) window.open(s.registration.href, "_blank", "noopener,noreferrer");
+    else if (s.registration?.mode === "form") setRegistering(true);
     else toast.info("Tautan resmi menyusul", { description: "Prodi akan mengumumkannya di laman ini dan di Warta." });
   };
+  useEffect(() => setRegistering(false), [s?.slug]);
 
   return (
     <ResponsiveDialog open={Boolean(s)} onOpenChange={(o) => !o && onClose()} className="max-w-[760px]" sheetClassName="max-h-[92dvh] overflow-y-auto">
       {s && (
         <div className="bs-certificate">
           <div className="bs-certificate-frame">
+            {registering ? (s.registration?.fields?.length ? <FlexibleRegistrationForm title={s.name} targetSlug={s.slug} targetType="scholarship" fields={s.registration.fields} endpoint="/api/scholarship-applications" onBack={() => setRegistering(false)} /> : <ScholarshipApplicationForm scholarship={s} onBack={() => setRegistering(false)} />) : <>
             <div className="flex items-start gap-5">
               <WaxSeal key={s.slug} initials={s.monogram} play />
               <div className="min-w-0 flex-1 pr-6">
@@ -170,9 +176,10 @@ export function ScholarshipModal({ slug, onSlug, onClose }) {
               <button
                 type="button"
                 onClick={register}
+                disabled={!s.registration?.mode || (s.registration.mode === "link" && !s.registration.href)}
                 className="inline-flex h-11 items-center gap-2 rounded-md bg-maroon px-5 text-sm font-semibold text-white transition-[background-color,transform] duration-300 hover:bg-maroon-deep active:scale-[0.98]"
               >
-                Ke laman pendaftaran
+                {s.registration?.mode === "link" ? "Ke laman pendaftaran" : s.registration?.mode === "form" ? "Daftar melalui form" : "Segera dibuka"}
                 <svg aria-hidden viewBox="0 0 16 16" className="size-4"><path d="M5 11l6-6M6 5h5v5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
               </button>
               <button
@@ -199,6 +206,7 @@ export function ScholarshipModal({ slug, onSlug, onClose }) {
                 </button>
               </span>
             </div>
+            </>}
           </div>
         </div>
       )}

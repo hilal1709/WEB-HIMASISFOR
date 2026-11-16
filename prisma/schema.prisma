@@ -133,6 +133,56 @@ model ServiceRequestEvent {
   @@index([requestId])
 }
 
+model CourseRegistration {
+  id        Int      @id @default(autoincrement())
+  courseSlug String
+  courseTitle String
+  name      String
+  email     String
+  phone     String
+  nim       String?
+  audience  String
+  answers   String?  @db.Text
+  documents String?  @db.Text
+  status    String   @default("baru")
+  staffNote String?  @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([courseSlug])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model ScholarshipApplication {
+  id              Int      @id @default(autoincrement())
+  scholarshipSlug String
+  scholarshipName String
+  applicantType   String
+  name            String
+  email           String
+  phone           String
+  nim             String?
+  semester        Int?
+  ipk             Float?
+  income          String?
+  school          String?
+  graduationYear  Int?
+  reportScore     Float?
+  admissionStatus String?
+  notes           String?  @db.Text
+  answers         String?  @db.Text
+  documents       String?
+  status          String   @default("baru")
+  staffNote       String?  @db.Text
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([scholarshipSlug])
+  @@index([status])
+  @@index([createdAt])
+}
+
 // Warta SISFOR — berita & artikel (/berita). Isi Markdown, hanya status "terbit" yang tampil publik.
 model Post {
   id          Int       @id @default(autoincrement())

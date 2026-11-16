@@ -119,15 +119,54 @@ export function PembukaChapter({ value, update }) {
 }
 
 /* ───────────── Rumpun ───────────── */
-export function RumpunChapter({ value, update, usage }) {
+export function RumpunChapter({ value, update, usage, replace }) {
+  const updateRumpun = (next) => {
+    const previous = value.rumpun ?? [];
+    const previousKeys = new Set(previous.map((r) => r.key));
+    const nextKeys = new Set(next.map((r) => r.key));
+    const changes = new Map(
+      previous
+        .map((r, i) => [r.key, next[i]?.key])
+        .filter(([from, to]) => from && to && from !== to && !nextKeys.has(from) && !previousKeys.has(to))
+    );
+    if (!changes.size || !replace) {
+      update("rumpun", next);
+      return;
+    }
+
+    const remapCourse = (course) => {
+      if (!course?.rumpun || !changes.has(course.rumpun)) return course;
+      return { ...course, rumpun: changes.get(course.rumpun) };
+    };
+    replace({
+      ...value,
+      rumpun: next,
+      semester: {
+        ...value.semester,
+        list: (value.semester?.list ?? []).map((semester) => ({
+          ...semester,
+          courses: (semester.courses ?? []).map(remapCourse),
+        })),
+      },
+      pilihan: {
+        ...value.pilihan,
+        tracks: (value.pilihan?.tracks ?? []).map((track) => ({
+          ...track,
+          rumpun: changes.get(track.rumpun) ?? track.rumpun,
+          courses: (track.courses ?? []).map(remapCourse),
+        })),
+      },
+    });
+  };
+
   return (
     <>
       <Intro kicker="Stasiun 02" title="Rumpun mata kuliah">Tiap rumpun menjadi satu jalur warna di peta studi, titik di buku semester, dan sorotan di Konversi SKS.</Intro>
       <Repeater
         items={value.rumpun}
-        onChange={(v) => update("rumpun", v)}
+        onChange={updateRumpun}
         make={() => ({ key: `rumpun-${Math.random().toString(36).slice(2, 6)}`, name: "", short: "", color: "navy", style: "solid" })}
-        max={8}
+        max={24}
         addLabel="Tambah rumpun"
         itemLabel={(x) => `${x.name || "Rumpun baru"} · ${usage[x.key] ?? 0} mata kuliah`}
         render={(x, s) => {

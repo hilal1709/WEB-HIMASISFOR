@@ -563,6 +563,7 @@ function readBeasiswa(d) {
         coverage: o.coverage ?? b.coverage,
         living: o.living ?? b.living,
         href: o.href || "",
+        registrationMode: o.registration?.mode || (o.href ? "link" : ""),
         windows: winToText(o.windows ?? b.windows),
         ipk: o.rules?.ipk ?? b.rules.ipk,
         semMin: o.rules?.semester?.[0] ?? b.rules.semester[0],
@@ -585,6 +586,7 @@ function BeasiswaEditor({ data, onSave, saving }) {
     const items = form.items.map((it) => {
       const base = BEASISWA_ITEMS.find((b) => b.slug === it.slug);
       const out = { slug: it.slug, name: it.name, coverage: Number(it.coverage), living: it.living, windows: textToWin(it.windows), hidden: it.hidden };
+      if (it.registrationMode) out.registration = { mode: it.registrationMode, ...(it.href.trim() ? { href: it.href.trim() } : {}) };
       if (it.href.trim()) out.href = it.href.trim();
       if (it.official) out.rules = { ...base.rules, ipk: Number(it.ipk) || 0, semester: [Number(it.semMin) || 1, Number(it.semMax) || 8] };
       return out;
@@ -595,7 +597,7 @@ function BeasiswaEditor({ data, onSave, saving }) {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <p className="text-sm text-gray-600">
-        Semua beasiswa di <code>/beasiswa</code> masih contoh. Centang &quot;Data resmi&quot; atau isi tautan resmi untuk menghapus label contoh pada beasiswa itu.
+        Semua beasiswa di <code>/beasiswa</code> masih contoh. Pilih kanal pendaftaran <b>link eksternal</b> atau <b>form website</b>. Centang &quot;Data resmi&quot; atau isi tautan resmi untuk menghapus label contoh pada beasiswa itu.
         Jendela pendaftaran ditulis satu per baris: <code>MM-DD MM-DD Label</code>, mis. <code>03-01 07-31 Bersamaan dengan PMB</code>.
       </p>
       <div>
@@ -638,6 +640,13 @@ function BeasiswaEditor({ data, onSave, saving }) {
               <input type="number" min="1" max="8" value={it.semMax} onChange={(e) => setItem(i, "semMax", e.target.value)} className={input} />
             </label>
             <input value={it.href} onChange={(e) => setItem(i, "href", e.target.value)} className={`${input} sm:col-span-3`} placeholder="Tautan pendaftaran resmi (https://…)" />
+            <label className="text-sm text-gray-600 sm:col-span-3">Kanal pendaftaran
+              <select value={it.registrationMode} onChange={(e) => setItem(i, "registrationMode", e.target.value)} className={input}>
+                <option value="">Belum dibuka</option>
+                <option value="link">Link eksternal</option>
+                <option value="form">Form website</option>
+              </select>
+            </label>
             <textarea rows={2} value={it.windows} onChange={(e) => setItem(i, "windows", e.target.value)} className={`${input} sm:col-span-3`} placeholder="03-01 07-31 Bersamaan dengan PMB" />
           </div>
         </div>
@@ -874,7 +883,7 @@ function BootcampEditor({ data, onSave, saving }) {
         <h3 className="text-lg font-semibold mb-1">Kursus mandiri (JSON)</h3>
         <p className="mb-3 text-sm text-gray-500">
           Kosongkan untuk memakai kursus contoh; mengisi akan mengganti semuanya. Per item:{" "}
-          <code>{`{ "title", "topic": ${Object.keys(BOOTCAMP_TRACKS).join(" | ")}, "level": pemula | menengah | mahir, "hours", "perWeek", "lessons": [{ "t", "min" }], "href" }`}</code>
+          <code>{`{ "title", "topic": ${Object.keys(BOOTCAMP_TRACKS).join(" | ")}, "level": pemula | menengah | mahir, "hours", "perWeek", "lessons": [{ "t", "min" }], "registration": { "mode": "link" | "form", "href": "..." } }`}</code>
         </p>
         <textarea rows={8} value={form.courses} onChange={(e) => setForm({ ...form, courses: e.target.value })} className={`${input} font-mono`} placeholder="[]" />
         {error && <p className="mt-2 text-sm text-red-600">{error}</p>}

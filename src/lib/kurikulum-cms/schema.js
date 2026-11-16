@@ -83,7 +83,7 @@ export const SHAPE = o({
     tocAria: s(80),
     mascot,
   }),
-  rumpun: l(o({ key, name: s(60), short: s(30), color: e(Object.keys(RUMPUN_COLORS)), style: e(RUMPUN_STYLES) }), 8),
+  rumpun: l(o({ key, name: s(60), short: s(30), color: e(Object.keys(RUMPUN_COLORS)), style: e(RUMPUN_STYLES) }), 24),
   bok: o({
     title: l(s(40), 3),
     body: s(400),

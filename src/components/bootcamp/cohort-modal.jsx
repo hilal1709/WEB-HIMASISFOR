@@ -9,6 +9,7 @@ import { PlaceholderTag } from "@/components/home/shared";
 import { useToast } from "@/components/ui/toast";
 import { cn } from "@/lib/utils";
 import { useBootcamp } from "./bootcamp-provider";
+import { FlexibleRegistrationForm } from "@/components/registration/flexible-registration-form";
 
 const TABS = [
   { key: "ringkas", label: "Ringkas" },
@@ -23,11 +24,13 @@ export function CohortModal({ slug, onSlug, onClose }) {
   const toast = useToast();
   const [tab, setTab] = useState("ringkas");
   const [loading, setLoading] = useState(false);
+  const [registering, setRegistering] = useState(false);
   const idx = bootcamps.findIndex((b) => b.slug === slug);
   const b = bootcamps[idx];
   const price = tiers.find((t) => t.key === "bootcamp")?.prices;
 
   useEffect(() => setTab("ringkas"), [slug]);
+  useEffect(() => setRegistering(false), [slug]);
   useEffect(() => {
     if (b) history.replaceState(null, "", `#bootcamp-${b.slug}`);
   }, [b]);
@@ -38,9 +41,11 @@ export function CohortModal({ slug, onSlug, onClose }) {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      if (b.href) {
-        window.open(b.href, "_blank", "noopener");
+      if (b.registration?.mode === "link" && b.registration.href) {
+        window.open(b.registration.href, "_blank", "noopener,noreferrer");
         toast.success("Formulir pendaftaran dibuka", { description: `${b.title} · tab baru` });
+      } else if (b.registration?.mode === "form") {
+        setRegistering(true);
       } else {
         toast.info("Formulir menyusul", { description: "Tautan pendaftaran diumumkan lewat banner di halaman ini." });
       }
@@ -77,6 +82,11 @@ export function CohortModal({ slug, onSlug, onClose }) {
               </div>
             </div>
 
+            {registering ? (
+              <div className="px-7 py-5">
+                <FlexibleRegistrationForm title={b.title} targetSlug={b.slug} targetType="cohort" fields={b.registration?.fields || []} endpoint="/api/course-registrations" onBack={() => setRegistering(false)} />
+              </div>
+            ) : <>
             <div role="tablist" aria-label="Detail kohort" className="flex gap-6 border-b border-line px-7">
               {TABS.map((t) => (
                 <button
@@ -146,10 +156,11 @@ export function CohortModal({ slug, onSlug, onClose }) {
                   </button>
                 ))}
               </div>
-              <Button variant="brand" loading={loading} onClick={register}>
-                Daftar kohort
+              <Button variant="brand" loading={loading} onClick={register} disabled={!b.registration?.mode}>
+                {b.registration?.mode === "link" ? "Daftar kohort" : b.registration?.mode === "form" ? "Isi form pendaftaran" : "Segera dibuka"}
               </Button>
             </div>
+            </>}
           </>
         )}
       </ModalContent>

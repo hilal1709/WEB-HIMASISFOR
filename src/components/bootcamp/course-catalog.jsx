@@ -109,20 +109,25 @@ function CourseCard({ c }) {
         <p className="mt-2 text-[13.5px] text-text/60">
           {c.lessons.length} pelajaran · {c.hours} jam · {level}
         </p>
-        <div className="mt-auto flex items-center justify-between gap-3 pt-6">
+        <div className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-6">
           <span className="text-[12.5px] text-text/50">±{c.perWeek} jam/minggu</span>
-          <button
-            type="button"
-            onClick={() => togglePlan(c.slug)}
-            aria-pressed={on}
-            className={cn(
-              "group/btn inline-flex h-9 items-center gap-1.5 rounded-full border px-3.5 text-[13px] font-semibold transition-[background-color,border-color,color,transform] duration-300 active:scale-[0.96]",
-              on ? "border-navy bg-navy text-white" : "border-line text-navy hover:border-navy"
-            )}
-          >
-            <LordIcon key={on ? "on" : "off"} name={on ? "check" : "plus-circle"} size={18} trigger={on ? "once" : "hover"} target=".group\/btn" colors={on ? "primary:#ffffff,secondary:#c9a227" : "primary:#14213d,secondary:#6e1423"} />
-            {on ? "Di rencana" : "Rencana"}
-          </button>
+          <div className="flex items-center gap-2">
+            <button type="button" onClick={() => openCourse(c.slug)} className="inline-flex h-9 items-center rounded-md bg-maroon px-3.5 text-[13px] font-semibold text-white transition-colors hover:bg-maroon-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-maroon/40">
+              Lihat course
+            </button>
+            <button
+              type="button"
+              onClick={() => togglePlan(c.slug)}
+              aria-pressed={on}
+              className={cn(
+                "group/btn inline-flex h-9 items-center gap-1.5 rounded-full border px-3.5 text-[13px] font-semibold transition-[background-color,border-color,color,transform] duration-300 active:scale-[0.96]",
+                on ? "border-navy bg-navy text-white" : "border-line text-navy hover:border-navy"
+              )}
+            >
+              <LordIcon key={on ? "on" : "off"} name={on ? "check" : "plus-circle"} size={18} trigger={on ? "once" : "hover"} target=".group\/btn" colors={on ? "primary:#ffffff,secondary:#c9a227" : "primary:#14213d,secondary:#6e1423"} />
+              {on ? "Di rencana" : "Rencana"}
+            </button>
+          </div>
         </div>
       </div>
     </article>

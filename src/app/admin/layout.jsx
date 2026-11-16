@@ -93,6 +93,9 @@ export default function AdminLayout({ children }) {
   const menuItems = [
     { href: '/admin/dashboard', label: 'Dashboard' },
     { href: '/admin/layanan', label: 'Kotak Masuk Layanan' },
+    { href: '/admin/course-registrations', label: 'Pendaftar Course' },
+    { href: '/admin/scholarship-applications', label: 'Pendaftar Beasiswa' },
+    { href: '/admin/registration-forms', label: 'Builder Form Pendaftaran' },
     { href: '/admin/home', label: 'Studio Beranda' },
     { href: '/admin/bidang-keahlian', label: 'Konsol Bidang Keahlian' },
     { href: '/admin/sambutan', label: 'Meja Sambutan Kaprodi' },

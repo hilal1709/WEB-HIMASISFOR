@@ -47,6 +47,8 @@ Bentuk `value` ada di `src/lib/kurikulum-cms/schema.js` (`SHAPE`, dibersihkan se
 Bawaan: `defaults.js` (teks) + `seed.js` (semester, bidang pilihan, RPS Kota Cerdas, rumpun, BoK).
 Token di teks (`{sks}`, `{n}`, `{count}`, `{q}`, …) diganti angka saat render (`fill()` di `src/lib/kurikulum-content.js`).
 
+Rumpun pada stasiun **Rumpun** bukan daftar paten: admin dapat menambah, menghapus, mengurutkan, mengganti nama, nama pendek, warna, gaya titik, dan kuncinya. Saat kunci rumpun diganti, referensi mata kuliah dan bidang pilihan ikut diperbarui otomatis.
+
 Pembaca:
 - `getKurikulumContent()` — isi mentah (draf saat pratinjau, terbit untuk pengunjung).
 - `getKurikulumData()` — bentuk turunan (`semesters`, `electives`, `courses`, `totals`, `bok`, `rumpun`, `copy`)

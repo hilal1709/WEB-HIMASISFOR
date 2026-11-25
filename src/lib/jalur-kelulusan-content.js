@@ -1,7 +1,5 @@
 /**
- * Konten halaman Jalur Kelulusan (`/jalur-kelulusan`).
- * SKS & semester mata kuliah tugas akhir dan prasyarat "Metode Penelitian" diturunkan dari kurikulum
- * (`getKurikulumData`); tanggal sidang dari agenda beranda (`AGENDA`) — tidak ditulis ulang.
+ * Isi awal halaman Jalur Kelulusan dan format `PageContent` lama. Studio memindahkannya ke dokumen lengkap sebelum diterbitkan.
  *
  * CMS `PageContent` section `jalur-kelulusan`:
  *   data.intro          → paragraf intro hero
@@ -10,7 +8,7 @@
  *   data.notice         → { title, body } untuk banner pengumuman
  * Tahapan, durasi, syarat, dan daftar kesiapan adalah CONTOH (`sample`) → tampil dengan PlaceholderTag.
  */
-import { AGENDA } from "@/lib/home-content";
+import { AGENDA } from "./home-content.js";
 
 export const CURTAIN_KEY = "sisfor:curtain:jalur-kelulusan";
 export const BANNER_KEY = "sisfor:banner:jalur-kelulusan";
@@ -123,14 +121,10 @@ function nextDefense() {
 /**
  * Gabungkan CMS ke fallback.
  * @param row        PageContent `jalur-kelulusan` (boleh null)
- * @param kurikulum  hasil getKurikulumData — mata kuliah tugas akhir & prasyarat
  */
-export function mergeJalur(row, { kurikulum } = {}) {
+export function mergeJalur(row) {
   const raw = parse(row?.data);
   const items = Array.isArray(raw?.paths) ? raw.paths : [];
-  const courses = kurikulum?.courses ?? [];
-  const thesis = courses.find((c) => /skripsi/i.test(c.nama)) ?? null;
-  const method = courses.find((c) => /metode penelitian/i.test(c.nama)) ?? null;
 
   const paths = PATHS.map((p) => {
     const o = items.find((x) => x?.key === p.key) ?? {};
@@ -152,8 +146,6 @@ export function mergeJalur(row, { kurikulum } = {}) {
   return {
     intro: { body: body && body.length > 40 ? body : INTRO.body },
     paths,
-    thesis: thesis ? { nama: thesis.nama, sks: thesis.sks, semester: thesis.semester, slug: thesis.slug } : { nama: "Skripsi / Lomba / PKM / Bisnis", sks: 6, semester: 8, slug: null },
-    method: method ? { nama: method.nama, slug: method.slug, semester: method.semester, rps: !!method.rps } : null,
     notice,
   };
 }

@@ -27,9 +27,13 @@ const notoSerif = Noto_Serif_Display({
 });
 
 export const metadata = {
+  metadataBase: new URL("https://si.uisi.ac.id"),
   title: "Sistem Informasi - UISI",
   description:
     "Program Studi Sistem Informasi UISI - Info kurikulum, prestasi, profil dosen dan mahasiswa",
+  alternates: { canonical: "/" },
+  robots: { index: true, follow: true, "max-snippet": -1, "max-image-preview": "large", "max-video-preview": -1 },
+  openGraph: { locale: "id_ID", type: "website", title: "Sistem Informasi - UISI", description: "Info lengkap tentang Program Studi Sistem Informasi UISI.", images: ["/img/logo.png"] },
 };
 
 export default function RootLayout({ children }) {
@@ -40,28 +44,10 @@ export default function RootLayout({ children }) {
         {/* Tahan konten halaman sampai hidrasi + kondisi awal animasi siap (dibuka oleh <AosReady/>); lihat globals.css */}
         <script dangerouslySetInnerHTML={{ __html: 'document.documentElement.setAttribute("data-prehydrate","")' }} />
         <meta
-          name="description"
-          content="Program Studi Sistem Informasi UISI - Info kurikulum, prestasi, profil dosen dan mahasiswa"
-        />
-        <meta
           name="keywords"
           content="Sistem Informasi, UISI, Kurikulum, Prestasi, Dosen, Mahasiswa"
         />
         <meta name="author" content="UISI" />
-        <meta
-          name="robots"
-          content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
-        />
-        <link rel="canonical" href="https://si.uisi.ac.id/" />
-        <meta property="og:locale" content="id_ID" />
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content="Sistem Informasi - UISI" />
-        <meta
-          property="og:description"
-          content="Info lengkap tentang Program Studi Sistem Informasi UISI."
-        />
-        <meta property="og:image" content="/img/logo.png" />
-        <meta property="og:type" content="website" />
         <link rel="icon" type="image" href="/icon.png" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 

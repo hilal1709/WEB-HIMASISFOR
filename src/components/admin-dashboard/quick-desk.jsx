@@ -7,6 +7,7 @@ import { TextRoll } from "@/components/motion/text-roll";
 export const DESK_LINKS = [
   { href: "/admin/content", icon: "document", title: "Konten Web Utama", note: "Hero, tentang, dan mitra di beranda" },
   { href: "/admin/kurikulum", icon: "book", title: "Kurikulum & RPS", note: "Semester, mata kuliah, dan lembar RPS" },
+  { href: "/admin/jalur-kelulusan", icon: "document", title: "Jalur Kelulusan", note: "Jalur tugas akhir, tahapan, dan cek kesiapan" },
   { href: "/admin/achievements", icon: "target", title: "Prestasi & Galeri", note: "Peraih prestasi dan foto kegiatan" },
   { href: "/admin/media", icon: "plus-circle", title: "Upload Media", note: "Gambar dan berkas untuk seluruh halaman" },
 ];

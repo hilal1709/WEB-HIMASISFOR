@@ -21,7 +21,7 @@ const bannerVariants = cva("relative flex w-full items-start gap-3 overflow-hidd
 const ICONS = { info: Info, success: CheckCircle2, warning: AlertTriangle, danger: XCircle, brand: Megaphone };
 
 /** Banner inline. Untuk pesan form/CMS (`danger`) atau pengumuman (`brand`). */
-export function Banner({ variant = "info", title, children, dismissible = false, action, className }) {
+export function Banner({ variant = "info", title, children, dismissible = false, dismissLabel = "Tutup banner", onDismiss, action, className }) {
   const [open, setOpen] = useState(true);
   if (!open) return null;
   const Icon = ICONS[variant];
@@ -34,7 +34,7 @@ export function Banner({ variant = "info", title, children, dismissible = false,
       </div>
       {action && <div className="shrink-0">{action}</div>}
       {dismissible && (
-        <button onClick={() => setOpen(false)} aria-label="Tutup banner" className="shrink-0 opacity-70 hover:opacity-100">
+        <button type="button" onClick={() => { setOpen(false); onDismiss?.(); }} aria-label={dismissLabel} className="shrink-0 opacity-70 hover:opacity-100">
           <X className="size-4" />
         </button>
       )}

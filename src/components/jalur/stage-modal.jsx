@@ -3,8 +3,9 @@ import { useRef } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
-import { PlaceholderTag } from "@/components/home/shared";
+import { fillJalur } from "@/lib/jalur-cms/copy";
 import { cn } from "@/lib/utils";
+import { JalurSample } from "./jalur-media";
 
 const pad = (n) => String(n).padStart(2, "0");
 const EASE = [0.22, 1, 0.36, 1];
@@ -14,7 +15,7 @@ const EASE = [0.22, 1, 0.36, 1];
  * titik bisa diklik), badan berisi luaran & kebutuhan tahap. Isi bergeser searah langkah (motion),
  * ‹ › + panah keyboard berpindah tahap dalam jalur yang sama.
  */
-export function StageModal({ paths, at, onAt, onClose }) {
+export function StageModal({ paths, at, onAt, onClose, labels }) {
   const last = useRef(null);
   const dir = useRef(1);
   if (at) last.current = at;
@@ -54,13 +55,13 @@ export function StageModal({ paths, at, onAt, onClose }) {
                 {/* kepala tiket */}
                 <div className="relative bg-navy px-6 pb-6 pt-6 text-white sm:px-8">
                   <Dialog.Close
-                    aria-label="Tutup"
+                    aria-label={labels.close}
                     className="absolute right-3 top-3 grid size-9 place-items-center rounded-full text-white/70 transition-colors hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
                   >
                     <X className="size-4" />
                   </Dialog.Close>
-                  <p className="kicker text-[11px] text-gold-soft">Jalur {p.title} · tahap {shown.s + 1} dari {total}</p>
-                  <ol className="relative mt-5 flex items-center justify-between" aria-label="Tahapan">
+                  <p className="kicker text-[11px] text-gold-soft">{fillJalur(labels.stageProgress, { path: p.title, number: shown.s + 1, total })}</p>
+                  <ol className="relative mt-5 flex flex-wrap items-center justify-between gap-y-3" aria-label={labels.stages}>
                     <span aria-hidden className="absolute inset-x-2 top-1/2 h-px -translate-y-1/2 bg-white/20" />
                     <span
                       aria-hidden
@@ -68,11 +69,11 @@ export function StageModal({ paths, at, onAt, onClose }) {
                       style={{ width: `calc((100% - 1rem) * ${total > 1 ? shown.s / (total - 1) : 0})` }}
                     />
                     {p.stages.map((x, i) => (
-                      <li key={x.name} className="relative">
+                      <li key={x.id} className="relative">
                         <button
                           type="button"
                           onClick={() => jump(i)}
-                          aria-label={`Tahap ${i + 1}: ${x.name}`}
+                          aria-label={fillJalur(labels.stageNumber, { number: i + 1, stage: x.name })}
                           aria-current={i === shown.s ? "step" : undefined}
                           className={cn(
                             "grid size-4 place-items-center rounded-full border-2 transition-[background-color,border-color,transform] duration-300 hover:scale-125 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60",
@@ -111,32 +112,32 @@ export function StageModal({ paths, at, onAt, onClose }) {
                         </div>
                       </div>
 
-                      <div className="mt-6 rounded-lg border-l-[3px] border-gold bg-cream/70 px-4 py-3">
-                        <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-text/45">Selesai bila</p>
+                      {st.output && <div className="mt-6 rounded-lg border-l-[3px] border-gold bg-cream/70 px-4 py-3">
+                        <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-text/45">{labels.stageOutput}</p>
                         <p className="mt-1 font-serif text-[1.15rem] italic leading-snug text-maroon">{st.output}</p>
-                      </div>
+                      </div>}
 
-                      <p className="mt-6 text-[12px] font-semibold uppercase tracking-[0.14em] text-text/45">Yang perlu disiapkan</p>
+                      {st.needs.length > 0 && <p className="mt-6 text-[12px] font-semibold uppercase tracking-[0.14em] text-text/45">{labels.requirements}</p>}
                       <ul className="mt-3 divide-y divide-line border-y border-line">
                         {st.needs.map((n, i) => (
-                          <li key={n} className="flex gap-3 py-2.5 text-[15px] text-navy animate-in fade-in-0 slide-in-from-bottom-1 fill-mode-both" style={{ animationDelay: `${100 + i * 60}ms` }}>
+                          <li key={n.id} className="flex gap-3 py-2.5 text-[15px] text-navy animate-in fade-in-0 slide-in-from-bottom-1 fill-mode-both" style={{ animationDelay: `${100 + i * 60}ms` }}>
                             <span aria-hidden className="mt-2 size-1.5 shrink-0 rounded-full bg-maroon" />
-                            {n}
+                            {n.text}
                           </li>
                         ))}
                       </ul>
-                      {p.sample && <PlaceholderTag className="mt-5" />}
+                      {p.sample && <JalurSample className="mt-5">{labels.sample}</JalurSample>}
                     </motion.div>
                   </AnimatePresence>
                 </div>
 
                 <div className="flex items-center justify-between gap-3 border-t border-line px-6 py-3 sm:px-8">
                   <span className="text-[13px] text-text/50">
-                    {shown.s + 1 < total ? <>Berikutnya: <span className="text-navy">{p.stages[shown.s + 1].name}</span></> : "Tahap terakhir"}
+                    {shown.s + 1 < total ? <>{labels.next} <span className="text-navy">{p.stages[shown.s + 1].name}</span></> : labels.last}
                   </span>
                   <div className="flex gap-2">
-                    <NavBtn label="Tahap sebelumnya" onClick={() => go(-1)} icon={ChevronLeft} />
-                    <NavBtn label="Tahap berikutnya" onClick={() => go(1)} icon={ChevronRight} />
+                    <NavBtn label={labels.previousStage} onClick={() => go(-1)} icon={ChevronLeft} />
+                    <NavBtn label={labels.nextStage} onClick={() => go(1)} icon={ChevronRight} />
                   </div>
                 </div>
               </motion.div>

@@ -3,10 +3,10 @@ import { useRef } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
-import { LottieIllustration } from "@/components/media/lottie-illustration";
-import { PlaceholderTag } from "@/components/home/shared";
+import { fillJalur } from "@/lib/jalur-cms/copy";
 import { cn } from "@/lib/utils";
 import { NavBtn } from "./stage-modal";
+import { JalurArt, JalurSample } from "./jalur-media";
 
 const pad = (n) => String(n).padStart(2, "0");
 const EASE = [0.22, 1, 0.36, 1];
@@ -15,7 +15,7 @@ const EASE = [0.22, 1, 0.36, 1];
  * Modal ringkasan jalur. Panel kiri navy (Lottie, fakta jalur), kanan: untuk siapa, risiko, dan
  * tahapan ringkas — tiap tahap membuka modal tahap. ‹ › + panah keyboard berpindah jalur.
  */
-export function PathModal({ paths, index, onIndex, onClose, onStage, method }) {
+export function PathModal({ paths, index, onIndex, onClose, onStage, method, prerequisitePath, labels }) {
   const last = useRef(null);
   if (index != null) last.current = index;
   const shown = index ?? last.current;
@@ -44,7 +44,7 @@ export function PathModal({ paths, index, onIndex, onClose, onStage, method }) {
                   <span className="flex-1 bg-gold" />
                 </div>
                 <Dialog.Close
-                  aria-label="Tutup"
+                  aria-label={labels.close}
                   className="absolute right-3 top-3 z-20 grid size-9 place-items-center rounded-full bg-white/90 text-navy shadow-sm transition-colors hover:bg-maroon hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
                 >
                   <X className="size-4" />
@@ -52,17 +52,17 @@ export function PathModal({ paths, index, onIndex, onClose, onStage, method }) {
 
                 <div key={p.key} className="grid min-h-0 flex-1 animate-in fade-in-0 overflow-y-auto duration-300 md:grid-cols-[280px_1fr] md:overflow-hidden">
                   <div className="flex flex-col bg-navy px-6 pb-6 pt-8 text-white" data-lottie-hover>
-                    <span className="mx-auto grid size-32 place-items-center rounded-full bg-maroon p-4">
-                      <LottieIllustration src={p.lottie} replayOnHover label={`Ilustrasi jalur ${p.title}`} />
-                    </span>
+                    {p.media.src && <span className="mx-auto grid size-32 place-items-center rounded-full bg-maroon p-4">
+                      <JalurArt media={p.media} path={p.title} replayOnHover />
+                    </span>}
                     <dl className="mt-7 space-y-4">
                       {[
-                        ["Durasi", p.duration],
-                        ["Pendamping", p.mentor],
-                        ["Luaran", p.output],
-                      ].map(([k, v]) => (
+                        ["duration", p.duration],
+                        ["mentor", p.mentor],
+                        ["output", p.output],
+                      ].filter(([, value]) => value).map(([k, v]) => (
                         <div key={k} className="border-b border-white/10 pb-3">
-                          <dt className="kicker text-[10.5px] text-gold-soft">{k}</dt>
+                          <dt className="kicker text-[10.5px] text-gold-soft">{labels[k]}</dt>
                           <dd className="mt-1 text-[14.5px] text-white/90">{v}</dd>
                         </div>
                       ))}
@@ -70,25 +70,25 @@ export function PathModal({ paths, index, onIndex, onClose, onStage, method }) {
                   </div>
 
                   <div className="min-h-0 overflow-y-auto p-6 sm:p-8 md:max-h-[calc(92vh-60px)]">
-                    <p className="kicker text-maroon">Jalur {pad(shown + 1)}</p>
+                    <p className="kicker text-maroon">{fillJalur(labels.pathNumber, { number: pad(shown + 1) })}</p>
                     <Dialog.Title className="mt-2 pr-10 font-serif text-[2rem] leading-tight text-navy">{p.title}</Dialog.Title>
                     <Dialog.Description className="mt-2 text-pretty text-[15.5px] leading-relaxed text-text/70">{p.oneLiner}</Dialog.Description>
 
                     <div className="mt-6 grid gap-3 sm:grid-cols-2">
                       <div className="rounded-lg bg-cream/70 p-4">
-                        <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-text/45">Cocok untuk</p>
+                        <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-text/45">{labels.audience}</p>
                         <p className="mt-1.5 text-[14.5px] leading-relaxed text-navy">{p.forWho}</p>
                       </div>
                       <div className="rounded-lg border border-maroon/20 p-4">
-                        <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-maroon/70">Pertimbangkan</p>
+                        <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-maroon/70">{labels.risk}</p>
                         <p className="mt-1.5 text-[14.5px] leading-relaxed text-navy">{p.risk}</p>
                       </div>
                     </div>
 
-                    <p className="mt-7 text-[12px] font-semibold uppercase tracking-[0.14em] text-text/45">Tahapan</p>
+                    {p.stages.length > 0 && <p className="mt-7 text-[12px] font-semibold uppercase tracking-[0.14em] text-text/45">{labels.stages}</p>}
                     <ol className="mt-3 divide-y divide-line border-y border-line">
                       {p.stages.map((s, i) => (
-                        <li key={s.name}>
+                        <li key={s.id}>
                           <button type="button" onClick={() => onStage(shown, i)} className="group flex w-full items-center gap-4 py-3 text-left transition-colors hover:text-maroon">
                             <span className="tabular w-6 font-serif text-gold">{pad(i + 1)}</span>
                             <span className="min-w-0 flex-1">
@@ -104,12 +104,12 @@ export function PathModal({ paths, index, onIndex, onClose, onStage, method }) {
                     </ol>
 
                     <div className="mt-6 flex flex-wrap items-center gap-3">
-                      {method?.slug && p.key === "skripsi" && (
-                        <a href={`/curiculum#rps-${method.slug}`} className="group inline-flex items-center gap-2 text-[14px] font-semibold text-maroon">
-                          <span className="u-gold">Prasyarat: {method.nama}</span>
+                      {method && p.key === prerequisitePath && (method.href ? (
+                        <a href={method.href} className="group inline-flex items-center gap-2 text-[14px] font-semibold text-maroon">
+                          <span className="u-gold">{fillJalur(labels.prerequisite, { course: method.nama })}</span>
                         </a>
-                      )}
-                      {p.sample && <PlaceholderTag />}
+                      ) : <span className="text-[14px] font-semibold text-maroon">{fillJalur(labels.prerequisite, { course: method.nama })}</span>)}
+                      {p.sample && <JalurSample>{labels.sample}</JalurSample>}
                     </div>
                   </div>
                 </div>
@@ -121,8 +121,8 @@ export function PathModal({ paths, index, onIndex, onClose, onStage, method }) {
                     ))}
                   </div>
                   <div className="flex gap-2">
-                    <NavBtn label="Jalur sebelumnya" onClick={() => go(-1)} icon={ChevronLeft} />
-                    <NavBtn label="Jalur berikutnya" onClick={() => go(1)} icon={ChevronRight} />
+                    <NavBtn label={labels.previousPath} onClick={() => go(-1)} icon={ChevronLeft} />
+                    <NavBtn label={labels.nextPath} onClick={() => go(1)} icon={ChevronRight} />
                   </div>
                 </div>
               </motion.div>

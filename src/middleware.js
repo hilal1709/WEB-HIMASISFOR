@@ -26,7 +26,10 @@ export default auth((request) => {
   
   if (pathname.startsWith('/img/') || pathname.startsWith('/_next/static/')) {
     response.headers.set('Cache-Control', 'public, max-age=31536000, immutable');
-  } else if (pathname.startsWith('/api/auth') || pathname.startsWith('/api/layanan') || pathname.startsWith('/api/warta')) {
+  } else if (pathname === '/admin/jalur-kelulusan/pratinjau') {
+    response.headers.set('Cache-Control', 'no-store');
+    response.headers.set('X-Robots-Tag', 'noindex, nofollow');
+  } else if (pathname.startsWith('/api/auth') || pathname.startsWith('/api/layanan') || pathname.startsWith('/api/warta') || pathname === '/api/jalur-cms') {
     // auth & pengajuan layanan bersifat pribadi — jangan pernah di-cache
     response.headers.set('Cache-Control', 'no-store');
   } else if (pathname.startsWith('/api/')) {

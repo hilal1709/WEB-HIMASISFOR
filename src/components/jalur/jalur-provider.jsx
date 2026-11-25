@@ -1,6 +1,7 @@
 "use client";
 import { createContext, useCallback, useContext, useLayoutEffect as useEffect, useMemo, useState } from "react";
 import { READY_KEY } from "@/lib/jalur-kelulusan-content";
+import { readJalurChecks, stageFromHash } from "@/lib/jalur-cms/schema";
 import { prefersReducedMotion } from "@/lib/motion";
 import { StageModal } from "./stage-modal";
 import { PathModal } from "./path-modal";
@@ -10,7 +11,7 @@ export const useJalur = () => useContext(Ctx);
 
 export function setHash(value) {
   try {
-    history.replaceState(null, "", `${location.pathname}${location.search}${value ? `#${value}` : ""}`);
+    history.replaceState(history.state, "", `${location.pathname}${location.search}${value ? `#${value}` : ""}`);
   } catch {}
 }
 
@@ -18,88 +19,96 @@ export function smoothTo(id) {
   document.getElementById(id)?.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth", block: "start" });
 }
 
-/**
- * State bersama halaman Jalur Kelulusan:
- * - `active`  : jalur yang sedang dibahas (hero, scrollytelling, cek kesiapan) — index
- * - modal tahap (`openStage(p, s)`) dan modal jalur (`openPath(p)`)
- * - `ready`   : centang daftar kesiapan per jalur (localStorage `sisfor:kesiapan:<key>`)
- * Deep link: `#jalur-<key>` membuka modal jalur, `#jalur-<key>-<n>` membuka tahap ke-n.
- */
+export function handleJalurTabs(event, index, setIndex, length) {
+  if (!length) return;
+  const positions = { ArrowLeft: (index + length - 1) % length, ArrowRight: (index + 1) % length, Home: 0, End: length - 1 };
+  const next = positions[event.key];
+  if (typeof next !== "number") return;
+  event.preventDefault();
+  setIndex(next);
+  event.currentTarget.querySelectorAll("button")[next]?.focus();
+}
+
 export function JalurProvider({ data, children }) {
-  const { paths } = data;
-  const [active, setActive] = useState(0);
-  const [stage, setStage] = useState(null); // { p, s }
-  const [pathModal, setPathModal] = useState(null);
-  const [ready, setReady] = useState(() => paths.map((p) => p.ready.map(() => false)));
+  const { paths, preview, copy: { labels }, method, academic } = data;
+  const [activeKey, setActiveKey] = useState(paths[0]?.key);
+  const [modal, setModal] = useState(null);
+  const [checks, setChecks] = useState({});
+  const active = Math.max(0, paths.findIndex((path) => path.key === activeKey));
+  const setActive = useCallback((i) => setActiveKey(paths[i]?.key), [paths]);
+  const ready = useMemo(() => paths.map((p) => p.ready.map((item) => checks[p.key]?.[item.id] === true)), [paths, checks]);
 
   useEffect(() => {
-    setReady(
-      paths.map((p) => {
+    if (preview) return;
+    setChecks(Object.fromEntries(paths.map((p) => {
         try {
           const raw = JSON.parse(localStorage.getItem(READY_KEY + p.key) ?? "[]");
-          return p.ready.map((_, i) => !!raw[i]);
+          return [p.key, readJalurChecks(raw)];
         } catch {
-          return p.ready.map(() => false);
+          return [p.key, {}];
         }
-      })
-    );
-  }, [paths]);
+      })));
+  }, [paths, preview]);
 
   const setReadyFor = useCallback(
     (p, list) => {
-      setReady((all) => all.map((r, i) => (i === p ? list : r)));
+      const path = paths[p];
+      if (!path) return;
+      const values = Object.fromEntries(path.ready.map((item, i) => [item.id, list[i] === true]));
+      setChecks((all) => ({ ...all, [path.key]: { ...all[path.key], ...values } }));
+      if (preview) return;
       try {
-        localStorage.setItem(READY_KEY + paths[p].key, JSON.stringify(list));
+        const key = READY_KEY + path.key;
+        const saved = readJalurChecks(JSON.parse(localStorage.getItem(key) ?? "[]"));
+        localStorage.setItem(key, JSON.stringify({ ...saved, ...values }));
       } catch {}
     },
-    [paths]
+    [paths, preview]
   );
 
   const openStage = useCallback(
     (p, s) => {
-      setPathModal(null);
-      setStage({ p, s });
-      setHash(`jalur-${paths[p].key}-${s + 1}`);
+      const path = paths[p];
+      const stage = path?.stages[s];
+      if (!stage) return;
+      setModal({ key: path.key, stage: stage.id });
+      setHash(`jalur-${path.key}/tahap/${stage.id}`);
     },
     [paths]
   );
   const openPath = useCallback(
     (p) => {
-      setStage(null);
-      setPathModal(p);
+      if (!paths[p]) return;
+      setModal({ key: paths[p].key });
       setHash(`jalur-${paths[p].key}`);
     },
     [paths]
   );
   const close = useCallback(() => {
-    setStage(null);
-    setPathModal(null);
+    setModal(null);
     setHash("");
   }, []);
 
   useEffect(() => {
     const fromHash = () => {
-      const m = location.hash.match(/^#jalur-([a-z]+)(?:-(\d+))?$/);
-      if (!m) return;
-      const p = paths.findIndex((x) => x.key === m[1]);
-      if (p < 0) return;
-      setActive(p);
-      const s = m[2] ? Number(m[2]) - 1 : null;
-      if (s != null && paths[p].stages[s]) setStage({ p, s });
-      else if (s == null) setPathModal(p);
+      const target = stageFromHash(paths, location.hash);
+      setModal(target);
+      if (target) setActiveKey(target.key);
     };
     fromHash();
     window.addEventListener("hashchange", fromHash);
     return () => window.removeEventListener("hashchange", fromHash);
   }, [paths]);
 
-  const value = useMemo(() => ({ ...data, active, setActive, openStage, openPath, ready, setReadyFor }), [data, active, openStage, openPath, ready, setReadyFor]);
+  const value = useMemo(() => ({ ...data, active, setActive, openStage, openPath, ready, setReadyFor }), [data, active, setActive, openStage, openPath, ready, setReadyFor]);
+  const modalPath = paths.findIndex((path) => path.key === modal?.key);
+  const modalStage = modal?.stage ? paths[modalPath]?.stages.findIndex((stage) => stage.id === modal.stage) ?? -1 : -1;
 
   return (
     <Ctx.Provider value={value}>
       {children}
-      <StageModal paths={paths} at={stage} onAt={(p, s) => openStage(p, s)} onClose={close} />
-      <PathModal paths={paths} index={pathModal} onIndex={openPath} onClose={close} onStage={openStage} method={data.method} />
+      <StageModal paths={paths} at={modalStage >= 0 ? { p: modalPath, s: modalStage } : null} onAt={openStage} onClose={close} labels={labels} />
+      <PathModal paths={paths} index={modalPath >= 0 && !modal.stage ? modalPath : null} onIndex={openPath} onClose={close} onStage={openStage} method={method} prerequisitePath={academic.prerequisitePath} labels={labels} />
     </Ctx.Provider>
   );
 }

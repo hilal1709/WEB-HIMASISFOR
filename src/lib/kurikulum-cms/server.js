@@ -58,3 +58,9 @@ export const getKurikulumData = cache(async () => {
   const { value, preview } = await getKurikulumContent();
   return { ...buildKurikulum(value), preview };
 });
+
+/** Referensi lintas CMS selalu memakai kurikulum yang sudah terbit. */
+export const getPublishedKurikulumData = cache(async () => {
+  const { base, published } = await readRows();
+  return buildKurikulum(published ? deepMerge(base, published) : base);
+});

@@ -1,57 +1,24 @@
-import prisma from "@/lib/prisma";
-import { CURTAIN_KEY, mergeJalur } from "@/lib/jalur-kelulusan-content";
-import { getKurikulumData } from "@/lib/kurikulum-cms/server";
-import { SiteHeader, Topbar } from "@/components/home/site-header";
-import { SiteFooter } from "@/components/home/site-footer";
-import { AosReady } from "@/components/motion/aos-provider";
-import { JalurProvider } from "@/components/jalur/jalur-provider";
-import { JalurHero } from "@/components/jalur/jalur-hero";
-import { RouteStory } from "@/components/jalur/route-story";
-import { ReadinessCheck } from "@/components/jalur/readiness-check";
-import { TradeoffCards } from "@/components/jalur/tradeoff-cards";
-import { JalurClosing } from "@/components/jalur/jalur-closing";
-import { HeadingStyle } from "@/components/home/shared";
-import { PageCurtain } from "@/components/motion/page-curtain";
+import { JalurView } from "@/components/jalur/jalur-view";
+import { readPublicJalur } from "@/lib/jalur-cms/server";
+import { safeJalurUrl } from "@/lib/jalur-cms/schema";
 
 export const revalidate = 300;
 
-export const metadata = {
-  title: "Jalur Kelulusan — Sistem Informasi UISI",
-  description:
-    "Empat jalur tugas akhir S1 Sistem Informasi UISI: skripsi, lomba, PKM, dan bisnis — tahapan, syarat, luaran, risiko, dan cek kesiapan untuk tiap jalur.",
-};
-
-async function getData() {
-  try {
-    const rows = await prisma.pageContent.findMany({ where: { section: { in: ["jalur-kelulusan", "curriculum"] }, isActive: true } });
-    const row = (s) => rows.find((r) => r.section === s) ?? null;
-    return mergeJalur(row("jalur-kelulusan"), { kurikulum: await getKurikulumData() });
-  } catch {
-    return mergeJalur(null, { kurikulum: await getKurikulumData() });
-  }
+export async function generateMetadata() {
+  const { copy: { identity } } = await readPublicJalur();
+  const image = safeJalurUrl(identity.seoImage);
+  return {
+    title: identity.seoTitle,
+    description: identity.seoDescription,
+    alternates: { canonical: "/jalur-kelulusan" },
+    openGraph: {
+      title: identity.seoTitle, description: identity.seoDescription, url: "/jalur-kelulusan", locale: "id_ID", type: "website",
+      images: image && !image.startsWith("#") ? [{ url: image, alt: identity.seoImageAlt || undefined }] : [],
+    },
+  };
 }
 
 /** Jalur Kelulusan — tema beranda "Kampus v3" (maroon + navy + gold di atas cream). */
 export default async function JalurKelulusanPage() {
-  const data = await getData();
-  return (
-    <div className="kampus" data-aos-wait>
-      <PageCurtain storageKey={CURTAIN_KEY} title="Jalur" accent="Kelulusan" label="Memuat jalur kelulusan" />
-      <Topbar />
-      <SiteHeader />
-      <JalurProvider data={data}>
-        <HeadingStyle value="edge">
-        <main>
-          <JalurHero />
-          <RouteStory />
-          <ReadinessCheck />
-          <TradeoffCards />
-          <JalurClosing />
-        </main>
-        </HeadingStyle>
-      </JalurProvider>
-      <SiteFooter />
-      <AosReady />
-    </div>
-  );
+  return <JalurView data={await readPublicJalur()} />;
 }

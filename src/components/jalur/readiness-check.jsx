@@ -5,11 +5,12 @@ import { motion, useReducedMotion } from "motion/react";
 import { gsap } from "@/lib/scroll";
 import { prefersReducedMotion } from "@/lib/motion";
 import { useToast } from "@/components/ui/toast";
-import { Container, PlaceholderTag, SectionHeader } from "@/components/home/shared";
+import { Container, SectionHeader } from "@/components/home/shared";
+import { fillJalur } from "@/lib/jalur-cms/copy";
 import { JalurBanner } from "./jalur-banner";
-import { LottieIllustration } from "@/components/media/lottie-illustration";
+import { JalurArt, JalurSample } from "./jalur-media";
 import { cn } from "@/lib/utils";
-import { useJalur } from "./jalur-provider";
+import { handleJalurTabs, useJalur } from "./jalur-provider";
 
 const R = 74;
 const C = 2 * Math.PI * R;
@@ -21,7 +22,7 @@ const C = 2 * Math.PI * R;
  * "Mulai ulang" → toast dengan "Batalkan".
  */
 export function ReadinessCheck() {
-  const { paths, active, setActive, ready, setReadyFor, openPath } = useJalur();
+  const { paths, active, setActive, ready, setReadyFor, openPath, readinessMedia, copy: { readiness, labels } } = useJalur();
   const toast = useToast();
   const reduce = useReducedMotion();
   const p = paths[active];
@@ -62,10 +63,10 @@ export function ReadinessCheck() {
     latest.current = latest.current.map((r, k) => (k === active ? next : r));
     setReadyFor(active, next);
     if (!prefersReducedMotion() && ring.current) gsap.fromTo(ring.current, { scale: 0.96 }, { scale: 1, duration: 0.6, ease: "elastic.out(1, 0.5)" });
-    if (next.every(Boolean) && !cur.every(Boolean)) {
-      toast.success(`Kamu siap menempuh jalur ${p.title}`, {
-        description: "Bawa daftar ini saat menemui calon pembimbing.",
-        action: { label: "Lihat tahapan", onClick: () => openPath(active) },
+    if (readiness.success && next.every(Boolean) && !cur.every(Boolean)) {
+      toast.success(fillJalur(readiness.success, { path: p.title }), {
+        description: readiness.successBody,
+        action: readiness.successAction ? { label: readiness.successAction, onClick: () => openPath(active) } : undefined,
       });
     }
   };
@@ -73,21 +74,18 @@ export function ReadinessCheck() {
   const reset = () => {
     const prev = list;
     setReadyFor(active, list.map(() => false));
-    toast.info(`Daftar kesiapan ${p.title} dikosongkan`, { action: { label: "Batalkan", onClick: () => setReadyFor(active, prev) } });
+    if (readiness.resetToast) toast.info(fillJalur(readiness.resetToast, { path: p.title }), { action: readiness.undo ? { label: readiness.undo, onClick: () => setReadyFor(active, prev) } : undefined });
   };
 
-  const verdict = pct === 100 ? "Siap berangkat." : pct >= 60 ? "Hampir siap." : pct > 0 ? "Masih ada yang perlu disiapkan." : "Mulai dari butir yang sudah pasti.";
+  const verdict = pct === 100 ? readiness.complete : pct >= 60 ? readiness.almost : pct > 0 ? readiness.started : readiness.initial;
 
   return (
     <section id="kesiapan" className="relative scroll-mt-20 py-16 md:py-20">
       <Container>
-        <SectionHeader title={["Cek", "kesiapanku"]} body="Centang yang sudah benar-benar kamu punya. Jawabanmu hanya tersimpan di perangkat ini." />
+        <SectionHeader title={readiness.title.split("\n")} body={readiness.body} />
         <JalurBanner className="mt-8" />
 
-        <div className="mt-10 flex gap-1 overflow-x-auto rounded-lg border border-line bg-white p-1 sm:inline-flex" role="tablist" aria-label="Jalur yang dicek" onKeyDown={(e) => {
-          if (e.key === "ArrowRight") setActive((active + 1) % paths.length);
-          if (e.key === "ArrowLeft") setActive((active - 1 + paths.length) % paths.length);
-        }}>
+        <div className="mt-10 flex max-w-full gap-1 overflow-x-auto rounded-lg border border-line bg-white p-1 sm:inline-flex" role="tablist" aria-label={readiness.select} onKeyDown={(event) => handleJalurTabs(event, active, setActive, paths.length)}>
           {paths.map((x, i) => {
             const d = (ready[i] ?? []).filter(Boolean).length;
             return (
@@ -138,14 +136,14 @@ export function ReadinessCheck() {
             </div>
             <p className="mt-5 font-serif text-[1.25rem] text-navy" aria-live="polite">{verdict}</p>
             <p className="mt-1 text-[13.5px] text-text/50">
-              {done} dari {list.length} butir untuk jalur {p.title}
+              {fillJalur(readiness.count, { done, total: list.length, path: p.title })}
             </p>
-            <div className={cn("mt-5 w-28 transition-opacity duration-500", pct === 100 ? "opacity-100" : "opacity-40")}>
-              <LottieIllustration src="/lottie/grad-cap.json" label="Ilustrasi toga" />
-            </div>
-            <button type="button" onClick={reset} disabled={done === 0} className="mt-4 text-[13.5px] font-semibold text-maroon disabled:pointer-events-none disabled:opacity-30">
-              <span className="u-gold">Mulai ulang</span>
-            </button>
+            {readinessMedia.src && <div className={cn("mt-5 w-28 transition-opacity duration-500", pct === 100 ? "opacity-100" : "opacity-40")}>
+              <JalurArt media={readinessMedia} />
+            </div>}
+            {readiness.reset && <button type="button" onClick={reset} disabled={done === 0} className="mt-4 text-[13.5px] font-semibold text-maroon disabled:pointer-events-none disabled:opacity-30">
+              <span className="u-gold">{readiness.reset}</span>
+            </button>}
           </div>
 
           {/* daftar */}
@@ -154,7 +152,7 @@ export function ReadinessCheck() {
               {p.ready.map((item, i) => {
                 const on = !!list[i];
                 return (
-                  <li key={item} className="animate-in fade-in-0 slide-in-from-bottom-2 fill-mode-both duration-500" style={{ animationDelay: `${i * 60}ms` }}>
+                  <li key={item.id} className="animate-in fade-in-0 slide-in-from-bottom-2 fill-mode-both duration-500" style={{ animationDelay: `${i * 60}ms` }}>
                     <button
                       type="button"
                       role="checkbox"
@@ -170,13 +168,14 @@ export function ReadinessCheck() {
                           <path d="M3.5 8.5l3 3 6-7" fill="none" stroke="var(--navy)" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" pathLength="1" className={cn("jk-tick", on && "jk-tick-on")} />
                         </svg>
                       </span>
-                      <span className="flex-1 text-[15.5px] leading-snug">{item}</span>
+                      <span className="flex-1 text-[15.5px] leading-snug">{item.text}</span>
                     </button>
                   </li>
                 );
               })}
             </ul>
-            {p.sample && <PlaceholderTag className="mt-5" />}
+            {!p.ready.length && readiness.empty && <p className="text-text/65">{readiness.empty}</p>}
+            {p.sample && <JalurSample className="mt-5">{labels.sample}</JalurSample>}
           </div>
         </div>
       </Container>

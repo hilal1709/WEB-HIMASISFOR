@@ -4,7 +4,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { animate, stagger } from "animejs";
 import { gsap } from "@/lib/scroll";
 import { prefersReducedMotion } from "@/lib/motion";
-import { LIMITS } from "@/lib/konversi-content";
+import { LIMITS, SEMESTER_WEEKS } from "@/lib/konversi-content";
 import { RUMPUN_BY_KEY } from "@/lib/kurikulum-content";
 import { Container, PlaceholderTag, SectionHeader } from "@/components/home/shared";
 import { RumpunDot } from "@/components/kurikulum/rumpun-dot";
@@ -102,7 +102,8 @@ function RateWindow() {
       </span>
       <div className="text-center">
         <p className="tabular font-serif text-[1.6rem] leading-none text-navy">{program.mode === "jam" ? rate : 1}</p>
-        <p className="mt-1 text-[11px] text-text/50">{program.mode === "jam" ? "jam" : "SKS asal"}</p>
+        <p className="mt-1 text-[11px] text-text/50">{program.mode === "jam" ? "menit/minggu" : "SKS asal"}</p>
+        {program.mode === "jam" && <p className="mt-1 text-[11px] text-text/50">× {SEMESTER_WEEKS} minggu</p>}
       </div>
     </div>
   );

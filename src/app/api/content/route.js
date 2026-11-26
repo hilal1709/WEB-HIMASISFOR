@@ -1,13 +1,17 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { JALUR_SECTIONS } from "@/lib/jalur-cms/schema";
+import { REGULASI_SECTIONS } from "@/lib/regulasi-cms/schema";
+import { MAGANG_SECTIONS } from "@/lib/magang-cms/schema";
+
+const STUDIO_SECTIONS = [...JALUR_SECTIONS, ...REGULASI_SECTIONS, ...MAGANG_SECTIONS];
 
 // GET /api/content - Fetch all page content or specific section
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
     const section = searchParams.get("section");
-    if (JALUR_SECTIONS.includes(section)) return NextResponse.json({ error: "Section not found" }, { status: 404 });
+    if (STUDIO_SECTIONS.includes(section)) return NextResponse.json({ error: "Section not found" }, { status: 404 });
 
     if (section) {
       // Fetch specific section
@@ -41,7 +45,7 @@ export async function GET(request) {
     const contents = await prisma.pageContent.findMany({
       where: {
         isActive: true,
-        section: { notIn: JALUR_SECTIONS },
+        section: { notIn: STUDIO_SECTIONS },
       },
       orderBy: {
         order: "asc",
@@ -76,7 +80,9 @@ export async function PUT(request) {
     const body = await request.json();
     const { section, title, subtitle, content, image, data, isActive, order } = body;
 
+    if (REGULASI_SECTIONS.includes(section)) return NextResponse.json({ error: "Gunakan CMS Regulasi Akademik" }, { status: 403 });
     if (JALUR_SECTIONS.includes(section)) return NextResponse.json({ error: "Gunakan CMS Jalur Kelulusan" }, { status: 403 });
+    if (MAGANG_SECTIONS.includes(section)) return NextResponse.json({ error: "Gunakan CMS Magang" }, { status: 403 });
 
     if (!section) {
       return NextResponse.json(
@@ -127,7 +133,9 @@ export async function DELETE(request) {
     const { searchParams } = new URL(request.url);
     const section = searchParams.get("section");
 
+    if (REGULASI_SECTIONS.includes(section)) return NextResponse.json({ error: "Gunakan CMS Regulasi Akademik" }, { status: 403 });
     if (JALUR_SECTIONS.includes(section)) return NextResponse.json({ error: "Gunakan CMS Jalur Kelulusan" }, { status: 403 });
+    if (MAGANG_SECTIONS.includes(section)) return NextResponse.json({ error: "Gunakan CMS Magang" }, { status: 403 });
 
     if (!section) {
       return NextResponse.json(

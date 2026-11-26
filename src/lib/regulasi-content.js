@@ -1,17 +1,4 @@
-/**
- * Konten halaman Regulasi Akademik (`/regulasi-akademik`).
- * Total SKS & lama studi normal diturunkan dari kurikulum (`getKurikulumData`) — tidak ditulis ulang.
- * Tahapan tugas akhir TIDAK dibahas di sini (sudah ada di `/jalur-kelulusan`); pasal kelulusan hanya menaut ke sana.
- *
- * CMS `PageContent` section `regulasi-akademik`:
- *   data.intro          → paragraf intro hero
- *   data.version        → mis. "2026/2027"
- *   data.chapters[]     → ditimpa per `key` (beban/nilai/hadir/status/evaluasi/etika; mengisi `pasal` menghapus tanda contoh)
- *   data.scenarios[]    → ditimpa per `key`
- *   data.docs[]         → ditimpa per `key` (isi `href` = URL PDF resmi)
- *   data.notice         → { title, body } untuk banner
- * Semua angka aturan di bawah adalah CONTOH (`sample`) → tampil dengan PlaceholderTag.
- */
+/** Isi awal CMS Regulasi Akademik. Data contoh tetap berlabel sampai diverifikasi di editor. */
 
 export const CURTAIN_KEY = "sisfor:curtain:regulasi-akademik";
 export const BANNER_KEY = "sisfor:banner:regulasi-akademik";
@@ -59,14 +46,6 @@ export const PREDIKAT = [
   { min: 2.76, label: "Memuaskan" },
   { min: 2.0, label: "Lulus" },
 ];
-
-export const gradeFor = (score) => GRADES.find((g) => score >= g.min) ?? GRADES[GRADES.length - 1];
-export const sksFor = (ips) => (SKS_RULES.find((r) => ips >= r.min) ?? SKS_RULES[SKS_RULES.length - 1]).sks;
-export function predikatFor(ipk, onTime) {
-  if (ipk < 2) return null;
-  const hit = PREDIKAT.find((p) => ipk >= p.min && (!p.onTime || onTime));
-  return hit ?? PREDIKAT[PREDIKAT.length - 1];
-}
 
 /**
  * Enam bab. Tiap pasal: `formal` (bahasa pedoman) & `plain` (bahasa sehari-hari), `tags` untuk pencarian,
@@ -118,8 +97,8 @@ export const CHAPTERS = [
       {
         no: "2.1",
         title: "Huruf mutu dan bobot",
-        formal: "Nilai akhir mata kuliah dinyatakan dalam huruf mutu A, AB, B, BC, C, D, dan E, masing-masing dengan bobot 4,00 sampai 0. Mata kuliah dinyatakan lulus dengan nilai paling rendah C.",
-        plain: "Nilai angkamu diubah jadi huruf. Minimal C supaya mata kuliahnya dianggap lulus.",
+        formal: "Nilai akhir mata kuliah dinyatakan dalam huruf mutu {grades}, masing-masing dengan bobot {maxGradeWeight} sampai {minGradeWeight}. Mata kuliah dinyatakan lulus dengan nilai paling rendah {passGrade}.",
+        plain: "Nilai angkamu diubah jadi huruf. Minimal {passGrade} supaya mata kuliahnya dianggap lulus.",
         tags: ["nilai", "huruf mutu", "bobot", "nilai e", "nilai d", "lulus matkul"],
         sim: "nilai",
       },
@@ -238,8 +217,8 @@ export const CHAPTERS = [
       {
         no: "5.4",
         title: "Kelulusan dan predikat",
-        formal: "Mahasiswa dinyatakan lulus dalam yudisium setelah menempuh seluruh beban studi dengan IPK paling rendah 2,00. Predikat dengan pujian hanya diberikan bila masa studi tidak melebihi {semester} semester.",
-        plain: "Semua SKS beres dan IPK minimal 2,00, kamu lulus. Predikat tertinggi butuh lulus tepat waktu.",
+        formal: "Mahasiswa dinyatakan lulus dalam yudisium setelah menempuh seluruh beban studi dengan IPK paling rendah {minGraduationGpa}. Predikat dengan pujian hanya diberikan bila masa studi tidak melebihi {semester} semester.",
+        plain: "Semua SKS beres dan IPK minimal {minGraduationGpa}, kamu lulus. Predikat tertinggi butuh lulus tepat waktu.",
         tags: ["lulus", "predikat", "cumlaude", "yudisium", "wisuda"],
         sim: "predikat",
         link: { href: "/jalur-kelulusan", label: "Pilihan jalur tugas akhir" },
@@ -337,70 +316,3 @@ export const DOCS = [
   { key: "panduan-ta", title: "Panduan Penulisan Tugas Akhir", short: "Panduan TA", tone: "gold", pages: 42, size: "2,1 MB", toc: ["Sistematika naskah", "Format dan tata letak", "Kutipan dan daftar pustaka", "Lembar pengesahan", "Unggah repositori"], href: "" },
   { key: "kalender", title: "Kalender Akademik", short: "Kalender", tone: "ivory", pages: 2, size: "0,4 MB", toc: ["Masa KRS dan batal-tambah", "Perkuliahan dan ujian", "Pengumuman nilai", "Periode sidang dan yudisium"], href: "" },
 ];
-
-const parse = (v) => {
-  if (!v) return null;
-  if (typeof v === "object") return v;
-  try {
-    return JSON.parse(v);
-  } catch {
-    return null;
-  }
-};
-
-const fill = (s, vars) => String(s ?? "").replace(/\{(\w+)\}/g, (m, k) => (vars[k] != null ? String(vars[k]) : m));
-const byKey = (list, key) => (Array.isArray(list) ? list.find((x) => x?.key === key) : null) ?? {};
-
-/**
- * Gabungkan CMS ke fallback.
- * @param row        PageContent `regulasi-akademik` (boleh null)
- * @param kurikulum  hasil getKurikulumData — total SKS & jumlah semester
- */
-export function mergeRegulasi(row, { kurikulum } = {}) {
-  const raw = parse(row?.data) ?? {};
-  const sks = kurikulum?.totals?.sks || 144;
-  const semester = kurikulum?.semesters?.length || 8;
-  const vars = { sks, semester, maxSemester: semester + 6 };
-
-  const chapters = CHAPTERS.map((c, ci) => {
-    const o = byKey(raw.chapters, c.key);
-    const list = Array.isArray(o.pasal) && o.pasal.length ? o.pasal : c.pasal;
-    return {
-      ...c,
-      ...o,
-      key: c.key,
-      index: ci,
-      sample: !(Array.isArray(o.pasal) && o.pasal.length),
-      pasal: list.map((p) => ({ ...p, id: String(p.no).replace(/\./g, "-"), chapter: c.key, formal: fill(p.formal, vars), plain: fill(p.plain, vars) })),
-    };
-  });
-
-  const scenarios = SCENARIOS.map((s) => {
-    const o = byKey(raw.scenarios, s.key);
-    return { ...s, ...o, key: s.key, sample: !Object.keys(o).length };
-  });
-
-  const docs = DOCS.map((d) => {
-    const o = byKey(raw.docs, d.key);
-    return { ...d, ...o, key: d.key, tone: d.tone, sample: !o.href };
-  });
-
-  const version = typeof raw.version === "string" && raw.version.trim() ? raw.version.trim() : "2026/2027";
-  const body = typeof raw.intro === "string" ? raw.intro.trim() : "";
-  const n = raw.notice;
-  const notice =
-    n && typeof n.title === "string" && n.title.trim()
-      ? { title: n.title.trim(), body: String(n.body ?? "").trim(), sample: false }
-      : { title: `Pedoman Akademik ${version} berlaku mulai semester ganjil`, body: "Batas SKS kini mengikuti IPS semester sebelumnya, dan cuti akademik wajib diajukan sebelum KRS dibuka.", sample: true };
-
-  return {
-    intro: { body: body.length > 40 ? body : INTRO.body },
-    version,
-    vars,
-    chapters,
-    scenarios,
-    docs,
-    notice,
-    pasalCount: chapters.reduce((t, c) => t + c.pasal.length, 0),
-  };
-}

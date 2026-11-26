@@ -3,7 +3,7 @@ import { useLayoutEffect as useEffect, useLayoutEffect, useMemo, useRef, useStat
 import { motion } from "motion/react";
 import { gsap, Flip } from "@/lib/scroll";
 import { prefersReducedMotion } from "@/lib/motion";
-import { FIELDS, MODES, programLabel } from "@/lib/magang-content";
+import { interpolate, titleLines } from "@/lib/magang-cms/copy";
 import { Container, PlaceholderTag, SectionHeader } from "@/components/home/shared";
 import { MagangBanner } from "./magang-banner";
 import { LottieIllustration } from "@/components/media/lottie-illustration";
@@ -13,9 +13,6 @@ import { cn } from "@/lib/utils";
 import { useMagang } from "./magang-provider";
 
 const useIso = typeof window !== "undefined" ? useLayoutEffect : useEffect;
-const PROGRAMS = ["kp", "mandiri", "dikti"].map((key) => ({ key, label: programLabel(key) }));
-const fieldLabel = (k) => FIELDS.find((f) => f.key === k)?.label ?? k;
-const modeLabel = (k) => MODES.find((m) => m.key === k)?.label ?? k;
 const STEP = 8;
 
 export function Highlight({ text, q }) {
@@ -32,8 +29,9 @@ export function Highlight({ text, q }) {
 }
 
 /** Label tenggat: < 7 hari = mendesak (emas), lewat = ditutup (redup). `days` null saat SSR. */
-export function DeadlineChip({ days, className }) {
-  if (days == null) return <span className={cn("inline-block h-6 w-20 rounded bg-cream-2", className)} aria-hidden />;
+export function DeadlineChip({ days, deadline, className }) {
+  const { copy: { jobs: labels } } = useMagang();
+  if (days == null) return deadline ? <span className={cn("inline-block h-6 w-20 rounded bg-cream-2", className)} aria-hidden /> : <span className="text-[11.5px] text-text/55">{labels.noDeadline}</span>;
   const closed = days < 0;
   const urgent = !closed && days < 7;
   return (
@@ -45,7 +43,7 @@ export function DeadlineChip({ days, className }) {
       )}
     >
       {urgent && <span aria-hidden className="size-1.5 animate-pulse rounded-full bg-maroon" />}
-      {closed ? "Ditutup" : days === 0 ? "Tutup hari ini" : `Tutup ${days} hari lagi`}
+      {closed ? labels.closed : days === 0 ? labels.today : interpolate(labels.deadline, { days })}
     </span>
   );
 }
@@ -56,8 +54,8 @@ export const matches = (j, f, q) =>
   (f.program === "all" || j.program === f.program) &&
   (!q || `${j.title} ${j.company} ${j.tasks.join(" ")} ${j.needs.join(" ")}`.toLowerCase().includes(q.toLowerCase()));
 
-function ChipGroup({ label, name, options, value, counts, onChange }) {
-  const all = `Semua ${label.toLowerCase()}`;
+function ChipGroup({ label, name, options, value, counts, onChange, allLabel }) {
+  const all = interpolate(allLabel, { label: label.toLowerCase() });
   return (
     <div role="radiogroup" aria-label={label} className="flex flex-wrap items-center gap-1.5">
       {[{ key: "all", label: all }, ...options].map((o) => {
@@ -101,7 +99,8 @@ function ChipGroup({ label, name, options, value, counts, onChange }) {
  * Cari ber-debounce dengan teks cocok disorot; filter beranimasi GSAP Flip; tenggat < 7 hari disorot.
  */
 export function JobBoard() {
-  const { jobs, jobsSample, filter, setFilter, resetFilter, track, toggleSave, openJob } = useMagang();
+  const { jobs, fields, modes, routes, filter, setFilter, resetFilter, track, toggleSave, openJob, visible: isVisible, copy: { jobs: labels } } = useMagang();
+  const canTrack = isVisible("tracker");
   const [qInput, setQInput] = useState(filter.q);
   const [pending, setPending] = useState(false);
   const [limit, setLimit] = useState(STEP);
@@ -139,8 +138,8 @@ export function JobBoard() {
   const counts = useMemo(() => {
     const facet = (name, opts) =>
       Object.fromEntries(["all", ...opts.map((o) => o.key)].map((k) => [k, jobs.filter((j) => matches(j, { ...filter, [name]: k }, filter.q)).length]));
-    return { field: facet("field", FIELDS), mode: facet("mode", MODES), program: facet("program", PROGRAMS) };
-  }, [jobs, filter]);
+    return { field: facet("field", fields), mode: facet("mode", modes), program: facet("program", routes) };
+  }, [jobs, filter, fields, modes, routes]);
 
   useIso(() => {
     const el = list.current;
@@ -164,16 +163,16 @@ export function JobBoard() {
     <section id="lowongan" className="scroll-mt-20 py-20 md:py-20">
       <Container>
         <SectionHeader
-          title={["Posisi yang", "sedang dibuka"]}
-          body="Klik posisi untuk membaca tugas dan kebutuhannya. Simpan yang menarik, lalu pantau lamaranmu di bagian berikutnya."
-          action={jobsSample ? <PlaceholderTag /> : null}
+          title={titleLines(labels.title)}
+          body={canTrack ? labels.body : labels.bodyWithoutTracker}
+          action={jobs.length > 0 && jobs.every((job) => job.sample) ? <PlaceholderTag>{labels.sample}</PlaceholderTag> : null}
         />
         <MagangBanner className="mt-8" />
 
         <div className="sticky top-16 z-30 -mx-5 mt-10 space-y-3 border-y border-line bg-cream/95 px-5 py-3 backdrop-blur-md md:top-20 md:mx-0 md:mt-12 md:rounded-lg md:border md:px-4">
           <div className="flex flex-wrap items-center gap-3">
             <label className="relative flex h-10 min-w-0 flex-1 items-center rounded-md border border-line bg-white pl-3 pr-2 transition-[border-color,box-shadow] focus-within:border-navy focus-within:shadow-[0_0_0_3px_rgb(201_162_39/0.25)] sm:max-w-sm">
-              <span className="sr-only">Cari posisi, perusahaan, atau keahlian</span>
+              <span className="sr-only">{labels.search}</span>
               <svg aria-hidden viewBox="0 0 16 16" className="size-4 shrink-0 text-text/40">
                 <circle cx="7" cy="7" r="4.5" fill="none" stroke="currentColor" strokeWidth="1.5" />
                 <path d="M10.5 10.5L14 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
@@ -182,26 +181,26 @@ export function JobBoard() {
                 type="search"
                 value={qInput}
                 onChange={(e) => setQInput(e.target.value)}
-                placeholder="Cari posisi, perusahaan, atau keahlian"
+                placeholder={labels.search}
                 className="h-full min-w-0 flex-1 bg-transparent px-2 text-[14px] text-navy outline-none placeholder:text-text/40"
               />
               {pending && <DotsLoader className="text-maroon" />}
             </label>
             <p className="tabular text-[13px] text-text/55" aria-live="polite">
-              <span className="font-semibold text-navy">{shown.length}</span> posisi
+              {interpolate(labels.count, { count: shown.length })}
             </p>
             {active && (
               <button type="button" onClick={() => (capture(), setQInput(""), resetFilter())} className="text-[13px] font-semibold text-maroon">
-                <span className="u-gold">Hapus filter</span>
+                <span className="u-gold">{labels.clear}</span>
               </button>
             )}
           </div>
           <div className="-mx-5 flex gap-4 overflow-x-auto px-5 pb-1 [scrollbar-width:none] md:mx-0 md:flex-wrap md:overflow-visible md:px-0 [&::-webkit-scrollbar]:hidden">
-            <ChipGroup label="Bidang" name="field" options={FIELDS} value={filter.field} counts={counts.field} onChange={change} />
+            <ChipGroup allLabel={labels.all} label={labels.field} name="field" options={fields} value={filter.field} counts={counts.field} onChange={change} />
             <span aria-hidden className="hidden w-px self-stretch bg-line md:block" />
-            <ChipGroup label="Pintu" name="program" options={PROGRAMS} value={filter.program} counts={counts.program} onChange={change} />
+            <ChipGroup allLabel={labels.all} label={labels.program} name="program" options={routes.map(({ key, title }) => ({ key, label: title }))} value={filter.program} counts={counts.program} onChange={change} />
             <span aria-hidden className="hidden w-px self-stretch bg-line md:block" />
-            <ChipGroup label="Lokasi kerja" name="mode" options={MODES} value={filter.mode} counts={counts.mode} onChange={change} />
+            <ChipGroup allLabel={labels.all} label={labels.mode} name="mode" options={modes} value={filter.mode} counts={counts.mode} onChange={change} />
           </div>
         </div>
 
@@ -235,24 +234,24 @@ export function JobBoard() {
                           <Highlight text={j.title} q={filter.q} />
                         </motion.span>
                         <span className="mt-1 block truncate text-[13px] text-text/60">
-                          <Highlight text={j.company} q={filter.q} /> · {modeLabel(j.mode)} · {j.duration}
+                          <Highlight text={j.company} q={filter.q} />{[modes.find(({ key }) => key === j.mode)?.label, j.duration].filter(Boolean).map((detail, i) => <span key={i}> · {detail}</span>)}
                         </span>
                         <span className="mt-2 flex flex-wrap items-center gap-1.5 md:hidden">
-                          <DeadlineChip days={j.days} />
+                          <DeadlineChip days={j.days} deadline={j.deadline} />
                         </span>
                       </span>
                       <span className="hidden shrink-0 flex-col items-end gap-1.5 md:flex">
-                        <DeadlineChip days={j.days} />
+                        <DeadlineChip days={j.days} deadline={j.deadline} />
                         <span className="text-[12px] text-text/50">
-                          {programLabel(j.program)} · {fieldLabel(j.field)}
+                          {[routes.find(({ key }) => key === j.program)?.title, fields.find(({ key }) => key === j.field)?.label].filter(Boolean).join(" · ")}
                         </span>
                       </span>
                     </button>
-                    <button
+                    {canTrack && <button
                       type="button"
                       onClick={() => toggleSave(j.slug)}
                       aria-pressed={saved}
-                      aria-label={saved ? `Hapus ${j.title} dari jejak lamaran` : `Simpan ${j.title} ke jejak lamaran`}
+                      aria-label={interpolate(saved ? labels.remove : labels.save, j)}
                       className={cn(
                         "relative z-10 grid size-10 shrink-0 place-items-center rounded-md border transition-[background-color,border-color,transform] duration-300 active:scale-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60",
                         saved ? "border-maroon bg-maroon" : "border-line bg-white hover:border-maroon"
@@ -265,7 +264,7 @@ export function JobBoard() {
                         trigger={saved ? "once" : "hover"}
                         colors={saved ? "primary:#ffffff,secondary:#e6d3a1" : "primary:#14213d,secondary:#6e1423"}
                       />
-                    </button>
+                    </button>}
                   </div>
                 </li>
               );
@@ -273,14 +272,15 @@ export function JobBoard() {
           </ul>
         ) : (
           <div className="mt-8 flex flex-col items-center rounded-xl border border-dashed border-line bg-white px-6 py-12 text-center">
-            <span className="size-36">
-              <LottieIllustration src="/lottie/empty-news.json" label="Tidak ada lowongan yang cocok" />
-            </span>
-            <p className="mt-4 font-serif text-[1.35rem] text-navy">Belum ada posisi yang cocok</p>
-            <p className="mt-1 max-w-sm text-[14.5px] text-text/60">Longgarkan filternya, atau cari dengan kata lain.</p>
+            {labels.illustration && <span className="size-36">
+              <LottieIllustration src={labels.illustration} label={labels.illustrationAlt} />
+            </span>}
+            <p className="mt-4 font-serif text-[1.35rem] text-navy">{jobs.length ? labels.filteredEmpty : labels.empty}</p>
+            {active && <>
+            <p className="mt-1 max-w-sm text-[14.5px] text-text/60">{labels.emptyHint}</p>
             <button type="button" onClick={() => (setQInput(""), resetFilter())} className="mt-5 h-10 rounded-md bg-maroon px-5 text-sm font-semibold text-white transition-colors hover:bg-maroon-deep">
-              Tampilkan semua posisi
-            </button>
+              {labels.resetEmpty}
+            </button></>}
           </div>
         )}
 
@@ -291,7 +291,7 @@ export function JobBoard() {
               onClick={() => (capture(), setLimit((l) => l + STEP))}
               className="h-11 rounded-md border border-navy/25 bg-white px-6 text-[14px] font-semibold text-navy transition-colors hover:border-navy"
             >
-              Tampilkan {Math.min(STEP, shown.length - limit)} posisi lagi
+              {interpolate(labels.more, { count: Math.min(STEP, shown.length - limit) })}
             </button>
           </div>
         )}

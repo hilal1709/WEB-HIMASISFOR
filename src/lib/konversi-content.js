@@ -6,7 +6,6 @@
  * CMS `PageContent` section `konversi-sks` (Admin › Konten › Konversi SKS):
  *   data.intro           → paragraf intro hero
  *   data.notice          → { title, body } untuk banner (kosong → diturunkan dari agenda/berita MBKM beranda)
- *   data.rate            → jam kegiatan per 1 SKS (angka)
  *   data.cap             → batas SKS konversi per semester (angka)
  *   data.programs[]      → ditimpa per `key` { label, lead, weeks, hours }
  *   data.docs[]          → ditimpa per `key` (la/penyetaraan; `href` = URL berkas)
@@ -22,14 +21,15 @@ export const INTRO = {
   body: "Magang, riset, mengajar, atau membangun desa — kegiatan di luar kelas bisa menggantikan mata kuliah. Hitung berapa SKS yang setara, pilih mata kuliah penggantinya, lalu bawa ringkasannya ke dosen wali.",
 };
 
-/** 1 SKS = 170 menit/minggu × 16 minggu ≈ 45 jam kegiatan (contoh, menunggu pedoman resmi). */
-export const RATE = 45;
+/** Menit per minggu dan jumlah minggu per semester untuk 1 SKS. */
+export const RATE = 50;
+export const SEMESTER_WEEKS = 16;
 /** Batas SKS konversi dalam satu semester (contoh). */
 export const CAP = 20;
 
 /**
  * Bentuk kegiatan. `mode`:
- *   "jam" → SKS = jam total ÷ kurs
+ *   "jam" → SKS = menit total ÷ (menit per minggu × minggu per semester)
  *   "sks" → mata kuliah di kampus tujuan diakui 1:1 (pertukaran)
  * `prefer` = rumpun kurikulum yang paling relevan; `pin` = mata kuliah yang otomatis disarankan pertama.
  */
@@ -90,7 +90,7 @@ const num = (v, [lo, hi]) => {
 /** SKS setara untuk satu kegiatan (sebelum dipotong batas). */
 export function creditsFor({ mode, weeks, hours, sks }, rate = RATE) {
   if (mode === "sks") return sks ?? 0;
-  return Math.floor(((weeks ?? 0) * (hours ?? 0)) / rate);
+  return Math.floor(((weeks ?? 0) * (hours ?? 0) * 60) / (rate * SEMESTER_WEEKS));
 }
 
 /** Pengumuman dari agenda beranda (MBKM/magang) atau berita MBKM. */
@@ -108,7 +108,6 @@ function noticeFromHome() {
  */
 export function mergeKonversi(row, { kurikulum } = {}) {
   const raw = parse(row?.data);
-  const rate = num(raw?.rate, [10, 120]);
   const cap = num(raw?.cap, [6, 40]);
 
   const cmsPrograms = Array.isArray(raw?.programs) ? raw.programs : [];
@@ -147,9 +146,9 @@ export function mergeKonversi(row, { kurikulum } = {}) {
 
   return {
     intro: { body: body && body.length > 40 ? body : INTRO.body },
-    rate: rate ?? RATE,
+    rate: RATE,
     cap: cap ?? CAP,
-    rulesSample: rate == null || cap == null,
+    rulesSample: cap == null,
     programs,
     courses,
     steps: STEPS,

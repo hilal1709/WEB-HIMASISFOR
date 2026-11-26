@@ -69,7 +69,7 @@ export default function AdminLayout({ children }) {
     }
   }
 
-  if (pathname === '/admin/login' || pathname === '/admin/jalur-kelulusan/pratinjau') {
+  if (pathname === '/admin/login' || pathname === '/admin/jalur-kelulusan/pratinjau' || pathname === '/admin/regulasi-akademik/pratinjau' || pathname === '/admin/magang/pratinjau') {
     return children
   }
 
@@ -86,7 +86,7 @@ export default function AdminLayout({ children }) {
   }
 
   // Studio penuh memakai kanvas sendiri tanpa chrome admin.
-  if (pathname === '/admin/home' || pathname === '/admin/sambutan' || pathname === '/admin/bidang-keahlian' || pathname === '/admin/visi-misi' || pathname === '/admin/struktur' || pathname === '/admin/profil-lulusan' || pathname === '/admin/program-kelas' || pathname === '/admin/dosen' || pathname === '/admin/prestasi' || pathname === '/admin/kurikulum' || pathname === '/admin/jalur-kelulusan') {
+  if (pathname === '/admin/home' || pathname === '/admin/sambutan' || pathname === '/admin/bidang-keahlian' || pathname === '/admin/visi-misi' || pathname === '/admin/struktur' || pathname === '/admin/profil-lulusan' || pathname === '/admin/program-kelas' || pathname === '/admin/dosen' || pathname === '/admin/prestasi' || pathname === '/admin/kurikulum' || pathname === '/admin/jalur-kelulusan' || pathname === '/admin/regulasi-akademik' || pathname === '/admin/magang') {
     return children
   }
 
@@ -94,6 +94,8 @@ export default function AdminLayout({ children }) {
     { href: '/admin/dashboard', label: 'Dashboard' },
     { href: '/admin/layanan', label: 'Kotak Masuk Layanan' },
     { href: '/admin/jalur-kelulusan', label: 'CMS Jalur Kelulusan' },
+    { href: '/admin/regulasi-akademik', label: 'CMS Regulasi Akademik' },
+    { href: '/admin/magang', label: 'CMS Magang' },
     { href: '/admin/course-registrations', label: 'Pendaftar Course' },
     { href: '/admin/scholarship-applications', label: 'Pendaftar Beasiswa' },
     { href: '/admin/registration-forms', label: 'Builder Form Pendaftaran' },

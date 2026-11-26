@@ -5,49 +5,50 @@ import { Banner } from "@/components/ui/banner";
 import { PlaceholderTag } from "@/components/home/shared";
 import { useRegulasi } from "./regulasi-provider";
 
-/** Pengumuman berlakunya pedoman (brand). Tombolnya membuka modal dokumen Pedoman. Tutup diingat per sesi. */
 export function RegulasiBanner({ className }) {
-  const { notice, openDoc } = useRegulasi();
-  const [show, setShow] = useState(false);
+  const { notice, openDoc, docs, copy, preview } = useRegulasi();
+  const id = notice ? JSON.stringify([notice.title, notice.body, notice.doc]) : "";
+  const [dismissed, setDismissed] = useState("");
 
   useEffect(() => {
-    let hidden = false;
+    if (preview) return;
     try {
-      hidden = sessionStorage.getItem(BANNER_KEY) === "1";
+      setDismissed(sessionStorage.getItem(BANNER_KEY) ?? "");
     } catch {}
-    setShow(!hidden);
-  }, []);
+  }, [id, preview]);
 
-  if (!show || !notice) return null;
+  if (!notice || dismissed === id) return null;
+  const target = docs.findIndex((doc) => doc.key === notice.doc);
+  const dismiss = () => {
+    setDismissed(id);
+    if (!preview) {
+      try {
+        sessionStorage.setItem(BANNER_KEY, id);
+      } catch {}
+    }
+  };
+
   return (
-    <div className={className}>
-      <div
-        onClickCapture={(e) => {
-          if (e.target.closest?.('[aria-label="Tutup banner"]')) {
-            try {
-              sessionStorage.setItem(BANNER_KEY, "1");
-            } catch {}
-          }
-        }}
-      >
-        <Banner
-          variant="brand"
-          dismissible
-          title={notice.title}
-          action={
-            <button
-              type="button"
-              onClick={() => openDoc(0)}
-              className="hidden h-10 items-center rounded-md bg-gold px-4 text-sm font-semibold text-navy transition-[background-color,transform] duration-300 hover:bg-gold-soft active:scale-[0.98] sm:inline-flex"
-            >
-              Buka pedoman
-            </button>
-          }
+    <Banner
+      key={id}
+      className={className}
+      variant="brand"
+      dismissible
+      dismissLabel={copy.documents.dismissNotice}
+      onDismiss={dismiss}
+      title={notice.title}
+      action={target >= 0 && notice.action ? (
+        <button
+          type="button"
+          onClick={() => openDoc(target)}
+          className="hidden h-10 items-center rounded-md bg-gold px-4 text-sm font-semibold text-navy transition-[background-color,transform] duration-300 hover:bg-gold-soft active:scale-[0.98] sm:inline-flex"
         >
-          {notice.body}
-          {notice.sample && <PlaceholderTag tone="dark" className="ml-2 align-middle" />}
-        </Banner>
-      </div>
-    </div>
+          {notice.action}
+        </button>
+      ) : null}
+    >
+      {notice.body}
+      {notice.sample && <PlaceholderTag tone="dark" className="ml-2 align-middle">{copy.general.sample}</PlaceholderTag>}
+    </Banner>
   );
 }

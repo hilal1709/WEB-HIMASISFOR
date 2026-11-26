@@ -8,7 +8,7 @@ export const Sheet = DialogPrimitive.Root;
 export const SheetTrigger = DialogPrimitive.Trigger;
 export const SheetClose = DialogPrimitive.Close;
 
-export function SheetContent({ side = "right", className, children, ...props }) {
+export function SheetContent({ side = "right", className, children, closeLabel = "Tutup menu", ...props }) {
   return (
     <DialogPrimitive.Portal>
       <DialogPrimitive.Overlay className="fixed inset-0 z-[60] bg-ink/40 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=closed]:animate-out data-[state=closed]:fade-out-0" />
@@ -27,7 +27,7 @@ export function SheetContent({ side = "right", className, children, ...props }) 
       >
         {children}
         <DialogPrimitive.Close
-          aria-label="Tutup menu"
+          aria-label={closeLabel}
           className="absolute right-4 top-4 grid size-9 place-items-center rounded-full text-muted-foreground transition hover:bg-muted hover:text-foreground"
         >
           <CloseGlyph className="size-4" />

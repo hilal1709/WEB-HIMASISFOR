@@ -2,9 +2,11 @@
 import { useLayoutEffect as useEffect, useRef } from "react";
 import { gsap, ScrollTrigger } from "@/lib/scroll";
 import { prefersReducedMotion } from "@/lib/motion";
+import { cn } from "@/lib/utils";
 import { Container, PlaceholderTag, SectionHeader } from "@/components/home/shared";
 import { LordIcon } from "@/components/media/lord-icon";
 import { useMagang } from "./magang-provider";
+import { interpolate, titleLines } from "@/lib/magang-cms/copy";
 
 // garis buku tulis: pola SVG (bukan gradien CSS) — satu garis tiap 44px
 const RULE = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='44'%3E%3Cpath d='M0 43.5h8' stroke='%2314213d' stroke-opacity='0.09'/%3E%3C/svg%3E")`;
@@ -17,7 +19,8 @@ const pad = (n) => String(n).padStart(2, "0");
  * Reduced-motion: semua tampil tanpa animasi.
  */
 export function Logbook() {
-  const { logbook, docs, openDoc } = useMagang();
+  const { logbook, docs, openDoc, copy } = useMagang();
+  const labels = copy.logbook;
   const ref = useRef(null);
   const docOf = (k) => docs.find((d) => d.key === k);
   let n = 0;
@@ -36,6 +39,7 @@ export function Logbook() {
       });
       el.querySelectorAll("[data-stamp]").forEach((st) => {
         const last = st.closest("[data-chapter]").querySelector("[data-entry]:last-of-type");
+        if (!last) return;
         gsap.fromTo(
           st,
           { opacity: 0, scale: 2.2, rotate: -26 },
@@ -56,19 +60,20 @@ export function Logbook() {
       clearTimeout(r);
       ctx.revert();
     };
-  }, []);
+  }, [logbook, docs]);
 
   return (
     <section id="logbook" className="scroll-mt-20 py-20 md:py-20">
       <Container>
         <SectionHeader
-          title={["Dari surat pengantar", "sampai seminar"]}
-          body="Urutan administrasinya, ditulis seperti logbook yang nanti kamu isi sendiri."
-          action={docs.some((d) => d.sample) ? <PlaceholderTag /> : null}
+          title={titleLines(labels.title)}
+          body={labels.body}
+          action={docs.some((d) => d.sample) || logbook.some((chapter) => chapter.sample) ? <PlaceholderTag>{copy.jobs.sample}</PlaceholderTag> : null}
         />
 
-        <div ref={ref} className="mt-12 grid gap-8 lg:grid-cols-[1fr_300px] lg:gap-10">
-          <div className="relative rounded-xl border border-line bg-white shadow-[0_30px_60px_-45px_rgb(20_33_61/0.6)]">
+        {!logbook.length && !docs.length && <p className="mt-10 text-center text-text/65">{labels.empty}</p>}
+        <div ref={ref} className={cn("mt-12 grid gap-8 lg:gap-10", logbook.length > 0 && docs.length > 0 && "lg:grid-cols-[1fr_300px]")}>
+          {!!logbook.length && <div className="relative rounded-xl border border-line bg-white shadow-[0_30px_60px_-45px_rgb(20_33_61/0.6)]">
             {/* lubang ring */}
             <div aria-hidden className="flex justify-around border-b border-line px-10 py-3">
               {Array.from({ length: 9 }, (_, i) => (
@@ -85,7 +90,7 @@ export function Logbook() {
                       n += 1;
                       const d = e.doc ? docOf(e.doc) : null;
                       return (
-                        <li key={e.text} data-entry className="relative flex min-h-[44px] items-end gap-3 pb-2.5">
+                        <li key={e.key} data-entry className="relative flex min-h-[44px] items-end gap-3 pb-2.5">
                           <span data-num className="tabular absolute -left-14 bottom-2.5 hidden w-8 text-right font-serif text-[14px] text-text/40 sm:block">
                             {pad(n)}
                           </span>
@@ -96,6 +101,7 @@ export function Logbook() {
                             <button
                               type="button"
                               onClick={() => openDoc(d.key)}
+                              aria-label={d.title}
                               className="group inline-flex shrink-0 items-center gap-1.5 rounded border border-maroon/25 bg-white px-2 py-1 text-[12px] font-semibold text-maroon transition-colors hover:border-maroon hover:bg-maroon hover:text-white"
                             >
                               <LordIcon name="document" size={16} target=".group" colors="primary:#6e1423,secondary:#c9a227" />
@@ -112,15 +118,15 @@ export function Logbook() {
                     className="pointer-events-none absolute right-0 top-1 hidden select-none rounded-md border-[2.5px] border-maroon/75 px-3 py-1 font-serif text-[13px] font-semibold uppercase tracking-[0.2em] text-maroon/75 sm:block"
                     style={{ transform: "rotate(-9deg)" }}
                   >
-                    Disetujui
+                    {labels.stamp}
                   </span>
                 </div>
               ))}
             </div>
-          </div>
+          </div>}
 
-          <aside className="lg:sticky lg:top-28 lg:self-start" aria-labelledby="berkas-title">
-            <p id="berkas-title" className="kicker text-[11px] text-maroon">Berkas yang dipakai</p>
+          {!!docs.length && <aside className="lg:sticky lg:top-28 lg:self-start" aria-labelledby="berkas-title">
+            <p id="berkas-title" className="kicker text-[11px] text-maroon">{labels.files}</p>
             <ul className="mt-4 space-y-3">
               {docs.map((d, i) => (
                 <li key={d.key} data-aos="fade-up" data-aos-delay={i * 80}>
@@ -140,14 +146,14 @@ export function Logbook() {
                       </span>
                     </span>
                     <span className="min-w-0 flex-1">
-                      <span className="kicker block text-[10px] text-text/45">{d.kind} · {d.pages} hlm</span>
+                      <span className="kicker block text-[10px] text-text/45">{[d.kind, d.pages ? interpolate(labels.pagesShort, d) : ""].filter(Boolean).join(" · ")}</span>
                       <span className="mt-1 block font-serif text-[1.05rem] leading-snug text-navy group-hover:text-maroon">{d.title}</span>
                     </span>
                   </button>
                 </li>
               ))}
             </ul>
-          </aside>
+          </aside>}
         </div>
       </Container>
     </section>

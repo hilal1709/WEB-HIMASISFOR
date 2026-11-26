@@ -1,7 +1,7 @@
 "use client";
 import { Fragment, useCallback, useLayoutEffect as useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
-import { TERMS } from "@/lib/regulasi-content";
+import { fillRegulasi } from "@/lib/regulasi-cms/copy";
 import { gsap } from "@/lib/scroll";
 import { prefersReducedMotion } from "@/lib/motion";
 import { Sheet, SheetContent, SheetDescription, SheetTitle } from "@/components/ui/sheet";
@@ -11,8 +11,12 @@ import { LottieIllustration } from "@/components/media/lottie-illustration";
 import { cn } from "@/lib/utils";
 import { useRegulasi } from "./regulasi-provider";
 
-const TERM_KEYS = Object.keys(TERMS).sort((a, b) => b.length - a.length);
-const TERM_RE = new RegExp(`\\b(${TERM_KEYS.map((k) => k.replace(/\s/g, "\\s")).join("|")})\\b`, "g");
+function termPattern(terms) {
+  const names = Object.keys(terms).sort((a, b) => b.length - a.length);
+  if (!names.length) return null;
+  const alternatives = names.map((name) => name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|");
+  return new RegExp("(?<![\\p{L}\\p{N}_])(" + alternatives + ")(?![\\p{L}\\p{N}_])", "gu");
+}
 
 /** Istilah bergaris bawah emas; definisi muncul saat hover/fokus. */
 function Term({ word, def }) {
@@ -33,38 +37,39 @@ function Term({ word, def }) {
 }
 
 /** Bungkus kemunculan pertama tiap istilah kunci. */
-function withTerms(text) {
+function withTerms(text, pattern, terms) {
+  if (!pattern) return text;
   const used = new Set();
   const out = [];
   let last = 0;
-  for (const m of text.matchAll(TERM_RE)) {
+  for (const m of text.matchAll(pattern)) {
     if (used.has(m[1])) continue;
     used.add(m[1]);
-    out.push(<Fragment key={`t${last}`}>{text.slice(last, m.index)}</Fragment>, <Term key={m.index} word={m[1]} def={TERMS[m[1]]} />);
+    out.push(<Fragment key={`t${last}`}>{text.slice(last, m.index)}</Fragment>, <Term key={m.index} word={m[1]} def={terms[m[1]]} />);
     last = m.index + m[1].length;
   }
   out.push(<Fragment key="end">{text.slice(last)}</Fragment>);
   return out;
 }
 
-function Pasal({ p, mode, flash, marked, onMark, onSim }) {
+function Pasal({ p, mode, flash, marked, onMark, onSim, copy, pattern, terms }) {
   const text = mode === "plain" ? p.plain : p.formal;
   return (
     <article id={`pasal-${p.id}`} data-pasal-id={p.id} data-flash={flash ? "" : undefined} className="rg-pasal -mx-4 scroll-mt-48 rounded-lg px-4 py-7 sm:-mx-6 sm:px-6">
       <div className="grid grid-cols-[1fr_auto] gap-4 sm:gap-8">
         <div className="min-w-0">
-          <p className="kicker text-[11px] text-maroon">Pasal {p.no}</p>
+          <p className="kicker text-[11px] text-maroon">{fillRegulasi(copy.general.article, p)}</p>
           <h4 className="mt-1.5 font-serif text-[1.4rem] leading-snug text-navy">{p.title}</h4>
           <div data-pasal-text className="overflow-hidden">
             <p key={mode} className={cn("mt-3 max-w-[62ch] text-pretty leading-relaxed animate-in fade-in-0 slide-in-from-bottom-1 duration-500", mode === "plain" ? "text-[17px] text-text/80" : "font-serif text-[16.5px] text-text/75")}>
-              {withTerms(text)}
+              {withTerms(text, pattern, terms)}
             </p>
           </div>
           {(p.sim || p.link) && (
             <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-[14px] font-semibold">
               {p.sim && (
                 <button type="button" onClick={() => onSim(p.sim)} className="text-navy">
-                  <span className="u-gold">Coba di simulator</span>
+                  <span className="u-gold">{copy.reader.trySimulator}</span>
                 </button>
               )}
               {p.link && (
@@ -80,8 +85,8 @@ function Pasal({ p, mode, flash, marked, onMark, onSim }) {
             type="button"
             onClick={() => onMark(p.id)}
             aria-pressed={marked}
-            aria-label={marked ? `Lepas tanda pasal ${p.no}` : `Tandai pasal ${p.no}`}
-            title={marked ? "Lepas tanda" : "Tandai"}
+            aria-label={fillRegulasi(marked ? copy.reader.unmarkArticle : copy.reader.markArticle, p)}
+            title={marked ? copy.reader.unmark : copy.reader.mark}
             className={cn(
               "grid size-10 place-items-center rounded-md border transition-[background-color,border-color,transform] duration-300 active:scale-90",
               marked ? "border-gold bg-gold" : "border-line bg-white hover:border-navy/30"
@@ -99,7 +104,7 @@ function Pasal({ p, mode, flash, marked, onMark, onSim }) {
  * Minimap "proximity" (inspirasi 21st.dev): satu garis per pasal; garis memanjang dan judulnya muncul saat
  * kursor mendekat, pasal yang sedang dibaca = garis emas penuh. Bar progres baca emas di sisi kiri.
  */
-function Minimap({ chapters, active, progress, onGo }) {
+function Minimap({ chapters, active, progress, onGo, label }) {
   const nav = useRef(null);
   const apply = useCallback(
     (y) => {
@@ -122,19 +127,19 @@ function Minimap({ chapters, active, progress, onGo }) {
   useEffect(() => apply(null), [apply]);
 
   return (
-    <nav ref={nav} aria-label="Daftar pasal" onPointerMove={(e) => apply(e.clientY)} onPointerLeave={() => apply(null)} className="relative pl-5">
+    <nav ref={nav} aria-label={label} onPointerMove={(e) => apply(e.clientY)} onPointerLeave={() => apply(null)} className="relative pl-5">
       <span aria-hidden className="absolute bottom-0 left-0 top-0 w-[2px] rounded bg-line" />
       <span aria-hidden className="absolute left-0 top-0 w-[2px] rounded bg-gold transition-[height] duration-200" style={{ height: `${progress * 100}%` }} />
       {chapters.map((c) => (
         <div key={c.key} className="mb-5 last:mb-0">
-          <button type="button" onClick={() => onGo(c.pasal[0].no)} className="flex items-baseline gap-2 text-left">
+          <button type="button" onClick={() => onGo(c.pasal[0].id)} className="flex items-baseline gap-2 text-left">
             <span className="w-6 font-serif text-[13px] italic text-maroon">{c.roman}</span>
             <span className={cn("text-[13px] font-semibold transition-colors", c.pasal.some((p) => p.id === active) ? "text-navy" : "text-text/45 hover:text-navy")}>{c.title}</span>
           </button>
           <ul className="mt-1.5 space-y-0.5 pl-8">
             {c.pasal.map((p) => (
               <li key={p.id}>
-                <button type="button" data-row={p.id} onClick={() => onGo(p.no)} aria-current={p.id === active ? "location" : undefined} className="flex h-5 w-full items-center gap-2 text-left focus-visible:outline-none focus-visible:[--o:1]">
+                <button type="button" data-row={p.id} onClick={() => onGo(p.id)} aria-current={p.id === active ? "location" : undefined} className="flex h-5 w-full items-center gap-2 text-left focus-visible:outline-none focus-visible:[--o:1]">
                   <span className="rg-dash shrink-0" data-on={p.id === active ? "" : undefined} />
                   <span className="rg-dash-label truncate text-[12px] text-navy">{p.no} {p.title}</span>
                 </button>
@@ -153,11 +158,13 @@ function Minimap({ chapters, active, progress, onGo }) {
  * filter "Hanya yang kutandai"; ponsel: daftar pasal di Sheet.
  */
 export function RuleReader() {
-  const { chapters, mode, setMode, flash, marks, toggleMark, goPasal, goSim, setChapter } = useRegulasi();
+  const { chapters, mode, setMode, flash, marks, toggleMark, goPasal, goSim, setChapter, terms, copy } = useRegulasi();
+  const ui = copy.reader;
+  const pattern = useMemo(() => termPattern(terms), [terms]);
   const reduce = useReducedMotion();
   const sectionRef = useRef(null);
   const heights = useRef(null);
-  const [active, setActive] = useState(chapters[0].pasal[0].id);
+  const [active, setActive] = useState(chapters[0]?.pasal[0]?.id ?? null);
   const [progress, setProgress] = useState(0);
   const [onlyMarked, setOnlyMarked] = useState(false);
   const [sheet, setSheet] = useState(false);
@@ -233,19 +240,19 @@ export function RuleReader() {
   return (
     <section ref={sectionRef} id="pasal" className="relative scroll-mt-20 border-y border-line bg-cream-2/60 py-16 md:py-20">
       <Container>
-        <SectionHeader title={["Pedomannya,", "pasal demi pasal"]} body="Pilih bahasanya: kalimat resmi dari pedoman, atau penjelasan singkat versi sehari-hari." action={sample ? <PlaceholderTag /> : null} />
+        <SectionHeader title={[ui.title, ui.accent]} body={ui.intro} action={sample ? <PlaceholderTag>{copy.general.sample}</PlaceholderTag> : null} />
 
         {/* toolbar */}
         <div className="sticky top-16 z-20 -mx-5 mt-10 flex items-center gap-2 border-b border-line bg-cream-2/90 px-5 py-3 sm:gap-3 backdrop-blur-md md:-mx-8 md:px-8">
-          <div role="radiogroup" aria-label="Bahasa pasal" className="flex gap-1 rounded-lg border border-line bg-white p-1">
+          <div role="radiogroup" aria-label={ui.language} className="flex gap-1 rounded-lg border border-line bg-white p-1">
             {[
-              ["plain", "Sehari-hari"],
-              ["formal", "Pedoman"],
-            ].map(([k, label]) => (
+              ["plain", ui.plain, ui.plainWide],
+              ["formal", ui.formal, ui.formalWide],
+            ].map(([k, label, wide]) => (
               <button key={k} type="button" role="radio" aria-checked={mode === k} onClick={() => changeMode(k)} className="relative whitespace-nowrap rounded-md px-2.5 py-1.5 text-[13.5px] font-medium outline-none sm:px-3.5 sm:text-[14px] focus-visible:ring-2 focus-visible:ring-gold/60">
                 {mode === k && <motion.span layoutId="rg-mode" className="absolute inset-0 rounded-md bg-navy" transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 380, damping: 32 }} />}
                 <span className={cn("relative z-10 transition-colors duration-300", mode === k ? "text-white" : "text-navy/70")}>
-                  <span className="hidden sm:inline">Bahasa {label.toLowerCase()}</span>
+                  <span className="hidden sm:inline">{wide}</span>
                   <span className="sm:hidden">{label}</span>
                 </span>
               </button>
@@ -258,32 +265,34 @@ export function RuleReader() {
             onClick={() => setOnlyMarked((v) => !v)}
             className={cn("inline-flex h-10 items-center gap-2 rounded-lg border px-2.5 text-[13.5px] font-medium transition-colors duration-300 sm:px-3.5 sm:text-[14px]", onlyMarked ? "border-gold bg-gold text-navy" : "border-line bg-white text-navy/75 hover:border-navy/30")}
           >
-            <span className="hidden sm:inline">Hanya yang kutandai</span>
-            <span className="sm:hidden">Ditandai</span>
+            <span className="hidden sm:inline">{ui.onlyMarked}</span>
+            <span className="sm:hidden">{ui.onlyMarkedShort}</span>
             <span className={cn("tabular rounded px-1.5 text-[12px]", onlyMarked ? "bg-navy/10" : "bg-cream")}>{marks.length}</span>
           </button>
-          <button type="button" onClick={() => setSheet(true)} aria-label="Daftar pasal" className="ml-auto inline-flex h-10 items-center gap-2 rounded-lg border border-line bg-white px-2.5 text-[14px] font-medium text-navy sm:px-3.5 lg:hidden">
+          <button type="button" onClick={() => setSheet(true)} aria-label={ui.index} className="ml-auto inline-flex h-10 items-center gap-2 rounded-lg border border-line bg-white px-2.5 text-[14px] font-medium text-navy sm:px-3.5 lg:hidden">
             <LordIcon name="book" size={20} trigger="hover" target="button" colors="primary:#14213d,secondary:#6e1423" />
-            <span className="hidden sm:inline">Daftar pasal</span>
+            <span className="hidden sm:inline">{ui.index}</span>
           </button>
         </div>
 
         <div className="mt-8 grid gap-10 lg:grid-cols-[250px_1fr] lg:gap-14">
           <aside className="hidden lg:block">
             <div className="sticky top-44">
-              <Minimap chapters={shown} active={active} progress={progress} onGo={goPasal} />
+              <Minimap label={ui.index} chapters={shown} active={active} progress={progress} onGo={goPasal} />
             </div>
           </aside>
 
           <div data-reader-body className="min-w-0">
             {shown.length === 0 ? (
               <div className="flex flex-col items-center rounded-2xl border border-dashed border-line bg-white px-6 py-14 text-center">
-                <LottieIllustration src="/lottie/empty-news.json" className="w-28" />
-                <p className="mt-4 font-serif text-[1.3rem] text-navy">Belum ada pasal yang kamu tandai</p>
-                <p className="mt-1 max-w-sm text-[14.5px] text-text/60">Tekan tombol tambah di samping pasal mana pun untuk menyimpannya di sini.</p>
+                {ui.emptyIllustration && <LottieIllustration src={ui.emptyIllustration} className="w-28" />}
+                <p className="mt-4 font-serif text-[1.3rem] text-navy">{onlyMarked ? ui.emptyMarked : ui.empty}</p>
+                {onlyMarked && <>
+                <p className="mt-1 max-w-sm text-[14.5px] text-text/60">{ui.emptyMarkedHint}</p>
                 <button type="button" onClick={() => setOnlyMarked(false)} className="mt-5 text-[14px] font-semibold text-maroon">
-                  <span className="u-gold">Tampilkan semua pasal</span>
+                  <span className="u-gold">{ui.reset}</span>
                 </button>
+                </>}
               </div>
             ) : (
               shown.map((c) => (
@@ -291,13 +300,13 @@ export function RuleReader() {
                   <header className="flex items-end gap-5 border-b-2 border-navy pb-4">
                     <span className="font-serif text-[clamp(3.2rem,6vw,4.6rem)] italic leading-[0.8] text-maroon">{c.roman}</span>
                     <div className="pb-1">
-                      <p className="kicker text-[11px] text-text/45">Bab {c.roman}</p>
+                      <p className="kicker text-[11px] text-text/45">{fillRegulasi(copy.general.chapter, c)}</p>
                       <h3 className="font-serif text-[clamp(1.5rem,2.4vw,2rem)] leading-tight text-navy">{c.title}</h3>
                     </div>
                   </header>
                   <div className="divide-y divide-line">
                     {c.pasal.map((p) => (
-                      <Pasal key={p.id} p={p} mode={mode} flash={flash === p.id} marked={marks.includes(p.id)} onMark={toggleMark} onSim={goSim} />
+                      <Pasal copy={copy} pattern={pattern} terms={terms} key={p.id} p={p} mode={mode} flash={flash === p.id} marked={marks.includes(p.id)} onMark={toggleMark} onSim={goSim} />
                     ))}
                   </div>
                 </div>
@@ -308,9 +317,9 @@ export function RuleReader() {
       </Container>
 
       <Sheet open={sheet} onOpenChange={setSheet}>
-        <SheetContent className="overflow-y-auto bg-cream p-6 pt-14">
-          <SheetTitle className="font-serif text-[1.4rem] font-normal text-navy">Daftar pasal</SheetTitle>
-          <SheetDescription>Pilih pasal untuk langsung menuju ke sana</SheetDescription>
+        <SheetContent closeLabel={copy.general.closeSheet} className="overflow-y-auto bg-cream p-6 pt-14">
+          <SheetTitle className="font-serif text-[1.4rem] font-normal text-navy">{ui.index}</SheetTitle>
+          <SheetDescription>{ui.indexHint}</SheetDescription>
           <div className="mt-6 space-y-6">
             {chapters.map((c) => (
               <div key={c.key}>
@@ -325,13 +334,13 @@ export function RuleReader() {
                         type="button"
                         onClick={() => {
                           setSheet(false);
-                          setTimeout(() => goPasal(p.no), 250);
+                          setTimeout(() => goPasal(p.id), 250);
                         }}
                         className={cn("-ml-[2px] flex w-full gap-3 border-l-2 py-2 pl-4 text-left text-[14.5px] transition-colors", p.id === active ? "border-gold text-navy" : "border-transparent text-text/65")}
                       >
                         <span className="tabular w-8 shrink-0 text-text/40">{p.no}</span>
                         {p.title}
-                        {marks.includes(p.id) && <span className="ml-auto size-2 shrink-0 self-center rounded-full bg-gold" aria-label="ditandai" />}
+                        {marks.includes(p.id) && <span className="ml-auto size-2 shrink-0 self-center rounded-full bg-gold" aria-label={ui.marked} />}
                       </button>
                     </li>
                   ))}

@@ -5,8 +5,8 @@ import { WordRotate } from "@/components/motion/word-rotate";
 import { LottieIllustration } from "@/components/media/lottie-illustration";
 import { cn } from "@/lib/utils";
 import { useRegulasi } from "./regulasi-provider";
+import { fillRegulasi } from "@/lib/regulasi-cms/copy";
 
-const SUGGEST = ["cuti", "nilai E", "titip absen", "batas SKS"];
 const norm = (s) => String(s ?? "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
 
 /** Sorot bagian teks yang cocok dengan kata kunci. */
@@ -25,7 +25,9 @@ export function Highlight({ text, q }) {
  * situasi "Kalau terjadi…". Pasal → gulir + sorot; situasi → modal prosedur.
  */
 export function RuleSearch() {
-  const { allPasal, scenarios, goPasal, openProc } = useRegulasi();
+  const { allPasal, scenarios, goPasal, openProc, copy, suggestions } = useRegulasi();
+  const ui = copy.search;
+  const suggest = suggestions.filter(Boolean);
   const [q, setQ] = useState("");
   const [open, setOpen] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -84,7 +86,7 @@ export function RuleSearch() {
   const pick = (r) => {
     setOpen(false);
     input.current?.blur();
-    if (r.type === "pasal") goPasal(r.item.no);
+    if (r.type === "pasal") goPasal(r.item.id);
     else openProc(r.index);
   };
 
@@ -134,29 +136,29 @@ export function RuleSearch() {
             aria-expanded={showPanel}
             aria-controls={`${id}-list`}
             aria-activedescendant={showPanel && results[cursor] ? `${id}-${cursor}` : undefined}
-            aria-label="Cari aturan akademik"
+            aria-label={ui.label}
             className="h-[58px] w-full bg-transparent text-[16.5px] text-navy outline-none placeholder:text-transparent"
-            placeholder="Cari aturan"
+            placeholder={ui.placeholder}
           />
           {!q && (
             <span aria-hidden className="pointer-events-none absolute inset-y-0 left-0 flex items-center gap-1.5 whitespace-nowrap text-[16.5px] text-text/45">
-              Cari aturan tentang <WordRotate words={SUGGEST} className="text-maroon" />
+              {suggest.length ? <>{ui.prompt} <WordRotate key={suggest.length} words={suggest} className="text-maroon" /></> : ui.placeholder}
             </span>
           )}
         </div>
         {busy ? (
-          <DotsLoader className="text-maroon [&>span]:size-1.5" />
+          <span role="status" aria-label={ui.loading}><span aria-hidden><DotsLoader className="text-maroon [&>span]:size-1.5" /></span></span>
         ) : (
           <kbd className="hidden rounded border border-line bg-cream px-2 py-0.5 font-sans text-[12px] text-text/55 sm:inline-block">/</kbd>
         )}
       </div>
 
-      {!showPanel && (
+      {!showPanel && suggest.length > 0 && (
         <p className="mt-3 flex flex-wrap items-center justify-center gap-2 text-[13px] text-text/50">
-          Sering dicari:
-          {SUGGEST.map((s) => (
+          {ui.frequent}
+          {suggest.map((s, index) => (
             <button
-              key={s}
+              key={`${s}-${index}`}
               type="button"
               onClick={() => {
                 setQ(s);
@@ -180,7 +182,7 @@ export function RuleSearch() {
               ))}
             </div>
           ) : results.length ? (
-            <ul id={`${id}-list`} role="listbox" aria-label="Hasil pencarian" className="max-h-[360px] overflow-y-auto p-2">
+            <ul id={`${id}-list`} role="listbox" aria-label={ui.results} className="max-h-[360px] overflow-y-auto p-2">
               {results.map((r, i) => (
                 <li
                   key={`${r.type}-${r.item.key ?? r.item.id}`}
@@ -196,14 +198,14 @@ export function RuleSearch() {
                   style={{ animationDelay: `${i * 40}ms` }}
                 >
                   <span className={cn("mt-0.5 w-12 shrink-0 font-serif text-[15px] tabular", r.type === "pasal" ? "text-maroon" : "text-gold")}>
-                    {r.type === "pasal" ? `§ ${r.item.no}` : "Bila"}
+                    {r.type === "pasal" ? `§ ${r.item.no}` : ui.scenario}
                   </span>
                   <span className="min-w-0 flex-1">
                     <span className="block text-[15px] font-semibold text-navy">
                       <Highlight text={r.item.title} q={settled} />
                     </span>
                     <span className="mt-0.5 line-clamp-1 text-[13.5px] text-text/60">
-                      {r.type === "pasal" ? <Highlight text={r.item.plain} q={settled} /> : `Prosedur · tenggat ${r.item.deadline.toLowerCase()}`}
+                      {r.type === "pasal" ? <Highlight text={r.item.plain} q={settled} /> : fillRegulasi(ui.deadline, { deadline: r.item.deadline.toLowerCase() })}
                     </span>
                   </span>
                   <span aria-hidden className={cn("mt-1 text-[12px] text-text/40 transition-opacity", i === cursor ? "opacity-100" : "opacity-0")}>
@@ -214,16 +216,16 @@ export function RuleSearch() {
             </ul>
           ) : (
             <div className="flex items-center gap-4 p-5">
-              <LottieIllustration src="/lottie/empty-news.json" className="w-16 shrink-0" />
+              {ui.emptyIllustration && <LottieIllustration src={ui.emptyIllustration} className="w-16 shrink-0" />}
               <p className="text-[14px] leading-relaxed text-text/65">
-                Belum ada pasal tentang “<span className="text-navy">{settled}</span>”. Coba kata lain, atau tanyakan ke dosen wali.
+                {ui.empty.split("{query}").map((part, index) => <Fragment key={index}>{index > 0 && <span className="text-navy">{settled}</span>}{part}</Fragment>)}
               </p>
             </div>
           )}
           <div className="hidden items-center gap-4 border-t border-line px-4 py-2 text-[12px] text-text/45 sm:flex">
-            <span><kbd className="font-sans">↑↓</kbd> pilih</span>
-            <span><kbd className="font-sans">Enter</kbd> buka</span>
-            <span><kbd className="font-sans">Esc</kbd> tutup</span>
+            <span><kbd className="font-sans">↑↓</kbd> {ui.choose}</span>
+            <span><kbd className="font-sans">Enter</kbd> {ui.open}</span>
+            <span><kbd className="font-sans">Esc</kbd> {ui.dismiss}</span>
           </div>
         </div>
       )}

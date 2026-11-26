@@ -1,74 +1,66 @@
 "use client";
 import { useEffect, useState } from "react";
-import { BANNER_KEY } from "@/lib/magang-content";
 import { Banner } from "@/components/ui/banner";
-import { LordIcon } from "@/components/media/lord-icon";
 import { useToast } from "@/components/ui/toast";
+import { LordIcon } from "@/components/media/lord-icon";
+import { BANNER_KEY } from "@/lib/magang-content";
+import { downloadEventIcs, downloadIcs } from "@/lib/ics";
 import { PlaceholderTag } from "@/components/home/shared";
-import { downloadIcs } from "@/lib/ics";
 import { useMagang } from "./magang-provider";
 
-/** Pengumuman Info Session magang (brand). Bila ditutup, tidak muncul lagi selama sesi. */
 export function MagangBanner({ className }) {
-  const { notice } = useMagang();
+  const { notice, copy, preview, link } = useMagang();
+  const labels = copy.notice;
   const toast = useToast();
-  const [show, setShow] = useState(false);
-
+  const [dismissed, setDismissed] = useState(null);
+  const signature = notice ? JSON.stringify([notice.title, notice.body, notice.actionLabel, notice.actionHref, notice.startAt, notice.place]) : "";
   useEffect(() => {
-    let hidden = false;
+    if (preview) return;
     try {
-      hidden = sessionStorage.getItem(BANNER_KEY) === "1";
+      setDismissed(sessionStorage.getItem(BANNER_KEY));
     } catch {}
-    setShow(!hidden);
-  }, []);
+  }, [preview]);
 
-  if (!show || !notice) return null;
+  if (!notice || !notice.title || dismissed === signature) return null;
+  const calendar = notice.startAt || notice.legacyEvent;
+  const href = link(notice.actionHref);
+  const canLink = href && notice.actionLabel;
 
-  const save = () => {
-    if (notice.event && downloadIcs(notice.event, { filename: "info-session-magang.ics", uid: "magang" })) {
-      toast.success("Jadwal tersimpan", { description: "Buka berkas .ics untuk menambahkannya ke kalendermu." });
-    } else {
-      toast.warning("Tanggal belum pasti", { description: "Pantau papan agenda prodi untuk jadwal resminya." });
-    }
-  };
+  function save() {
+    if (preview) return;
+    const saved = notice.startAt
+      ? downloadEventIcs({ slug: "info-session-magang", title: notice.title, startAt: notice.startAt, place: notice.place, summary: notice.body })
+      : notice.legacyEvent && downloadIcs({ ...notice.legacyEvent, title: notice.title }, { filename: "info-session-magang.ics", uid: "magang" });
+    if (saved) toast.success(labels.saved, { description: labels.savedBody });
+    else toast.warning(labels.unavailable, { description: labels.unavailableBody });
+  }
 
   return (
     <div className={className}>
-      <div
-        onClickCapture={(e) => {
-          if (e.target.closest?.('[aria-label="Tutup banner"]')) {
-            try {
-              sessionStorage.setItem(BANNER_KEY, "1");
-            } catch {}
+      <Banner
+        key={signature}
+        variant="brand"
+        dismissible
+        dismissLabel={labels.dismiss}
+        title={notice.title}
+        onDismiss={() => {
+          setDismissed(signature);
+          if (!preview) {
+            try { sessionStorage.setItem(BANNER_KEY, signature); } catch {}
           }
         }}
+        action={calendar && !canLink && (
+          <button type="button" onClick={save} disabled={preview} className="group hidden h-10 items-center gap-2 rounded-md bg-gold px-4 text-sm font-semibold text-navy transition-colors hover:bg-gold-soft sm:inline-flex">
+            <LordIcon name="calendar" size={20} target=".group" colors="primary:#14213d,secondary:#6e1423" />
+            {labels.calendar}
+          </button>
+        )}
       >
-        <Banner
-          variant="brand"
-          dismissible
-          title={notice.title}
-          action={
-            notice.event && (
-              <button
-                type="button"
-                onClick={save}
-                className="group hidden h-10 items-center gap-2 rounded-md bg-gold px-4 text-sm font-semibold text-navy transition-[background-color,transform] duration-300 hover:bg-gold-soft active:scale-[0.97] sm:inline-flex"
-              >
-                <LordIcon name="calendar" size={20} target=".group" colors="primary:#14213d,secondary:#6e1423" />
-                Simpan ke kalender
-              </button>
-            )
-          }
-        >
-          <span>{notice.body}</span>
-          {notice.event && (
-            <button type="button" onClick={save} className="mt-2 block text-[13px] font-semibold text-gold-soft underline decoration-gold/50 underline-offset-4 sm:hidden">
-              Simpan ke kalender
-            </button>
-          )}
-          {notice.sample && <PlaceholderTag tone="dark" className="mt-2" />}
-        </Banner>
-      </div>
+        {notice.body && <span>{notice.body}</span>}
+        {calendar && <button type="button" onClick={save} disabled={preview} className={canLink ? "mt-2 mr-4 text-sm font-semibold text-gold-soft underline" : "mt-2 block text-sm font-semibold text-gold-soft underline sm:hidden"}>{labels.calendar}</button>}
+        {canLink && <a href={href} className="mt-2 inline-block text-sm font-semibold text-gold-soft underline underline-offset-4">{notice.actionLabel}</a>}
+        {notice.sample && <PlaceholderTag tone="dark" className="mt-2">{copy.jobs.sample}</PlaceholderTag>}
+      </Banner>
     </div>
   );
 }

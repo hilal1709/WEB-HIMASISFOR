@@ -1,0 +1,93 @@
+.studio {
+  border-top: 3px solid var(--maroon);
+}
+
+.frame {
+  width: min(100% - 2rem, 96rem);
+  margin-inline: auto;
+}
+
+.workspace {
+  display: grid;
+  align-items: start;
+  gap: 1rem;
+  margin-block-start: 1rem;
+}
+
+.manuscript,
+.proof {
+  min-width: 0;
+}
+
+.manuscript {
+  border: 1px solid var(--line);
+  border-radius: 0.625rem;
+  background: #fcf9f3;
+}
+
+.index {
+  position: relative;
+  border-bottom: 1px solid var(--line);
+  padding-inline: 0.25rem;
+}
+
+.indexButton {
+  position: relative;
+}
+
+.indexButton::after {
+  position: absolute;
+  inset-inline: 0.75rem;
+  bottom: -1px;
+  height: 2px;
+  background: var(--maroon);
+  content: "";
+  opacity: 0;
+  transform: scaleX(0.6);
+  transition: transform 180ms ease-out, opacity 180ms ease-out;
+}
+
+.indexButton[aria-current="true"]::after,
+.indexButton[aria-pressed="true"]::after {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+.proof {
+  border: 1px solid var(--maroon-deep);
+  border-radius: 0.625rem;
+  background: var(--maroon-deep);
+  box-shadow: 0 19px 42px -32px rgb(78 14 25 / 0.75);
+}
+
+.toast {
+  border-top: 2px solid var(--gold);
+  box-shadow: 0 15px 36px -12px rgb(20 33 61 / 0.6);
+  animation: arrive 200ms ease-out both;
+}
+
+@keyframes arrive {
+  from { opacity: 0; transform: translateY(0.4rem); }
+}
+
+.studio :is(button, a, summary):focus-visible {
+  outline: 2px solid var(--maroon);
+  outline-offset: 3px;
+}
+
+.proof :is(button, a):focus-visible,
+.toast button:focus-visible {
+  outline-color: var(--gold-soft);
+}
+
+@media (min-width: 64rem) {
+  .frame { width: min(100% - 3rem, 96rem); }
+  .workspace { grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr); gap: 1.5rem; margin-block-start: 1.5rem; }
+  .proof { position: sticky; top: 1rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .studio [data-aos] { opacity: 1; transform: none; transition: none; }
+  .indexButton::after { transition: none; }
+  .toast { animation: none; }
+}

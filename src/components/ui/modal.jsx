@@ -9,7 +9,7 @@ export const Modal = DialogPrimitive.Root;
 export const ModalTrigger = DialogPrimitive.Trigger;
 export const ModalClose = DialogPrimitive.Close;
 
-export function ModalContent({ className, children, hideClose = false, ...props }) {
+export function ModalContent({ className, children, hideClose = false, closeLabel = "Tutup", ...props }) {
   return (
     <DialogPrimitive.Portal>
       <DialogPrimitive.Overlay className="fixed inset-0 z-[90] bg-navy-deep/60 backdrop-blur-sm data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=closed]:animate-out data-[state=closed]:fade-out-0" />
@@ -29,7 +29,7 @@ export function ModalContent({ className, children, hideClose = false, ...props 
         {children}
         {!hideClose && (
           <DialogPrimitive.Close
-            aria-label="Tutup"
+            aria-label={closeLabel}
             className="absolute right-4 top-4 rounded-md p-1.5 text-text/50 transition-colors hover:bg-cream hover:text-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-maroon/40"
           >
             <X className="size-4" />

@@ -12,7 +12,7 @@ export function SplitReveal({ as: Tag = "h2", children, className, trigger = "sc
   const ref = useRef(null);
   useEffect(() => {
     const el = ref.current;
-    if (!el || prefersReducedMotion()) return;
+    if (!el || trigger === "none" || prefersReducedMotion()) return;
     let split;
     const ctx = gsap.context(() => {
       split = SplitText.create(el, { type: "words", mask: "words", wordsClass: "split-word" });

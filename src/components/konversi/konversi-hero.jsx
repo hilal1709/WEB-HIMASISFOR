@@ -2,7 +2,7 @@
 import { useLayoutEffect as useEffect, useRef, useState } from "react";
 import { gsap } from "@/lib/scroll";
 import { prefersReducedMotion, curtainDelay } from "@/lib/motion";
-import { CURTAIN_KEY, creditsFor } from "@/lib/konversi-content";
+import { CURTAIN_KEY, SEMESTER_WEEKS, creditsFor } from "@/lib/konversi-content";
 import { Container, SceneTitle } from "@/components/home/shared";
 import { ElvoPeek } from "@/components/home/elvo-peek";
 import { cn } from "@/lib/utils";
@@ -101,7 +101,7 @@ export function KonversiHero() {
               <div className="flex items-center justify-between gap-3 border-y border-white/10 bg-navy-deep/60 px-5 py-2.5 sm:px-7">
                 <span className="kicker text-[10.5px] text-gold-soft">Papan konversi</span>
                 <span className="tabular text-[12px] text-white/60">
-                  1 SKS = <span className="font-semibold text-white">{rate} jam</span> · maks {cap} SKS/semester
+                  1 SKS = <span className="font-semibold text-white">{rate} menit/minggu × {SEMESTER_WEEKS} minggu</span> · maks {cap} SKS/semester
                 </span>
               </div>
 

@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
  *   const toast = useToast();
  *   toast.success("Tersimpan"); toast.error("Gagal", { description: "..." });
  *   toast.success("Ditandai", { action: { label: "Batalkan", onClick: undo } });
+ *   toast.success("Tersimpan", { appearance: "brand" });
  * Pasang <ToastProvider> sekali di layout.
  */
 const ToastContext = createContext(null);
@@ -24,6 +25,7 @@ function ToastItem({ toast, onClose }) {
   const [leaving, setLeaving] = useState(false);
   const timer = useRef();
   const { icon: Icon, bar, text } = STYLE[toast.type];
+  const branded = toast.appearance === "brand";
 
   const close = useCallback(() => {
     setLeaving(true);
@@ -42,11 +44,12 @@ function ToastItem({ toast, onClose }) {
       onMouseEnter={() => clearTimeout(timer.current)}
       className={cn(
         "relative flex w-full items-start gap-3 overflow-hidden rounded-lg border border-white/10 bg-navy p-4 pl-5 pr-10 text-white shadow-[0_24px_50px_-20px_rgb(14_24_48/0.7)]",
-        leaving ? "animate-toast-out" : "animate-toast-in"
+        leaving ? "animate-toast-out" : "animate-toast-in",
+        branded && "border-gold/50 pl-4 motion-reduce:animate-none"
       )}
     >
-      <span className={cn("absolute inset-y-0 left-0 w-1", bar)} />
-      <Icon className={cn("mt-0.5 size-5 shrink-0", text)} />
+      {!branded && <span aria-hidden className={cn("absolute inset-y-0 left-0 w-1", bar)} />}
+      <Icon aria-hidden className={cn("mt-0.5 size-5 shrink-0", branded ? "text-gold-soft" : text)} />
       <div className="min-w-0">
         <p className="text-sm font-semibold">{toast.title}</p>
         {toast.description && <p className="mt-0.5 text-[13px] leading-relaxed text-white/70">{toast.description}</p>}

@@ -1,9 +1,8 @@
 /**
- * Konten halaman Magang (`/magang`).
- * SKS & semester Kerja Praktik diturunkan dari kurikulum (`getKurikulumData`); tanggal Info Session dari
- * agenda beranda (`AGENDA`) — tidak ditulis ulang. Konversi SKS & Bootcamp punya halaman sendiri (hanya ditautkan).
+ * Konten awal dan format lama halaman Magang. CMS baru mengimpor section `magang`
+ * saat belum ada versi terbit melalui `initialMagang`.
  *
- * CMS `PageContent` section `magang` (Admin › Konten › Magang):
+ * Format lama PageContent:
  *   data.intro      → paragraf intro hero
  *   data.jobs[]     → papan lowongan { title, company, field, mode, program, duration, deadline (YYYY-MM-DD),
  *                     needs[], tasks[], href }. Mengisi `jobs` menghapus tanda contoh.
@@ -11,12 +10,11 @@
  *   data.docs[]     → ditimpa per `key` (surat/logbook/laporan; `href` = URL berkas)
  * Pintu, lowongan, tahapan logbook, dan berkas adalah CONTOH (`sample`) → tampil dengan PlaceholderTag.
  */
-import { AGENDA, CONTACT_URL } from "@/lib/home-content";
+import { AGENDA } from "./home-content.js";
 
 export const CURTAIN_KEY = "sisfor:curtain:magang";
 export const BANNER_KEY = "sisfor:banner:magang";
 export const TRACK_KEY = "sisfor:magang:jejak";
-export { CONTACT_URL };
 
 export const INTRO = {
   body: "Sebelum lulus, setiap Sisforian bekerja sungguhan di organisasi: membaca proses bisnisnya, memegang datanya, dan pulang dengan laporan yang dinilai. Pilih pintumu, temukan posisinya, lalu catat perjalananmu di sini.",
@@ -85,7 +83,6 @@ export const ROUTES = [
 ];
 
 const PROGRAM_OF = { kp: "Kerja Praktik", mandiri: "Magang Mandiri", dikti: "Program Dikti" };
-export const programLabel = (k) => PROGRAM_OF[k] ?? k;
 
 /** Lowongan contoh. `deadline` ISO; yang sudah lewat otomatis turun ke bawah. */
 export const JOBS = [
@@ -110,7 +107,7 @@ export const slugify = (s) =>
     .replace(/\s+/g, "-")
     .slice(0, 60);
 
-const initials = (s) =>
+export const initials = (s) =>
   String(s)
     .split(/\s+/)
     .filter((w) => /^[A-Za-z]/.test(w) && !/^(dan|di|—|mitra)$/i.test(w))
@@ -242,6 +239,8 @@ export function mergeMagang(row, { kurikulum } = {}) {
 /** Sisa hari sampai tenggat (dibulatkan ke atas; negatif = sudah lewat). `today` disuntik agar mudah diuji. */
 export function daysLeft(deadline, today = new Date()) {
   if (!deadline) return null;
-  const end = new Date(`${deadline}T23:59:59`);
-  return Math.ceil((end - today) / 86400000) - 1;
+  const day = 86400000;
+  const wibToday = Math.floor((today.getTime() + 7 * 3600000) / day);
+  const target = Date.parse(deadline + "T00:00:00Z") / day;
+  return Number.isFinite(target) ? target - wibToday : null;
 }

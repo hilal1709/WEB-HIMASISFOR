@@ -9,6 +9,7 @@ import { prefersReducedMotion } from "@/lib/motion";
 import { Container, PlaceholderTag, SectionHeader } from "@/components/home/shared";
 import { cn } from "@/lib/utils";
 import { useRegulasi } from "./regulasi-provider";
+import { fillRegulasi } from "@/lib/regulasi-cms/copy";
 
 const pad = (n) => String(n).padStart(2, "0");
 
@@ -18,11 +19,14 @@ const pad = (n) => String(n).padStart(2, "0");
  * Berkas, contoh pesan, dan pasal rujukan ada di modal prosedur (tidak diulang di sini). Ponsel: chip Swiper FreeMode.
  */
 export function ScenarioFlow() {
-  const { scenarios, openProc, findPasal } = useRegulasi();
-  const [i, setI] = useState(0);
+  const { scenarios, openProc, findPasal, copy } = useRegulasi();
+  const ui = copy.procedure;
+  const [active, setActive] = useState(null);
+  const i = Math.max(0, scenarios.findIndex((item) => item.key === active));
+  const setI = (index) => setActive(scenarios[index]?.key);
   const flow = useRef(null);
   const s = scenarios[i];
-  const ref = findPasal(s.ref);
+  const ref = s ? findPasal(s.ref) : null;
 
   useEffect(() => {
     const el = flow.current;
@@ -38,18 +42,19 @@ export function ScenarioFlow() {
   const onKey = (e) => {
     if (e.key === "ArrowDown" || e.key === "ArrowRight") {
       e.preventDefault();
-      setI((v) => (v + 1) % scenarios.length);
+      setI((i + 1) % scenarios.length);
     }
     if (e.key === "ArrowUp" || e.key === "ArrowLeft") {
       e.preventDefault();
-      setI((v) => (v - 1 + scenarios.length) % scenarios.length);
+      setI((i - 1 + scenarios.length) % scenarios.length);
     }
   };
 
+  if (!s) return null;
   return (
     <section id="prosedur" className="relative scroll-mt-20 py-16 md:py-20">
       <Container>
-        <SectionHeader title={["Kalau terjadi", "sesuatu…"]} body="Situasi yang paling sering ditanyakan ke sekretariat, lengkap dengan urutan langkahnya." action={s.sample ? <PlaceholderTag /> : null} />
+        <SectionHeader title={[ui.title, ui.accent]} body={ui.intro} action={s.sample ? <PlaceholderTag>{copy.general.sample}</PlaceholderTag> : null} />
 
         <div className="mt-8 min-w-0 md:hidden">
           <Swiper modules={[FreeMode, A11y]} freeMode slidesPerView="auto" spaceBetween={8}>
@@ -69,7 +74,7 @@ export function ScenarioFlow() {
         </div>
 
         <div className="mt-8 grid gap-8 md:mt-12 md:grid-cols-[1fr_1.05fr] md:gap-12 lg:gap-16">
-          <div role="tablist" aria-orientation="vertical" aria-label="Situasi" onKeyDown={onKey} className="rg-rows hidden border-t border-line md:block">
+          <div role="tablist" aria-orientation="vertical" aria-label={ui.list} onKeyDown={onKey} className="rg-rows hidden border-t border-line md:block">
             {scenarios.map((x, k) => (
               <button
                 key={x.key}
@@ -98,7 +103,7 @@ export function ScenarioFlow() {
                 <span aria-hidden className="size-1.5 rounded-full bg-gold" />
                 {s.deadline}
               </span>
-              <span className="inline-flex items-center rounded-md bg-cream px-2.5 py-1 text-[12.5px] text-text/70">Ke: {s.to}</span>
+              <span className="inline-flex items-center rounded-md bg-cream px-2.5 py-1 text-[12.5px] text-text/70">{fillRegulasi(ui.destination, { destination: s.to })}</span>
             </div>
             <h3 className="mt-4 font-serif text-[1.6rem] leading-tight text-navy md:hidden">{s.title}</h3>
 
@@ -116,14 +121,14 @@ export function ScenarioFlow() {
 
             <div className="mt-7 flex flex-wrap items-center justify-between gap-4 border-t border-line pt-5">
               <span className="text-[13.5px] text-text/55">
-                {s.files.length} berkas · rujukan pasal {ref?.no ?? s.ref}
+                {fillRegulasi(ref ? ui.references : ui.fileCount, { count: s.files.length, no: ref?.no })}
               </span>
               <button
                 type="button"
                 onClick={() => openProc(i)}
                 className="group inline-flex h-11 items-center gap-2 rounded-md bg-maroon px-5 text-[14.5px] font-semibold text-white transition-[background-color,transform] duration-300 hover:bg-maroon-deep active:scale-[0.98]"
               >
-                Siapkan berkasnya
+                {ui.details}
                 <svg aria-hidden viewBox="0 0 16 16" className="size-4 transition-transform duration-300 group-hover:translate-x-0.5">
                   <path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>

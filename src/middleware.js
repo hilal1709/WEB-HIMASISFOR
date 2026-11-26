@@ -26,10 +26,10 @@ export default auth((request) => {
   
   if (pathname.startsWith('/img/') || pathname.startsWith('/_next/static/')) {
     response.headers.set('Cache-Control', 'public, max-age=31536000, immutable');
-  } else if (pathname === '/admin/jalur-kelulusan/pratinjau') {
+  } else if (['/admin/jalur-kelulusan/pratinjau', '/admin/regulasi-akademik/pratinjau', '/admin/magang/pratinjau'].includes(pathname)) {
     response.headers.set('Cache-Control', 'no-store');
     response.headers.set('X-Robots-Tag', 'noindex, nofollow');
-  } else if (pathname.startsWith('/api/auth') || pathname.startsWith('/api/layanan') || pathname.startsWith('/api/warta') || pathname === '/api/jalur-cms') {
+  } else if (pathname.startsWith('/api/auth') || pathname.startsWith('/api/layanan') || pathname.startsWith('/api/warta') || pathname === '/api/jalur-cms' || pathname === '/api/regulasi-cms' || pathname === '/api/magang-cms') {
     // auth & pengajuan layanan bersifat pribadi — jangan pernah di-cache
     response.headers.set('Cache-Control', 'no-store');
   } else if (pathname.startsWith('/api/')) {

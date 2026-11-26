@@ -10,14 +10,16 @@ import { Container, PlaceholderTag, SectionHeader } from "@/components/home/shar
 import { LottieIllustration } from "@/components/media/lottie-illustration";
 import { cn } from "@/lib/utils";
 import { useMagang } from "./magang-provider";
+import { interpolate, titleLines } from "@/lib/magang-cms/copy";
+import { kpText } from "@/lib/magang-cms/schema";
 
 const pad = (n) => String(n).padStart(2, "0");
 
 function Facts({ r, tone = "light" }) {
   return (
     <dl className="grid gap-x-6 gap-y-3 sm:grid-cols-3">
-      {r.facts.map((f) => (
-        <div key={f.k} className={cn("border-t pt-3", tone === "light" ? "border-line" : "border-white/15")}>
+      {r.facts.map((f, i) => (
+        <div key={i} className={cn("border-t pt-3", tone === "light" ? "border-line" : "border-white/15")}>
           <dt className={cn("kicker text-[10.5px]", tone === "light" ? "text-maroon" : "text-gold-soft")}>{f.k}</dt>
           <dd className={cn("mt-1 text-[14px] leading-snug", tone === "light" ? "text-navy" : "text-white/85")}>{f.v}</dd>
         </div>
@@ -32,7 +34,9 @@ function Facts({ r, tone = "light" }) {
  * serta Lottie `-dark` per pintu. Ponsel: Swiper tersinkron dengan pintu aktif.
  */
 export function RouteDoors() {
-  const { routes, route, setRoute, kp } = useMagang();
+  const { routes, route, setRoute, kp, copy, link } = useMagang();
+  const labels = copy.routes;
+  const relatedHref = link(labels.creditsHref);
   const panel = useRef(null);
   const prev = useRef(route);
   const dwell = useRef();
@@ -49,13 +53,15 @@ export function RouteDoors() {
     const el = imgs[route];
     if (el && prev.current !== route && !prefersReducedMotion()) {
       gsap.fromTo(el, { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.9, ease: "expo.inOut" });
-      gsap.fromTo(el.querySelector("img"), { scale: 1.12 }, { scale: 1, duration: 1.3, ease: "expo.out" });
+      const image = el.querySelector("img");
+      if (image) gsap.fromTo(image, { scale: 1.12 }, { scale: 1, duration: 1.3, ease: "expo.out" });
     } else if (el) {
       gsap.set(el, { clipPath: "inset(0% 0% 0% 0%)" });
     }
     prev.current = route;
     if (swiper.current && swiper.current.activeIndex !== route) swiper.current.slideTo(route);
-  }, [route]);
+    return () => clearTimeout(dwell.current);
+  }, [route, routes]);
 
   const r = routes[route];
 
@@ -63,10 +69,12 @@ export function RouteDoors() {
     <section id="pintu" className="relative scroll-mt-24 bg-white py-20 md:py-20">
       <Container>
         <SectionHeader
-          title={["Pilih pintu", "yang paling pas"]}
-          body={`${kp.nama} wajib ditempuh semua mahasiswa di semester ${kp.semester}. Dua pintu lainnya boleh kamu ambil sebagai tambahan pengalaman.`}
+          title={titleLines(labels.title)}
+          body={kpText(labels.body, kp)}
         />
 
+        {!r && <p className="mt-10 text-center text-text/65">{labels.empty}</p>}
+        {r && <>
         {/* ≥ lg */}
         <div className="mt-14 hidden gap-12 lg:grid lg:grid-cols-[1.1fr_0.9fr]">
           <ol className="border-b border-line">
@@ -112,20 +120,20 @@ export function RouteDoors() {
               <div className="relative aspect-[4/3]">
                 {routes.map((x, i) => (
                   <div key={x.key} data-door-img className="absolute inset-0" style={{ clipPath: i === 0 ? "inset(0% 0% 0% 0%)" : "inset(0% 100% 0% 0%)" }}>
-                    <Image src={x.image} alt="" fill sizes="(min-width: 1024px) 40vw, 100vw" className="object-cover" />
+                    {x.image && <Image src={x.image} alt={x.alt} fill sizes="(min-width: 1024px) 40vw, 100vw" className="object-cover" />}
                     <span className="absolute inset-0 bg-navy/35" />
                   </div>
                 ))}
                 <span className="absolute left-5 top-5 z-10 rounded bg-navy/80 px-2.5 py-1 text-[11.5px] font-semibold text-gold-soft backdrop-blur-sm">
-                  Pintu {pad(route + 1)} · {r.title}
+                  {interpolate(labels.imageLabel, { index: pad(route + 1), title: r.title })}
                 </span>
               </div>
               <div className="flex items-center gap-5 p-6">
-                <span className="grid size-24 shrink-0 place-items-center rounded-full bg-maroon p-3">
-                  <LottieIllustration key={r.lottie} src={r.lottie} label={`Ilustrasi ${r.title}`} />
-                </span>
+                {r.lottie && <span className="grid size-24 shrink-0 place-items-center rounded-full bg-maroon p-3">
+                  <LottieIllustration key={r.lottie} src={r.lottie} label={interpolate(labels.illustrationLabel, r)} />
+                </span>}
                 <div key={r.key} className="min-w-0 animate-in fade-in-0 slide-in-from-bottom-1 duration-500">
-                  <p className="kicker text-[10.5px] text-gold-soft">Cocok untuk</p>
+                  <p className="kicker text-[10.5px] text-gold-soft">{labels.audience}</p>
                   <p className="mt-1.5 text-pretty font-serif text-[1.2rem] leading-snug">{r.forWho}</p>
                 </div>
               </div>
@@ -139,6 +147,7 @@ export function RouteDoors() {
             <Swiper
               modules={[A11y, Keyboard]}
               keyboard
+              speed={prefersReducedMotion() ? 0 : 300}
               slidesPerView={1.12}
               spaceBetween={14}
               slidesOffsetBefore={20}
@@ -151,7 +160,7 @@ export function RouteDoors() {
                 <SwiperSlide key={x.key} className="!h-auto">
                   <article className="flex h-full flex-col overflow-hidden rounded-xl bg-navy text-white">
                     <div className="relative aspect-[16/10]">
-                      <Image src={x.image} alt="" fill sizes="90vw" className="object-cover" />
+                      {x.image && <Image src={x.image} alt={x.alt} fill sizes="90vw" className="object-cover" />}
                       <span className="absolute inset-0 bg-navy/35" />
                       <span className="absolute left-4 top-4 rounded bg-navy/80 px-2 py-0.5 text-[11px] font-semibold text-gold-soft">{x.tag}</span>
                     </div>
@@ -175,14 +184,15 @@ export function RouteDoors() {
           </div>
         </div>
 
+        </>}
         <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3" data-aos="fade-up">
-          <a href="/konversi-sks#kalkulator" className="group inline-flex items-center gap-2 text-[14.5px] font-semibold text-maroon">
-            <span className="u-gold">Cara magang dikonversi ke SKS</span>
+          {relatedHref && labels.creditsLink && <a href={relatedHref} className="group inline-flex items-center gap-2 text-[14.5px] font-semibold text-maroon">
+            <span className="u-gold">{labels.creditsLink}</span>
             <svg aria-hidden viewBox="0 0 16 16" className="size-4 transition-transform duration-500 ease-cinematic group-hover:translate-x-1">
               <path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
-          </a>
-          {routes.some((x) => x.sample) && <PlaceholderTag />}
+          </a>}
+          {routes.some((x) => x.sample) && <PlaceholderTag>{copy.jobs.sample}</PlaceholderTag>}
         </div>
       </Container>
     </section>

@@ -2,6 +2,7 @@
 import { useLayoutEffect as useEffect, useRef, useState } from "react";
 import { gsap } from "@/lib/scroll";
 import { prefersReducedMotion } from "@/lib/motion";
+import { SEMESTER_WEEKS } from "@/lib/konversi-content";
 import { LordIcon } from "@/components/media/lord-icon";
 import { LottieIllustration } from "@/components/media/lottie-illustration";
 import { Skeleton } from "@/components/ui/loader";
@@ -76,7 +77,7 @@ export function Receipt({ className, tilt = true }) {
               <>
                 <Line k="Durasi" v={`${weeks} mgg × ${hours} jam`} />
                 <Line k="Jam kegiatan" v={`${total.toLocaleString("id-ID")} jam`} />
-                <Line k="Kurs" v={`÷ ${rate} jam/SKS`} />
+                <Line k="Kurs" v={`${rate} menit/minggu × ${SEMESTER_WEEKS} minggu/SKS`} />
               </>
             ) : (
               <Line k="SKS kampus tujuan" v={`${sks} SKS`} />

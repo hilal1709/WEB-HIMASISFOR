@@ -216,9 +216,9 @@
     "semantic_hash": "b1d5dd9ac21c8cf0b9736825e51289b4"
   },
   "src/app/admin/content/page.jsx": {
-    "mtime": 1794801537.3690343,
-    "seen": 1794801750.4786162,
-    "ast_hash": "15fe73b407b73adb851882fc36c99b9c",
+    "mtime": 1795658094.580893,
+    "seen": 1795658288.5060241,
+    "ast_hash": "536e6ebc20cfb6820d29702ac84ba5d9",
     "semantic_hash": ""
   },
   "src/app/admin/curriculum/page.jsx": {
@@ -252,9 +252,9 @@
     "semantic_hash": "b4edb1e7c2123e83a8ce4d2d2c85d6a0"
   },
   "src/app/admin/layout.jsx": {
-    "mtime": 1795640710.802391,
-    "seen": 1795641657.4407477,
-    "ast_hash": "e5ae646fe63e6e9688dd553ccb8e4d05",
+    "mtime": 1795647785.347922,
+    "seen": 1795649228.9199955,
+    "ast_hash": "6d11ef8d505ca25f11183f4275ca807a",
     "semantic_hash": ""
   },
   "src/app/admin/login/page.jsx": {
@@ -288,9 +288,9 @@
     "semantic_hash": "68498685c91ae81ef9b77d7829f7ed6a"
   },
   "src/app/api/content/route.js": {
-    "mtime": 1795640080.6630545,
-    "seen": 1795641657.4560995,
-    "ast_hash": "33a8bf631b63961afd6a662da0f3fde7",
+    "mtime": 1795647788.2231882,
+    "seen": 1795649228.9386287,
+    "ast_hash": "7c08a5ebce1e4be3e93ec0bae9400e08",
     "semantic_hash": ""
   },
   "src/app/api/curriculum/route.js": {
@@ -312,10 +312,10 @@
     "semantic_hash": "27f2645c1d02765b652c37793ed30287"
   },
   "src/app/api/page/[slug]/route.js": {
-    "mtime": 1770273217.7059357,
-    "seen": 1794651734.9178438,
-    "ast_hash": "eacdeae48a44db3368521be2f90040e8",
-    "semantic_hash": "eacdeae48a44db3368521be2f90040e8"
+    "mtime": 1795647790.12775,
+    "seen": 1795649228.9943492,
+    "ast_hash": "d196ab15445efee251b2e99fcbc71c6b",
+    "semantic_hash": ""
   },
   "src/app/api/test-db/route.js": {
     "mtime": 1770256875.1757696,
@@ -534,9 +534,9 @@
     "semantic_hash": "0d72cb52dbd49f66ae39edb37aecb9eb"
   },
   "src/middleware.js": {
-    "mtime": 1795640081.41548,
-    "seen": 1795641657.8544815,
-    "ast_hash": "06e019e90e5e3af83be571af94e11926",
+    "mtime": 1795647786.831222,
+    "seen": 1795649229.8855135,
+    "ast_hash": "a8cab455fd016410a318ad86a3679716",
     "semantic_hash": ""
   },
   "sync-to-production.js": {
@@ -1560,16 +1560,16 @@
     "semantic_hash": "3ba36b63caaf6e1d1dcb8ad73f300cda"
   },
   "src/components/ui/modal.jsx": {
-    "mtime": 1794411462.3301985,
-    "seen": 1794651734.9195466,
-    "ast_hash": "66f2f0952e98134be29e172628232041",
-    "semantic_hash": "66f2f0952e98134be29e172628232041"
+    "mtime": 1795644783.6472893,
+    "seen": 1795645938.2404437,
+    "ast_hash": "7ddb11284ddce52feaf74715b31d434e",
+    "semantic_hash": ""
   },
   "src/components/ui/toast.jsx": {
-    "mtime": 1794461048.1245325,
-    "seen": 1794651734.9195693,
-    "ast_hash": "b2b179cbaf0c431c05930189e489854c",
-    "semantic_hash": "b2b179cbaf0c431c05930189e489854c"
+    "mtime": 1795657258.351705,
+    "seen": 1795657630.3137827,
+    "ast_hash": "d5a7e3b066b467f1e66536300f020e36",
+    "semantic_hash": ""
   },
   "src/lib/motion.js": {
     "mtime": 1794480606.6898744,
@@ -1584,9 +1584,9 @@
     "semantic_hash": "d1c4afdedf414ae731f58a28173db977"
   },
   "DESIGN.md": {
-    "mtime": 1794631866.336793,
-    "seen": 1794631930.795299,
-    "ast_hash": "e137559cf07a77f4505f3d708d8b01c5",
+    "mtime": 1795657494.8243563,
+    "seen": 1795657630.6197662,
+    "ast_hash": "ae90078419c698c401ed474c9ea204ba",
     "semantic_hash": ""
   },
   ".claude/launch.json": {
@@ -1692,10 +1692,10 @@
     "semantic_hash": "777f723c109476da09facbc7e0958eb6"
   },
   "src/components/motion/split-reveal.jsx": {
-    "mtime": 1794517474.9094057,
-    "seen": 1794651734.9189014,
-    "ast_hash": "a2b3dc81020992335e641b390493b98d",
-    "semantic_hash": "a2b3dc81020992335e641b390493b98d"
+    "mtime": 1795646174.6182356,
+    "seen": 1795646340.553153,
+    "ast_hash": "05a3fd2c4e192f39b7d272f3ae088133",
+    "semantic_hash": ""
   },
   "src/components/scroll/chapter-rail.jsx": {
     "mtime": 1794385959.7857442,
@@ -2052,10 +2052,10 @@
     "semantic_hash": "0cb3204d13318609c73705d6925c6113"
   },
   "src/components/ui/sheet.jsx": {
-    "mtime": 1794478066.571742,
-    "seen": 1794651734.9195607,
-    "ast_hash": "71c427657db1ce001c68913b5f399842",
-    "semantic_hash": "71c427657db1ce001c68913b5f399842"
+    "mtime": 1795645301.624587,
+    "seen": 1795645938.2418902,
+    "ast_hash": "b8f8df9cdf0eabc4c287e46028fa033e",
+    "semantic_hash": ""
   },
   "src/components/ui/tabs.jsx": {
     "mtime": 1794392615.587867,
@@ -3306,82 +3306,82 @@
     "semantic_hash": "8c04552cb2563fa350722aafee5ad038"
   },
   "src/app/regulasi-akademik/page.jsx": {
-    "mtime": 1794630299.3535516,
-    "seen": 1794651734.9180548,
-    "ast_hash": "56d30739bdef853017c0cc6de31ce7fb",
-    "semantic_hash": "56d30739bdef853017c0cc6de31ce7fb"
+    "mtime": 1795644569.6976116,
+    "seen": 1795645937.8813832,
+    "ast_hash": "34fecacfa4e2f930e2edce22cc0c3591",
+    "semantic_hash": ""
   },
   "src/components/regulasi/doc-modal.jsx": {
-    "mtime": 1794465394.088033,
-    "seen": 1794651734.919026,
-    "ast_hash": "b2ad63f0d136cd77764eae02527c8657",
-    "semantic_hash": "b2ad63f0d136cd77764eae02527c8657"
+    "mtime": 1795645709.5999773,
+    "seen": 1795645938.207066,
+    "ast_hash": "ed7c83adc39397ed9554749f0c646138",
+    "semantic_hash": ""
   },
   "src/components/regulasi/doc-shelf.jsx": {
-    "mtime": 1794535816.7145302,
-    "seen": 1794651734.9190285,
-    "ast_hash": "8ec28e1ba46e11f24c66615f60def1e7",
-    "semantic_hash": "8ec28e1ba46e11f24c66615f60def1e7"
+    "mtime": 1795645709.5979788,
+    "seen": 1795645938.2070715,
+    "ast_hash": "7adc30884ab8523bfd7ca6c7410811da",
+    "semantic_hash": ""
   },
   "src/components/regulasi/procedure-modal.jsx": {
-    "mtime": 1794465330.7655897,
-    "seen": 1794651734.9190314,
-    "ast_hash": "77e85b2647696c7fc7eeeb5cba866f9c",
-    "semantic_hash": "77e85b2647696c7fc7eeeb5cba866f9c"
+    "mtime": 1795645709.6019778,
+    "seen": 1795645938.2070756,
+    "ast_hash": "5e2527bb3aad9dc7f361d91450452e5d",
+    "semantic_hash": ""
   },
   "src/components/regulasi/regulasi-banner.jsx": {
-    "mtime": 1794479894.1965003,
-    "seen": 1794651734.9190347,
-    "ast_hash": "8b2b4ad4bafc1cd7b5e5ee107da043dc",
-    "semantic_hash": "8b2b4ad4bafc1cd7b5e5ee107da043dc"
+    "mtime": 1795644831.995253,
+    "seen": 1795645938.2070804,
+    "ast_hash": "ba5d62cb8ef4e44d6e1f78779089e884",
+    "semantic_hash": ""
   },
   "src/components/regulasi/regulasi-closing.jsx": {
-    "mtime": 1794535816.7185576,
-    "seen": 1794651734.9190743,
-    "ast_hash": "4cc19366f9cae14007d94fe9233c5d80",
-    "semantic_hash": "4cc19366f9cae14007d94fe9233c5d80"
+    "mtime": 1795645709.6061525,
+    "seen": 1795645938.2070892,
+    "ast_hash": "ad9f56c68879138a293e98c095aa6531",
+    "semantic_hash": ""
   },
   "src/components/regulasi/regulasi-hero.jsx": {
-    "mtime": 1794535511.4481611,
-    "seen": 1794651734.919082,
-    "ast_hash": "3c9f027dd9cefc7a48fc512dde5189f8",
-    "semantic_hash": "3c9f027dd9cefc7a48fc512dde5189f8"
+    "mtime": 1795646174.6182356,
+    "seen": 1795646340.5961797,
+    "ast_hash": "f5bf04a034651a4f62c747402e458a7a",
+    "semantic_hash": ""
   },
   "src/components/regulasi/regulasi-provider.jsx": {
-    "mtime": 1794517474.9887283,
-    "seen": 1794651734.9190876,
-    "ast_hash": "7b3a2da3fc47ad6879f3dbee6f178ae0",
-    "semantic_hash": "7b3a2da3fc47ad6879f3dbee6f178ae0"
+    "mtime": 1795646174.6155014,
+    "seen": 1795646340.5961874,
+    "ast_hash": "d556bff9262b2789ccb894496cdc2395",
+    "semantic_hash": ""
   },
   "src/components/regulasi/rule-reader.jsx": {
-    "mtime": 1794535816.7520916,
-    "seen": 1794651734.9190931,
-    "ast_hash": "3861515775115d6bfc5bfdc7f974ae6c",
-    "semantic_hash": "3861515775115d6bfc5bfdc7f974ae6c"
+    "mtime": 1795645301.624587,
+    "seen": 1795645938.2071085,
+    "ast_hash": "7782e7abcd62f1b7d982ebc63e58026c",
+    "semantic_hash": ""
   },
   "src/components/regulasi/rule-search.jsx": {
-    "mtime": 1794465536.7649186,
-    "seen": 1794651734.919099,
-    "ast_hash": "ec32d56b133217f8c482800a767d37ae",
-    "semantic_hash": "ec32d56b133217f8c482800a767d37ae"
+    "mtime": 1795645301.624587,
+    "seen": 1795645938.2071133,
+    "ast_hash": "31b72eae2291b14cd4f3e8ea234d5bf7",
+    "semantic_hash": ""
   },
   "src/components/regulasi/rule-simulator.jsx": {
-    "mtime": 1794535816.7606628,
-    "seen": 1794651734.9191055,
-    "ast_hash": "84e5a9c85c9f2755977a96d4991db10a",
-    "semantic_hash": "84e5a9c85c9f2755977a96d4991db10a"
+    "mtime": 1795644673.038196,
+    "seen": 1795645938.2071178,
+    "ast_hash": "f18462c4b87889aa2554e83d1275e7e1",
+    "semantic_hash": ""
   },
   "src/components/regulasi/scenario-flow.jsx": {
-    "mtime": 1794535816.7646909,
-    "seen": 1794651734.9191115,
-    "ast_hash": "8eb97ce3692a909878869c96e7b95787",
-    "semantic_hash": "8eb97ce3692a909878869c96e7b95787"
+    "mtime": 1795644737.904581,
+    "seen": 1795645938.2071228,
+    "ast_hash": "a066e8a907c15a1ef444e4e737d134a5",
+    "semantic_hash": ""
   },
   "src/lib/regulasi-content.js": {
-    "mtime": 1794630313.11358,
-    "seen": 1794651734.9199698,
-    "ast_hash": "bad0173b5a62574270cb05e1d77e9333",
-    "semantic_hash": "bad0173b5a62574270cb05e1d77e9333"
+    "mtime": 1795645547.921486,
+    "seen": 1795645938.373919,
+    "ast_hash": "d9adc3e8c60512c156cd75ac0759d113",
+    "semantic_hash": ""
   },
   "public/lottie/briefcase-dark.json": {
     "mtime": 1794466813.8108685,
@@ -3402,76 +3402,76 @@
     "semantic_hash": "a2369c47738070455cb3d9cec5fbdae7"
   },
   "src/app/magang/page.jsx": {
-    "mtime": 1794630299.6273623,
-    "seen": 1794651734.9180312,
-    "ast_hash": "748fc8722918c4407e5a3af0ebf0ec17",
-    "semantic_hash": "748fc8722918c4407e5a3af0ebf0ec17"
+    "mtime": 1795647782.842269,
+    "seen": 1795649229.0985496,
+    "ast_hash": "65740b5be2147694c7d1d79373935780",
+    "semantic_hash": ""
   },
   "src/components/magang/application-tracker.jsx": {
-    "mtime": 1794535816.6872704,
-    "seen": 1794651734.9188423,
-    "ast_hash": "267e3c540f1e43694dc14a370fd0b1c3",
-    "semantic_hash": "267e3c540f1e43694dc14a370fd0b1c3"
+    "mtime": 1795647965.4886308,
+    "seen": 1795649229.4450786,
+    "ast_hash": "c69b5152e1ce59f1ada8207e1d7e59a0",
+    "semantic_hash": ""
   },
   "src/components/magang/doc-modal.jsx": {
-    "mtime": 1794467229.782247,
-    "seen": 1794651734.918846,
-    "ast_hash": "5e8b4f0dd7fd2fc4c21addc813df932a",
-    "semantic_hash": "5e8b4f0dd7fd2fc4c21addc813df932a"
+    "mtime": 1795649296.458699,
+    "seen": 1795649569.5068822,
+    "ast_hash": "492e401b6448aba993ac6b9b6bc88c60",
+    "semantic_hash": ""
   },
   "src/components/magang/job-board.jsx": {
-    "mtime": 1794535816.6923206,
-    "seen": 1794651734.918849,
-    "ast_hash": "a3a817f85a10145c0e579aa0e05614a5",
-    "semantic_hash": "a3a817f85a10145c0e579aa0e05614a5"
+    "mtime": 1795647965.4866107,
+    "seen": 1795649229.4450877,
+    "ast_hash": "2310fb9d753cbdd215a69ca2a86a8c43",
+    "semantic_hash": ""
   },
   "src/components/magang/job-modal.jsx": {
-    "mtime": 1794467110.4210455,
-    "seen": 1794651734.9188519,
-    "ast_hash": "ec20940a45125d47e333299c2e4ebd90",
-    "semantic_hash": "ec20940a45125d47e333299c2e4ebd90"
+    "mtime": 1795649296.4566834,
+    "seen": 1795649569.5079768,
+    "ast_hash": "f8dedc58c8c92670ac1651de8529dd39",
+    "semantic_hash": ""
   },
   "src/components/magang/logbook.jsx": {
-    "mtime": 1794535816.6983664,
-    "seen": 1794651734.918855,
-    "ast_hash": "e80b408ac7541c035289a880bd15047a",
-    "semantic_hash": "e80b408ac7541c035289a880bd15047a"
+    "mtime": 1795648924.3523405,
+    "seen": 1795649229.445095,
+    "ast_hash": "f623c22b86b67a9967d93921b37db1d4",
+    "semantic_hash": ""
   },
   "src/components/magang/magang-banner.jsx": {
-    "mtime": 1794479978.128457,
-    "seen": 1794651734.9188578,
-    "ast_hash": "551933a3485a5c9f08da5a2e94a2cc11",
-    "semantic_hash": "551933a3485a5c9f08da5a2e94a2cc11"
+    "mtime": 1795648040.9797578,
+    "seen": 1795649229.4450998,
+    "ast_hash": "8fe1e91aac89d05c859f30a74b92e16b",
+    "semantic_hash": ""
   },
   "src/components/magang/magang-closing.jsx": {
-    "mtime": 1794535816.7024016,
-    "seen": 1794651734.9188602,
-    "ast_hash": "ea7f570b69f5146d43a79ff1815f9269",
-    "semantic_hash": "ea7f570b69f5146d43a79ff1815f9269"
+    "mtime": 1795648015.511534,
+    "seen": 1795649229.4451087,
+    "ast_hash": "b31e848b5a835cd9e8467876c191d892",
+    "semantic_hash": ""
   },
   "src/components/magang/magang-hero.jsx": {
-    "mtime": 1794535511.4481611,
-    "seen": 1794651734.918863,
-    "ast_hash": "24741550d699d9cf5b10dcd574857934",
-    "semantic_hash": "24741550d699d9cf5b10dcd574857934"
+    "mtime": 1795649296.454667,
+    "seen": 1795649569.51098,
+    "ast_hash": "f36d8d0074732ab1d566a0cf3fa74f98",
+    "semantic_hash": ""
   },
   "src/components/magang/magang-provider.jsx": {
-    "mtime": 1794517474.8915062,
-    "seen": 1794651734.9188662,
-    "ast_hash": "fad8d61e7f57f7253901372b413cc25f",
-    "semantic_hash": "fad8d61e7f57f7253901372b413cc25f"
+    "mtime": 1795648677.9105234,
+    "seen": 1795649229.4451175,
+    "ast_hash": "9f422454379f1c1404b250bd40b98d84",
+    "semantic_hash": ""
   },
   "src/components/magang/route-doors.jsx": {
-    "mtime": 1794535816.7104962,
-    "seen": 1794651734.9188688,
-    "ast_hash": "c104fba41e9e3bc61a9b05d69009a122",
-    "semantic_hash": "c104fba41e9e3bc61a9b05d69009a122"
+    "mtime": 1795647965.4886308,
+    "seen": 1795649229.4451263,
+    "ast_hash": "0d3b2fc3350092deb0dcf549febd644f",
+    "semantic_hash": ""
   },
   "src/lib/magang-content.js": {
-    "mtime": 1794630313.162988,
-    "seen": 1794651734.919865,
-    "ast_hash": "078b4cd2e4733e763579bd71ea8a224c",
-    "semantic_hash": "078b4cd2e4733e763579bd71ea8a224c"
+    "mtime": 1795648924.3533413,
+    "seen": 1795649229.8103566,
+    "ast_hash": "bd5a3f59499f6f89a55ad43d5d777862",
+    "semantic_hash": ""
   },
   "public/lottie/credit-swap-dark.json": {
     "mtime": 1794477647.8901353,
@@ -3510,10 +3510,10 @@
     "semantic_hash": "afca3c9d26a14fe31c22c2b2f1eb3a54"
   },
   "src/components/konversi/exchange-desk.jsx": {
-    "mtime": 1794535816.6451807,
-    "seen": 1794651734.918652,
-    "ast_hash": "695f702039713f37c8a5b23a323031b3",
-    "semantic_hash": "695f702039713f37c8a5b23a323031b3"
+    "mtime": 1795658091.926535,
+    "seen": 1795658288.8457549,
+    "ast_hash": "61359ebd4ccb4cde02d3e642a0c2fbcd",
+    "semantic_hash": ""
   },
   "src/components/konversi/konversi-banner.jsx": {
     "mtime": 1794479978.128457,
@@ -3528,10 +3528,10 @@
     "semantic_hash": "9f5c95430fa6260b4b6b046be273bd0c"
   },
   "src/components/konversi/konversi-hero.jsx": {
-    "mtime": 1794538720.9749916,
-    "seen": 1794651734.9186618,
-    "ast_hash": "d496f90ace8ee427492f75605c087d70",
-    "semantic_hash": "d496f90ace8ee427492f75605c087d70"
+    "mtime": 1795658092.7321713,
+    "seen": 1795658288.8474631,
+    "ast_hash": "92458c7433bbec681918360f935b483d",
+    "semantic_hash": ""
   },
   "src/components/konversi/konversi-provider.jsx": {
     "mtime": 1794517474.8391604,
@@ -3540,10 +3540,10 @@
     "semantic_hash": "453026fc954ef3bf2ab77bb27e7e2a45"
   },
   "src/components/konversi/receipt.jsx": {
-    "mtime": 1794517474.8409252,
-    "seen": 1794651734.918668,
-    "ast_hash": "521dcda9d413f537de470998d4b0ca3d",
-    "semantic_hash": "521dcda9d413f537de470998d4b0ca3d"
+    "mtime": 1795658093.6793747,
+    "seen": 1795658288.848388,
+    "ast_hash": "db5d466a9af0bfba0ac37dfe176a8f5d",
+    "semantic_hash": ""
   },
   "src/components/konversi/rolling-number.jsx": {
     "mtime": 1794479115.448466,
@@ -3582,10 +3582,10 @@
     "semantic_hash": "da5e1c62e50fbd26cb78c6c7adf7a5a5"
   },
   "src/lib/konversi-content.js": {
-    "mtime": 1794630313.00714,
-    "seen": 1794651734.9198132,
-    "ast_hash": "e5ecadc9300a98a8c789ff919cbce230",
-    "semantic_hash": "e5ecadc9300a98a8c789ff919cbce230"
+    "mtime": 1795658091.280168,
+    "seen": 1795658289.1904395,
+    "ast_hash": "d2b3abc695ba3babbb1857f26890e61c",
+    "semantic_hash": ""
   },
   "public/lottie/certificate-dark.json": {
     "mtime": 1794484095.244869,
@@ -5544,9 +5544,9 @@
     "semantic_hash": "bca7d29c34b782f61211951ce0e57421"
   },
   "src/components/bidang-studio/chrome.jsx": {
-    "mtime": 1794657234.0179884,
-    "seen": 1794657467.6926022,
-    "ast_hash": "c5e2bcdc2c77f4b21fe91f6cbfba42fe",
+    "mtime": 1795643404.1425915,
+    "seen": 1795643520.141719,
+    "ast_hash": "586d0036783b57aa58556add09dabb41",
     "semantic_hash": ""
   },
   "src/components/bidang-studio/controls.jsx": {
@@ -5790,15 +5790,15 @@
     "semantic_hash": ""
   },
   "src/components/jalur-cms/fields.jsx": {
-    "mtime": 1795641119.4798315,
-    "seen": 1795641657.654648,
-    "ast_hash": "54d486f226143d9996c3ceed10107c74",
+    "mtime": 1795642374.4805381,
+    "seen": 1795642533.7234592,
+    "ast_hash": "55bb17d076f1feca2496159d5151c5af",
     "semantic_hash": ""
   },
   "src/components/jalur-cms/jalur-editor.jsx": {
-    "mtime": 1795641879.4101026,
-    "seen": 1795642075.2952724,
-    "ast_hash": "2d4cc3e4aa902ae0b6515a8821953cb2",
+    "mtime": 1795642352.6522748,
+    "seen": 1795642533.7234697,
+    "ast_hash": "69b8f81985b0ce533be0d89e58aac0ec",
     "semantic_hash": ""
   },
   "src/components/jalur-cms/use-jalur-editor.js": {
@@ -6177,6 +6177,162 @@
     "mtime": 1795419428.0898201,
     "seen": 1795641657.9021595,
     "ast_hash": "8a6643a420fdad6bfb583523bc6cef16",
+    "semantic_hash": ""
+  },
+  "src/app/admin/regulasi-akademik/page.jsx": {
+    "mtime": 1795644569.6033041,
+    "seen": 1795645937.7998178,
+    "ast_hash": "8a1e3d816fbc1ba78a6ef760aa3bed48",
+    "semantic_hash": ""
+  },
+  "src/app/admin/regulasi-akademik/pratinjau/page.jsx": {
+    "mtime": 1795644569.7317083,
+    "seen": 1795645937.799826,
+    "ast_hash": "86c6c1847aeba677592c36d6f0d9886b",
+    "semantic_hash": ""
+  },
+  "src/app/api/regulasi-cms/route.js": {
+    "mtime": 1795644328.7385,
+    "seen": 1795645937.8395138,
+    "ast_hash": "aba6ebf1923bd472491d79b73070cc7f",
+    "semantic_hash": ""
+  },
+  "src/components/regulasi-cms/fields.jsx": {
+    "mtime": 1795645709.5917082,
+    "seen": 1795645938.2070372,
+    "ast_hash": "52a0b036fff3579c2e098b7c0ebe8fdf",
+    "semantic_hash": ""
+  },
+  "src/components/regulasi-cms/preview-bridge.jsx": {
+    "mtime": 1795646174.611212,
+    "seen": 1795646340.588272,
+    "ast_hash": "fa2c33b58c0c44b18316ac63f8f3197b",
+    "semantic_hash": ""
+  },
+  "src/components/regulasi-cms/preview-pane.jsx": {
+    "mtime": 1795645765.510551,
+    "seen": 1795645938.2070498,
+    "ast_hash": "1338c0a71679efb7e18c35d17fa03f86",
+    "semantic_hash": ""
+  },
+  "src/components/regulasi-cms/regulasi-editor.jsx": {
+    "mtime": 1795646174.611212,
+    "seen": 1795646340.58921,
+    "ast_hash": "9da094c0fa98921750591dda42b0cb6a",
+    "semantic_hash": ""
+  },
+  "src/components/regulasi-cms/use-regulasi-editor.js": {
+    "mtime": 1795644991.1398034,
+    "seen": 1795645938.2070596,
+    "ast_hash": "e000fce4ce4ce55cfa780738c1b92492",
+    "semantic_hash": ""
+  },
+  "src/components/regulasi/regulasi-body.jsx": {
+    "mtime": 1795644569.5594232,
+    "seen": 1795645938.207085,
+    "ast_hash": "8d91900d738be294b96d65e531187a1b",
+    "semantic_hash": ""
+  },
+  "src/components/regulasi/regulasi-shell.jsx": {
+    "mtime": 1795644569.6201246,
+    "seen": 1795645938.2071035,
+    "ast_hash": "23d019020f8e8ef96c7498cd93b7df25",
+    "semantic_hash": ""
+  },
+  "src/lib/regulasi-cms/copy.js": {
+    "mtime": 1795645709.603976,
+    "seen": 1795645938.3738945,
+    "ast_hash": "f1d6322717c8a84df3eb2ce0e346b831",
+    "semantic_hash": ""
+  },
+  "src/lib/regulasi-cms/schema.js": {
+    "mtime": 1795645598.6035388,
+    "seen": 1795645938.373901,
+    "ast_hash": "afabc29c7459f38b28d06b766349f79c",
+    "semantic_hash": ""
+  },
+  "src/lib/regulasi-cms/schema.test.mjs": {
+    "mtime": 1795645262.5426662,
+    "seen": 1795645938.3739057,
+    "ast_hash": "5b47cbd554c2a3756b758d53e27c84db",
+    "semantic_hash": ""
+  },
+  "src/lib/regulasi-cms/server.js": {
+    "mtime": 1795645598.6064322,
+    "seen": 1795645938.3739114,
+    "ast_hash": "341ec22c5bdb2c2d01975ee1a46449aa",
+    "semantic_hash": ""
+  },
+  "src/app/admin/magang/page.jsx": {
+    "mtime": 1795648305.3805065,
+    "seen": 1795649228.9213138,
+    "ast_hash": "a5c1911ea213c3a0fe33eda5d3e667a2",
+    "semantic_hash": ""
+  },
+  "src/app/admin/magang/pratinjau/page.jsx": {
+    "mtime": 1795648677.906523,
+    "seen": 1795649228.9213207,
+    "ast_hash": "303aa71fd618f1b37828197577d03529",
+    "semantic_hash": ""
+  },
+  "src/app/api/magang-cms/route.js": {
+    "mtime": 1795647774.000877,
+    "seen": 1795649228.9935713,
+    "ast_hash": "f45d7199ad91472bd3bf243d9b862c2a",
+    "semantic_hash": ""
+  },
+  "src/components/magang-cms/editor.jsx": {
+    "mtime": 1795657258.353723,
+    "seen": 1795657630.1156726,
+    "ast_hash": "cec0dc2dbcb99265719591939b2b4a8e",
+    "semantic_hash": ""
+  },
+  "src/components/magang-cms/fields.jsx": {
+    "mtime": 1795649296.454667,
+    "seen": 1795649569.5056171,
+    "ast_hash": "884734d0a6426260152c45bf1a921b50",
+    "semantic_hash": ""
+  },
+  "src/components/magang-cms/preview.jsx": {
+    "mtime": 1795649384.1421068,
+    "seen": 1795649569.5056236,
+    "ast_hash": "8f06b40bfb3c6b6ac358032ad7c86536",
+    "semantic_hash": ""
+  },
+  "src/components/magang/magang-body.jsx": {
+    "mtime": 1795647775.1292253,
+    "seen": 1795649229.4451036,
+    "ast_hash": "461a4619b3891480bfe144acef39b9c7",
+    "semantic_hash": ""
+  },
+  "src/components/magang/magang-shell.jsx": {
+    "mtime": 1795647776.3968804,
+    "seen": 1795649229.4451215,
+    "ast_hash": "7dc8cb410de300912cf3117a3afcd7e3",
+    "semantic_hash": ""
+  },
+  "src/lib/magang-cms/copy.js": {
+    "mtime": 1795649296.4518511,
+    "seen": 1795649569.6557195,
+    "ast_hash": "d69dba27f1bafff3f884119accf4a3f5",
+    "semantic_hash": ""
+  },
+  "src/lib/magang-cms/schema.js": {
+    "mtime": 1795649296.4518511,
+    "seen": 1795649569.6557267,
+    "ast_hash": "e6bf6f1eaa26903a20f0350c1c4b4ccc",
+    "semantic_hash": ""
+  },
+  "src/lib/magang-cms/schema.test.mjs": {
+    "mtime": 1795648718.468086,
+    "seen": 1795649229.8103426,
+    "ast_hash": "088d5f64904e3d43994e2156388ebb9f",
+    "semantic_hash": ""
+  },
+  "src/lib/magang-cms/server.js": {
+    "mtime": 1795649669.5341825,
+    "seen": 1795657177.473036,
+    "ast_hash": "d8464992bbea90a219c3651b62ce695b",
     "semantic_hash": ""
   }
 }

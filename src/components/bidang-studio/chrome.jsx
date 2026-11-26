@@ -125,7 +125,7 @@ export function PreviewSheet({ open, onOpenChange, refreshKey, anchor, slug }) {
   }, [open, slug]);
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="right" className="w-[min(100vw,1000px)] border-l border-[var(--k-line)] bg-[#0b1222] p-0 text-[var(--k-ink)]">
+      <SheetContent side="right" className="konsol w-[min(100vw,1000px)] border-l border-[var(--k-line)] bg-[#0b1222] p-0 text-[var(--k-ink)]">
         <div className="flex items-center gap-3 border-b border-[var(--k-line)] px-5 py-3 pr-16">
           <span className="k-led size-2 rounded-full text-[var(--k-maroon)]" aria-hidden />
           <SheetTitle className="font-serif text-lg font-normal">Monitor draf</SheetTitle>

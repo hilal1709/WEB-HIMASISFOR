@@ -1,6 +1,7 @@
 "use client";
 import { createContext, useCallback, useContext, useLayoutEffect as useEffect, useMemo, useRef, useState } from "react";
 import { MARKS_KEY } from "@/lib/regulasi-content";
+import { fillRegulasi } from "@/lib/regulasi-cms/copy";
 import { prefersReducedMotion } from "@/lib/motion";
 import { useToast } from "@/components/ui/toast";
 import { ProcedureModal } from "./procedure-modal";
@@ -15,8 +16,16 @@ export function setHash(value) {
   } catch {}
 }
 
-export function smoothTo(id) {
-  document.getElementById(id)?.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth", block: "start" });
+export function smoothTo(id, behavior = prefersReducedMotion() ? "auto" : "smooth") {
+  const target = document.getElementById(id);
+  if (!target) return;
+  if (window.parent !== window) {
+    // scrollIntoView also scrolls the containing editor when called inside an iframe.
+    const margin = parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
+    window.scrollTo({ top: window.scrollY + target.getBoundingClientRect().top - margin, behavior });
+    return;
+  }
+  target.scrollIntoView({ behavior, block: "start" });
 }
 
 /**
@@ -28,8 +37,8 @@ export function smoothTo(id) {
  * - modal prosedur & modal dokumen
  * Deep link: `#pasal-1-3`, `#prosedur-<key>`, `#dokumen-<key>`.
  */
-export function RegulasiProvider({ data, children }) {
-  const { chapters, scenarios, docs } = data;
+export function RegulasiProvider({ data, preview, children }) {
+  const { chapters, scenarios, docs, copy } = data;
   const toast = useToast();
   const [chapter, setChapter] = useState(0);
   const [mode, setMode] = useState("plain");
@@ -38,41 +47,46 @@ export function RegulasiProvider({ data, children }) {
   const [marks, setMarks] = useState([]);
   const [proc, setProc] = useState(null);
   const [doc, setDoc] = useState(null);
+  const procedureIndex = scenarios.findIndex((item) => item.key === proc);
+  const documentIndex = docs.findIndex((item) => item.key === doc);
   const flashTimer = useRef();
 
   const allPasal = useMemo(() => chapters.flatMap((c) => c.pasal.map((p) => ({ ...p, chapterTitle: c.title, roman: c.roman, chapterIndex: c.index }))), [chapters]);
-  const findPasal = useCallback((no) => allPasal.find((p) => p.no === no || p.id === no) ?? null, [allPasal]);
+  const findPasal = useCallback((no) => allPasal.find((p) => p.id === no) ?? allPasal.find((p) => p.no === no) ?? null, [allPasal]);
 
   useEffect(() => {
+    if (preview) return;
     try {
       const raw = JSON.parse(localStorage.getItem(MARKS_KEY) ?? "[]");
       if (Array.isArray(raw)) setMarks(raw.filter((id) => allPasal.some((p) => p.id === id)));
     } catch {}
-  }, [allPasal]);
+  }, [allPasal, preview]);
 
   const marksRef = useRef(marks);
   marksRef.current = marks;
   const saveMarks = useCallback((list) => {
     marksRef.current = list;
     setMarks(list);
+    if (preview) return;
     try {
       localStorage.setItem(MARKS_KEY, JSON.stringify(list));
     } catch {}
-  }, []);
+  }, [preview]);
 
   const toggleMark = useCallback(
     (id) => {
       const p = findPasal(id);
+      if (!p) return;
       const cur = marksRef.current;
       const on = cur.includes(id);
       const next = on ? cur.filter((x) => x !== id) : [...cur, id];
       marksRef.current = next;
       saveMarks(next);
-      const undo = { label: "Batalkan", onClick: () => ((marksRef.current = cur), saveMarks(cur)) };
-      if (!on) toast.success(`Pasal ${p?.no} ditandai`, { description: p?.title, action: undo });
-      else toast.info(`Tanda pasal ${p?.no} dilepas`, { action: undo });
+      const undo = { label: copy.general.undo, onClick: () => ((marksRef.current = cur), saveMarks(cur)) };
+      if (!on) toast.success(fillRegulasi(copy.reader.saved, p), { description: p.title, action: undo });
+      else toast.info(fillRegulasi(copy.reader.removed, p), { action: undo });
     },
-    [findPasal, saveMarks, toast]
+    [findPasal, saveMarks, toast, copy]
   );
 
   /** Gulir ke pasal dan sorot sebentar. */
@@ -100,16 +114,18 @@ export function RegulasiProvider({ data, children }) {
 
   const openProc = useCallback(
     (i) => {
+      if (!scenarios[i]) return;
       setDoc(null);
-      setProc(i);
+      setProc(scenarios[i].key);
       setHash(`prosedur-${scenarios[i].key}`);
     },
     [scenarios]
   );
   const openDoc = useCallback(
     (i) => {
+      if (!docs[i]) return;
       setProc(null);
-      setDoc(i);
+      setDoc(docs[i].key);
       setHash(`dokumen-${docs[i].key}`);
     },
     [docs]
@@ -124,15 +140,15 @@ export function RegulasiProvider({ data, children }) {
     const fromHash = () => {
       const h = location.hash.slice(1);
       let m;
-      if ((m = h.match(/^pasal-(\d+-\d+)$/))) {
+      if ((m = h.match(/^pasal-([a-z0-9-]+)$/))) {
         const p = findPasal(m[1]);
-        if (p) setTimeout(() => goPasal(p.no), 400);
-      } else if ((m = h.match(/^prosedur-([a-z-]+)$/))) {
+        if (p) setTimeout(() => goPasal(p.id), 400);
+      } else if ((m = h.match(/^prosedur-([a-z0-9-]+)$/))) {
         const i = scenarios.findIndex((s) => s.key === m[1]);
-        if (i >= 0) setProc(i);
-      } else if ((m = h.match(/^dokumen-([a-z-]+)$/))) {
+        if (i >= 0) setProc(scenarios[i].key);
+      } else if ((m = h.match(/^dokumen-([a-z0-9-]+)$/))) {
         const i = docs.findIndex((d) => d.key === m[1]);
-        if (i >= 0) setDoc(i);
+        if (i >= 0) setDoc(docs[i].key);
       }
     };
     fromHash();
@@ -141,15 +157,15 @@ export function RegulasiProvider({ data, children }) {
   }, [findPasal, goPasal, scenarios, docs]);
 
   const value = useMemo(
-    () => ({ ...data, allPasal, findPasal, chapter, setChapter, mode, setMode, flash, marks, toggleMark, saveMarks, goPasal, simFocus, goSim, openProc, openDoc }),
-    [data, allPasal, findPasal, chapter, mode, flash, marks, toggleMark, saveMarks, goPasal, simFocus, goSim, openProc, openDoc]
+    () => ({ ...data, preview, allPasal, findPasal, chapter, setChapter, mode, setMode, flash, marks, toggleMark, saveMarks, goPasal, simFocus, goSim, openProc, openDoc }),
+    [data, preview, allPasal, findPasal, chapter, mode, flash, marks, toggleMark, saveMarks, goPasal, simFocus, goSim, openProc, openDoc]
   );
 
   return (
     <Ctx.Provider value={value}>
       {children}
-      <ProcedureModal scenarios={scenarios} index={proc} onIndex={openProc} onClose={close} findPasal={findPasal} onPasal={goPasal} />
-      <DocModal docs={docs} chapters={chapters} version={data.version} index={doc} onIndex={openDoc} onClose={close} />
+      <ProcedureModal scenarios={scenarios} index={procedureIndex < 0 ? null : procedureIndex} preview={preview} copy={copy} onIndex={openProc} onClose={close} findPasal={findPasal} onPasal={goPasal} />
+      <DocModal docs={docs} chapters={chapters} version={data.version} index={documentIndex < 0 ? null : documentIndex} preview={preview} copy={copy} onIndex={openDoc} onClose={close} />
     </Ctx.Provider>
   );
 }

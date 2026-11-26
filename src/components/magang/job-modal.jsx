@@ -3,18 +3,16 @@ import { useRef } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
-import { FIELDS, MODES, programLabel } from "@/lib/magang-content";
+import { interpolate } from "@/lib/magang-cms/copy";
 import { LordIcon } from "@/components/media/lord-icon";
 import { PlaceholderTag } from "@/components/home/shared";
 import { useToast } from "@/components/ui/toast";
 import { cn } from "@/lib/utils";
 import { NavBtn } from "@/components/jalur/stage-modal";
 import { DeadlineChip, matches } from "./job-board";
-import { STAGES, useMagang } from "./magang-provider";
+import { useMagang } from "./magang-provider";
 
 const EASE = [0.22, 1, 0.36, 1];
-const fieldLabel = (k) => FIELDS.find((f) => f.key === k)?.label ?? k;
-const modeLabel = (k) => MODES.find((m) => m.key === k)?.label ?? k;
 
 /**
  * Modal detail lowongan. Logo & judul memakai `layoutId` yang sama dengan baris di papan, sehingga baris
@@ -22,7 +20,9 @@ const modeLabel = (k) => MODES.find((m) => m.key === k)?.label ?? k;
  * dalam hasil filter aktif.
  */
 export function JobModal({ slug, onSlug, onClose }) {
-  const { jobs, filter, track, toggleSave, markApplied, jobsSample } = useMagang();
+  const { jobs, fields, modes, routes, stages, filter, track, toggleSave, markApplied, copy, visible, preview, link } = useMagang();
+  const labels = copy.jobModal;
+  const canTrack = visible("tracker");
   const toast = useToast();
   const reduce = useReducedMotion();
   const last = useRef(null);
@@ -36,19 +36,24 @@ export function JobModal({ slug, onSlug, onClose }) {
   const go = (d) => slug && list.length > 1 && onSlug(list[(index + d + list.length) % list.length].slug);
 
   const stage = j ? track[j.slug] : null;
+  const program = routes.find(({ key }) => key === j?.program)?.title;
+  const mode = modes.find(({ key }) => key === j?.mode)?.label;
+  const field = fields.find(({ key }) => key === j?.field);
+  const fieldHref = field ? link(field.href) : "";
+  const applyHref = j ? link(j.href) : "";
   const closed = j?.days != null && j.days < 0;
 
   const apply = () => {
-    if (!j) return;
-    if (!j.href) {
-      toast.info("Tautan lamaran menyusul", { description: "Koordinator magang akan mengumumkannya di papan agenda prodi." });
+    if (!j || preview) return;
+    if (!applyHref) {
+      toast.info(labels.noLink, { description: labels.noLinkBody });
       return;
     }
-    window.open(j.href, "_blank", "noopener,noreferrer");
-    if (!stage || stage === "simpan") {
-      toast.success("Semoga lolos!", {
-        description: "Tandai lamaran ini sebagai sudah dikirim?",
-        action: { label: "Tandai Melamar", onClick: () => markApplied(j.slug) },
+    window.open(applyHref, "_blank", "noopener,noreferrer");
+    if (canTrack && (!stage || stage === "simpan")) {
+      toast.success(labels.opened, {
+        description: labels.openedBody,
+        action: { label: labels.mark, onClick: () => markApplied(j.slug) },
       });
     }
   };
@@ -74,7 +79,7 @@ export function JobModal({ slug, onSlug, onClose }) {
                   <span className="flex-1 bg-gold" />
                 </div>
                 <Dialog.Close
-                  aria-label="Tutup"
+                  aria-label={labels.close}
                   className="absolute right-3 top-3 z-20 grid size-9 place-items-center rounded-full bg-white/90 text-navy shadow-sm transition-colors hover:bg-maroon hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
                 >
                   <X className="size-4" />
@@ -98,12 +103,12 @@ export function JobModal({ slug, onSlug, onClose }) {
                   <motion.div key={j.slug} initial={reduce ? false : { opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, ease: EASE, delay: 0.1 }}>
                     <dl className="mt-6 grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-4">
                       {[
-                        ["Pintu", programLabel(j.program)],
-                        ["Lokasi", modeLabel(j.mode)],
-                        ["Durasi", j.duration],
-                        ["Bidang", fieldLabel(j.field)],
-                      ].map(([k, v]) => (
-                        <div key={k} className="bg-cream/60 px-3 py-2.5">
+                        [copy.jobs.program, program],
+                        [labels.mode, mode],
+                        [labels.duration, j.duration],
+                        [copy.jobs.field, field?.label],
+                      ].filter(([, detail]) => detail).map(([k, v], i) => (
+                        <div key={i} className="bg-cream/60 px-3 py-2.5">
                           <dt className="kicker text-[10px] text-maroon">{k}</dt>
                           <dd className="mt-0.5 text-[13.5px] font-medium leading-snug text-navy">{v}</dd>
                         </div>
@@ -111,20 +116,20 @@ export function JobModal({ slug, onSlug, onClose }) {
                     </dl>
 
                     <Dialog.Description className="sr-only">
-                      Lowongan {j.title} di {j.company}, {programLabel(j.program)}, durasi {j.duration}.
+                      {interpolate(labels.summary, { ...j, program })}
                     </Dialog.Description>
 
                     <div className="mt-6 grid gap-6 sm:grid-cols-2">
                       {[
-                        ["Yang akan kamu kerjakan", j.tasks],
-                        ["Yang perlu kamu bawa", j.needs],
-                      ].map(([title, items]) =>
+                        [labels.tasks, j.tasks],
+                        [labels.needs, j.needs],
+                      ].map(([title, items], i) =>
                         items.length ? (
-                          <div key={title}>
+                          <div key={i}>
                             <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-text/45">{title}</p>
                             <ul className="mt-3 space-y-2.5">
-                              {items.map((t) => (
-                                <li key={t} className="flex gap-3 text-[14.5px] leading-snug text-navy">
+                              {items.map((t, i) => (
+                                <li key={i} className="flex gap-3 text-[14.5px] leading-snug text-navy">
                                   <span aria-hidden className="mt-[7px] size-1.5 shrink-0 rounded-full bg-gold" />
                                   {t}
                                 </li>
@@ -136,31 +141,31 @@ export function JobModal({ slug, onSlug, onClose }) {
                     </div>
 
                     <div className="mt-6 flex flex-wrap items-center gap-3">
-                      <DeadlineChip days={j.days} />
-                      <a href={`/bidang-keahlian#bidang-${j.field}`} className="text-[13px] font-semibold text-maroon">
-                        <span className="u-gold">Tentang bidang {fieldLabel(j.field)}</span>
-                      </a>
-                      {jobsSample && <PlaceholderTag />}
+                      <DeadlineChip days={j.days} deadline={j.deadline} />
+                      {fieldHref && <a href={fieldHref} className="text-[13px] font-semibold text-maroon">
+                        <span className="u-gold">{interpolate(labels.aboutField, { field: field.label })}</span>
+                      </a>}
+                      {j.sample && <PlaceholderTag>{copy.jobs.sample}</PlaceholderTag>}
                     </div>
                   </motion.div>
                 </div>
 
                 <div className="flex flex-wrap items-center justify-between gap-3 border-t border-line px-5 py-3 sm:px-7">
                   <div className="flex flex-1 gap-2">
-                    <button
+                    {(!j.href || applyHref) && <button
                       type="button"
                       onClick={apply}
-                      disabled={closed}
+                      disabled={closed || preview}
                       className="group inline-flex h-11 items-center gap-2 rounded-md bg-maroon px-5 text-[14.5px] font-semibold text-white transition-[background-color,transform] duration-300 hover:bg-maroon-deep active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-text/25"
                     >
-                      {closed ? "Pendaftaran ditutup" : "Lamar posisi ini"}
+                      {closed ? labels.closed : labels.apply}
                       {!closed && (
                         <svg aria-hidden viewBox="0 0 16 16" className="size-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5">
                           <path d="M5 11l6-6M6 5h5v5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                       )}
-                    </button>
-                    <button
+                    </button>}
+                    {canTrack && <button
                       type="button"
                       onClick={() => toggleSave(j.slug)}
                       aria-pressed={!!stage}
@@ -170,12 +175,12 @@ export function JobModal({ slug, onSlug, onClose }) {
                       )}
                     >
                       <LordIcon key={stage ? "on" : "off"} name={stage ? "check" : "plus-circle"} size={20} target=".group" trigger={stage ? "once" : "hover"} colors="primary:#14213d,secondary:#6e1423" />
-                      {stage ? STAGES.find((s) => s.key === stage)?.label : "Simpan"}
-                    </button>
+                      {stage ? stages.find((s) => s.key === stage)?.label : labels.save}
+                    </button>}
                   </div>
                   <div className="flex gap-2">
-                    <NavBtn label="Posisi sebelumnya" onClick={() => go(-1)} icon={ChevronLeft} />
-                    <NavBtn label="Posisi berikutnya" onClick={() => go(1)} icon={ChevronRight} />
+                    <NavBtn label={labels.previous} onClick={() => go(-1)} icon={ChevronLeft} />
+                    <NavBtn label={labels.next} onClick={() => go(1)} icon={ChevronRight} />
                   </div>
                 </div>
               </motion.div>

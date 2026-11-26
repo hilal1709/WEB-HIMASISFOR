@@ -4,6 +4,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { DOCS_CHECK_KEY } from "@/lib/regulasi-content";
+import { fillRegulasi } from "@/lib/regulasi-cms/copy";
 import { useToast } from "@/components/ui/toast";
 import { PlaceholderTag } from "@/components/home/shared";
 import { NavBtn } from "@/components/jalur/stage-modal";
@@ -17,7 +18,7 @@ function Template({ text, values }) {
   return text.split(/(\{\w+\})/g).map((part, i) => {
     const m = part.match(/^\{(\w+)\}$/);
     if (!m) return <Fragment key={i}>{part}</Fragment>;
-    const v = values[m[1]]?.trim();
+    const v = Object.hasOwn(values, m[1]) ? values[m[1]].trim() : "";
     return v ? (
       <span key={i} className="font-semibold text-navy">{v}</span>
     ) : (
@@ -26,14 +27,16 @@ function Template({ text, values }) {
   });
 }
 
-const fillText = (text, values) => text.replace(/\{(\w+)\}/g, (all, k) => values[k]?.trim() || `[${k}]`);
+const fillText = (text, values) => text.replace(/\{(\w+)\}/g, (all, k) => (Object.hasOwn(values, k) && values[k].trim()) || `[${k}]`);
 
 /**
  * Modal prosedur — kepala maroon (situasi, tenggat, tujuan), isi: daftar berkas yang bisa dicentang
  * (tersimpan di perangkat), contoh pesan yang terisi saat nama/NIM diketik + tombol salin, rujukan pasal.
  * Isi bergeser searah perpindahan, ‹ › + panah keyboard.
  */
-export function ProcedureModal({ scenarios, index, onIndex, onClose, findPasal, onPasal }) {
+export function ProcedureModal({ scenarios, index, onIndex, onClose, findPasal, onPasal, copy: content, preview }) {
+  const ui = content.procedure;
+  const general = content.general;
   const toast = useToast();
   const reduce = useReducedMotion();
   const last = useRef(null);
@@ -46,12 +49,12 @@ export function ProcedureModal({ scenarios, index, onIndex, onClose, findPasal, 
   const [who, setWho] = useState({ nama: "", nim: "" });
 
   useEffect(() => {
-    if (!s) return;
+    if (!s || preview) return;
     try {
       const raw = JSON.parse(localStorage.getItem(DOCS_CHECK_KEY + s.key) ?? "[]");
       setChecks((c) => ({ ...c, [s.key]: s.files.map((_, i) => !!raw[i]) }));
     } catch {}
-  }, [s]);
+  }, [s, preview]);
 
   const go = (d) => {
     if (index == null) return;
@@ -65,16 +68,16 @@ export function ProcedureModal({ scenarios, index, onIndex, onClose, findPasal, 
     const next = list.map((v, k) => (k === i ? !v : v));
     setChecks((c) => ({ ...c, [s.key]: next }));
     try {
-      localStorage.setItem(DOCS_CHECK_KEY + s.key, JSON.stringify(next));
+      if (!preview) localStorage.setItem(DOCS_CHECK_KEY + s.key, JSON.stringify(next));
     } catch {}
-    if (next.every(Boolean) && !list.every(Boolean)) toast.success("Semua berkas siap", { description: `Serahkan ke ${s.to.toLowerCase()} sebelum tenggat.` });
+    if (next.every(Boolean) && !list.every(Boolean)) toast.success(ui.allReady, { description: fillRegulasi(ui.sendHint, { destination: s.to.toLowerCase() }) });
   };
 
   const copy = () => {
     const text = fillText(s.message, who);
-    const ok = () => toast.success("Contoh pesan disalin", { description: "Lengkapi bagian dalam kurung siku sebelum dikirim." });
-    if (navigator.clipboard?.writeText) navigator.clipboard.writeText(text).then(ok, () => toast.error("Pesan tidak bisa disalin"));
-    else toast.error("Pesan tidak bisa disalin");
+    const ok = () => toast.success(ui.copied, { description: ui.copyHint });
+    if (navigator.clipboard?.writeText) navigator.clipboard.writeText(text).then(ok, () => toast.error(ui.copyError));
+    else toast.error(ui.copyError);
   };
 
   const ref = s ? findPasal(s.ref) : null;
@@ -119,28 +122,28 @@ export function ProcedureModal({ scenarios, index, onIndex, onClose, findPasal, 
                       transition={{ duration: 0.4, ease: EASE }}
                     >
                       <div className="bg-maroon px-6 pb-6 pt-7 text-white sm:px-8">
-                        <p className="kicker text-[11px] text-gold-soft">Prosedur {pad(shown + 1)} dari {pad(total)}</p>
+                        <p className="kicker text-[11px] text-gold-soft">{fillRegulasi(ui.serial, { current: pad(shown + 1), total: pad(total) })}</p>
                         <Dialog.Title className="mt-2 pr-8 font-serif text-[1.8rem] leading-tight">{s.title}</Dialog.Title>
                         <Dialog.Description className="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-[14px] text-white/75">
-                          <span>Tenggat: <span className="text-gold-soft">{s.deadline}</span></span>
-                          <span>Ke: {s.to}</span>
+                          {s.deadline && <span>{ui.deadline} <span className="text-gold-soft">{s.deadline}</span></span>}
+                          {s.to && <span>{fillRegulasi(ui.destination, { destination: s.to })}</span>}
                         </Dialog.Description>
                       </div>
 
                       <div className="space-y-8 p-6 sm:p-8">
-                        <div>
+                        {s.files.length > 0 && <div>
                           <div className="flex items-baseline justify-between">
-                            <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-text/45">Berkas yang disiapkan</p>
-                            <span className="tabular text-[13px] text-text/55">{ready}/{s.files.length} siap</span>
+                            <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-text/45">{ui.files}</p>
+                            <span className="tabular text-[13px] text-text/55">{fillRegulasi(ui.ready, { ready, total: s.files.length })}</span>
                           </div>
                           <span aria-hidden className="mt-2 block h-1 overflow-hidden rounded-full bg-cream-2">
-                            <span className="block h-full rounded-full bg-gold transition-[width] duration-500 ease-cinematic" style={{ width: `${(ready / s.files.length) * 100}%` }} />
+                            <span className="block h-full rounded-full bg-gold transition-[width] duration-500 ease-cinematic" style={{ width: `${(ready / (s.files.length || 1)) * 100}%` }} />
                           </span>
                           <ul className="mt-3 space-y-2">
                             {s.files.map((f, k) => {
                               const on = !!list[k];
                               return (
-                                <li key={f}>
+                                <li key={`${f}-${k}`}>
                                   <button
                                     type="button"
                                     role="checkbox"
@@ -159,45 +162,45 @@ export function ProcedureModal({ scenarios, index, onIndex, onClose, findPasal, 
                               );
                             })}
                           </ul>
-                        </div>
+                        </div>}
 
-                        <div>
-                          <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-text/45">Contoh pesan</p>
+                        {s.message && <div>
+                          <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-text/45">{ui.message}</p>
                           <div className="mt-3 grid gap-2 sm:grid-cols-2">
-                            <input value={who.nama} onChange={(e) => setWho((w) => ({ ...w, nama: e.target.value }))} placeholder="Nama lengkap" aria-label="Nama untuk contoh pesan" className="h-10 rounded-md border border-line bg-white px-3 text-[14px] text-navy outline-none transition-colors focus:border-navy/40" />
-                            <input value={who.nim} onChange={(e) => setWho((w) => ({ ...w, nim: e.target.value }))} placeholder="NIM" inputMode="numeric" aria-label="NIM untuk contoh pesan" className="h-10 rounded-md border border-line bg-white px-3 text-[14px] text-navy outline-none transition-colors focus:border-navy/40" />
+                            <input value={who.nama} onChange={(e) => setWho((w) => ({ ...w, nama: e.target.value }))} placeholder={ui.name} aria-label={ui.nameLabel} className="h-10 rounded-md border border-line bg-white px-3 text-[14px] text-navy outline-none transition-colors focus:border-navy/40" />
+                            <input value={who.nim} onChange={(e) => setWho((w) => ({ ...w, nim: e.target.value }))} placeholder={ui.nim} inputMode="numeric" aria-label={ui.nimLabel} className="h-10 rounded-md border border-line bg-white px-3 text-[14px] text-navy outline-none transition-colors focus:border-navy/40" />
                           </div>
                           <blockquote className="mt-3 rounded-lg border-l-[3px] border-gold bg-cream/70 px-4 py-3 text-[15px] leading-relaxed text-text/80">
                             <Template text={s.message} values={who} />
                           </blockquote>
                           <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
-                            <span className="text-[12.5px] text-text/45">Nama dan NIM tidak dikirim ke mana pun.</span>
+                            <span className="text-[12.5px] text-text/45">{ui.privacy}</span>
                             <button type="button" onClick={copy} className="text-[14px] font-semibold text-maroon">
-                              <span className="u-gold">Salin pesan</span>
+                              <span className="u-gold">{ui.copy}</span>
                             </button>
                           </div>
-                        </div>
-                        {s.sample && <PlaceholderTag />}
+                        </div>}
+                        {s.sample && <PlaceholderTag>{general.sample}</PlaceholderTag>}
                       </div>
                     </motion.div>
                   </AnimatePresence>
                 </div>
 
-                <Dialog.Close aria-label="Tutup" className="absolute right-3 top-3 grid size-9 place-items-center rounded-full text-white/70 transition-colors hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60">
+                <Dialog.Close aria-label={general.close} className="absolute right-3 top-3 grid size-9 place-items-center rounded-full text-white/70 transition-colors hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60">
                   <X className="size-4" />
                 </Dialog.Close>
 
                 <div className="flex items-center justify-between gap-3 border-t border-line px-6 py-3 sm:px-8">
                   {ref ? (
-                    <button type="button" onClick={() => onPasal(ref.no)} className="text-[14px] font-semibold text-navy">
-                      <span className="u-gold">Baca pasal {ref.no}: {ref.title}</span>
+                    <button type="button" onClick={() => onPasal(ref.id)} className="text-[14px] font-semibold text-navy">
+                      <span className="u-gold">{fillRegulasi(general.openArticle, ref)}</span>
                     </button>
                   ) : (
                     <span />
                   )}
                   <div className="flex shrink-0 gap-2">
-                    <NavBtn label="Prosedur sebelumnya" onClick={() => go(-1)} icon={ChevronLeft} />
-                    <NavBtn label="Prosedur berikutnya" onClick={() => go(1)} icon={ChevronRight} />
+                    <NavBtn label={ui.previous} onClick={() => go(-1)} icon={ChevronLeft} />
+                    <NavBtn label={ui.next} onClick={() => go(1)} icon={ChevronRight} />
                   </div>
                 </div>
               </motion.div>

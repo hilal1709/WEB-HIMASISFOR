@@ -1,5 +1,6 @@
 "use client";
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
+import { useHydratedReducedMotion } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 /** Tinggi satu baris digit (em). Lebih tinggi dari 1em karena glyph serif display melewati kotak 1em —
@@ -11,7 +12,7 @@ const ROW = 1.3;
  * berputar ke posisinya dengan pegas. Lebar digit tetap (tabular) sehingga layout tidak bergeser.
  */
 export function RollingNumber({ value, minDigits = 2, className, label }) {
-  const reduce = useReducedMotion();
+  const reduce = useHydratedReducedMotion();
   const digits = String(Math.max(0, Math.round(value))).padStart(minDigits, "0").split("");
   return (
     <span className={cn("inline-flex leading-none tabular", className)} role="img" aria-label={label ?? String(value)}>

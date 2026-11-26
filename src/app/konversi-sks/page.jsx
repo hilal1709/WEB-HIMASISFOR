@@ -1,57 +1,18 @@
-import prisma from "@/lib/prisma";
-import { CURTAIN_KEY, mergeKonversi } from "@/lib/konversi-content";
-import { getKurikulumData } from "@/lib/kurikulum-cms/server";
-import { SiteHeader, Topbar } from "@/components/home/site-header";
-import { SiteFooter } from "@/components/home/site-footer";
-import { AosReady } from "@/components/motion/aos-provider";
-import { KonversiProvider } from "@/components/konversi/konversi-provider";
-import { KonversiHero } from "@/components/konversi/konversi-hero";
-import { ExchangeDesk } from "@/components/konversi/exchange-desk";
-import { ClaimStepper } from "@/components/konversi/claim-stepper";
-import { TranscriptCompare } from "@/components/konversi/transcript-compare";
-import { KonversiClosing } from "@/components/konversi/konversi-closing";
-import { HeadingStyle } from "@/components/home/shared";
-import { PageCurtain } from "@/components/motion/page-curtain";
+import { readPublicKonversi } from "@/lib/konversi-cms/server";
+import { KonversiShell } from "@/components/konversi/konversi-shell";
 
 export const revalidate = 300;
 
-export const metadata = {
-  title: "Konversi SKS — Sistem Informasi UISI",
-  description:
-    "Hitung berapa SKS yang setara dengan magang, studi independen, riset, atau kegiatan MBKM lain, pilih mata kuliah penggantinya, dan ikuti enam langkah pengajuan konversi di S1 Sistem Informasi UISI.",
-};
-
-async function getData() {
-  try {
-    const rows = await prisma.pageContent.findMany({ where: { section: { in: ["konversi-sks", "curriculum"] }, isActive: true } });
-    const row = (s) => rows.find((r) => r.section === s) ?? null;
-    return mergeKonversi(row("konversi-sks"), { kurikulum: await getKurikulumData() });
-  } catch {
-    return mergeKonversi(null, { kurikulum: await getKurikulumData() });
-  }
+export async function generateMetadata() {
+  const { seo } = await readPublicKonversi();
+  return {
+    title: seo.title,
+    description: seo.description,
+    alternates: { canonical: "/konversi-sks" },
+    openGraph: { title: seo.title, description: seo.description, url: "/konversi-sks", images: seo.image ? [seo.image] : [] },
+  };
 }
 
-/** Konversi SKS — tema beranda "Kampus v3" (maroon + navy + gold di atas cream). */
 export default async function KonversiSksPage() {
-  const data = await getData();
-  return (
-    <div className="kampus" data-aos-wait>
-      <PageCurtain storageKey={CURTAIN_KEY} title="Konversi" accent="SKS" label="Memuat konversi SKS" />
-      <Topbar />
-      <SiteHeader />
-      <KonversiProvider data={data}>
-        <HeadingStyle value="rule">
-        <main>
-          <KonversiHero />
-          <ExchangeDesk />
-          <ClaimStepper />
-          <TranscriptCompare />
-          <KonversiClosing />
-        </main>
-        </HeadingStyle>
-      </KonversiProvider>
-      <SiteFooter />
-      <AosReady />
-    </div>
-  );
+  return <KonversiShell data={await readPublicKonversi()} />;
 }

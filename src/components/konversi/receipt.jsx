@@ -2,7 +2,7 @@
 import { useLayoutEffect as useEffect, useRef, useState } from "react";
 import { gsap } from "@/lib/scroll";
 import { prefersReducedMotion } from "@/lib/motion";
-import { SEMESTER_WEEKS } from "@/lib/konversi-content";
+import { konversiText as msg } from "@/lib/konversi-cms/copy";
 import { LordIcon } from "@/components/media/lord-icon";
 import { LottieIllustration } from "@/components/media/lottie-illustration";
 import { Skeleton } from "@/components/ui/loader";
@@ -25,7 +25,7 @@ function Teeth({ className }) {
  * Isi: kegiatan, durasi, jam, kurs, SKS diakui, daftar mata kuliah pengganti, sisa. Aksi: Simpan (localStorage), Kosongkan (ConfirmModal). Menghitung → Skeleton.
  */
 export function Receipt({ className, tilt = true }) {
-  const { program, weeks, hours, sks, rate, cap, credits, over, pickedCourses, left, busy, savedAt, save, askReset, toggleCourse } = useKonversi();
+  const { program, weeks, hours, sks, rate, semesterWeeks, cap, credits, over, pickedCourses, left, busy, savedAt, save, askReset, toggleCourse, copy: { receipt: ui, calculator } } = useKonversi();
   const paper = useRef(null);
   const [today, setToday] = useState(null);
   useEffect(() => setToday(new Date()), []);
@@ -66,39 +66,39 @@ export function Receipt({ className, tilt = true }) {
         <div className="rounded-t-md bg-white px-5 pb-4 pt-5 font-mono text-[12.5px]">
           <div className="flex items-start justify-between gap-3 border-b border-dashed border-navy/20 pb-3">
             <div>
-              <p className="kicker text-[10.5px] text-maroon">Struk simulasi</p>
+              <p className="kicker text-[10.5px] text-maroon">{ui.title}</p>
               <p className="mt-1 font-sans text-[15px] font-semibold text-navy">{program.label}</p>
             </div>
-            <span className="text-right text-[11px] text-text/45">{today ? fmtDate(today) : "—"}<br />SISFOR UISI</span>
+            <span className="text-right text-[11px] text-text/45">{today ? fmtDate(today) : "—"}<br />{ui.brand}</span>
           </div>
 
           <div className="py-2">
             {program.mode === "jam" ? (
               <>
-                <Line k="Durasi" v={`${weeks} mgg × ${hours} jam`} />
-                <Line k="Jam kegiatan" v={`${total.toLocaleString("id-ID")} jam`} />
-                <Line k="Kurs" v={`${rate} menit/minggu × ${SEMESTER_WEEKS} minggu/SKS`} />
+                <Line k={ui.duration} v={msg(ui.durationValue, { weeks, hours })} />
+                <Line k={ui.hours} v={msg(ui.hoursValue, { hours: total.toLocaleString("id-ID") })} />
+                <Line k={ui.rate} v={msg(ui.rateValue, { rate, semesterWeeks })} />
               </>
             ) : (
-              <Line k="SKS kampus tujuan" v={`${sks} SKS`} />
+              <Line k={ui.transfer} v={`${sks} ${calculator.credits}`} />
             )}
-            {over && <Line k="Batas semester" v={`maks ${cap} SKS`} />}
+            {over && <Line k={ui.cap} v={msg(ui.capValue, { cap })} />}
           </div>
 
           <div className="flex items-end justify-between border-y border-dashed border-navy/20 py-3">
-            <span className="font-sans text-[13px] font-semibold text-navy">SKS diakui</span>
+            <span className="font-sans text-[13px] font-semibold text-navy">{ui.result}</span>
             {busy ? <Skeleton className="h-8 w-14" /> : <span className="tabular font-serif text-[2rem] leading-none text-maroon">{credits}</span>}
           </div>
 
           {credits === 0 && !busy ? (
             <div className="flex flex-col items-center py-4 text-center font-sans">
-              <LottieIllustration src="/lottie/credit-swap.json" label="Jam pasir berubah menjadi lembar transkrip" className="size-28" />
-              <p className="mt-1 text-[13px] text-text/60">Jam kegiatanmu belum cukup untuk 1 SKS. Tambah durasi atau jam per minggu.</p>
+              {ui.illustration && <LottieIllustration src={ui.illustration} label={ui.illustrationAlt} className="size-28" />}
+              <p className="mt-1 text-[13px] text-text/60">{ui.zero}</p>
             </div>
           ) : (
             <div className="py-2">
-              <p className="pb-1 text-[11px] uppercase tracking-[0.12em] text-text/45">Mata kuliah pengganti</p>
-              {pickedCourses.length === 0 && <p className="py-1 font-sans text-[13px] text-text/50">Belum ada. Pilih dari kantong di samping.</p>}
+              <p className="pb-1 text-[11px] uppercase tracking-[0.12em] text-text/45">{ui.replacements}</p>
+              {pickedCourses.length === 0 && <p className="py-1 font-sans text-[13px] text-text/50">{ui.empty}</p>}
               <ul>
                 {pickedCourses.map((c) => (
                   <li key={c.slug} className="group flex items-baseline justify-between gap-3 py-1">
@@ -108,7 +108,7 @@ export function Receipt({ className, tilt = true }) {
                       <button
                         type="button"
                         onClick={() => toggleCourse(c.slug)}
-                        aria-label={`Keluarkan ${c.nama}`}
+                        aria-label={msg(ui.remove, { course: c.nama })}
                         className="text-text/35 transition-colors hover:text-maroon"
                       >
                         ×
@@ -119,8 +119,8 @@ export function Receipt({ className, tilt = true }) {
               </ul>
               {left > 0 && (
                 <div className="mt-1 flex justify-between border-t border-dotted border-navy/20 pt-2 text-text/55">
-                  <span>Belum dipetakan</span>
-                  <span className="tabular">{left} SKS</span>
+                  <span>{ui.remaining}</span>
+                  <span className="tabular">{left} {calculator.credits}</span>
                 </div>
               )}
             </div>
@@ -132,12 +132,12 @@ export function Receipt({ className, tilt = true }) {
             className="group mt-2 inline-flex h-10 w-full items-center justify-center gap-2 rounded-md bg-maroon font-sans text-[13px] font-semibold text-white transition-[background-color,transform] duration-300 hover:bg-maroon-deep active:scale-[0.97]"
           >
             <LordIcon name="check" size={18} target=".group" colors="primary:#ffffff,secondary:#e6d3a1" />
-            Simpan simulasi
+            {ui.save}
           </button>
           <div className="mt-3 flex items-center justify-between font-sans text-[11.5px] text-text/45">
-            <span>{savedAt ? `Tersimpan ${fmtDate(new Date(savedAt))}` : "Belum disimpan"}</span>
+            <span>{savedAt ? msg(ui.saved, { date: fmtDate(new Date(savedAt)) }) : ui.unsaved}</span>
             <button type="button" onClick={askReset} className="font-semibold text-text/55 underline decoration-dotted underline-offset-4 transition-colors hover:text-maroon">
-              Kosongkan
+              {ui.reset}
             </button>
           </div>
         </div>

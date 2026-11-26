@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef } from "react";
+import { konversiText as msg } from "@/lib/konversi-cms/copy";
 import { Modal, ModalContent, ModalDescription, ModalTitle } from "@/components/ui/modal";
 import { Button } from "@/components/ui/button";
 import { RumpunDot } from "@/components/kurikulum/rumpun-dot";
@@ -13,7 +14,7 @@ import { useKonversi } from "./konversi-provider";
  * mengikuti urutan saran di meja.
  */
 export function CourseModal({ slug, onSlug, onClose }) {
-  const { ranked, picked, left, toggleCourse, bySlug, program } = useKonversi();
+  const { ranked, picked, left, toggleCourse, bySlug, program, restoreFocus, copy: { course: ui, feedback, calculator } } = useKonversi();
   const last = useRef(null);
   if (slug) last.current = slug;
   const c = bySlug(slug ?? last.current);
@@ -40,7 +41,7 @@ export function CourseModal({ slug, onSlug, onClose }) {
       type="button"
       disabled={!to}
       onClick={() => to && onSlug(to.slug)}
-      aria-label={dir < 0 ? `Sebelumnya: ${to?.nama ?? ""}` : `Berikutnya: ${to?.nama ?? ""}`}
+      aria-label={msg(dir < 0 ? ui.previous : ui.next, { course: to?.nama ?? "" })}
       className="grid size-9 place-items-center rounded-md border border-white/20 text-white transition-[background-color,opacity] hover:bg-white/10 disabled:opacity-30"
     >
       <svg aria-hidden viewBox="0 0 16 16" className="size-4">
@@ -51,17 +52,17 @@ export function CourseModal({ slug, onSlug, onClose }) {
 
   return (
     <Modal open={!!slug} onOpenChange={(o) => !o && onClose()}>
-      <ModalContent className="max-w-xl p-0 [&>button[aria-label=Tutup]]:text-white/70 [&>button[aria-label=Tutup]]:hover:bg-white/10 [&>button[aria-label=Tutup]]:hover:text-white">
+      <ModalContent closeLabel={feedback.close} onCloseAutoFocus={restoreFocus} className="max-h-[90dvh] max-w-xl overflow-y-auto p-0 [&>button]:text-white/70 [&>button]:hover:bg-white/10 [&>button]:hover:text-white">
         <div key={c.slug} className="animate-in fade-in-0 slide-in-from-right-2 duration-300">
           <div className="bg-maroon px-6 pb-6 pt-7 text-white">
             <p className="flex items-center gap-2 text-[12px] text-gold-soft">
               <RumpunDot rumpun={c.rumpun} className="ring-1 ring-white/60" />
-              {RUMPUN_BY_KEY[c.rumpun]?.name} · {c.semester ? `Semester ${c.semester}` : "Mata kuliah pilihan"}
+              {RUMPUN_BY_KEY[c.rumpun]?.name} · {c.semester ? msg(ui.semester, { semester: c.semester }) : ui.elective}
             </p>
             <ModalTitle className="mt-2 pr-8 text-[1.7rem] text-white">{c.nama}</ModalTitle>
             <div className="mt-4 flex items-center justify-between gap-3">
               <span className="tabular font-serif text-[2.2rem] leading-none text-gold">
-                {c.sks} <span className="font-sans text-[13px] text-white/60">SKS</span>
+                {c.sks} <span className="font-sans text-[13px] text-white/60">{calculator.credits}</span>
               </span>
               <span className="flex items-center gap-2">
                 <span className="tabular text-[12px] text-white/50">{i + 1}/{ranked.length}</span>
@@ -71,7 +72,7 @@ export function CourseModal({ slug, onSlug, onClose }) {
             </div>
           </div>
           <div className="p-6">
-            <ModalDescription>Capaian yang perlu dibuktikan lewat kegiatanmu ({program.label}):</ModalDescription>
+            <ModalDescription>{msg(ui.outcome, { program: program.label })}</ModalDescription>
             {c.cpmk.length ? (
               <ol className="mt-3 space-y-2.5">
                 {c.cpmk.map((t, k) => (
@@ -82,15 +83,15 @@ export function CourseModal({ slug, onSlug, onClose }) {
                 ))}
               </ol>
             ) : (
-              <p className="mt-3 rounded-md bg-cream px-4 py-3 text-[14px] text-text/60">Ringkasan capaian belum diunggah. Tanyakan ke dosen pengampu saat menyusun Learning Agreement.</p>
+              <p className="mt-3 rounded-md bg-cream px-4 py-3 text-[14px] text-text/60">{ui.empty}</p>
             )}
             <div className="mt-6 flex flex-wrap items-center gap-3">
               <Button variant={on ? "outline-navy" : "maroon"} size="lg" disabled={!fits} onClick={() => toggleCourse(c.slug)} className={cn(!fits && "cursor-not-allowed")}>
-                {on ? "Keluarkan dari kantong" : fits ? "Masukkan ke kantong" : `Butuh ${c.sks} SKS, sisa ${Math.max(left, 0)}`}
+                {on ? ui.remove : fits ? ui.add : msg(ui.insufficient, { credits: c.sks, remaining: Math.max(left, 0) })}
               </Button>
-              <a href={`/curiculum#rps-${c.slug}`} className="text-[14px] font-semibold text-maroon">
-                <span className="u-gold">Buka RPS lengkap</span>
-              </a>
+              {ui.syllabusHref && ui.syllabus && <a href={msg(ui.syllabusHref, { slug: encodeURIComponent(c.slug) })} className="text-[14px] font-semibold text-maroon">
+                <span className="u-gold">{ui.syllabus}</span>
+              </a>}
             </div>
           </div>
         </div>

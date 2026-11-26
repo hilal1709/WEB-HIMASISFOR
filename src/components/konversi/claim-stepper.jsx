@@ -1,11 +1,12 @@
 "use client";
 import { useLayoutEffect as useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { A11y, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import { gsap, ScrollTrigger } from "@/lib/scroll";
+import { useHydratedReducedMotion } from "@/lib/motion";
 import { Container, PlaceholderTag, SectionHeader } from "@/components/home/shared";
 import { KonversiBanner } from "./konversi-banner";
 import { cn } from "@/lib/utils";
@@ -22,16 +23,17 @@ function headerOffset() {
 }
 
 function StepBody({ step, onDoc, tone = "light" }) {
+  const { copy: { steps: c } } = useKonversi();
   const dark = tone === "dark";
   return (
     <>
       <dl className={cn("grid gap-4 border-y py-5 sm:grid-cols-3", dark ? "border-white/10" : "border-line")}>
         {[
-          ["Siapa", step.who],
-          ["Hasilnya", step.output],
-          ["Kapan", step.when],
-        ].map(([k, v]) => (
-          <div key={k}>
+          [c.who, step.who],
+          [c.output, step.output],
+          [c.when, step.when],
+        ].map(([k, v], index) => (
+          <div key={index}>
             <dt className={cn("kicker text-[10.5px]", dark ? "text-gold-soft" : "text-maroon")}>{k}</dt>
             <dd className={cn("mt-1.5 text-[14.5px] font-medium leading-snug", dark ? "text-white" : "text-navy")}>{v}</dd>
           </div>
@@ -49,7 +51,7 @@ function StepBody({ step, onDoc, tone = "light" }) {
               <svg aria-hidden viewBox="0 0 16 16" className="size-4 transition-transform duration-300 group-hover:-rotate-6">
                 <path d="M4 1.5h5.5L12.5 4.5v10h-8.5zM9.5 1.5v3h3M6 8h4.5M6 10.5h4.5" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" />
               </svg>
-              Lihat templat
+              {c.template}
             </button>
           )}
           {step.link && (
@@ -72,9 +74,9 @@ function StepBody({ step, onDoc, tone = "light" }) {
  * meluncur di rel kiri, panel kanan berganti lewat mask-wipe clip-path. Klik nomor → gulir ke tahap itu.
  * Ponsel: Swiper dengan pagination fraksi.
  */
-export function ClaimStepper() {
-  const { steps, openDoc } = useKonversi();
-  const reduce = useReducedMotion();
+export function ClaimStepper({ showNotice }) {
+  const { steps, stepsSample, openDoc, copy: { steps: c, feedback } } = useKonversi();
+  const reduce = useHydratedReducedMotion();
   const pin = useRef(null);
   const st = useRef(null);
   const [active, setActive] = useState(0);
@@ -82,7 +84,7 @@ export function ClaimStepper() {
 
   useEffect(() => {
     const el = pin.current;
-    if (!el) return;
+    if (!el || n <= 1) return;
     const mm = gsap.matchMedia();
     mm.add("(min-width: 1024px) and (prefers-reduced-motion: no-preference)", () => {
       st.current = ScrollTrigger.create({
@@ -121,31 +123,35 @@ export function ClaimStepper() {
     } else setActive(i);
   };
 
-  const step = steps[active];
+  const index = Math.min(active, Math.max(0, n - 1));
+  const progress = n > 1 ? index / (n - 1) : 0;
+  const step = steps[index];
 
   return (
     <section id="alur" className="scroll-mt-20 bg-cream max-lg:overflow-x-clip">
       <div className="relative z-0 bg-cream py-16 md:py-20 lg:pb-16 lg:pt-20">
         <Container>
-          <SectionHeader title={["Enam langkah", "sampai nilainya masuk"]} action={<PlaceholderTag />} />
-          <KonversiBanner className="mt-8" />
+          <SectionHeader title={[c.title, c.accent]} action={stepsSample && <PlaceholderTag>{feedback.example}</PlaceholderTag>} />
+          {showNotice && <KonversiBanner className="mt-8" />}
+          {!step && <p className="mt-8 text-text/70">{c.empty}</p>}
+          {step && <>
 
           {/* ≥ lg: rel + panel */}
           {/* pembungkus tetap: GSAP membungkus elemen yang dikunci dengan .pin-spacer, jadi elemen itu harus jadi
               satu-satunya anak di sini — kalau tidak, React gagal menyisipkan saudara (mis. banner) di dekatnya */}
           <div className="mt-12 hidden lg:block">
           <div ref={pin} className="relative z-0 grid grid-cols-[280px_minmax(0,1fr)] gap-12 bg-cream">
-            <ol className="relative self-start" aria-label="Tahap pengajuan">
+            <ol className="relative self-start" aria-label={c.items}>
               <span aria-hidden className="absolute bottom-5 left-[19px] top-5 w-px bg-line" />
               <motion.span
                 aria-hidden
                 className="absolute left-[18px] top-5 w-[3px] origin-top rounded-full bg-gold"
-                animate={{ height: `calc(${(active / (n - 1)) * 100}% - ${(active / (n - 1)) * 40}px)` }}
+                animate={{ height: `calc(${progress * 100}% - ${progress * 40}px)` }}
                 transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 160, damping: 26 }}
               />
               {steps.map((s, i) => {
-                const on = i === active;
-                const done = i < active;
+                const on = i === index;
+                const done = i < index;
                 return (
                   <li key={s.key}>
                     <button
@@ -185,7 +191,7 @@ export function ClaimStepper() {
                   className="max-h-[calc(100vh-var(--stepper-top,96px)-56px)] overflow-y-auto rounded-lg border border-line bg-white p-8 xl:p-10"
                 >
                   <div className="flex items-baseline gap-5">
-                    <span className="tabular font-serif text-[4.5rem] leading-none text-gold">{pad(active + 1)}</span>
+                    <span className="tabular font-serif text-[4.5rem] leading-none text-gold">{pad(index + 1)}</span>
                     <h3 className="font-serif text-[clamp(1.7rem,2.6vw,2.3rem)] leading-tight text-navy">{step.title}</h3>
                   </div>
                   <div className="mt-6">
@@ -193,7 +199,7 @@ export function ClaimStepper() {
                   </div>
                 </motion.div>
               </AnimatePresence>
-              <p className="mt-4 text-[12.5px] text-text/45">Gulir untuk lanjut ke tahap berikutnya, atau pilih nomornya.</p>
+              {n > 1 && <p className="mt-4 text-[12.5px] text-text/45">{c.scroll}</p>}
             </div>
           </div>
           </div>
@@ -205,7 +211,7 @@ export function ClaimStepper() {
               spaceBetween={14}
               slidesPerView={1.06}
               pagination={{ type: "fraction", el: ".konversi-step-pg" }}
-              a11y={{ prevSlideMessage: "Tahap sebelumnya", nextSlideMessage: "Tahap berikutnya" }}
+              a11y={{ prevSlideMessage: c.previous, nextSlideMessage: c.next }}
               className="!overflow-visible"
             >
               {steps.map((s, i) => (
@@ -222,6 +228,7 @@ export function ClaimStepper() {
             </Swiper>
             <p className="konversi-step-pg tabular mt-4 !static text-[13px] font-semibold text-navy" />
           </div>
+          </>}
         </Container>
       </div>
     </section>

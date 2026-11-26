@@ -1,4 +1,5 @@
 import { getDosenData } from "@/lib/dosen-cms/server";
+import { readPublicKonversiRules } from "@/lib/konversi-cms/server";
 import prisma from "@/lib/prisma";
 import { CURTAIN_KEY, mergeBootcamp } from "@/lib/bootcamp-content";
 import { mergeKontak } from "@/lib/kontak-content";
@@ -26,12 +27,13 @@ export const metadata = {
 };
 
 async function getData() {
+  const conversionRules = await readPublicKonversiRules();
   try {
     const rows = await prisma.pageContent.findMany({ where: { section: { in: ["bootcamp", "kontak", "layanan-akademik"] }, isActive: true } });
-    const bootcamp = mergeBootcamp(rows.find((r) => r.section === "bootcamp") ?? null, { dosen: await getDosenData() });
+    const bootcamp = mergeBootcamp(rows.find((r) => r.section === "bootcamp") ?? null, { dosen: await getDosenData(), conversionRules });
     return { ...bootcamp, contact: mergeKontak(rows.find((r) => r.section === "kontak") ?? null, rows.find((r) => r.section === "layanan-akademik") ?? null).channels };
   } catch {
-    return { ...mergeBootcamp(null, { dosen: await getDosenData() }), contact: { whatsapp: "", email: "" } };
+    return { ...mergeBootcamp(null, { dosen: await getDosenData(), conversionRules }), contact: { whatsapp: "", email: "" } };
   }
 }
 

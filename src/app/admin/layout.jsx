@@ -69,7 +69,7 @@ export default function AdminLayout({ children }) {
     }
   }
 
-  if (pathname === '/admin/login' || pathname === '/admin/jalur-kelulusan/pratinjau' || pathname === '/admin/regulasi-akademik/pratinjau' || pathname === '/admin/magang/pratinjau') {
+  if (pathname === '/admin/login' || pathname === '/admin/jalur-kelulusan/pratinjau' || pathname === '/admin/regulasi-akademik/pratinjau' || pathname === '/admin/magang/pratinjau' || pathname === '/admin/konversi-sks/pratinjau') {
     return children
   }
 
@@ -86,7 +86,7 @@ export default function AdminLayout({ children }) {
   }
 
   // Studio penuh memakai kanvas sendiri tanpa chrome admin.
-  if (pathname === '/admin/home' || pathname === '/admin/sambutan' || pathname === '/admin/bidang-keahlian' || pathname === '/admin/visi-misi' || pathname === '/admin/struktur' || pathname === '/admin/profil-lulusan' || pathname === '/admin/program-kelas' || pathname === '/admin/dosen' || pathname === '/admin/prestasi' || pathname === '/admin/kurikulum' || pathname === '/admin/jalur-kelulusan' || pathname === '/admin/regulasi-akademik' || pathname === '/admin/magang') {
+  if (pathname === '/admin/home' || pathname === '/admin/sambutan' || pathname === '/admin/bidang-keahlian' || pathname === '/admin/visi-misi' || pathname === '/admin/struktur' || pathname === '/admin/profil-lulusan' || pathname === '/admin/program-kelas' || pathname === '/admin/dosen' || pathname === '/admin/prestasi' || pathname === '/admin/kurikulum' || pathname === '/admin/jalur-kelulusan' || pathname === '/admin/regulasi-akademik' || pathname === '/admin/magang' || pathname === '/admin/konversi-sks') {
     return children
   }
 
@@ -96,6 +96,7 @@ export default function AdminLayout({ children }) {
     { href: '/admin/jalur-kelulusan', label: 'CMS Jalur Kelulusan' },
     { href: '/admin/regulasi-akademik', label: 'CMS Regulasi Akademik' },
     { href: '/admin/magang', label: 'CMS Magang' },
+    { href: '/admin/konversi-sks', label: 'CMS Konversi SKS' },
     { href: '/admin/course-registrations', label: 'Pendaftar Course' },
     { href: '/admin/scholarship-applications', label: 'Pendaftar Beasiswa' },
     { href: '/admin/registration-forms', label: 'Builder Form Pendaftaran' },

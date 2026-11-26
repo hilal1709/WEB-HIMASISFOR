@@ -1,10 +1,10 @@
 "use client";
 import { useLayoutEffect as useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { animate, stagger } from "animejs";
 import { gsap } from "@/lib/scroll";
-import { prefersReducedMotion } from "@/lib/motion";
-import { LIMITS, SEMESTER_WEEKS } from "@/lib/konversi-content";
+import { prefersReducedMotion, useHydratedReducedMotion } from "@/lib/motion";
+import { konversiText as msg } from "@/lib/konversi-cms/copy";
 import { RUMPUN_BY_KEY } from "@/lib/kurikulum-content";
 import { Container, PlaceholderTag, SectionHeader } from "@/components/home/shared";
 import { RumpunDot } from "@/components/kurikulum/rumpun-dot";
@@ -22,13 +22,21 @@ const SHOW = 8;
 
 /** Kiri: pilihan kegiatan (sorotan `layoutId`) + scrub field. */
 function Inputs() {
-  const { programs, program, programKey, choose, weeks, hours, sks, setWeeks, setHours, setSks } = useKonversi();
-  const reduce = useReducedMotion();
+  const { programs, program, programKey, choose, weeks, hours, sks, setWeeks, setHours, setSks, limits, transferRatio, copy: { calculator: c } } = useKonversi();
+  const reduce = useHydratedReducedMotion();
   return (
     <div className="flex h-full flex-col gap-4">
       <div>
-        <p className="kicker text-[11px] text-maroon">1 · Kegiatan</p>
-        <div role="radiogroup" aria-label="Bentuk kegiatan" className="mt-3 flex flex-wrap gap-1.5">
+        <p className="kicker text-[11px] text-maroon">{c.activities}</p>
+        <div role="radiogroup" aria-label={c.activityLabel} className="mt-3 flex flex-wrap gap-1.5" onKeyDown={(event) => {
+          const delta = { ArrowLeft: -1, ArrowUp: -1, ArrowRight: 1, ArrowDown: 1 }[event.key];
+          if (!delta) return;
+          event.preventDefault();
+          const current = programs.findIndex((item) => item.key === programKey);
+          const next = (current + delta + programs.length) % programs.length;
+          choose(programs[next].key);
+          event.currentTarget.querySelectorAll("[role=radio]")[next]?.focus();
+        }}>
           {programs.map((p) => {
             const on = p.key === programKey;
             return (
@@ -37,6 +45,7 @@ function Inputs() {
                 type="button"
                 role="radio"
                 aria-checked={on}
+                tabIndex={on ? 0 : -1}
                 onClick={() => !on && choose(p.key)}
                 className={cn(
                   "relative h-9 rounded-md border px-3 text-[13px] font-medium outline-none transition-colors duration-300 focus-visible:ring-2 focus-visible:ring-gold",
@@ -63,14 +72,14 @@ function Inputs() {
         </AnimatePresence>
       </div>
       <div>
-        <p className="kicker text-[11px] text-maroon">2 · {program.mode === "jam" ? "Durasi" : "SKS yang kamu ambil"}</p>
+        <p className="kicker text-[11px] text-maroon">2 · {program.mode === "jam" ? c.duration : c.transfer}</p>
         {program.mode === "jam" ? (
           <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
-            <ScrubField label="Lama kegiatan" unit="minggu" value={weeks} min={LIMITS.weeks[0]} max={LIMITS.weeks[1]} onChange={setWeeks} />
-            <ScrubField label="Jam per minggu" unit="jam" value={hours} min={LIMITS.hours[0]} max={LIMITS.hours[1]} onChange={setHours} />
+            <ScrubField label={c.weeks} unit={c.weeksUnit} copy={c} value={weeks} min={limits.weeks[0]} max={limits.weeks[1]} onChange={setWeeks} />
+            <ScrubField label={c.hours} unit={c.hoursUnit} copy={c} value={hours} min={limits.hours[0]} max={limits.hours[1]} onChange={setHours} />
           </div>
         ) : (
-          <ScrubField className="mt-3" label="SKS di kampus tujuan" unit="SKS" hint="diakui 1 : 1" value={sks} min={LIMITS.sks[0]} max={LIMITS.sks[1]} onChange={setSks} />
+          <ScrubField className="mt-3" label={c.inputSks} unit={c.credits} hint={msg(c.transferHint, { ratio: transferRatio })} copy={c} value={sks} min={limits.sks[0]} max={limits.sks[1]} onChange={setSks} />
         )}
       </div>
     </div>
@@ -79,7 +88,7 @@ function Inputs() {
 
 /** Tengah: jendela kurs. Panah tukar berputar pegas setiap angka berubah. */
 function RateWindow() {
-  const { program, rate, weeks, hours, sks } = useKonversi();
+  const { program, rate, semesterWeeks, transferRatio, weeks, hours, sks, copy: { calculator: c } } = useKonversi();
   const arrows = useRef(null);
   const turn = useRef(0);
   useEffect(() => {
@@ -90,10 +99,10 @@ function RateWindow() {
 
   return (
     <div className="flex items-center justify-center gap-4 rounded-lg border border-gold/60 bg-white px-4 py-4 outline outline-1 outline-offset-4 outline-gold/30 lg:h-full lg:flex-col lg:gap-5 lg:px-3 lg:py-6">
-      <p className="kicker text-[10.5px] text-text/50 lg:[writing-mode:vertical-rl] lg:rotate-180">Kurs</p>
+      <p className="kicker text-[10.5px] text-text/50 lg:[writing-mode:vertical-rl] lg:rotate-180">{c.rate}</p>
       <div className="text-center">
-        <p className="font-serif text-[1.6rem] leading-none text-navy">1</p>
-        <p className="mt-1 text-[11px] text-text/50">SKS</p>
+        <p className="font-serif text-[1.6rem] leading-none text-navy">{program.mode === "jam" ? 1 : transferRatio}</p>
+        <p className="mt-1 text-[11px] text-text/50">{c.credits}</p>
       </div>
       <span ref={arrows} aria-hidden className="grid size-10 place-items-center rounded-full bg-cream text-maroon">
         <svg viewBox="0 0 20 20" className="size-5 lg:rotate-90">
@@ -102,8 +111,8 @@ function RateWindow() {
       </span>
       <div className="text-center">
         <p className="tabular font-serif text-[1.6rem] leading-none text-navy">{program.mode === "jam" ? rate : 1}</p>
-        <p className="mt-1 text-[11px] text-text/50">{program.mode === "jam" ? "menit/minggu" : "SKS asal"}</p>
-        {program.mode === "jam" && <p className="mt-1 text-[11px] text-text/50">× {SEMESTER_WEEKS} minggu</p>}
+        <p className="mt-1 text-[11px] text-text/50">{program.mode === "jam" ? c.minutesUnit : c.transferUnit}</p>
+        {program.mode === "jam" && <p className="mt-1 text-[11px] text-text/50">{msg(c.rateWeeks, { weeks: semesterWeeks })}</p>}
       </div>
     </div>
   );
@@ -111,7 +120,8 @@ function RateWindow() {
 
 /** Kanan: SKS diakui (angka bergulir) + meter sel batas semester. */
 function Result() {
-  const { program, weeks, hours, raw, credits, cap, over, busy, rulesSample } = useKonversi();
+  const { program, weeks, hours, raw, credits, cap, over, busy, sample, transferRatio, copy: { calculator: c, feedback } } = useKonversi();
+  const reduce = useHydratedReducedMotion();
   const cells = useRef(null);
   const prev = useRef(credits);
   useEffect(() => {
@@ -127,20 +137,20 @@ function Result() {
   return (
     <div className="relative flex h-full flex-col overflow-hidden rounded-lg bg-navy p-5 text-white sm:p-6">
       <div className="flex items-center justify-between gap-3">
-        <p className="kicker text-[11px] text-gold-soft">3 · SKS diakui</p>
-        <span className="flex h-4 items-center">{busy && <DotsLoader className="text-gold [&>span]:size-1.5" />}</span>
+        <p className="kicker text-[11px] text-gold-soft">{c.result}</p>
+        <span className="flex h-4 items-center">{busy && <span role="status"><span className="sr-only">{c.calculating}</span><DotsLoader className="text-gold [&>span]:size-1.5" /></span>}</span>
       </div>
       <div className="mt-3 flex items-end gap-3">
-        <RollingNumber value={credits} className="font-serif text-[clamp(4.5rem,9vw,6.5rem)] text-white" label={`${credits} SKS`} />
-        <span className="mb-3 text-[15px] text-white/60">SKS</span>
+        <RollingNumber value={credits} className="font-serif text-[clamp(4.5rem,9vw,6.5rem)] text-white" label={`${credits} ${c.credits}`} />
+        <span className="mb-3 text-[15px] text-white/60">{c.credits}</span>
       </div>
       <p className="tabular text-[13px] text-white/55">
-        {program.mode === "jam" ? `dari ${(weeks * hours).toLocaleString("id-ID")} jam kegiatan` : "setara jumlah SKS di kampus tujuan"}
+        {program.mode === "jam" ? msg(c.resultHours, { hours: (weeks * hours).toLocaleString("id-ID") }) : transferRatio === 1 ? c.resultTransfer : msg(c.resultRatio, { ratio: transferRatio })}
       </p>
 
       <div className="mt-5">
         <div className="flex items-center justify-between text-[11px] text-white/45">
-          <span>Batas per semester</span>
+          <span>{c.cap}</span>
           <span className="tabular">{credits}/{cap}</span>
         </div>
         <div ref={cells} aria-hidden className="mt-2 grid gap-1" style={{ gridTemplateColumns: `repeat(${Math.min(cap, 10)}, minmax(0, 1fr))` }}>
@@ -158,48 +168,49 @@ function Result() {
 
       <AnimatePresence initial={false}>
         {over && (
-          <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden">
-            <Banner variant="warning" title={`${raw - cap} SKS di atas batas`} className="mt-4">
-              Kelebihan jam tidak menambah SKS semester ini.{" "}
-              <a href="/regulasi-akademik#pasal-1-3" className="font-semibold text-navy underline decoration-gold underline-offset-4">Lihat aturannya</a>
+          <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} transition={reduce ? { duration: 0 } : undefined} className="overflow-hidden">
+            <Banner variant="warning" title={msg(c.overTitle, { excess: raw - cap })} className="mt-4">
+              {c.overBody}{" "}
+              {c.ruleHref && c.ruleLink && <a href={c.ruleHref} className="font-semibold text-navy underline decoration-gold underline-offset-4">{c.ruleLink}</a>}
             </Banner>
           </motion.div>
         )}
       </AnimatePresence>
-      {rulesSample && <PlaceholderTag tone="dark" className="mt-4 self-start" />}
+      {sample && <PlaceholderTag tone="dark" className="mt-4 self-start">{feedback.example}</PlaceholderTag>}
     </div>
   );
 }
 
 /** Kantong mata kuliah: bilah bertumpuk + daftar kandidat dari kurikulum. */
 function Pocket() {
-  const { program, ranked, picked, pickedCourses, credits, used, left, toggleCourse, autofill, openCourse } = useKonversi();
-  const reduce = useReducedMotion();
+  const { program, ranked, picked, pickedCourses, credits, used, left, toggleCourse, autofill, openCourse, copy: { calculator: c } } = useKonversi();
+  const reduce = useHydratedReducedMotion();
   const [all, setAll] = useState(false);
   useEffect(() => setAll(false), [program.key]);
   const list = all ? ranked : ranked.slice(0, SHOW);
+  const ui = c;
 
   return (
     <div className="rounded-lg border border-line bg-white p-5 sm:p-6">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="kicker text-[11px] text-maroon">4 · Mata kuliah pengganti</p>
+          <p className="kicker text-[11px] text-maroon">{c.replacements}</p>
           <p className="mt-1.5 text-[14px] text-text/65">
-            Terpakai <span className="tabular font-semibold text-navy">{used}</span> dari <span className="tabular font-semibold text-navy">{credits}</span> SKS
+            {c.used} <span className="tabular font-semibold text-navy">{used}</span> {c.from} <span className="tabular font-semibold text-navy">{credits}</span> {c.credits}
           </p>
         </div>
         <button
           type="button"
           onClick={autofill}
-          disabled={!credits}
+          disabled={!credits || !ranked.length}
           className="h-9 rounded-md border border-navy/20 px-3.5 text-[13px] font-semibold text-navy transition-[background-color,border-color,transform] duration-300 hover:border-navy/40 hover:bg-cream active:scale-[0.97] disabled:opacity-40"
         >
-          Isi otomatis
+          {c.autofill}
         </button>
       </div>
 
       {/* bilah bertumpuk */}
-      <div className="mt-4 flex h-4 overflow-hidden rounded-[3px] bg-cream-2" role="img" aria-label={`${used} dari ${credits} SKS terpakai`}>
+      <div className="mt-4 flex h-4 overflow-hidden rounded-[3px] bg-cream-2" role="img" aria-label={msg(c.usedLabel, { used, credits })}>
         <AnimatePresence initial={false}>
           {credits > 0 &&
             pickedCourses.map((c) => (
@@ -211,7 +222,7 @@ function Pocket() {
                 exit={{ width: 0 }}
                 transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 260, damping: 30 }}
                 className={cn("h-full border-r-2 border-white", SEG[c.rumpun] ?? SEG.fondasi)}
-                title={`${c.nama} · ${c.sks} SKS`}
+                title={`${c.nama} · ${c.sks} ${ui.credits}`}
               />
             ))}
         </AnimatePresence>
@@ -237,15 +248,15 @@ function Pocket() {
               <button type="button" onClick={() => openCourse(c.slug)} className="min-w-0 flex-1 text-left">
                 <span className={cn("block truncate text-[14px] font-medium transition-colors hover:text-maroon", fits ? "text-navy" : "text-text/40")}>{c.nama}</span>
                 <span className="block text-[12px] text-text/50">
-                  {c.semester ? `Smt ${c.semester}` : "Pilihan"} · {RUMPUN_BY_KEY[c.rumpun]?.short}
+                  {c.semester ? msg(ui.semester, { semester: c.semester }) : ui.elective} · {RUMPUN_BY_KEY[c.rumpun]?.short}
                 </span>
               </button>
-              <span className="tabular text-[13px] text-text/55">{c.sks} SKS</span>
+              <span className="tabular text-[13px] text-text/55">{c.sks} {ui.credits}</span>
               <button
                 type="button"
                 onClick={() => toggleCourse(c.slug)}
                 aria-pressed={on}
-                aria-label={on ? `Keluarkan ${c.nama} dari kantong` : `Masukkan ${c.nama} ke kantong`}
+                aria-label={msg(on ? ui.removeCourse : ui.addCourse, { course: c.nama })}
                 className={cn(
                   "grid size-8 shrink-0 place-items-center rounded-md border transition-[background-color,border-color,color,transform] duration-300 active:scale-90",
                   on ? "border-maroon bg-maroon text-white" : fits ? "border-line text-navy hover:border-maroon hover:text-maroon" : "border-line text-text/30"
@@ -259,9 +270,10 @@ function Pocket() {
           );
         })}
       </ul>
+      {!ranked.length && <p className="mt-4 text-sm text-text/65">{c.noCourses}</p>}
       {ranked.length > SHOW && (
         <button type="button" onClick={() => setAll((v) => !v)} className="mt-3 text-[13px] font-semibold text-maroon">
-          <span className="u-gold">{all ? "Tampilkan lebih sedikit" : `Tampilkan semua (${ranked.length})`}</span>
+          <span className="u-gold">{all ? c.less : msg(c.more, { count: ranked.length })}</span>
         </button>
       )}
     </div>
@@ -270,7 +282,9 @@ function Pocket() {
 
 /** Ponsel: bilah ringkas di bawah layar selama meja terlihat → membuka struk sebagai lembar bawah. */
 function MobileDock({ visible }) {
-  const { credits, pickedCourses } = useKonversi();
+  const { credits, pickedCourses, copy: { calculator: c, feedback } } = useKonversi();
+  const reduce = useHydratedReducedMotion();
+  const trigger = useRef(null);
   const [open, setOpen] = useState(false);
   return (
     <>
@@ -280,23 +294,25 @@ function MobileDock({ visible }) {
             initial={{ y: 80 }}
             animate={{ y: 0 }}
             exit={{ y: 80 }}
-            transition={{ type: "spring", stiffness: 320, damping: 32 }}
+            transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 320, damping: 32 }}
             className="fixed inset-x-3 bottom-3 z-40 lg:hidden"
           >
-            <button type="button" onClick={() => setOpen(true)} className="flex w-full items-center justify-between gap-3 rounded-lg bg-navy px-4 py-3 text-left text-white shadow-[0_18px_40px_-16px_rgb(14_24_48/0.8)]">
+            <button ref={trigger} type="button" onClick={() => setOpen(true)} className="flex w-full items-center justify-between gap-3 rounded-lg bg-navy px-4 py-3 text-left text-white shadow-[0_18px_40px_-16px_rgb(14_24_48/0.8)]">
               <span className="flex items-baseline gap-2">
                 <RollingNumber value={credits} className="font-serif text-[1.6rem] text-gold-soft" />
-                <span className="text-[13px] text-white/70">SKS · {pickedCourses.length} mata kuliah</span>
+                <span className="text-[13px] text-white/70">{msg(c.mobileSummary, { count: pickedCourses.length })}</span>
               </span>
-              <span className="rounded-md bg-gold px-3 py-1.5 text-[13px] font-semibold text-navy">Lihat struk</span>
+              <span className="rounded-md bg-gold px-3 py-1.5 text-[13px] font-semibold text-navy">{c.mobileOpen}</span>
             </button>
           </motion.div>
         )}
       </AnimatePresence>
       <Sheet open={open} onOpenChange={setOpen}>
-        <SheetContent side="bottom" className="bg-cream-2 px-4 pb-6 pt-12">
-          <SheetTitle className="sr-only">Struk simulasi konversi</SheetTitle>
-          <SheetDescription>Ringkasan SKS yang diakui dan mata kuliah pengganti.</SheetDescription>
+        <SheetContent side="bottom" closeLabel={feedback.close} onCloseAutoFocus={(event) => {
+          if (trigger.current) { event.preventDefault(); trigger.current.focus({ preventScroll: true }); }
+        }} className="bg-cream-2 px-4 pb-6 pt-12">
+          <SheetTitle className="sr-only">{c.mobileTitle}</SheetTitle>
+          <SheetDescription>{c.mobileDescription}</SheetDescription>
           <Receipt tilt={false} />
         </SheetContent>
       </Sheet>
@@ -310,7 +326,7 @@ function MobileDock({ visible }) {
  * lalu kantong mata kuliah pengganti dan struk simulasi yang menempel (≥ lg) / lembar bawah (ponsel).
  */
 export function ExchangeDesk() {
-  const { program } = useKonversi();
+  const { program, programs, copy: { calculator: c } } = useKonversi();
   const section = useRef(null);
   const [inView, setInView] = useState(false);
 
@@ -325,7 +341,8 @@ export function ExchangeDesk() {
   return (
     <section ref={section} id="kalkulator" className="scroll-mt-24 border-t border-line bg-cream-2 py-16 md:py-20">
       <Container>
-        <SectionHeader title={["Tukar jam kegiatan", "jadi SKS"]} body={`Atur ${program.mode === "jam" ? "durasinya" : "jumlah SKS-nya"}, lalu pilih mata kuliah yang digantikan. Angkanya langsung terhitung.`} />
+        <SectionHeader title={[c.title, c.accent]} body={programs.length ? (program.mode === "jam" ? c.bodyHours : c.bodyTransfer) : c.noPrograms} />
+        {programs.length > 0 && <>
 
         <div className="mt-10 grid grid-cols-[minmax(0,1fr)] gap-4 lg:grid-cols-[minmax(0,1.15fr)_96px_minmax(0,1fr)] lg:gap-5" data-aos="fade-up">
           <Inputs />
@@ -339,8 +356,9 @@ export function ExchangeDesk() {
             <Receipt />
           </div>
         </div>
+        </>}
       </Container>
-      <MobileDock visible={inView} />
+      {programs.length > 0 && <MobileDock visible={inView} />}
     </section>
   );
 }

@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { PROGRAMS as KONVERSI_PROGRAMS, DOCS as KONVERSI_DOCS, CAP as KONVERSI_CAP, LIMITS as KONVERSI_LIMITS } from "@/lib/konversi-content";
+
 import { SERVICES as LAYANAN_SERVICES, HOURS as LAYANAN_HOURS, DAYS as LAYANAN_DAYS } from "@/lib/layanan-content";
 import { DESKS as KONTAK_DESKS } from "@/lib/kontak-content";
 import { CARDS as FAQ_CARDS, DRAWERS as FAQ_DRAWERS, PERSONAS as FAQ_PERSONAS } from "@/lib/faq-content";
@@ -174,12 +174,11 @@ export default function ContentManagement() {
               <Link href="/admin/magang" className="font-semibold text-maroon underline underline-offset-4">Buka CMS Magang</Link>
             )}
             {activeTab === "konversi-sks" && (
-              <KonversiEditor
-                data={contents["konversi-sks"]}
-                onSave={(data) => handleSave("konversi-sks", data)}
-                saving={saving}
-              />
+              <a href="/admin/konversi-sks" className="inline-flex rounded-md bg-maroon px-4 py-2 font-semibold text-white hover:bg-maroon-deep">
+                Buka CMS Konversi SKS
+              </a>
             )}
+
             {activeTab === "bootcamp" && (
               <BootcampEditor data={contents.bootcamp} onSave={(data) => handleSave("bootcamp", data)} saving={saving} />
             )}
@@ -550,104 +549,6 @@ function BeasiswaEditor({ data, onSave, saving }) {
           </div>
         </div>
       ))}
-
-      <button type="submit" disabled={saving} className="w-full sm:w-auto px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50">
-        {saving ? "Menyimpan..." : "Simpan Perubahan"}
-      </button>
-    </form>
-  );
-}
-
-/* ---------- Konversi SKS (/konversi-sks) ---------- */
-function readKonversi(d) {
-  const raw = d?.data && typeof d.data === "object" ? d.data : {};
-  return {
-    intro: raw.intro || "",
-    notice: { title: raw.notice?.title || "", body: raw.notice?.body || "" },
-    cap: raw.cap ?? "",
-    programs: KONVERSI_PROGRAMS.map((p) => {
-      const o = (raw.programs || []).find((x) => x?.key === p.key) || {};
-      return { key: p.key, mode: p.mode, label: o.label || "", lead: o.lead || "", weeks: o.weeks ?? "", hours: o.hours ?? "" };
-    }),
-    docs: KONVERSI_DOCS.map(({ key }) => ({ key, href: (raw.docs || []).find((x) => x?.key === key)?.href || "" })),
-  };
-}
-
-function KonversiEditor({ data, onSave, saving }) {
-  const [form, setForm] = useState(() => readKonversi(data));
-  useEffect(() => setForm(readKonversi(data)), [data]);
-  const input = "w-full px-3 py-2 border border-gray-300 rounded-lg text-sm";
-  const setProgram = (i, field, value) => setForm((f) => ({ ...f, programs: f.programs.map((p, k) => (k === i ? { ...p, [field]: value } : p)) }));
-  const n = (v) => (v === "" || v == null ? undefined : Number(v));
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const programs = form.programs
-      .map(({ key, label, lead, weeks, hours }) => ({ key, label: label.trim(), lead: lead.trim(), weeks: n(weeks), hours: n(hours) }))
-      .filter((p) => p.label || p.lead || p.weeks || p.hours);
-    onSave({ title: "Konversi SKS", data: { ...form, cap: n(form.cap), programs } });
-  };
-
-  return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <p className="text-sm text-gray-600">
-        Mengatur halaman <code>/konversi-sks</code>. Nama &amp; SKS mata kuliah diambil dari Admin › Kurikulum. Kurs ditetapkan 50 menit per minggu selama 16 minggu per SKS. Mengisi batas menghapus tanda &quot;contoh&quot; pada meja konversi.
-      </p>
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Intro hero (opsional, minimal 40 karakter)</label>
-        <textarea rows={3} value={form.intro} onChange={(e) => setForm({ ...form, intro: e.target.value })} className={input} />
-      </div>
-      <div className="grid gap-3 sm:grid-cols-2">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Batas SKS konversi per semester (contoh {KONVERSI_CAP})</label>
-          <input type="number" min={6} max={40} value={form.cap} onChange={(e) => setForm({ ...form, cap: e.target.value })} className={input} />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Judul banner (kosong = dari agenda beranda)</label>
-          <input value={form.notice.title} onChange={(e) => setForm({ ...form, notice: { ...form.notice, title: e.target.value } })} className={input} />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Isi banner</label>
-          <input value={form.notice.body} onChange={(e) => setForm({ ...form, notice: { ...form.notice, body: e.target.value } })} className={input} />
-        </div>
-      </div>
-
-      <div className="border-t pt-6">
-        <h3 className="text-lg font-semibold mb-1">Bentuk kegiatan</h3>
-        <p className="mb-4 text-sm text-gray-500">Kosongkan kolom untuk memakai nilai bawaan. Minggu {KONVERSI_LIMITS.weeks.join("–")}, jam/minggu {KONVERSI_LIMITS.hours.join("–")}.</p>
-        {form.programs.map((p, i) => {
-          const base = KONVERSI_PROGRAMS[i];
-          return (
-            <div key={p.key} className="mb-3 grid gap-3 rounded-lg border border-gray-200 p-4 sm:grid-cols-[1fr_2fr_90px_90px]">
-              <input value={p.label} onChange={(e) => setProgram(i, "label", e.target.value)} className={input} placeholder={base.label} />
-              <input value={p.lead} onChange={(e) => setProgram(i, "lead", e.target.value)} className={input} placeholder={base.lead} />
-              {p.mode === "jam" ? (
-                <>
-                  <input type="number" value={p.weeks} onChange={(e) => setProgram(i, "weeks", e.target.value)} className={input} placeholder={`${base.weeks} mgg`} />
-                  <input type="number" value={p.hours} onChange={(e) => setProgram(i, "hours", e.target.value)} className={input} placeholder={`${base.hours} jam`} />
-                </>
-              ) : (
-                <p className="text-xs text-gray-500 sm:col-span-2 self-center">Diakui 1 : 1 dari SKS kampus tujuan</p>
-              )}
-            </div>
-          );
-        })}
-      </div>
-
-      <div className="border-t pt-6">
-        <h3 className="text-lg font-semibold mb-4">Templat berkas (URL unduhan)</h3>
-        {KONVERSI_DOCS.map(({ key, title }, i) => (
-          <div key={key} className="mb-3">
-            <label className="block text-sm text-gray-700 mb-1">{title}</label>
-            <input
-              value={form.docs[i].href}
-              onChange={(e) => setForm({ ...form, docs: form.docs.map((d, k) => (k === i ? { ...d, href: e.target.value } : d)) })}
-              className={input}
-              placeholder="/berkas/nama-file.pdf atau https://…"
-            />
-          </div>
-        ))}
-      </div>
 
       <button type="submit" disabled={saving} className="w-full sm:w-auto px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50">
         {saving ? "Menyimpan..." : "Simpan Perubahan"}

@@ -6,6 +6,7 @@
  * - AOS   : reveal sederhana via atribut data-aos (lihat <AosProvider>)
  * - Swiper: carousel (lihat components/motion/swiper-carousel.jsx)
  */
+import { useSyncExternalStore } from "react";
 import { animate, stagger } from "animejs";
 
 export const motionTokens = {
@@ -14,8 +15,19 @@ export const motionTokens = {
   stagger: 0.08,
 };
 
+const REDUCED_MOTION = "(prefers-reduced-motion: reduce)";
 export const prefersReducedMotion = () =>
-  typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  typeof window !== "undefined" && window.matchMedia(REDUCED_MOTION).matches;
+
+function subscribeReducedMotion(listener) {
+  const media = window.matchMedia(REDUCED_MOTION);
+  media.addEventListener("change", listener);
+  return () => media.removeEventListener("change", listener);
+}
+
+export function useHydratedReducedMotion() {
+  return useSyncExternalStore(subscribeReducedMotion, prefersReducedMotion, () => false);
+}
 
 /** anime.js: hitung angka naik (statistik, prestasi). */
 export function countUp(el, to, { duration = 1400, format = (v) => v.toLocaleString("id-ID") } = {}) {

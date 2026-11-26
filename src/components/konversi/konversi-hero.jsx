@@ -2,7 +2,8 @@
 import { useLayoutEffect as useEffect, useRef, useState } from "react";
 import { gsap } from "@/lib/scroll";
 import { prefersReducedMotion, curtainDelay } from "@/lib/motion";
-import { CURTAIN_KEY, SEMESTER_WEEKS, creditsFor } from "@/lib/konversi-content";
+import { CURTAIN_KEY, creditsFor } from "@/lib/konversi-content";
+import { konversiText as msg } from "@/lib/konversi-cms/copy";
 import { Container, SceneTitle } from "@/components/home/shared";
 import { ElvoPeek } from "@/components/home/elvo-peek";
 import { cn } from "@/lib/utils";
@@ -18,16 +19,24 @@ const pad = (n) => String(n).padStart(2, "0");
  * memilih kegiatan di meja konversi. Papan selebar konten menjadi satu-satunya visual hero (tanpa ilustrasi).
  */
 export function KonversiHero() {
-  const { intro, programs, rate, cap, choose } = useKonversi();
+  const { intro, programs, rules, rate, semesterWeeks, cap, choose, preview, canCalculate, blocks, copy: { hero: c } } = useKonversi();
+  const showSteps = blocks.some((block) => block.key === "steps" && block.visible);
+  const available = (href) => href && (href !== "#kalkulator" || canCalculate) && (href !== "#alur" || showSteps);
+  const jump = (event, href) => {
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || !href.startsWith("#")) return;
+    if (!document.getElementById(href.slice(1))) return;
+    event.preventDefault();
+    smoothTo(href.slice(1));
+  };
   const ref = useRef(null);
   const [offset, setOffset] = useState(0);
   const [paused, setPaused] = useState(false);
   const [active, setActive] = useState(null);
 
-  const rows = Array.from({ length: ROWS }, (_, i) => programs[(offset + i) % programs.length]);
+  const rows = Array.from({ length: Math.min(ROWS, programs.length) }, (_, i) => programs[(offset + i) % programs.length]);
 
   useEffect(() => {
-    if (paused || prefersReducedMotion()) return;
+    if (paused || programs.length <= ROWS || prefersReducedMotion()) return;
     const t = setInterval(() => setOffset((o) => (o + 1) % programs.length), 3000);
     return () => clearInterval(t);
   }, [paused, programs.length]);
@@ -35,7 +44,7 @@ export function KonversiHero() {
   useEffect(() => {
     const el = ref.current;
     if (!el || prefersReducedMotion()) return;
-    const delay = curtainDelay(CURTAIN_KEY);
+    const delay = preview ? 0 : curtainDelay(CURTAIN_KEY);
     const ctx = gsap.context(() => {
       gsap.from("[data-hero-fade]", { y: 18, opacity: 0, duration: 0.8, stagger: 0.08, ease: "expo.out", delay });
       gsap.from("[data-board]", { y: 40, rotateX: -12, opacity: 0, duration: 1.2, ease: "expo.out", delay: delay + 0.2, transformPerspective: 900 });
@@ -51,44 +60,44 @@ export function KonversiHero() {
   return (
     <section ref={ref} className="relative overflow-hidden pb-10 pt-10 md:pb-14 md:pt-14">
       <Container>
-        <nav aria-label="Breadcrumb" data-hero-fade className="text-sm text-text/55">
+        <nav aria-label={c.breadcrumb} data-hero-fade className="text-sm text-text/55">
           <ol className="flex flex-wrap items-center gap-2">
-            <li><a href="/" className="u-gold transition-colors hover:text-maroon">Beranda</a></li>
+            <li><a href={c.homeHref || undefined} className="u-gold transition-colors hover:text-maroon">{c.home}</a></li>
             <li aria-hidden>/</li>
-            <li>Belajar Luar Prodi</li>
+            <li>{c.parent}</li>
             <li aria-hidden>/</li>
-            <li aria-current="page" className="text-navy">Konversi SKS</li>
+            <li aria-current="page" className="text-navy">{c.current}</li>
           </ol>
         </nav>
 
         <div className="mt-10 grid gap-10 lg:mt-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:gap-12">
           <div className="relative z-10 flex flex-col gap-6">
             <div>
-            <SceneTitle as="h1" trigger="mount" title={["Pengalaman di luar kelas,", "tercatat di transkrip"]} className="!text-[clamp(2.5rem,4.4vw,4.1rem)] !leading-[1]" />
+            <SceneTitle as="h1" trigger="mount" title={[c.title, c.accent]} className="!text-[clamp(2.5rem,4.4vw,4.1rem)] !leading-[1]" />
             </div>
             <div className="flex flex-col gap-7">
             <p data-hero-fade className="max-w-xl text-pretty text-[17px] leading-relaxed text-text/70">{intro.body}</p>
             <div data-hero-fade className="flex shrink-0 flex-wrap items-center gap-x-7 gap-y-4">
-              <button
-                type="button"
-                onClick={() => smoothTo("kalkulator")}
+              {available(c.calculateHref) && c.calculate && <a
+                href={c.calculateHref}
+                onClick={(event) => jump(event, c.calculateHref)}
                 className="group inline-flex h-12 items-center gap-3 rounded-md bg-maroon px-6 text-[15px] font-semibold text-white transition-[background-color,transform] duration-300 ease-cinematic hover:bg-maroon-deep active:scale-[0.98]"
               >
-                Hitung konversiku
+                {c.calculate}
                 <svg aria-hidden viewBox="0 0 16 16" className="size-4 transition-transform duration-300 group-hover:translate-y-0.5">
                   <path d="M8 3v10M4 9l4 4 4-4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
-              </button>
-              <button type="button" onClick={() => smoothTo("alur")} className="text-[15px] font-semibold text-navy">
-                <span className="u-gold">Lihat alur pengajuan</span>
-              </button>
+              </a>}
+              {available(c.stepsHref) && c.steps && <a href={c.stepsHref} onClick={(event) => jump(event, c.stepsHref)} className="text-[15px] font-semibold text-navy">
+                <span className="u-gold">{c.steps}</span>
+              </a>}
             </div>
             </div>
           </div>
 
           <div className="relative" style={{ perspective: 1200 }}>
             <span aria-hidden className="pointer-events-none absolute -bottom-16 -right-6 z-20 hidden xl:block">
-              <ElvoPeek pose="think" size={88} side="left" say="Jam magangku setara berapa SKS, ya?" />
+              {c.pose && <ElvoPeek pose={c.pose} size={88} side="left" say={c.mascot} />}
             </span>
             <div
               data-board
@@ -99,28 +108,29 @@ export function KonversiHero() {
               className="relative overflow-hidden rounded-xl bg-navy text-white shadow-[0_50px_90px_-45px_rgb(14_24_48/0.9)]"
             >
               <div className="flex items-center justify-between gap-3 border-y border-white/10 bg-navy-deep/60 px-5 py-2.5 sm:px-7">
-                <span className="kicker text-[10.5px] text-gold-soft">Papan konversi</span>
+                <span className="kicker text-[10.5px] text-gold-soft">{c.board}</span>
                 <span className="tabular text-[12px] text-white/60">
-                  1 SKS = <span className="font-semibold text-white">{rate} menit/minggu × {SEMESTER_WEEKS} minggu</span> · maks {cap} SKS/semester
+                  {c.formulaStart} <span className="font-semibold text-white">{msg(c.formula, { rate, semesterWeeks })}</span> {msg(c.formulaCap, { cap })}
                 </span>
               </div>
 
-              <div role="list" aria-label="Contoh konversi per kegiatan" className="px-3 py-3 sm:px-5">
+              <div role="list" aria-label={c.boardLabel} className="px-3 py-3 sm:px-5">
                 <div aria-hidden className="grid grid-cols-[1fr_auto] gap-4 px-2 pb-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-white/40 sm:grid-cols-[1fr_auto_auto]">
-                  <span>Kegiatan</span>
-                  <span className="hidden sm:block">Durasi</span>
-                  <span className="text-right">SKS</span>
+                  <span>{c.activity}</span>
+                  <span className="hidden sm:block">{c.duration}</span>
+                  <span className="text-right">{c.credits}</span>
                 </div>
                 {rows.map((p, i) => {
-                  const sks = Math.min(creditsFor(p, rate), cap);
-                  const dur = p.mode === "jam" ? `${p.weeks}MGG×${p.hours}J` : `${p.sks} SKS IN`;
+                  const sks = Math.min(creditsFor(p, rules), cap);
+                  const dur = msg(p.mode === "jam" ? c.hoursShort : c.transferShort, p);
                   return (
                     <button
                       key={i}
                       role="listitem"
                       type="button"
                       onClick={() => pick(p.key)}
-                      aria-label={`${p.label}: ${p.mode === "jam" ? `${p.weeks} minggu, ${p.hours} jam per minggu` : `${p.sks} SKS dari kampus tujuan`}, setara ${sks} SKS. Hitung di meja konversi.`}
+                      disabled={!canCalculate}
+                      aria-label={msg(c.boardRow, { program: p.label, duration: msg(p.mode === "jam" ? c.hoursLong : c.transferLong, p), credits: sks })}
                       className={cn(
                         "group grid w-full grid-cols-[1fr_auto] items-center gap-4 rounded-md px-2 py-1.5 text-left text-[9.5px] outline-none transition-colors duration-300 hover:bg-white/[0.06] focus-visible:ring-2 focus-visible:ring-gold sm:grid-cols-[1fr_auto_auto] sm:text-[12px] xl:text-[13px]",
                         active === p.key && "bg-white/[0.06]"
@@ -142,7 +152,7 @@ export function KonversiHero() {
                 })}
               </div>
               <p className="flex items-center justify-between gap-3 border-t border-white/10 px-5 py-3 text-[11.5px] text-white/45 sm:px-7">
-                <span>{paused ? "Papan berhenti — pilih satu baris" : "Arahkan kursor untuk menahan papan"}</span>
+                <span>{programs.length > ROWS && (paused ? c.paused : c.pause)}</span>
                 <span aria-hidden className="flex gap-1">
                   {programs.map((p, i) => (
                     <span key={p.key} className={cn("h-1 rounded-full transition-all duration-500", i === offset ? "w-4 bg-gold" : "w-1 bg-white/25")} />

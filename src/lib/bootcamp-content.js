@@ -14,7 +14,7 @@
  *   data.tiers[]        → ditimpa per `key` { prices { mahasiswa, alumni, umum } }
  * Semua kohort, kursus, harga, dan mentor praktisi adalah CONTOH (`sample`) → tampil dengan PlaceholderTag.
  */
-import { RATE, creditsFor } from "@/lib/konversi-content";
+import { creditEstimate } from "@/lib/konversi-cms/schema";
 
 export const CURTAIN_KEY = "sisfor:curtain:bootcamp";
 export const BANNER_KEY = "sisfor:banner:bootcamp";
@@ -245,7 +245,7 @@ export function untilStart(start, now) {
  * @param row    PageContent `bootcamp` (boleh null)
  * @param dosen  hasil getDosenData — mentor dosen per rumpun
  */
-export function mergeBootcamp(row, { dosen } = {}) {
+export function mergeBootcamp(row, { dosen, conversionRules } = {}) {
   const raw = parse(row?.data) ?? {};
 
   const over = Array.isArray(raw.bootcamps) ? raw.bootcamps : [];
@@ -271,7 +271,7 @@ export function mergeBootcamp(row, { dosen } = {}) {
         fields: Array.isArray(o.registration?.fields) ? o.registration.fields : [],
       },
       plan: b.plan.slice(0, weeks),
-      sks: creditsFor({ mode: "jam", weeks, hours }, RATE),
+      sks: creditEstimate({ mode: "jam", weeks, hours }, conversionRules),
       sample: !touched,
     };
   });

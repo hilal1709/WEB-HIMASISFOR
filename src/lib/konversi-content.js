@@ -11,7 +11,7 @@
  *   data.docs[]          → ditimpa per `key` (la/penyetaraan; `href` = URL berkas)
  * Kurs, batas, bentuk kegiatan, alur, kasus, dan berkas adalah CONTOH (`sample`) → tampil dengan PlaceholderTag.
  */
-import { AGENDA, NEWS } from "@/lib/home-content";
+import { AGENDA, NEWS } from "./home-content.js";
 
 export const CURTAIN_KEY = "sisfor:curtain:konversi";
 export const BANNER_KEY = "sisfor:banner:konversi";
@@ -88,9 +88,10 @@ const num = (v, [lo, hi]) => {
 };
 
 /** SKS setara untuk satu kegiatan (sebelum dipotong batas). */
-export function creditsFor({ mode, weeks, hours, sks }, rate = RATE) {
-  if (mode === "sks") return sks ?? 0;
-  return Math.floor(((weeks ?? 0) * (hours ?? 0) * 60) / (rate * SEMESTER_WEEKS));
+export function creditsFor({ mode, weeks, hours, sks }, { rate = RATE, semesterWeeks = SEMESTER_WEEKS, transferRatio = 1, rounding = "floor" } = {}) {
+  const raw = mode === "sks" ? (sks ?? 0) * transferRatio : ((weeks ?? 0) * (hours ?? 0) * 60) / (rate * semesterWeeks);
+  const round = { floor: Math.floor, nearest: Math.round, ceil: Math.ceil }[rounding];
+  return round(raw);
 }
 
 /** Pengumuman dari agenda beranda (MBKM/magang) atau berita MBKM. */

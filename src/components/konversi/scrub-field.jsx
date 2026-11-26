@@ -1,8 +1,9 @@
 "use client";
-import { useLayoutEffect as useEffect, useRef } from "react";
+import { useId, useLayoutEffect as useEffect, useRef } from "react";
 import { animate } from "animejs";
 import { prefersReducedMotion } from "@/lib/motion";
 import { cn } from "@/lib/utils";
+import { konversiText as msg } from "@/lib/konversi-cms/copy";
 
 /**
  * Masukan angka "geser" (pola 21st.dev Number Field + Quantity Stepper):
@@ -11,7 +12,8 @@ import { cn } from "@/lib/utils";
  * - ←/→/↑/↓, PageUp/PageDown (±5), Home/End
  * - menyentuh batas → angka bergetar halus (anime.js)
  */
-export function ScrubField({ label, value, unit, min, max, onChange, hint, className }) {
+export function ScrubField({ label, value, unit, min, max, onChange, hint, className, copy }) {
+  const id = useId();
   const box = useRef(null);
   const drag = useRef(null);
   const hold = useRef(null);
@@ -108,20 +110,20 @@ export function ScrubField({ label, value, unit, min, max, onChange, hint, class
     </button>
   );
 
-  const pct = ((value - min) / (max - min)) * 100;
+  const pct = max === min ? 100 : ((value - min) / (max - min)) * 100;
 
   return (
     <div className={cn("rounded-lg border border-line bg-white p-4", className)}>
       <div className="flex items-baseline justify-between gap-3">
-        <span id={`${label}-l`} className="text-[13px] font-semibold text-navy">{label}</span>
+        <span id={id} className="text-[13px] font-semibold text-navy">{label}</span>
         {hint && <span className="text-[12px] text-text/50">{hint}</span>}
       </div>
       <div className="mt-3 flex items-center gap-3">
-        {btn(-1, `Kurangi ${label}`, <svg aria-hidden viewBox="0 0 16 16" className="size-4"><path d="M3 8h10" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" /></svg>)}
+        {btn(-1, msg(copy.decrement, { label }), <svg aria-hidden viewBox="0 0 16 16" className="size-4"><path d="M3 8h10" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" /></svg>)}
         <div
           role="spinbutton"
           tabIndex={0}
-          aria-labelledby={`${label}-l`}
+          aria-labelledby={id}
           aria-valuemin={min}
           aria-valuemax={max}
           aria-valuenow={value}
@@ -136,10 +138,10 @@ export function ScrubField({ label, value, unit, min, max, onChange, hint, class
           <span ref={box} className="tabular font-serif text-[2.4rem] leading-none text-navy">{value}</span>
           <span className="text-[13px] text-text/55">{unit}</span>
           <span aria-hidden className="absolute -bottom-1 left-1/2 -translate-x-1/2 text-[10.5px] text-text/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-            ⟷ geser
+            {copy.drag}
           </span>
         </div>
-        {btn(1, `Tambah ${label}`, <svg aria-hidden viewBox="0 0 16 16" className="size-4"><path d="M3 8h10M8 3v10" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" /></svg>)}
+        {btn(1, msg(copy.increment, { label }), <svg aria-hidden viewBox="0 0 16 16" className="size-4"><path d="M3 8h10M8 3v10" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" /></svg>)}
       </div>
       {/* rel posisi nilai */}
       <div aria-hidden className="relative mt-4 h-[3px] rounded-full bg-cream-2">

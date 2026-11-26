@@ -61,13 +61,15 @@ export function ConfirmModal({
   description,
   confirmLabel = "Ya, lanjutkan",
   cancelLabel = "Batal",
+  closeLabel,
+  onCloseAutoFocus,
   destructive = false,
   loading = false,
   onConfirm,
 }) {
   return (
     <Modal open={open} onOpenChange={onOpenChange}>
-      <ModalContent>
+      <ModalContent closeLabel={closeLabel} onCloseAutoFocus={onCloseAutoFocus}>
         <ModalHeader>
           <ModalTitle>{title}</ModalTitle>
           {description && <ModalDescription>{description}</ModalDescription>}

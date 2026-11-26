@@ -966,6 +966,17 @@ html.has-cursor, html.has-cursor a, html.has-cursor button { cursor: none; }
 html[data-prehydrate] [data-aos-wait] { opacity: 0; animation: prehydrate-safety 1ms linear 3s forwards; }
 @keyframes prehydrate-safety { to { opacity: 1; } }
 
+@media (prefers-reduced-motion: reduce) {
+  html[data-prehydrate] .konversi-page[data-aos-wait],
+  .konversi-page [data-aos] {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+    transition: none !important;
+    pointer-events: auto;
+  }
+}
+
 /* ==========================================================================
    MEJA SAMBUTAN (/admin/sambutan) — meja cream bertitik, kertas surat di atasnya
    ========================================================================== */

@@ -3,8 +3,9 @@ import prisma from "@/lib/prisma";
 import { JALUR_SECTIONS } from "@/lib/jalur-cms/schema";
 import { REGULASI_SECTIONS } from "@/lib/regulasi-cms/schema";
 import { MAGANG_SECTIONS } from "@/lib/magang-cms/schema";
+import { KONVERSI_SECTIONS } from "@/lib/konversi-cms/schema";
 
-const STUDIO_SECTIONS = [...JALUR_SECTIONS, ...REGULASI_SECTIONS, ...MAGANG_SECTIONS];
+const STUDIO_SECTIONS = [...JALUR_SECTIONS, ...REGULASI_SECTIONS, ...MAGANG_SECTIONS, ...KONVERSI_SECTIONS];
 
 // GET /api/content - Fetch all page content or specific section
 export async function GET(request) {
@@ -83,6 +84,7 @@ export async function PUT(request) {
     if (REGULASI_SECTIONS.includes(section)) return NextResponse.json({ error: "Gunakan CMS Regulasi Akademik" }, { status: 403 });
     if (JALUR_SECTIONS.includes(section)) return NextResponse.json({ error: "Gunakan CMS Jalur Kelulusan" }, { status: 403 });
     if (MAGANG_SECTIONS.includes(section)) return NextResponse.json({ error: "Gunakan CMS Magang" }, { status: 403 });
+    if (KONVERSI_SECTIONS.includes(section)) return NextResponse.json({ error: "Gunakan CMS Konversi SKS" }, { status: 403 });
 
     if (!section) {
       return NextResponse.json(
@@ -136,6 +138,7 @@ export async function DELETE(request) {
     if (REGULASI_SECTIONS.includes(section)) return NextResponse.json({ error: "Gunakan CMS Regulasi Akademik" }, { status: 403 });
     if (JALUR_SECTIONS.includes(section)) return NextResponse.json({ error: "Gunakan CMS Jalur Kelulusan" }, { status: 403 });
     if (MAGANG_SECTIONS.includes(section)) return NextResponse.json({ error: "Gunakan CMS Magang" }, { status: 403 });
+    if (KONVERSI_SECTIONS.includes(section)) return NextResponse.json({ error: "Gunakan CMS Konversi SKS" }, { status: 403 });
 
     if (!section) {
       return NextResponse.json(
